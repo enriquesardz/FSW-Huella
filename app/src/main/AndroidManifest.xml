@@ -22,9 +22,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".MenuInicioSesion" />
-        <activity
-            android:name=".LoginActivitytest"
-            android:label="@string/title_activity_login_activitytest" />
         <activity android:name=".PrefectoLoginActivity"></activity>
     </application>
 
