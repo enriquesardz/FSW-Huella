@@ -1,0 +1,11 @@
+<tabs>
+    <tab
+        id="@+id/tab_codigo"
+        title="Barra" />
+    <tab
+        id="@+id/tab_datos"
+        title="Datos" />
+    <tab
+        id="@+id/tab_recorrido"
+        title="Recorrido" />
+</tabs>

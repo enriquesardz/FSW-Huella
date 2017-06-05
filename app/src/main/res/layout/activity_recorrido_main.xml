@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.fime.fsw.huella.huella.RecorridoMainActivity">
+
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        >
+    </FrameLayout>
+
+    <com.roughike.bottombar.BottomBar
+        android:id="@+id/barra_navegacion"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        app:bb_tabXmlResource="@xml/barra_navegacion_inferior_tabs"
+        />
+
+</LinearLayout>
