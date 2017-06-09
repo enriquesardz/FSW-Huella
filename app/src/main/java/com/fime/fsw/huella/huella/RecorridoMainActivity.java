@@ -34,7 +34,6 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
             }
         });
     }
-
     @Override
     public void onRecorridoFragmentInteraction(Uri uri){
 
@@ -49,5 +48,7 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
     public void onCodigoBarrasFragmentInteraction(Uri uri){
 
     }
+
+
 }
 

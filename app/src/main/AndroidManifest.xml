@@ -16,15 +16,27 @@
         android:theme="@style/FimeTheme">
         <activity android:name=".RecorridoMainActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
+                <action android:name="android.intenet.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".SplashActivity"
+            android:theme="@style/SplashTheme">
+            <intent-filter>
+                <action android:name="android.intenet.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".MenuInicioSesionActivity" />
-        <activity android:name=".PrefectoLoginActivity" />
-        <activity android:name=".PrefectoRegistroActivity" />
-        <activity android:name=".DescargaRutaActivity"></activity>
+        <activity
+            android:name=".PrefectoLoginActivity"
+            android:parentActivityName=".MenuInicioSesionActivity" />
+        <activity
+            android:name=".PrefectoRegistroActivity"
+            android:parentActivityName=".MenuInicioSesionActivity" />
+        <activity android:name=".DescargaRutaActivity" />
+
     </application>
 
 </manifest>

@@ -23,18 +23,21 @@
         android:padding="32dp">
 
         <Button
+            android:id="@+id/iniciar_sesion_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="64dp"
             android:text="@string/iniciar_sesion" />
 
         <Button
+            android:id="@+id/registrarse_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="64dp"
             android:text="@string/registrarse" />
 
         <Button
+            android:id="@+id/iniciar_huella_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/iniciar_con_huella" />
