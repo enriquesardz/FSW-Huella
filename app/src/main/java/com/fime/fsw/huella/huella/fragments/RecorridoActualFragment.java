@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -89,18 +90,28 @@ public class RecorridoActualFragment extends Fragment {
     }
 
     private void initComponentes(View view){
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
         mRecyclerView = (RecyclerView)view.findViewById(R.id.recorrido_actual_recyclerview);
         mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        mRecyclerView.setLayoutManager(linearLayoutManager);
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(mRecyclerView.getContext(), linearLayoutManager.getOrientation()));
 
         //Data prueba
         mData.add(new RecorridoActualItem(1,"M2","2030"));
         mData.add(new RecorridoActualItem(2,"N3","4200"));
+        mData.add(new RecorridoActualItem(3,"V4","6302"));
+        mData.add(new RecorridoActualItem(4,"M5","1301"));
+        mData.add(new RecorridoActualItem(5,"N2","4208"));
 
         mRecyclerAdapter = new RecorridoActualAdapter(mContext, mData, new RecyclerViewItemClickListener() {
             @Override
             public void onItemClick(View v, int position) {
-                Toast.makeText(mContext, "Posicion: "+position, Toast.LENGTH_SHORT).show();
+                long itemId = mData.get(position).getID();
+                String horaFime = mData.get(position).getHoraFime();
+                String salonFime = mData.get(position).getSalonFime();
+
+                Toast.makeText(mContext, "ID: "+itemId+" Hora: "+horaFime+" Salon: "+salonFime, Toast.LENGTH_SHORT).show();
             }
         });
         mRecyclerView.setAdapter(mRecyclerAdapter);

@@ -59,6 +59,6 @@ public class RecorridoActualAdapter extends RecyclerView.Adapter<RecorridoActual
 
     @Override
     public int getItemCount() {
-        return 0;
+        return this.mData.size();
     }
 }
