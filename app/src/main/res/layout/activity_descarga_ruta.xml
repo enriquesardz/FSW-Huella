@@ -20,6 +20,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
                 android:weightSum="2">
 
                 <TextView
@@ -29,19 +30,19 @@
                     android:layout_weight="1"
                     android:text="@string/druta_clave_area" />
 
-                <Spinner
+                <com.jaredrummler.materialspinner.MaterialSpinner
+                    android:id="@+id/clave_area_spinner"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
-                    android:layout_weight="1"
-                    android:dropDownWidth="wrap_content"
-                    android:entries="@array/druta_claves_area_spinner"
-                    android:spinnerMode="dropdown"></Spinner>
+                    android:layout_weight="1" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:weightSum="2">
 
                 <TextView
                     style="@style/Base.TextAppearance.AppCompat.Widget.ActionBar.Title"
@@ -50,12 +51,12 @@
                     android:layout_weight="1"
                     android:text="@string/druta_periodo" />
 
-                <Spinner
+                <com.jaredrummler.materialspinner.MaterialSpinner
+                    android:id="@+id/periodo_spinner"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
-                    android:layout_weight="1"
-                    android:entries="@array/druta_periodo_spinner"></Spinner>
+                    android:layout_weight="1" />
             </LinearLayout>
 
             <LinearLayout
@@ -108,6 +109,7 @@
                 android:orientation="horizontal">
 
                 <Button
+                    android:id="@+id/descargar_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/druta_descargar" />

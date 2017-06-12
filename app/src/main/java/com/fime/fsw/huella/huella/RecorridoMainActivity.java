@@ -6,10 +6,13 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.fime.fsw.huella.huella.fragments.CodigoBarrasFragment;
+import com.fime.fsw.huella.huella.fragments.RecorridoActualFragment;
+import com.fime.fsw.huella.huella.fragments.RecorridoFragment;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
 
-public class RecorridoMainActivity extends AppCompatActivity implements RecorridoFragment.OnFragmentInteractionListener, DatosMaestroFragment.OnFragmentInteractionListener, CodigoBarrasFragment.OnFragmentInteractionListener{
+public class RecorridoMainActivity extends AppCompatActivity implements RecorridoFragment.OnFragmentInteractionListener, RecorridoActualFragment.OnFragmentInteractionListener, CodigoBarrasFragment.OnFragmentInteractionListener{
 
     private BottomBar mBarraNav;
     private Fragment mFragment;
@@ -25,7 +28,7 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
                     mFragment = new CodigoBarrasFragment();
                 }
                 else if (tabId == R.id.tab_datos){
-                    mFragment = new DatosMaestroFragment();
+                    mFragment = new RecorridoActualFragment();
                 }
                 else if (tabId == R.id.tab_recorrido){
                     mFragment = new RecorridoFragment();

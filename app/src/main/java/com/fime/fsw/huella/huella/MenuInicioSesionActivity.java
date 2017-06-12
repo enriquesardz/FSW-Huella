@@ -21,6 +21,7 @@ public class MenuInicioSesionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_inicio_sesion);
         mContext = this;
+        getSupportActionBar().setTitle(getResources().getString(R.string.menu_inicio_titulo));
 
         inicializarComponentes();
 
@@ -35,6 +36,7 @@ public class MenuInicioSesionActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(mContext, PrefectoLoginActivity.class));
+                finish();
             }
         });
 
@@ -42,6 +44,7 @@ public class MenuInicioSesionActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(mContext, PrefectoRegistroActivity.class));
+                finish();
             }
         });
 

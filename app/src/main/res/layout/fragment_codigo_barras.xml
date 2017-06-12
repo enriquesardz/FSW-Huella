@@ -2,12 +2,36 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.fime.fsw.huella.huella.CodigoBarrasFragment">
+    tools:context="com.fime.fsw.huella.huella.fragments.CodigoBarrasFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Fragment Codigo Barras" />
+        android:orientation="vertical">
+
+        <ScrollView
+            android:id="@+id/informacion_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/bordes_views"></ScrollView>
+
+        <TextView
+            android:id="@+id/salon_textview"
+            style="@style/TextTitulo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/cbarra_salon" />
+
+        <Button
+            android:id="@+id/escaner_salon_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:drawableLeft="@drawable/ic_codigo_barras"
+            android:drawablePadding="8dp"
+            android:text="@string/cbarra_escanear_salon" />
+    </LinearLayout>
 
 </FrameLayout>
