@@ -1,12 +1,15 @@
 package com.fime.fsw.huella.huella.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 
 import com.fime.fsw.huella.huella.R;
 
@@ -21,6 +24,8 @@ public class CodigoBarrasFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
+    private ImageButton btnCapturar;
+
     public CodigoBarrasFragment() {
         // Required empty public constructor
     }
@@ -30,7 +35,18 @@ public class CodigoBarrasFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_codigo_barras, container, false);
+        View view = inflater.inflate(R.layout.fragment_codigo_barras, container, false);
+
+        btnCapturar =(ImageButton) view.findViewById(R.id.capturar_button);
+        btnCapturar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivity(intent);
+            }
+        });
+
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -71,4 +87,5 @@ public class CodigoBarrasFragment extends Fragment {
         // TODO: Update argument type and name
         void onCodigoBarrasFragmentInteraction(Uri uri);
     }
+
 }

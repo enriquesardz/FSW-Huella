@@ -104,6 +104,7 @@ public class RecorridoActualFragment extends Fragment {
         mData.add(new RecorridoActualItem(4,"M5","1301"));
         mData.add(new RecorridoActualItem(5,"N2","4208"));
 
+        //TODO: Que esta info se pase al fragment del scanner, y actualize los datos de los views que estan dentro del ScrollView
         mRecyclerAdapter = new RecorridoActualAdapter(mContext, mData, new RecyclerViewItemClickListener() {
             @Override
             public void onItemClick(View v, int position) {
