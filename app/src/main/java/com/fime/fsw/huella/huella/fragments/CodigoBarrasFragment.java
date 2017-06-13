@@ -6,10 +6,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.fime.fsw.huella.huella.R;
 
@@ -25,6 +29,9 @@ public class CodigoBarrasFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
 
     private ImageButton btnCapturar;
+    private Button escanerButton;
+
+    private Context mContext;
 
     public CodigoBarrasFragment() {
         // Required empty public constructor
@@ -32,17 +39,37 @@ public class CodigoBarrasFragment extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_codigo_barras, container, false);
 
+        mContext = getContext();
+
+        //Boton para abrir la aplicacion de la camara y que tome foto del maestro.
         btnCapturar =(ImageButton) view.findViewById(R.id.capturar_button);
+        escanerButton = (Button)view.findViewById(R.id.escaner_salon_button);
+
         btnCapturar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivity(intent);
+            }
+        });
+
+        //Toast cuando se le da click al boton de escanear.
+        escanerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                View customToast = inflater.inflate(R.layout.custom_toast_informacion_correcta,null);
+                TextView msgToast = (TextView)customToast.findViewById(R.id.txt_custom_toast);
+                msgToast.setText("Se actualizo la información");
+                Toast toast = new Toast(mContext);
+                toast.setGravity(Gravity.CENTER,0,0);
+                toast.setDuration(Toast.LENGTH_SHORT);
+                toast.setView(customToast);
+                toast.show();
             }
         });
 
