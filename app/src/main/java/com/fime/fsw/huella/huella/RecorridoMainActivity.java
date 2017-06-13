@@ -28,6 +28,8 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
                     mFragment = new CodigoBarrasFragment();
                 }
                 else if (tabId == R.id.tab_datos){
+                    //Puede iniciar vacio/hard coded o se inicia porque
+                    //se le dio click a un salon del recorrido actual.
                     mFragment = new RecorridoActualFragment();
                 }
                 else if (tabId == R.id.tab_recorrido){
@@ -43,8 +45,8 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
     }
 
     @Override
-    public void onDatosMaestroFragmentInteraction(Uri uri){
-
+    public void onRecorridoActualItemSelected(long id, String horaFime, String salonFime){
+        mBarraNav.selectTabWithId(R.id.tab_datos);
     }
 
     @Override

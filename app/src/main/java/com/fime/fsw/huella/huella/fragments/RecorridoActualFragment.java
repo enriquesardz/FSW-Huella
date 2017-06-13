@@ -50,13 +50,6 @@ public class RecorridoActualFragment extends Fragment {
         return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onDatosMaestroFragmentInteraction(uri);
-        }
-    }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -86,7 +79,7 @@ public class RecorridoActualFragment extends Fragment {
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onDatosMaestroFragmentInteraction(Uri uri);
+        void onRecorridoActualItemSelected(long id, String horaFime, String salonFime);
     }
 
     private void initComponentes(View view){
@@ -113,6 +106,9 @@ public class RecorridoActualFragment extends Fragment {
                 String salonFime = mData.get(position).getSalonFime();
 
                 Toast.makeText(mContext, "ID: "+itemId+" Hora: "+horaFime+" Salon: "+salonFime, Toast.LENGTH_SHORT).show();
+                if (mListener!=null){
+                    mListener.onRecorridoActualItemSelected(itemId,horaFime,salonFime);
+                }
             }
         });
         mRecyclerView.setAdapter(mRecyclerAdapter);
