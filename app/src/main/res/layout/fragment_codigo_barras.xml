@@ -19,9 +19,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:padding="16dp"
-                tools:context="com.ssfsw.pantallahoras.MaestroActivity">
+                android:orientation="vertical">
 
 
                 <LinearLayout
@@ -47,10 +45,19 @@
                         android:text="Maestro: Colunga" />
 
                     <TextView
+                        android:id="@+id/hora_fime_textview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="10dp"
+                        android:text="Hora: M1" />
+
+                    <TextView
+                        android:id="@+id/salon_fime_textview"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingBottom="10dp"
                         android:text="Salón: 3301" />
+
 
                     <TextView
                         android:layout_width="wrap_content"
