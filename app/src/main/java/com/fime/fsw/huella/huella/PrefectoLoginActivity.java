@@ -8,6 +8,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import com.fime.fsw.huella.huella.utilidad.ValidacionLogin;
+
 public class PrefectoLoginActivity extends AppCompatActivity {
 
     private Button mIniciarSesionButton;
@@ -27,6 +29,9 @@ public class PrefectoLoginActivity extends AppCompatActivity {
         mIniciarSesionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //TODO: Algun tipo de validacion usando ValidacionLogin.class quitar valores hard coded
+                //Guarda la sesion del usuario; el usuario ahora esta logeado, pero no ha descargado.
+                ValidacionLogin validacionLogin = new ValidacionLogin(mContext, "text");
                 startActivity(new Intent(mContext, DescargaRutaActivity.class));
                 finish();
             }

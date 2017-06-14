@@ -44,7 +44,8 @@
     <!-- Fragment Codigo Barras -->
     <string name="cbarra_escanear_salon">Escanear salón</string>
     <string name="cbarra_salon">Salon: </string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- Settings Menu Strings -->
+    <string name="menu_cerrar_sesion">Cerrar sesión</string>
 
 </resources>

@@ -8,6 +8,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import com.fime.fsw.huella.huella.utilidad.SesionAplicacion;
+import com.fime.fsw.huella.huella.utilidad.ValidacionLogin;
+
 public class PrefectoRegistroActivity extends AppCompatActivity {
 
     private Button mAceptarButton;
@@ -17,7 +20,10 @@ public class PrefectoRegistroActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_prefecto_registro);
+
         mContext = this;
+
+        final SesionAplicacion sesionAplicacion = new SesionAplicacion(mContext);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -27,7 +33,12 @@ public class PrefectoRegistroActivity extends AppCompatActivity {
         mAceptarButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //TODO: Revisar si el usuario se debe logear desde aqui o no.
+                //ValidacionLogin validacionLogin = new ValidacionLogin(mContext, "test");
+                //Tal vez no sea necesario logear al usuario aqui, solamente que cree la cuenta y despues tenga que logearse
+
                 startActivity(new Intent(mContext, DescargaRutaActivity.class));
+
                 finish();
             }
         });

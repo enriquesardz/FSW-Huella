@@ -4,9 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import com.fime.fsw.huella.huella.utilidad.SesionAplicacion;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 
 import java.util.Arrays;
@@ -32,7 +35,7 @@ public class DescargaRutaActivity extends AppCompatActivity {
         List<String> claveAreaData = new LinkedList<>(Arrays.asList(getResources().getStringArray(R.array.druta_claves_area_spinner)));
         mClaveAreaSpinner.setItems(claveAreaData);
 
-        //TODO: Solo muestra 2 valores, corregir
+
         mPeriodoSpinner = (MaterialSpinner) findViewById(R.id.periodo_spinner);
         List<String> periodoData = new LinkedList<>(Arrays.asList(getResources().getStringArray(R.array.druta_periodo_spinner)));
         mPeriodoSpinner.setItems(periodoData);
@@ -41,9 +44,31 @@ public class DescargaRutaActivity extends AppCompatActivity {
         mDescargarButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //El usuario esta logeado; aqui se descarga y ahora la aplicacion continuara a abrir el RecorridoMainActivity.
+                SesionAplicacion sesionAplicacion = new SesionAplicacion(mContext);
+                sesionAplicacion.crearSesionDescarga();
                 startActivity(new Intent(mContext, RecorridoMainActivity.class));
                 finish();
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.settings_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId())
+        {
+            case R.id.cerrar_sesion:
+                SesionAplicacion sesionAplicacion = new SesionAplicacion(mContext);
+                sesionAplicacion.terminarSesionAplicacion();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }
