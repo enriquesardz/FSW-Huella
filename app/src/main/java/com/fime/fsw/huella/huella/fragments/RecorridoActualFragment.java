@@ -1,7 +1,6 @@
 package com.fime.fsw.huella.huella.fragments;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
@@ -67,18 +66,9 @@ public class RecorridoActualFragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
+    //Interfaz implementada por RecorridoMainActivity que se encarga de pasarle los datos
+    //al fragment CodigoBarrasFragment
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onRecorridoActualItemSelected(long id, String horaFime, String salonFime);
     }
 
@@ -97,7 +87,6 @@ public class RecorridoActualFragment extends Fragment {
         mData.add(new RecorridoActualItem(4,"M5","1301"));
         mData.add(new RecorridoActualItem(5,"N2","4208"));
 
-        //TODO: Que esta info se pase al fragment del scanner, y actualize los datos de los views que estan dentro del ScrollView
         mRecyclerAdapter = new RecorridoActualAdapter(mContext, mData, new RecyclerViewItemClickListener() {
             @Override
             public void onItemClick(View v, int position) {
@@ -106,6 +95,8 @@ public class RecorridoActualFragment extends Fragment {
                 String salonFime = mData.get(position).getSalonFime();
 
                 Toast.makeText(mContext, "ID: "+itemId+" Hora: "+horaFime+" Salon: "+salonFime, Toast.LENGTH_SHORT).show();
+                //Trigger de onRecorridoActualItemSelected en RecorridoMainActivity para comunicar con
+                //CodigoBarrasFragment
                 if (mListener!=null){
                     mListener.onRecorridoActualItemSelected(itemId,horaFime,salonFime);
                 }

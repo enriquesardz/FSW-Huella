@@ -34,6 +34,7 @@ public class CodigoBarrasFragment extends Fragment {
     private Button escanerButton;
     private TextView horaFimeTextview;
     private TextView salonFimeTextview;
+    private View infoContainer;
 
     private Bundle mBundle;
 
@@ -58,6 +59,9 @@ public class CodigoBarrasFragment extends Fragment {
 
         mContext = getContext();
 
+        infoContainer = (View)view.findViewById(R.id.informacion_container);
+        infoContainer.setVisibility(View.INVISIBLE);
+
         horaFimeTextview = (TextView)view.findViewById(R.id.hora_fime_textview);
         salonFimeTextview = (TextView)view.findViewById(R.id.salon_fime_textview);
 
@@ -68,6 +72,7 @@ public class CodigoBarrasFragment extends Fragment {
             horaFimeTextview.setText("Hora: " + horaFime);
             String salonFime = mBundle.getString(RecorridoMainActivity.KEY_SALON_FIME);
             salonFimeTextview.setText("Salon: " + salonFime);
+            infoContainer.setVisibility(View.VISIBLE);
         }
 
         btnCapturar =(ImageButton) view.findViewById(R.id.capturar_button);
