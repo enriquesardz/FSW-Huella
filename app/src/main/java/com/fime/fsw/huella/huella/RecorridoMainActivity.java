@@ -14,22 +14,34 @@ import com.roughike.bottombar.OnTabSelectListener;
 
 public class RecorridoMainActivity extends AppCompatActivity implements RecorridoFragment.OnFragmentInteractionListener, RecorridoActualFragment.OnFragmentInteractionListener, CodigoBarrasFragment.OnFragmentInteractionListener{
 
+    public static final String KEY_ID_RECORRIDO_ITEM = "id";
+    public static final String KEY_HORA_FIME = "hora_fime";
+    public static final String KEY_SALON_FIME = "salon_fime";
+
     private BottomBar mBarraNav;
     private Fragment mFragment;
+
+    private Bundle codigoArgs;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recorrido_main);
+
+        codigoArgs = new Bundle();
+
         mBarraNav = (BottomBar)findViewById(R.id.barra_navegacion);
         mBarraNav.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
             public void onTabSelected(@IdRes int tabId) {
                 if (tabId == R.id.tab_codigo){
-                    mFragment = new CodigoBarrasFragment();
-                }
-                else if (tabId == R.id.tab_datos){
                     //Puede iniciar vacio/hard coded o se inicia porque
                     //se le dio click a un salon del recorrido actual.
+                    mFragment = new CodigoBarrasFragment();
+                    mFragment.setArguments(codigoArgs);
+                }
+                else if (tabId == R.id.tab_datos){
+
                     mFragment = new RecorridoActualFragment();
                 }
                 else if (tabId == R.id.tab_recorrido){
@@ -46,7 +58,10 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
 
     @Override
     public void onRecorridoActualItemSelected(long id, String horaFime, String salonFime){
-        mBarraNav.selectTabWithId(R.id.tab_datos);
+        codigoArgs.putLong(KEY_ID_RECORRIDO_ITEM, id);
+        codigoArgs.putString(KEY_HORA_FIME, horaFime);
+        codigoArgs.putString(KEY_SALON_FIME, salonFime);
+        mBarraNav.selectTabWithId(R.id.tab_codigo);
     }
 
     @Override

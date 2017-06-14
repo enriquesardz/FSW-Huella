@@ -47,10 +47,19 @@
                         android:text="Maestro: Colunga" />
 
                     <TextView
+                        android:id="@+id/hora_fime_textview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="10dp"
+                        android:text="Hora: M1" />
+
+                    <TextView
+                        android:id="@+id/salon_fime_textview"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingBottom="10dp"
                         android:text="Salón: 3301" />
+
 
                     <TextView
                         android:layout_width="wrap_content"

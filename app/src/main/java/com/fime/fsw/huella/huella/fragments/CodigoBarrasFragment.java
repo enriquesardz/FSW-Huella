@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fime.fsw.huella.huella.R;
+import com.fime.fsw.huella.huella.RecorridoMainActivity;
 
 
 /**
@@ -30,8 +32,18 @@ public class CodigoBarrasFragment extends Fragment {
 
     private ImageButton btnCapturar;
     private Button escanerButton;
+    private TextView horaFimeTextview;
+    private TextView salonFimeTextview;
+
+    private Bundle mBundle;
 
     private Context mContext;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mBundle = this.getArguments();
+    }
 
     public CodigoBarrasFragment() {
         // Required empty public constructor
@@ -46,10 +58,22 @@ public class CodigoBarrasFragment extends Fragment {
 
         mContext = getContext();
 
-        //Boton para abrir la aplicacion de la camara y que tome foto del maestro.
+        horaFimeTextview = (TextView)view.findViewById(R.id.hora_fime_textview);
+        salonFimeTextview = (TextView)view.findViewById(R.id.salon_fime_textview);
+
+        //Si el bundle tiene contenido entonces cambian los valores de los textviews.
+        if(mBundle != null){
+            long itemId = mBundle.getLong(RecorridoMainActivity.KEY_ID_RECORRIDO_ITEM);
+            String horaFime = mBundle.getString(RecorridoMainActivity.KEY_HORA_FIME);
+            horaFimeTextview.setText("Hora: " + horaFime);
+            String salonFime = mBundle.getString(RecorridoMainActivity.KEY_SALON_FIME);
+            salonFimeTextview.setText("Salon: " + salonFime);
+        }
+
         btnCapturar =(ImageButton) view.findViewById(R.id.capturar_button);
         escanerButton = (Button)view.findViewById(R.id.escaner_salon_button);
 
+        //Boton para abrir la aplicacion de la camara y que tome foto del maestro.
         btnCapturar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
