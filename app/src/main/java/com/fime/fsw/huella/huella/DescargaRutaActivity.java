@@ -66,6 +66,8 @@ public class DescargaRutaActivity extends AppCompatActivity {
             case R.id.cerrar_sesion:
                 SesionAplicacion sesionAplicacion = new SesionAplicacion(mContext);
                 sesionAplicacion.terminarSesionAplicacion();
+                startActivity(new Intent(mContext, MenuInicioSesionActivity.class));
+                finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

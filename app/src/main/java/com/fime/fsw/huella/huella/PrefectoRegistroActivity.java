@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.fime.fsw.huella.huella.utilidad.SesionAplicacion;
 import com.fime.fsw.huella.huella.utilidad.ValidacionLogin;
@@ -14,6 +16,7 @@ import com.fime.fsw.huella.huella.utilidad.ValidacionLogin;
 public class PrefectoRegistroActivity extends AppCompatActivity {
 
     private Button mAceptarButton;
+    private TextView nombreTextView;
 
     private Context mContext;
     @Override
@@ -30,6 +33,8 @@ public class PrefectoRegistroActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(getResources().getString(R.string.prefecto_registro_titulo));
 
         mAceptarButton = (Button)findViewById(R.id.aceptar_button);
+        nombreTextView = (TextView)findViewById(R.id.nombre_textview);
+
         mAceptarButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -37,8 +42,8 @@ public class PrefectoRegistroActivity extends AppCompatActivity {
                 //ValidacionLogin validacionLogin = new ValidacionLogin(mContext, "test");
                 //Tal vez no sea necesario logear al usuario aqui, solamente que cree la cuenta y despues tenga que logearse
 
-                startActivity(new Intent(mContext, DescargaRutaActivity.class));
-
+                Toast.makeText(mContext, "Bienvenido: " + nombreTextView.getText() , Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(mContext, MenuInicioSesionActivity.class));
                 finish();
             }
         });

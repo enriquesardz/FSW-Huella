@@ -1,6 +1,7 @@
 package com.fime.fsw.huella.huella;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
@@ -75,6 +76,8 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
             case R.id.cerrar_sesion:
                 SesionAplicacion sesionAplicacion = new SesionAplicacion(mContext);
                 sesionAplicacion.terminarSesionAplicacion();
+                startActivity(new Intent(mContext, MenuInicioSesionActivity.class));
+                finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
