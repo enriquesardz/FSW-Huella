@@ -19,10 +19,20 @@
             android:layout_height="wrap_content">
 
             <EditText
+                android:id="@+id/nombre_textview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:imeOptions="actionNext"
-                android:hint="@string/usuario" />
+                android:hint="@string/nombre" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/clave" />
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
@@ -35,6 +45,17 @@
                 android:hint="@string/contrasena"
                 android:inputType="textPassword" />
         </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/confirmar_contrasena"
+                android:inputType="textPassword" />
+        </android.support.design.widget.TextInputLayout>
     </LinearLayout>
 
     <LinearLayout
@@ -43,12 +64,12 @@
         android:layout_weight="0">
 
         <Button
-            android:id="@+id/iniciar_sesion_button"
+            android:id="@+id/aceptar_button"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="0dp"
             android:padding="0dp"
-            android:text="@string/iniciar_sesion" />
+            android:text="@string/aceptar" />
     </LinearLayout>
 
 </LinearLayout>

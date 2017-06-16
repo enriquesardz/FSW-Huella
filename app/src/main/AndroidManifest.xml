@@ -14,18 +14,20 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/FimeTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".RecorridoMainActivity"/>
+        <activity
+            android:name=".SplashActivity"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MenuInicioSesion" />
-        <activity
-            android:name=".LoginActivitytest"
-            android:label="@string/title_activity_login_activitytest" />
-        <activity android:name=".PrefectoLoginActivity"></activity>
+        <activity android:name=".MenuInicioSesionActivity" />
+        <activity android:name=".PrefectoLoginActivity" />
+        <activity android:name=".PrefectoRegistroActivity" />
+        <activity android:name=".DescargaRutaActivity" />
+
     </application>
 
 </manifest>
