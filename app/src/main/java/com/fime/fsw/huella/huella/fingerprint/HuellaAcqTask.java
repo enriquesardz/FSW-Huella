@@ -4,9 +4,13 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.text.TextUtils;
+import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.rscja.deviceapi.Fingerprint;
+
+import org.w3c.dom.Text;
 
 /**
  * Created by ensardz on 20/06/2017.
@@ -16,19 +20,26 @@ public class HuellaAcqTask extends AsyncTask<Integer, Integer, String> {
 
     private ProgressDialog progressDialog;
     private Context mContext;
+
+    private Fingerprint mFingerprint;
+
     private int pid;
     private String uname;
     private String data;
     //    private boolean isShowImg;
 
-    public HuellaAcqTask(int pageId, String name, Context context) {
+    private TextView showDataTV;
+
+    public HuellaAcqTask(int pageId, String name, Context context, Fingerprint fingerprint, TextView showData) {
 
         //TODO: El mFingerprint hace referencia al objeto Fingerprint que se tiene corriendo en la Actividad que llama a esta clase
         //TODO: Por ello, se requiere el Contexto de esa Actividad.
 
         mContext = context;
+        mFingerprint = fingerprint;
         pid = pageId;
         uname = name;
+        showDataTV = showData;
 //        isShowImg = showImg; Por si se quiere mostrar la imagen se pasa un booleano
     }
 
@@ -38,32 +49,32 @@ public class HuellaAcqTask extends AsyncTask<Integer, Integer, String> {
         boolean exeSucc = false;
 
         // Consigue la imagen de la huella
-        if (!mContext.mFingerprint.getImage()) {
+        if (!mFingerprint.getImage()) {
             return null;
         }
 
         // Genera char? con BufferEnum.B1
-        if (mContext.mFingerprint.genChar(Fingerprint.BufferEnum.B1)) {
+        if (mFingerprint.genChar(Fingerprint.BufferEnum.B1)) {
             exeSucc = true;
         }
 
         // Vuelve a conseguir la imagen
-        if (!mContext.mFingerprint.getImage()) {
+        if (!mFingerprint.getImage()) {
             return null;
         }
 
         // Genera char? ahora con BufferEnum.B2
-        if (mContext.mFingerprint.genChar(Fingerprint.BufferEnum.B2)) {
+        if (mFingerprint.genChar(Fingerprint.BufferEnum.B2)) {
             exeSucc = true;
         }
 
         // 合并两个缓冲区到B1
-        if (mContext.mFingerprint.regModel()) {
+        if (mFingerprint.regModel()) {
             exeSucc = true;
         }
 
         if (exeSucc) {
-            if (mContext.mFingerprint.storChar(Fingerprint.BufferEnum.B1, pid)) {
+            if (mFingerprint.storChar(Fingerprint.BufferEnum.B1, pid)) {
 
                 //Checa si la opcion ISO esta activada, podemos saltarnos esto
                 //Por lo pronto se quita ese check
@@ -72,7 +83,7 @@ public class HuellaAcqTask extends AsyncTask<Integer, Integer, String> {
                 //data = mContext.mFingerprint.upChar(Fingerprint.BufferEnum.B11);
 
                 //Save as default
-                data = mContext.mFingerprint.upChar(Fingerprint.BufferEnum.B1);
+                data = mFingerprint.upChar(Fingerprint.BufferEnum.B1);
 
                 //Aqui se puede meter codigo para traer la imagen de la huella
                 //para mostrarlo en un ImageView
@@ -87,7 +98,7 @@ public class HuellaAcqTask extends AsyncTask<Integer, Integer, String> {
     protected void onPostExecute(String result) {
         super.onPostExecute(result);
 
-        progressDialog.cancel();
+//        progressDialog.cancel();
 
         if (TextUtils.isEmpty(result)) {
 
@@ -96,16 +107,18 @@ public class HuellaAcqTask extends AsyncTask<Integer, Integer, String> {
         }
 
         //Si el if anterior no atrapa nada, entonces la adquisicion fue exitosa.
+        showDataTV.setText(data);
+        Log.e("HUELLA", data);
     }
 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
 
-        progressDialog = new ProgressDialog(mContext);
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.show();
+//        progressDialog = new ProgressDialog(mContext);
+//        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+//        progressDialog.setCanceledOnTouchOutside(false);
+//        progressDialog.show();
 
     }
 
@@ -113,4 +126,9 @@ public class HuellaAcqTask extends AsyncTask<Integer, Integer, String> {
     protected void onProgressUpdate(Integer... values) {
         super.onProgressUpdate(values);
     }
+
+    public String getData(){
+        return data;
+    }
+
 }

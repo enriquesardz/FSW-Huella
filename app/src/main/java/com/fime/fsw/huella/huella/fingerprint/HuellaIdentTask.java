@@ -22,28 +22,33 @@ public class HuellaIdentTask extends AsyncTask<Integer, Integer, String> {
     private ProgressDialog progressDialog;
     private Context mContext;
 
+    private Fingerprint mFingerprint;
+
     private int searchPageID = -1;
     private int searchScore = -1;
     private String searchName = "";
 
-    public HuellaIdentTask(Context context) {
+    public String data;
+
+    public HuellaIdentTask(Context context, Fingerprint fingerprint) {
         mContext = context;
+        mFingerprint = fingerprint;
     }
 
     @Override
     protected String doInBackground(Integer... params) {
 
-        if (!mContext.mFingerprint.getImage()) {
+        if (!mFingerprint.getImage()) {
             return null;
         }
 
-        if (mContext.mFingerprint.genChar(Fingerprint.BufferEnum.B1)) {
+        if (mFingerprint.genChar(Fingerprint.BufferEnum.B1)) {
             int[] result = null;
             int exeCount = 0;
 
             do {
                 exeCount++;
-                result = mContext.mFingerprint
+                result = mFingerprint
                         .search(Fingerprint.BufferEnum.B1, 0, 255);
 
             } while (result == null && exeCount < 3);
@@ -53,6 +58,8 @@ public class HuellaIdentTask extends AsyncTask<Integer, Integer, String> {
             if (result != null) {
                 searchPageID = result[0];
                 searchScore = result[1];
+                data = mFingerprint.upChar(Fingerprint.BufferEnum.B1);
+                Log.e("HUELLA",data);
                 return "ok";
             }
 
@@ -66,7 +73,7 @@ public class HuellaIdentTask extends AsyncTask<Integer, Integer, String> {
     protected void onPostExecute(String result) {
         super.onPostExecute(result);
 
-        progressDialog.cancel();
+//        progressDialog.cancel();
 
         if (TextUtils.isEmpty(result)) {
             //Fallo la identificacion
@@ -81,15 +88,19 @@ public class HuellaIdentTask extends AsyncTask<Integer, Integer, String> {
     protected void onPreExecute() {
         super.onPreExecute();
 
-        progressDialog = new ProgressDialog(mContext);
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.show();
+//        progressDialog = new ProgressDialog(mContext);
+//        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+//        progressDialog.setCanceledOnTouchOutside(false);
+//        progressDialog.show();
 
     }
 
     @Override
     protected void onProgressUpdate(Integer... values) {
         super.onProgressUpdate(values);
+    }
+
+    public String getData(){
+        return data;
     }
 }

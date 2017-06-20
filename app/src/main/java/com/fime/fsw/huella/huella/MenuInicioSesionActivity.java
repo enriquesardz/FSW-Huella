@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.fime.fsw.huella.huella.prueba.RecogHuellaActivity;
+
 public class MenuInicioSesionActivity extends AppCompatActivity {
 
     private Button mIniciarSesionButton;
@@ -51,7 +53,8 @@ public class MenuInicioSesionActivity extends AppCompatActivity {
         mIniciarConHuellaButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(mContext, "Lanzar Huella", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(mContext, RecogHuellaActivity.class));
+                finish();
             }
         });
     }
