@@ -13,8 +13,9 @@
             android:id="@+id/informacion_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/bordes_views">
+            android:layout_weight="4"
+            android:background="@drawable/bordes_views"
+            android:fillViewport="true">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -26,26 +27,27 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:gravity="center"
+                    android:gravity="left"
                     android:orientation="vertical">
 
-                    <ImageView
-                        android:layout_width="150dp"
-                        android:layout_height="150dp"
-                        android:src="@drawable/usuario" />
-
-                    <Space
-                        android:layout_width="match_parent"
-                        android:layout_height="30dp" />
+                    <TextView
+                        style="@style/TextTitulo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="@string/cbarra_datos_generales" />
 
                     <TextView
+                        style="@style/TextSubTitulo"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingBottom="10dp"
+                        android:paddingTop="20dp"
                         android:text="Maestro: Colunga" />
 
                     <TextView
                         android:id="@+id/hora_fime_textview"
+                        style="@style/TextSubTitulo"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingBottom="10dp"
@@ -53,6 +55,7 @@
 
                     <TextView
                         android:id="@+id/salon_fime_textview"
+                        style="@style/TextSubTitulo"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingBottom="10dp"
@@ -60,6 +63,7 @@
 
 
                     <TextView
+                        style="@style/TextSubTitulo"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingBottom="10dp"
@@ -68,50 +72,49 @@
                 </LinearLayout>
 
 
+                <!-- ### CAMARA Y BOTON ACEPTAR ###
+
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="3"
-                    android:gravity="center"
-                    android:orientation="horizontal">
+                           android:layout_width="match_parent"
+                           android:layout_height="match_parent"
+                           android:layout_weight="3"
+                           android:gravity="center"
+                           android:orientation="horizontal">
 
-                    <ImageButton
-                        android:id="@+id/capturar_button"
-                        android:layout_width="70dp"
-                        android:layout_height="70dp"
-                        android:background="@drawable/camara" />
+                           <ImageButton
+                               android:id="@+id/capturar_button"
+                               android:layout_width="70dp"
+                               android:layout_height="70dp"
+                               android:background="@drawable/camara" />
 
-                    <Space
-                        android:layout_width="150dp"
-                        android:layout_height="match_parent" />
+                           <Space
+                               android:layout_width="150dp"
+                               android:layout_height="match_parent" />
 
-                    <ImageButton
-                        android:layout_width="70dp"
-                        android:layout_height="70dp"
-                        android:background="@drawable/aceptar" />
+                           <ImageButton
+                               android:layout_width="70dp"
+                               android:layout_height="70dp"
+                               android:background="@drawable/aceptar" />
 
-                </LinearLayout>
+                       </LinearLayout>
+
+                       -->
 
             </LinearLayout>
 
         </ScrollView>
 
-        <TextView
-            android:id="@+id/salon_textview"
-            style="@style/TextTitulo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:text="@string/cbarra_salon" />
 
-        <Button
-            android:id="@+id/escaner_salon_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:drawableLeft="@drawable/ic_codigo_barras"
-            android:drawablePadding="8dp"
-            android:text="@string/cbarra_escanear_salon" />
+            <ImageButton
+                android:id="@+id/escaner_salon_button"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/img_codigo_barras" />
+
+
+
+
     </LinearLayout>
 
 </FrameLayout>

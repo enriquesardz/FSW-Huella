@@ -34,7 +34,6 @@ public class RecogHuellaActivity extends AppCompatActivity {
     private TextView dataTextview;
     private ProgressDialog progressDialog;
 
-    private HuellaIdentTask identTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,15 +97,14 @@ public class RecogHuellaActivity extends AppCompatActivity {
             }
         });
 
+        //TODO: Agregar metodo para encontrar huella con valor hexadecimal
+        //TODO: hay un metodo que puede funcionar = downChar(buffer, hexStr);
         buscarButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                identTask = new HuellaIdentTask(mContext,mFingerprint, progressDialog);
-                identTask.execute();
+                new HuellaIdentTask(mContext,mFingerprint, progressDialog).execute();
             }
         });
-
-
 
     }
 

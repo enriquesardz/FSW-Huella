@@ -28,7 +28,8 @@
         <activity android:name=".PrefectoLoginActivity" />
         <activity android:name=".PrefectoRegistroActivity" />
         <activity android:name=".DescargaRutaActivity" />
-        <activity android:name=".prueba.RecogHuellaActivity"></activity>
+        <activity android:name=".prueba.RecogHuellaActivity" />
+        <activity android:name=".barcode.BarcodeReaderActivity" />
     </application>
 
 </manifest>

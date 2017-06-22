@@ -61,11 +61,25 @@ public class HuellaIdentTask extends AsyncTask<Integer, Integer, String> {
                 searchScore = result[1];
                 data = mFingerprint.upChar(Fingerprint.BufferEnum.B1);
                 Log.e("HUELLA",data);
+
+                mFingerprint.downChar(Fingerprint.BufferEnum.B2, HuellaAcqTask.datab2);
+
+                if (mFingerprint.match()!=-1){
+                    Log.i("HUELLA", "match b1 b2");
+                } else
+                {
+                    Log.i("HUELLA", "nomatfch");
+                }
+
                 return "ok";
             }
 
+
+
             Log.i(TAG, "search result Empty");
         }
+
+
 
         return null;
     }
@@ -74,7 +88,7 @@ public class HuellaIdentTask extends AsyncTask<Integer, Integer, String> {
     protected void onPostExecute(String result) {
         super.onPostExecute(result);
 
-        progressDialog.cancel();
+//        progressDialog.cancel();
 
         if (TextUtils.isEmpty(result)) {
             //Fallo la identificacion
@@ -89,9 +103,9 @@ public class HuellaIdentTask extends AsyncTask<Integer, Integer, String> {
     protected void onPreExecute() {
         super.onPreExecute();
 
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.show();
+//        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+//        progressDialog.setCanceledOnTouchOutside(false);
+//        progressDialog.show();
 
     }
 

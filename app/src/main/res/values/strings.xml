@@ -42,10 +42,15 @@
     </string-array>
 
     <!-- Fragment Codigo Barras -->
+    <string name="cbarra_datos_generales">Datos Generales</string>
     <string name="cbarra_escanear_salon">Escanear salón</string>
     <string name="cbarra_salon">Salon: </string>
 
     <!-- Settings Menu Strings -->
     <string name="menu_cerrar_sesion">Cerrar sesión</string>
+    <string name="title_activity_test">test</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
 
 </resources>

@@ -18,6 +18,8 @@ import org.w3c.dom.Text;
 
 public class HuellaAcqTask extends AsyncTask<Integer, Integer, String> {
 
+    public static String datab2;
+
     private ProgressDialog progressDialog;
     private Context mContext;
 
@@ -85,6 +87,7 @@ public class HuellaAcqTask extends AsyncTask<Integer, Integer, String> {
 
                 //Save as default
                 data = mFingerprint.upChar(Fingerprint.BufferEnum.B1);
+                datab2 = data;
 
                 //Aqui se puede meter codigo para traer la imagen de la huella
                 //para mostrarlo en un ImageView
@@ -99,7 +102,7 @@ public class HuellaAcqTask extends AsyncTask<Integer, Integer, String> {
     protected void onPostExecute(String result) {
         super.onPostExecute(result);
 
-        progressDialog.cancel();
+//        progressDialog.cancel();
 
         if (TextUtils.isEmpty(result)) {
 
@@ -115,10 +118,10 @@ public class HuellaAcqTask extends AsyncTask<Integer, Integer, String> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.show();
+//
+//        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+//        progressDialog.setCanceledOnTouchOutside(false);
+//        progressDialog.show();
 
     }
 

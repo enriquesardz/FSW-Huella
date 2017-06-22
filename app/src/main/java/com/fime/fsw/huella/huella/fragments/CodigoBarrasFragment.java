@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.fime.fsw.huella.huella.R;
 import com.fime.fsw.huella.huella.RecorridoMainActivity;
+import com.fime.fsw.huella.huella.barcode.BarcodeReaderActivity;
 
 
 /**
@@ -30,8 +31,7 @@ public class CodigoBarrasFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    private ImageButton btnCapturar;
-    private Button escanerButton;
+    private ImageButton escanerButton;
     private TextView horaFimeTextview;
     private TextView salonFimeTextview;
     private View infoContainer;
@@ -75,30 +75,14 @@ public class CodigoBarrasFragment extends Fragment {
             infoContainer.setVisibility(View.VISIBLE);
         }
 
-        btnCapturar =(ImageButton) view.findViewById(R.id.capturar_button);
-        escanerButton = (Button)view.findViewById(R.id.escaner_salon_button);
+        escanerButton = (ImageButton)view.findViewById(R.id.escaner_salon_button);
 
-        //Boton para abrir la aplicacion de la camara y que tome foto del maestro.
-        btnCapturar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivity(intent);
-            }
-        });
 
         //Toast cuando se le da click al boton de escanear.
         escanerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                View customToast = inflater.inflate(R.layout.custom_toast_informacion_correcta,null);
-                TextView msgToast = (TextView)customToast.findViewById(R.id.txt_custom_toast);
-                msgToast.setText("Se actualizo la información");
-                Toast toast = new Toast(mContext);
-                toast.setGravity(Gravity.CENTER,0,0);
-                toast.setDuration(Toast.LENGTH_SHORT);
-                toast.setView(customToast);
-                toast.show();
+                startActivity(new Intent(mContext, BarcodeReaderActivity.class));
             }
         });
 
