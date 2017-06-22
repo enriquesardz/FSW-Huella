@@ -30,9 +30,10 @@ public class HuellaIdentTask extends AsyncTask<Integer, Integer, String> {
 
     public String data;
 
-    public HuellaIdentTask(Context context, Fingerprint fingerprint) {
+    public HuellaIdentTask(Context context, Fingerprint fingerprint, ProgressDialog progressDialog) {
         mContext = context;
         mFingerprint = fingerprint;
+        this.progressDialog = progressDialog;
     }
 
     @Override
@@ -73,7 +74,7 @@ public class HuellaIdentTask extends AsyncTask<Integer, Integer, String> {
     protected void onPostExecute(String result) {
         super.onPostExecute(result);
 
-//        progressDialog.cancel();
+        progressDialog.cancel();
 
         if (TextUtils.isEmpty(result)) {
             //Fallo la identificacion
@@ -88,10 +89,9 @@ public class HuellaIdentTask extends AsyncTask<Integer, Integer, String> {
     protected void onPreExecute() {
         super.onPreExecute();
 
-//        progressDialog = new ProgressDialog(mContext);
-//        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-//        progressDialog.setCanceledOnTouchOutside(false);
-//        progressDialog.show();
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.show();
 
     }
 

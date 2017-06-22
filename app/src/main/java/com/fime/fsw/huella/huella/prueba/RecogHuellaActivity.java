@@ -31,8 +31,8 @@ public class RecogHuellaActivity extends AppCompatActivity {
     private Button adquirirButton;
     private Button buscarButton;
     private Button checarButton;
-
     private TextView dataTextview;
+    private ProgressDialog progressDialog;
 
     private HuellaIdentTask identTask;
 
@@ -58,6 +58,7 @@ public class RecogHuellaActivity extends AppCompatActivity {
         buscarButton = (Button)findViewById(R.id.buscar_button);
         dataTextview = (TextView)findViewById(R.id.data_textview);
         checarButton = (Button)findViewById(R.id.checar_button);
+        progressDialog = new ProgressDialog(mContext);
 
         //Adquisicion de huella
         adquirirButton.setOnClickListener(new View.OnClickListener() {
@@ -93,30 +94,18 @@ public class RecogHuellaActivity extends AppCompatActivity {
                     return;
                 }
 
-                new HuellaAcqTask(iPageId, "", mContext, mFingerprint, dataTextview).execute();
+                new HuellaAcqTask(iPageId, "", mContext, mFingerprint, dataTextview, progressDialog).execute();
             }
         });
 
         buscarButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                identTask = new HuellaIdentTask(mContext,mFingerprint);
+                identTask = new HuellaIdentTask(mContext,mFingerprint, progressDialog);
                 identTask.execute();
             }
         });
 
-        checarButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String temp = dataTextview.getText().toString();
-                String respuesta = "no";
-                if(TextUtils.equals(temp, identTask.getData())){
-                    respuesta = "Si es igual";
-                }
-
-                Toast.makeText(mContext, respuesta, Toast.LENGTH_SHORT).show();
-            }
-        });
 
 
     }

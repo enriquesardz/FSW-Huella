@@ -30,7 +30,7 @@ public class HuellaAcqTask extends AsyncTask<Integer, Integer, String> {
 
     private TextView showDataTV;
 
-    public HuellaAcqTask(int pageId, String name, Context context, Fingerprint fingerprint, TextView showData) {
+    public HuellaAcqTask(int pageId, String name, Context context, Fingerprint fingerprint, TextView showData, ProgressDialog progressDialog) {
 
         //TODO: El mFingerprint hace referencia al objeto Fingerprint que se tiene corriendo en la Actividad que llama a esta clase
         //TODO: Por ello, se requiere el Contexto de esa Actividad.
@@ -40,6 +40,7 @@ public class HuellaAcqTask extends AsyncTask<Integer, Integer, String> {
         pid = pageId;
         uname = name;
         showDataTV = showData;
+        this.progressDialog = progressDialog;
 //        isShowImg = showImg; Por si se quiere mostrar la imagen se pasa un booleano
     }
 
@@ -98,7 +99,7 @@ public class HuellaAcqTask extends AsyncTask<Integer, Integer, String> {
     protected void onPostExecute(String result) {
         super.onPostExecute(result);
 
-//        progressDialog.cancel();
+        progressDialog.cancel();
 
         if (TextUtils.isEmpty(result)) {
 
@@ -115,10 +116,9 @@ public class HuellaAcqTask extends AsyncTask<Integer, Integer, String> {
     protected void onPreExecute() {
         super.onPreExecute();
 
-//        progressDialog = new ProgressDialog(mContext);
-//        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-//        progressDialog.setCanceledOnTouchOutside(false);
-//        progressDialog.show();
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.show();
 
     }
 
