@@ -88,7 +88,7 @@ public class HuellaIdentTask extends AsyncTask<Integer, Integer, String> {
     protected void onPostExecute(String result) {
         super.onPostExecute(result);
 
-//        progressDialog.cancel();
+        progressDialog.cancel();
 
         if (TextUtils.isEmpty(result)) {
             //Fallo la identificacion
@@ -103,9 +103,9 @@ public class HuellaIdentTask extends AsyncTask<Integer, Integer, String> {
     protected void onPreExecute() {
         super.onPreExecute();
 
-//        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-//        progressDialog.setCanceledOnTouchOutside(false);
-//        progressDialog.show();
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.show();
 
     }
 

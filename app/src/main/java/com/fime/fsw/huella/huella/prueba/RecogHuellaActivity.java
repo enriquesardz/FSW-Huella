@@ -21,6 +21,8 @@ import com.fime.fsw.huella.huella.fingerprint.HuellaAcqTask;
 import com.fime.fsw.huella.huella.fingerprint.HuellaIdentTask;
 import com.rscja.deviceapi.Fingerprint;
 
+import org.w3c.dom.Text;
+
 public class RecogHuellaActivity extends AppCompatActivity {
 
     public Fingerprint mFingerprint;
@@ -32,6 +34,7 @@ public class RecogHuellaActivity extends AppCompatActivity {
     private Button buscarButton;
     private Button checarButton;
     private TextView dataTextview;
+    private TextView matchTextview;
     private ProgressDialog progressDialog;
 
 
@@ -50,15 +53,17 @@ public class RecogHuellaActivity extends AppCompatActivity {
             Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show();
         }
 
-        mContext = getApplicationContext();
+        mContext = RecogHuellaActivity.this;
 
         pageIDTextView = (EditText)findViewById(R.id.page_id_edittext);
         adquirirButton = (Button) findViewById(R.id.adquirir_button);
-        buscarButton = (Button)findViewById(R.id.buscar_button);
+//        buscarButton = (Button)findViewById(R.id.buscar_button);
         dataTextview = (TextView)findViewById(R.id.data_textview);
-        checarButton = (Button)findViewById(R.id.checar_button);
+//        checarButton = (Button)findViewById(R.id.checar_button);
+        matchTextview = (TextView)findViewById(R.id.match_textview);
         progressDialog = new ProgressDialog(mContext);
 
+        pageIDTextView.setText("1");
         //Adquisicion de huella
         adquirirButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,18 +98,18 @@ public class RecogHuellaActivity extends AppCompatActivity {
                     return;
                 }
 
-                new HuellaAcqTask(iPageId, "", mContext, mFingerprint, dataTextview, progressDialog).execute();
+                new HuellaAcqTask(iPageId, "", mContext, mFingerprint, dataTextview, progressDialog, matchTextview).execute();
             }
         });
 
         //TODO: Agregar metodo para encontrar huella con valor hexadecimal
         //TODO: hay un metodo que puede funcionar = downChar(buffer, hexStr);
-        buscarButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                new HuellaIdentTask(mContext,mFingerprint, progressDialog).execute();
-            }
-        });
+//        buscarButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                new HuellaIdentTask(mContext,mFingerprint, progressDialog).execute();
+//            }
+//        });
 
     }
 

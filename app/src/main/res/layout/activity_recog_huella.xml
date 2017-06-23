@@ -21,22 +21,26 @@
         android:layout_marginTop="30dp"
         android:text="Adquirir huella nueva" />
 
-    <Button
-        android:id="@+id/buscar_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="30dp"
-        android:text="Buscar huella" />
+    <!--<Button-->
+        <!--android:id="@+id/buscar_button"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="center_horizontal"-->
+        <!--android:layout_marginTop="30dp"-->
+        <!--android:text="Buscar huella" />-->
 
-    <Button
-        android:id="@+id/checar_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="30dp"
-        android:text="Checar" />
+    <!--<Button-->
+        <!--android:id="@+id/checar_button"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="center_horizontal"-->
+        <!--android:layout_marginTop="30dp"-->
+        <!--android:text="Checar" />-->
 
+    <TextView
+        android:id="@+id/match_textview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">

@@ -28,11 +28,13 @@ public class HuellaAcqTask extends AsyncTask<Integer, Integer, String> {
     private int pid;
     private String uname;
     private String data;
+    private String matchData;
     //    private boolean isShowImg;
 
     private TextView showDataTV;
+    private TextView matchTextView;
 
-    public HuellaAcqTask(int pageId, String name, Context context, Fingerprint fingerprint, TextView showData, ProgressDialog progressDialog) {
+    public HuellaAcqTask(int pageId, String name, Context context, Fingerprint fingerprint, TextView showData, ProgressDialog progressDialog, TextView matchText) {
 
         //TODO: El mFingerprint hace referencia al objeto Fingerprint que se tiene corriendo en la Actividad que llama a esta clase
         //TODO: Por ello, se requiere el Contexto de esa Actividad.
@@ -43,6 +45,7 @@ public class HuellaAcqTask extends AsyncTask<Integer, Integer, String> {
         uname = name;
         showDataTV = showData;
         this.progressDialog = progressDialog;
+        matchTextView = matchText;
 //        isShowImg = showImg; Por si se quiere mostrar la imagen se pasa un booleano
     }
 
@@ -70,6 +73,8 @@ public class HuellaAcqTask extends AsyncTask<Integer, Integer, String> {
         if (mFingerprint.genChar(Fingerprint.BufferEnum.B2)) {
             exeSucc = true;
         }
+
+        matchData = Integer.toString(mFingerprint.match());
 
         // 合并两个缓冲区到B1
         if (mFingerprint.regModel()) {
@@ -102,7 +107,7 @@ public class HuellaAcqTask extends AsyncTask<Integer, Integer, String> {
     protected void onPostExecute(String result) {
         super.onPostExecute(result);
 
-//        progressDialog.cancel();
+        progressDialog.cancel();
 
         if (TextUtils.isEmpty(result)) {
 
@@ -112,16 +117,17 @@ public class HuellaAcqTask extends AsyncTask<Integer, Integer, String> {
 
         //Si el if anterior no atrapa nada, entonces la adquisicion fue exitosa.
         showDataTV.setText(data);
+        matchTextView.setText(matchData);
         Log.e("HUELLA", data);
     }
 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-//
-//        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-//        progressDialog.setCanceledOnTouchOutside(false);
-//        progressDialog.show();
+
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.show();
 
     }
 
