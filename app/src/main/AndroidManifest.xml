@@ -28,8 +28,9 @@
         <activity android:name=".PrefectoLoginActivity" />
         <activity android:name=".PrefectoRegistroActivity" />
         <activity android:name=".DescargaRutaActivity" />
-        <activity android:name=".prueba.RecogHuellaActivity" />
+        <activity android:name=".fingerprint.NewHuellaActivity" />
         <activity android:name=".barcode.BarcodeReaderActivity" />
+        <activity android:name=".fingerprint.BuscarHuellaActivity"></activity>
     </application>
 
 </manifest>

@@ -5,52 +5,27 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.fime.fsw.huella.huella.prueba.RecogHuellaActivity">
+    android:focusableInTouchMode="false"
+    tools:context="com.fime.fsw.huella.huella.fingerprint.NewHuellaActivity">
 
     <EditText
         android:id="@+id/page_id_edittext"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Page ID(0~254)" />
+        android:hint="Nombre"
+        android:paddingTop="8dp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
 
     <Button
         android:id="@+id/adquirir_button"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/ms__item_height"
+        android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal|center_vertical"
         android:layout_marginTop="30dp"
         android:text="Adquirir huella nueva" />
-
-    <!--<Button-->
-        <!--android:id="@+id/buscar_button"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_gravity="center_horizontal"-->
-        <!--android:layout_marginTop="30dp"-->
-        <!--android:text="Buscar huella" />-->
-
-    <!--<Button-->
-        <!--android:id="@+id/checar_button"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_gravity="center_horizontal"-->
-        <!--android:layout_marginTop="30dp"-->
-        <!--android:text="Checar" />-->
-
-    <TextView
-        android:id="@+id/match_textview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:id="@+id/data_textview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:text="Data" />
-    </ScrollView>
 
 </LinearLayout>

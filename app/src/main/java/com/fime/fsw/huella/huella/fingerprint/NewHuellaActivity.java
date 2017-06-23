@@ -1,4 +1,4 @@
-package com.fime.fsw.huella.huella.prueba;
+package com.fime.fsw.huella.huella.fingerprint;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -7,36 +7,24 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.fime.fsw.huella.huella.MenuInicioSesionActivity;
 import com.fime.fsw.huella.huella.R;
-import com.fime.fsw.huella.huella.fingerprint.HuellaAcqTask;
-import com.fime.fsw.huella.huella.fingerprint.HuellaIdentTask;
 import com.rscja.deviceapi.Fingerprint;
 
-import org.w3c.dom.Text;
-
-public class RecogHuellaActivity extends AppCompatActivity {
+public class NewHuellaActivity extends AppCompatActivity {
 
     public Fingerprint mFingerprint;
     public Context mContext;
 
-    private EditText pageIDTextView;
-
+    private EditText nombreUsuarioET;
     private Button adquirirButton;
-    private Button buscarButton;
-    private Button checarButton;
-    private TextView dataTextview;
-    private TextView matchTextview;
-    private ProgressDialog progressDialog;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,66 +41,31 @@ public class RecogHuellaActivity extends AppCompatActivity {
             Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show();
         }
 
-        mContext = RecogHuellaActivity.this;
+        mContext = NewHuellaActivity.this;
 
-        pageIDTextView = (EditText)findViewById(R.id.page_id_edittext);
+        nombreUsuarioET = (EditText) findViewById(R.id.page_id_edittext);
         adquirirButton = (Button) findViewById(R.id.adquirir_button);
-//        buscarButton = (Button)findViewById(R.id.buscar_button);
-        dataTextview = (TextView)findViewById(R.id.data_textview);
-//        checarButton = (Button)findViewById(R.id.checar_button);
-        matchTextview = (TextView)findViewById(R.id.match_textview);
-        progressDialog = new ProgressDialog(mContext);
 
-        pageIDTextView.setText("1");
+
         //Adquisicion de huella
         adquirirButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String pageId = pageIDTextView.getText().toString().trim();
+                String nombreUsuario = nombreUsuarioET.getText().toString().trim();
 
-                if (TextUtils.isEmpty(pageId)) {
+                if (TextUtils.isEmpty(nombreUsuario)) {
 
-                    Toast.makeText(mContext, "ID no puede ser nulo",
+                    Toast.makeText(mContext, "Nombre no puede ser nulo",
                             Toast.LENGTH_SHORT).show();
 
                     return;
                 }
 
-                if (!TextUtils.isDigitsOnly(pageId)) {
-
-                    Toast.makeText(mContext,
-                            "ID debe de ser un numero",
-                            Toast.LENGTH_SHORT).show();
-
-                    return;
-                }
-
-                int iPageId = Integer.parseInt(pageId);
-
-                if (iPageId < 0 || iPageId > 254) {
-
-                    Toast.makeText(mContext,
-                            "ID debe estar en el rango de 0~254",
-                            Toast.LENGTH_SHORT).show();
-
-                    return;
-                }
-
-                new HuellaAcqTask(iPageId, "", mContext, mFingerprint, dataTextview, progressDialog, matchTextview).execute();
+                new HuellaAcqTask(mContext,mFingerprint,nombreUsuario).execute();
             }
         });
 
-        //TODO: Agregar metodo para encontrar huella con valor hexadecimal
-        //TODO: hay un metodo que puede funcionar = downChar(buffer, hexStr);
-//        buscarButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                new HuellaIdentTask(mContext,mFingerprint, progressDialog).execute();
-//            }
-//        });
-
     }
-
 
     @Override
     public void onBackPressed() {
@@ -164,7 +117,7 @@ public class RecogHuellaActivity extends AppCompatActivity {
             mypDialog.cancel();
 
             if (!result) {
-                Toast.makeText(RecogHuellaActivity.this, "init fail",
+                Toast.makeText(NewHuellaActivity.this, "init fail",
                         Toast.LENGTH_SHORT).show();
             }
         }
@@ -174,7 +127,7 @@ public class RecogHuellaActivity extends AppCompatActivity {
             // TODO Auto-generated method stub
             super.onPreExecute();
 
-            mypDialog = new ProgressDialog(RecogHuellaActivity.this);
+            mypDialog = new ProgressDialog(NewHuellaActivity.this);
             mypDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             mypDialog.setMessage("init...");
             mypDialog.setCanceledOnTouchOutside(false);

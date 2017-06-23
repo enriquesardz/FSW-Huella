@@ -1,13 +1,18 @@
 package com.fime.fsw.huella.huella.fingerprint;
 
 import android.app.ProgressDialog;
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.os.AsyncTask;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fime.fsw.huella.huella.data.HuellaContract;
+import com.fime.fsw.huella.huella.data.HuellaDBHelper;
 import com.rscja.deviceapi.Fingerprint;
 
 import org.w3c.dom.Text;
@@ -18,35 +23,23 @@ import org.w3c.dom.Text;
 
 public class HuellaAcqTask extends AsyncTask<Integer, Integer, String> {
 
-    public static String datab2;
+    private static final String TAG = HuellaAcqTask.class.getSimpleName();
 
-    private ProgressDialog progressDialog;
     private Context mContext;
-
     private Fingerprint mFingerprint;
+    private String hexData;
+    private String nombreUsuario;
+    private HuellaDBHelper mDBHelper;
+    ProgressDialog progressDialog;
 
-    private int pid;
-    private String uname;
-    private String data;
-    private String matchData;
-    //    private boolean isShowImg;
 
-    private TextView showDataTV;
-    private TextView matchTextView;
-
-    public HuellaAcqTask(int pageId, String name, Context context, Fingerprint fingerprint, TextView showData, ProgressDialog progressDialog, TextView matchText) {
-
-        //TODO: El mFingerprint hace referencia al objeto Fingerprint que se tiene corriendo en la Actividad que llama a esta clase
-        //TODO: Por ello, se requiere el Contexto de esa Actividad.
+    public HuellaAcqTask(Context context, Fingerprint fingerprint, String nombre) {
 
         mContext = context;
         mFingerprint = fingerprint;
-        pid = pageId;
-        uname = name;
-        showDataTV = showData;
-        this.progressDialog = progressDialog;
-        matchTextView = matchText;
-//        isShowImg = showImg; Por si se quiere mostrar la imagen se pasa un booleano
+        nombreUsuario = nombre;
+        mDBHelper = new HuellaDBHelper(mContext);
+        progressDialog = new ProgressDialog(mContext);
     }
 
     @Override
@@ -74,29 +67,13 @@ public class HuellaAcqTask extends AsyncTask<Integer, Integer, String> {
             exeSucc = true;
         }
 
-        matchData = Integer.toString(mFingerprint.match());
-
         // 合并两个缓冲区到B1
         if (mFingerprint.regModel()) {
             exeSucc = true;
         }
 
         if (exeSucc) {
-            if (mFingerprint.storChar(Fingerprint.BufferEnum.B1, pid)) {
-
-                //Checa si la opcion ISO esta activada, podemos saltarnos esto
-                //Por lo pronto se quita ese check
-
-                //Save as ISO
-                //data = mContext.mFingerprint.upChar(Fingerprint.BufferEnum.B11);
-
-                //Save as default
-                data = mFingerprint.upChar(Fingerprint.BufferEnum.B1);
-                datab2 = data;
-
-                //Aqui se puede meter codigo para traer la imagen de la huella
-                //para mostrarlo en un ImageView
-            }
+            hexData = mFingerprint.upChar(Fingerprint.BufferEnum.B1);
             return "ok";
         }
 
@@ -106,19 +83,26 @@ public class HuellaAcqTask extends AsyncTask<Integer, Integer, String> {
     @Override
     protected void onPostExecute(String result) {
         super.onPostExecute(result);
-
+        //TODO: Aqui se guarda a la base de datos.
+//        Guardar los datos aqui
         progressDialog.cancel();
 
         if (TextUtils.isEmpty(result)) {
-
             //Fallo la adquisicion de datos
             return;
         }
-
         //Si el if anterior no atrapa nada, entonces la adquisicion fue exitosa.
-        showDataTV.setText(data);
-        matchTextView.setText(matchData);
-        Log.e("HUELLA", data);
+        SQLiteDatabase db = mDBHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(HuellaContract.HuellaEntry.COLUMNA_NOMBRE, nombreUsuario);
+        values.put(HuellaContract.HuellaEntry.COLUMNA_HUELLA, hexData);
+        long rowID = db.insert(HuellaContract.HuellaEntry.TABLA_USUARIO_NOMBRE,null,values);
+        Log.i(TAG, nombreUsuario);
+        Log.i(TAG, hexData);
+        Log.i(TAG, Long.toString(rowID) +" agregado.");
+        mDBHelper.close();
+        db.close();
+
     }
 
     @Override
@@ -128,7 +112,6 @@ public class HuellaAcqTask extends AsyncTask<Integer, Integer, String> {
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.show();
-
     }
 
     @Override
@@ -136,8 +119,8 @@ public class HuellaAcqTask extends AsyncTask<Integer, Integer, String> {
         super.onProgressUpdate(values);
     }
 
-    public String getData(){
-        return data;
+    public String getData() {
+        return hexData;
     }
 
 }

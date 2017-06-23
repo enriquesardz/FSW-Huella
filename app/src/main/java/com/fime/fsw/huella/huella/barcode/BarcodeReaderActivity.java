@@ -2,15 +2,20 @@ package com.fime.fsw.huella.huella.barcode;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.fime.fsw.huella.huella.MenuInicioSesionActivity;
 import com.fime.fsw.huella.huella.R;
+import com.fime.fsw.huella.huella.fingerprint.BuscarHuellaActivity;
 import com.rscja.deviceapi.Barcode1D;
 import com.rscja.deviceapi.exception.ConfigurationException;
 
@@ -23,6 +28,7 @@ public class BarcodeReaderActivity extends AppCompatActivity {
     private TextView txtCodigo;
     private Button btnEscanear;
     private ProgressDialog progressDialog;
+    private ImageButton identHuellaButton;
 
     private Context mContext;
 
@@ -47,9 +53,17 @@ public class BarcodeReaderActivity extends AppCompatActivity {
 
         mContext = getApplicationContext();
 
-        txtCodigo = (TextView)findViewById(R.id.data_textview);
+        txtCodigo = (TextView) findViewById(R.id.data_textview);
         btnEscanear = (Button) findViewById(R.id.escanear_button);
         progressDialog = new ProgressDialog(mContext);
+        identHuellaButton = (ImageButton) findViewById(R.id.identificar_huella_button);
+
+        identHuellaButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(mContext, BuscarHuellaActivity.class));
+            }
+        });
 
         //Empieza a escanear
         btnEscanear.setOnClickListener(new View.OnClickListener() {
@@ -60,6 +74,18 @@ public class BarcodeReaderActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override

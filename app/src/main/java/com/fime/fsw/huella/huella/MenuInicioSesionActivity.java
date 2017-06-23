@@ -6,9 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
-import com.fime.fsw.huella.huella.prueba.RecogHuellaActivity;
+import com.fime.fsw.huella.huella.fingerprint.NewHuellaActivity;
 
 public class MenuInicioSesionActivity extends AppCompatActivity {
 
@@ -53,7 +52,7 @@ public class MenuInicioSesionActivity extends AppCompatActivity {
         mIniciarConHuellaButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(mContext, RecogHuellaActivity.class));
+                startActivity(new Intent(mContext, NewHuellaActivity.class));
                 finish();
             }
         });
