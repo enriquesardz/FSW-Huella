@@ -2,7 +2,6 @@ package com.fime.fsw.huella.huella.fingerprint;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,30 +13,28 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.fime.fsw.huella.huella.MenuInicioSesionActivity;
 import com.fime.fsw.huella.huella.R;
-import com.fime.fsw.huella.huella.RecorridoMainActivity;
 import com.rscja.deviceapi.Fingerprint;
-
-import org.w3c.dom.Text;
 
 public class BuscarHuellaActivity extends AppCompatActivity {
 
     public Fingerprint mFingerprint;
     public Context mContext;
 
-    private EditText idUsuarioET;
-    private TextView nombreUsuarioTV;
-    private Button buscarButton;
+    private EditText etIdUsuario;
+    private TextView tvNombreUsuario;
+    private Button btnBuscarHuella;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_buscar_huella);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setTitle("Buscar Huella");
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setTitle("Buscar Huella");
+        }
 
         try {
             mFingerprint = Fingerprint.getInstance();
@@ -46,24 +43,31 @@ public class BuscarHuellaActivity extends AppCompatActivity {
         }
 
         mContext = BuscarHuellaActivity.this;
+        initComponentes();
 
-        nombreUsuarioTV = (TextView) findViewById(R.id.nombre_textview);
-        idUsuarioET = (EditText) findViewById(R.id.id_usuario_edittext);
-        buscarButton = (Button) findViewById(R.id.buscar_huella_button);
+        //Inicia el task para buscar la huella con el id que se le pasa,
+        //ademas, toma la huella que se encuentre en el escanner para comparar.
+        //TODO: El id se debe de sacar de los datos que nos pasan los web service
 
-        //Adquisicion de huella
-        buscarButton.setOnClickListener(new View.OnClickListener() {
+        btnBuscarHuella.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String usuarioID = idUsuarioET.getText().toString();
+                String usuarioID = etIdUsuario.getText().toString();
                 if (TextUtils.isEmpty(usuarioID)) {
                     Toast.makeText(mContext, "El id no puede ir vacio", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                new HuellaIdentTask(mContext, mFingerprint, usuarioID,nombreUsuarioTV).execute();
+                //Este task utiliza las funciones proporcionadas por el SDK para identificar la huella
+                new HuellaIdentTask(mContext, mFingerprint, usuarioID, tvNombreUsuario).execute();
             }
         });
 
+    }
+
+    private void initComponentes() {
+        tvNombreUsuario = (TextView) findViewById(R.id.nombre_textview);
+        etIdUsuario = (EditText) findViewById(R.id.id_usuario_edittext);
+        btnBuscarHuella = (Button) findViewById(R.id.buscar_huella_button);
     }
 
     @Override
@@ -87,6 +91,7 @@ public class BuscarHuellaActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        //Libera la huella si esta activa cuando sale de la actividad.
         if (mFingerprint != null) {
             mFingerprint.free();
         }
@@ -95,9 +100,11 @@ public class BuscarHuellaActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        //Inicia la huella cuando se inicia la actividad.
         new InitTask().execute();
     }
 
+    //Este task inicia se encarga de iniciar el lector de la huella.
     public class InitTask extends AsyncTask<String, Integer, Boolean> {
         ProgressDialog mypDialog;
 

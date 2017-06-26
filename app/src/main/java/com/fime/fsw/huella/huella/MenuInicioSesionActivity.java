@@ -11,9 +11,9 @@ import com.fime.fsw.huella.huella.fingerprint.NewHuellaActivity;
 
 public class MenuInicioSesionActivity extends AppCompatActivity {
 
-    private Button mIniciarSesionButton;
-    private Button mRegistroButton;
-    private Button mIniciarConHuellaButton;
+    private Button btnIniciarSesion;
+    private Button btnRegistro;
+    private Button btnIniciarConHuella;
 
     private Context mContext;
 
@@ -22,18 +22,21 @@ public class MenuInicioSesionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_inicio_sesion);
         mContext = this;
-        getSupportActionBar().setTitle(getResources().getString(R.string.menu_inicio_titulo));
 
-        inicializarComponentes();
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(getResources().getString(R.string.menu_inicio_titulo));
+        }
+
+        initComponentes();
 
     }
 
-    private void inicializarComponentes(){
-        mIniciarSesionButton = (Button)findViewById(R.id.iniciar_sesion_button);
-        mRegistroButton = (Button)findViewById(R.id.registrarse_button);
-        mIniciarConHuellaButton = (Button)findViewById(R.id.iniciar_huella_button);
+    private void initComponentes() {
+        btnIniciarSesion = (Button) findViewById(R.id.iniciar_sesion_button);
+        btnRegistro = (Button) findViewById(R.id.registrarse_button);
+        btnIniciarConHuella = (Button) findViewById(R.id.iniciar_huella_button);
 
-        mIniciarSesionButton.setOnClickListener(new View.OnClickListener() {
+        btnIniciarSesion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(mContext, PrefectoLoginActivity.class));
@@ -41,7 +44,7 @@ public class MenuInicioSesionActivity extends AppCompatActivity {
             }
         });
 
-        mRegistroButton.setOnClickListener(new View.OnClickListener() {
+        btnRegistro.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(mContext, PrefectoRegistroActivity.class));
@@ -49,7 +52,7 @@ public class MenuInicioSesionActivity extends AppCompatActivity {
             }
         });
 
-        mIniciarConHuellaButton.setOnClickListener(new View.OnClickListener() {
+        btnIniciarConHuella.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(mContext, NewHuellaActivity.class));

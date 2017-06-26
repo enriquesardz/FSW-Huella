@@ -13,7 +13,6 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.fime.fsw.huella.huella.MenuInicioSesionActivity;
 import com.fime.fsw.huella.huella.R;
 import com.fime.fsw.huella.huella.fingerprint.BuscarHuellaActivity;
 import com.rscja.deviceapi.Barcode1D;
@@ -23,12 +22,12 @@ public class BarcodeReaderActivity extends AppCompatActivity {
 
     private final static String TAG = BarcodeReaderActivity.class.getSimpleName();
 
-    private boolean isOpened = false;
+    private boolean estaActivo = false;
 
-    private TextView txtCodigo;
+    private TextView tvCodigo;
     private Button btnEscanear;
     private ProgressDialog progressDialog;
-    private ImageButton identHuellaButton;
+    private ImageButton btnIdentHuella;
 
     private Context mContext;
 
@@ -51,29 +50,35 @@ public class BarcodeReaderActivity extends AppCompatActivity {
             return;
         }
 
-        mContext = getApplicationContext();
+        mContext = BarcodeReaderActivity.this;
 
-        txtCodigo = (TextView) findViewById(R.id.data_textview);
-        btnEscanear = (Button) findViewById(R.id.escanear_button);
-        progressDialog = new ProgressDialog(mContext);
-        identHuellaButton = (ImageButton) findViewById(R.id.identificar_huella_button);
+        initComponentes();
 
-        identHuellaButton.setOnClickListener(new View.OnClickListener() {
+        //Inicia actividad para identificar la huella
+        btnIdentHuella.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(mContext, BuscarHuellaActivity.class));
             }
         });
 
-        //Empieza a escanear
+        //Inicia el escanner para leer codigos de barra
         btnEscanear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (isOpened) {
+                //Si el codigo de barras esta activo entonces puede escanear
+                if (estaActivo) {
                     new ScanTask().execute();
                 }
             }
         });
+    }
+
+    private void initComponentes() {
+        tvCodigo = (TextView) findViewById(R.id.data_textview);
+        btnEscanear = (Button) findViewById(R.id.escanear_button);
+        progressDialog = new ProgressDialog(mContext);
+        btnIdentHuella = (ImageButton) findViewById(R.id.identificar_huella_button);
     }
 
     @Override
@@ -91,17 +96,21 @@ public class BarcodeReaderActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        //Inicia el codigo de barras cuando la actividad se abre
         new BarcodeInitTask().execute();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        //Si se sale de la actividad y el codigo de barras esta activo,
+        //se cierra.
         if (mBarcode != null) {
             mBarcode.close();
         }
     }
 
+    //Inicia el codigo de barras
     public class BarcodeInitTask extends AsyncTask<String, Integer, Boolean> {
 
         @Override
@@ -113,19 +122,18 @@ public class BarcodeReaderActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Boolean result) {
             super.onPostExecute(result);
-//            progressDialog.cancel();
-            isOpened = result;
+            progressDialog.cancel();
+            estaActivo = result;
 
         }
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-//            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-//            progressDialog.setMessage("Iniciando scanner");
-//            progressDialog.setCanceledOnTouchOutside(false);
-//            progressDialog.show();
-
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progressDialog.setMessage("Iniciando scanner");
+            progressDialog.setCanceledOnTouchOutside(false);
+            progressDialog.show();
         }
     }
 
@@ -135,7 +143,7 @@ public class BarcodeReaderActivity extends AppCompatActivity {
         protected String doInBackground(String... params) {
             String code = "";
 
-            if (isOpened) {
+            if (estaActivo) {
                 code = mBarcode.scan();
             }
 
@@ -145,7 +153,8 @@ public class BarcodeReaderActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-            txtCodigo.setText(result);
+            //Aqui se puede usar el codigo que regrese el escanner.
+            tvCodigo.setText(result);
 
         }
 

@@ -18,9 +18,9 @@ import java.util.List;
 
 public class DescargaRutaActivity extends AppCompatActivity {
 
-    private MaterialSpinner mClaveAreaSpinner;
-    private MaterialSpinner mPeriodoSpinner;
-    private Button mDescargarButton;
+    private MaterialSpinner spinnerClaveArea;
+    private MaterialSpinner spinnerPeriodo;
+    private Button btnDescargar;
 
     private Context mContext;
 
@@ -29,19 +29,17 @@ public class DescargaRutaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_descarga_ruta);
 
-        mContext = this;
+        mContext = DescargaRutaActivity.this;
 
-        mClaveAreaSpinner = (MaterialSpinner) findViewById(R.id.clave_area_spinner);
+        initComponentes();
+
         List<String> claveAreaData = new LinkedList<>(Arrays.asList(getResources().getStringArray(R.array.druta_claves_area_spinner)));
-        mClaveAreaSpinner.setItems(claveAreaData);
-
-
-        mPeriodoSpinner = (MaterialSpinner) findViewById(R.id.periodo_spinner);
         List<String> periodoData = new LinkedList<>(Arrays.asList(getResources().getStringArray(R.array.druta_periodo_spinner)));
-        mPeriodoSpinner.setItems(periodoData);
 
-        mDescargarButton = (Button)findViewById(R.id.descargar_button);
-        mDescargarButton.setOnClickListener(new View.OnClickListener() {
+        spinnerClaveArea.setItems(claveAreaData);
+        spinnerPeriodo.setItems(periodoData);
+
+        btnDescargar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //El usuario esta logeado; aqui se descarga y ahora la aplicacion continuara a abrir el RecorridoMainActivity.
@@ -51,6 +49,12 @@ public class DescargaRutaActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    private void initComponentes(){
+        spinnerClaveArea = (MaterialSpinner) findViewById(R.id.clave_area_spinner);
+        spinnerPeriodo = (MaterialSpinner) findViewById(R.id.periodo_spinner);
+        btnDescargar = (Button)findViewById(R.id.descargar_button);
     }
 
     @Override

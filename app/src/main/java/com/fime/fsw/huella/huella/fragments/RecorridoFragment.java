@@ -19,6 +19,8 @@ import com.fime.fsw.huella.huella.R;
  */
 public class RecorridoFragment extends Fragment {
 
+    //TODO: AUN NO IMPLEMENTADO
+
     private OnFragmentInteractionListener mListener;
 
     public RecorridoFragment() {

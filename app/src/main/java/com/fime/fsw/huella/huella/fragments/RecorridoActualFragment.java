@@ -67,7 +67,7 @@ public class RecorridoActualFragment extends Fragment {
     }
 
     //Interfaz implementada por RecorridoMainActivity que se encarga de pasarle los datos
-    //al fragment CodigoBarrasFragment
+    //al fragment DatosVisitaFragment
     public interface OnFragmentInteractionListener {
         void onRecorridoActualItemSelected(long id, String horaFime, String salonFime);
     }
@@ -81,11 +81,12 @@ public class RecorridoActualFragment extends Fragment {
         mRecyclerView.addItemDecoration(new DividerItemDecoration(mRecyclerView.getContext(), linearLayoutManager.getOrientation()));
 
         //Data prueba
+        //TODO: Aqui se debe de llenar con data de la base de datos
         mData.add(new RecorridoActualItem(1,"M2","2030"));
-        mData.add(new RecorridoActualItem(2,"N3","4200"));
-        mData.add(new RecorridoActualItem(3,"V4","6302"));
-        mData.add(new RecorridoActualItem(4,"M5","1301"));
-        mData.add(new RecorridoActualItem(5,"N2","4208"));
+        mData.add(new RecorridoActualItem(2,"M2","4200"));
+        mData.add(new RecorridoActualItem(3,"M2","6302"));
+        mData.add(new RecorridoActualItem(4,"M2","1301"));
+        mData.add(new RecorridoActualItem(5,"M2","4208"));
 
         mRecyclerAdapter = new RecorridoActualAdapter(mContext, mData, new RecyclerViewItemClickListener() {
             @Override
@@ -96,7 +97,7 @@ public class RecorridoActualFragment extends Fragment {
 
                 Toast.makeText(mContext, "ID: "+itemId+" Hora: "+horaFime+" Salon: "+salonFime, Toast.LENGTH_SHORT).show();
                 //Trigger de onRecorridoActualItemSelected en RecorridoMainActivity para comunicar con
-                //CodigoBarrasFragment
+                //DatosVisitaFragment
                 if (mListener!=null){
                     mListener.onRecorridoActualItemSelected(itemId,horaFime,salonFime);
                 }

@@ -11,7 +11,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.fime.fsw.huella.huella.MenuInicioSesionActivity;
@@ -23,17 +22,19 @@ public class NewHuellaActivity extends AppCompatActivity {
     public Fingerprint mFingerprint;
     public Context mContext;
 
-    private EditText nombreUsuarioET;
-    private Button adquirirButton;
+    private EditText etNombreUsuario;
+    private Button btnAdquirirHuella;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recog_huella);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setTitle("Adquisicion y leectura de Huella");
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setTitle("Adquisicion y leectura de Huella");
+        }
 
         try {
             mFingerprint = Fingerprint.getInstance();
@@ -42,16 +43,14 @@ public class NewHuellaActivity extends AppCompatActivity {
         }
 
         mContext = NewHuellaActivity.this;
-
-        nombreUsuarioET = (EditText) findViewById(R.id.page_id_edittext);
-        adquirirButton = (Button) findViewById(R.id.adquirir_button);
-
+        initComponentes();
 
         //Adquisicion de huella
-        adquirirButton.setOnClickListener(new View.OnClickListener() {
+        //TODO: Esta almacenando en una DB temporal, cambiar por DB para producto final.
+        btnAdquirirHuella.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String nombreUsuario = nombreUsuarioET.getText().toString().trim();
+                String nombreUsuario = etNombreUsuario.getText().toString().trim();
 
                 if (TextUtils.isEmpty(nombreUsuario)) {
 
@@ -61,10 +60,15 @@ public class NewHuellaActivity extends AppCompatActivity {
                     return;
                 }
 
-                new HuellaAcqTask(mContext,mFingerprint,nombreUsuario).execute();
+                new HuellaAcqTask(mContext, mFingerprint, nombreUsuario).execute();
             }
         });
 
+    }
+
+    private void initComponentes(){
+        etNombreUsuario = (EditText) findViewById(R.id.page_id_edittext);
+        btnAdquirirHuella = (Button) findViewById(R.id.adquirir_button);
     }
 
     @Override
@@ -89,6 +93,7 @@ public class NewHuellaActivity extends AppCompatActivity {
 
     @Override
     protected void onPause() {
+        //Libera la huella al salir de la actividad
         super.onPause();
         if (mFingerprint != null) {
             mFingerprint.free();
@@ -97,13 +102,14 @@ public class NewHuellaActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
+        //Inicia la huella al iniciar la actividad.
         super.onResume();
         new InitTask().execute();
     }
 
     public class InitTask extends AsyncTask<String, Integer, Boolean> {
         ProgressDialog mypDialog;
-
+        //Inicia la huella
         @Override
         protected Boolean doInBackground(String... params) {
             // TODO Auto-generated method stub

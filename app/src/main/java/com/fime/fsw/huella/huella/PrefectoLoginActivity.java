@@ -12,21 +12,24 @@ import com.fime.fsw.huella.huella.utilidad.ValidacionLogin;
 
 public class PrefectoLoginActivity extends AppCompatActivity {
 
-    private Button mIniciarSesionButton;
+    private Button btnIniciarSesion;
     private Context mContext;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_prefecto_login);
         mContext = this;
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setTitle(getResources().getString(R.string.prefecto_login_titulo));
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setTitle(getResources().getString(R.string.prefecto_login_titulo));
+        }
 
-        mIniciarSesionButton = (Button)findViewById(R.id.iniciar_sesion_button);
+        btnIniciarSesion = (Button) findViewById(R.id.iniciar_sesion_button);
 
-        mIniciarSesionButton.setOnClickListener(new View.OnClickListener() {
+        btnIniciarSesion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //TODO: Algun tipo de validacion usando ValidacionLogin.class quitar valores hard coded

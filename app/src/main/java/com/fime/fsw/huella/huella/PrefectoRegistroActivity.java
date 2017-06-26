@@ -11,14 +11,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fime.fsw.huella.huella.utilidad.SesionAplicacion;
-import com.fime.fsw.huella.huella.utilidad.ValidacionLogin;
 
 public class PrefectoRegistroActivity extends AppCompatActivity {
 
-    private Button mAceptarButton;
-    private TextView nombreTextView;
+    private Button btnAceptar;
+    private TextView tvNombre;
 
     private Context mContext;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,27 +26,27 @@ public class PrefectoRegistroActivity extends AppCompatActivity {
 
         mContext = this;
 
-        final SesionAplicacion sesionAplicacion = new SesionAplicacion(mContext);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setTitle(getResources().getString(R.string.prefecto_registro_titulo));
+        }
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setTitle(getResources().getString(R.string.prefecto_registro_titulo));
+        initComponentes();
 
-        mAceptarButton = (Button)findViewById(R.id.aceptar_button);
-        nombreTextView = (TextView)findViewById(R.id.nombre_textview);
-
-        mAceptarButton.setOnClickListener(new View.OnClickListener() {
+        btnAceptar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO: Revisar si el usuario se debe logear desde aqui o no.
-                //ValidacionLogin validacionLogin = new ValidacionLogin(mContext, "test");
-                //Tal vez no sea necesario logear al usuario aqui, solamente que cree la cuenta y despues tenga que logearse
-
-                Toast.makeText(mContext, "Bienvenido: " + nombreTextView.getText() , Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, "Bienvenido: " + tvNombre.getText(), Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(mContext, MenuInicioSesionActivity.class));
                 finish();
             }
         });
+    }
+
+    private void initComponentes() {
+        btnAceptar = (Button) findViewById(R.id.aceptar_button);
+        tvNombre = (TextView) findViewById(R.id.nombre_textview);
     }
 
     @Override
@@ -58,12 +58,12 @@ public class PrefectoRegistroActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()) {
+        switch (item.getItemId()) {
             case android.R.id.home:
                 startActivity(new Intent(mContext, MenuInicioSesionActivity.class));
                 finish();
             default:
-            return super.onOptionsItemSelected(item);
+                return super.onOptionsItemSelected(item);
         }
     }
 }

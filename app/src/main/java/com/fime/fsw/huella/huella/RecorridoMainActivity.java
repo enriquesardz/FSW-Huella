@@ -10,14 +10,14 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.fime.fsw.huella.huella.fragments.CodigoBarrasFragment;
+import com.fime.fsw.huella.huella.fragments.DatosVisitaFragment;
 import com.fime.fsw.huella.huella.fragments.RecorridoActualFragment;
 import com.fime.fsw.huella.huella.fragments.RecorridoFragment;
 import com.fime.fsw.huella.huella.utilidad.SesionAplicacion;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
 
-public class RecorridoMainActivity extends AppCompatActivity implements RecorridoFragment.OnFragmentInteractionListener, RecorridoActualFragment.OnFragmentInteractionListener, CodigoBarrasFragment.OnFragmentInteractionListener{
+public class RecorridoMainActivity extends AppCompatActivity implements RecorridoFragment.OnFragmentInteractionListener, RecorridoActualFragment.OnFragmentInteractionListener, DatosVisitaFragment.OnFragmentInteractionListener{
 
     public static final String KEY_ID_RECORRIDO_ITEM = "id";
     public static final String KEY_HORA_FIME = "hora_fime";
@@ -38,26 +38,23 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
 
         mContext = getApplicationContext();
 
-
         codigoArgs = new Bundle();
 
         mBarraNav = (BottomBar)findViewById(R.id.barra_navegacion);
         mBarraNav.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
             public void onTabSelected(@IdRes int tabId) {
-                if (tabId == R.id.tab_codigo){
+                if (tabId == R.id.tab_datos_visita){
                     //Puede iniciar vacio/hard coded o se inicia porque
                     //se le dio click a un salon del recorrido actual.
-                    mFragment = new CodigoBarrasFragment();
+                    mFragment = new DatosVisitaFragment();
                     mFragment.setArguments(codigoArgs);
                 }
-                else if (tabId == R.id.tab_datos){
+                else if (tabId == R.id.tab_recorrido_actual){
 
                     mFragment = new RecorridoActualFragment();
                 }
-                else if (tabId == R.id.tab_recorrido){
-                    mFragment = new RecorridoFragment();
-                }
+
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,mFragment).commit();
             }
         });
@@ -94,7 +91,7 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
         codigoArgs.putLong(KEY_ID_RECORRIDO_ITEM, id);
         codigoArgs.putString(KEY_HORA_FIME, horaFime);
         codigoArgs.putString(KEY_SALON_FIME, salonFime);
-        mBarraNav.selectTabWithId(R.id.tab_codigo);
+        mBarraNav.selectTabWithId(R.id.tab_datos_visita);
     }
 
     @Override
