@@ -51,7 +51,7 @@ public class DatosVisitaFragment extends Fragment {
     public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_codigo_barras, container, false);
+        View view = inflater.inflate(R.layout.fragment_datos_visita, container, false);
 
         mContext = getContext();
 

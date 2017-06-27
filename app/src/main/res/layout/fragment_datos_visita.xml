@@ -104,16 +104,12 @@
 
         </ScrollView>
 
-
             <ImageButton
                 android:id="@+id/escaner_salon_button"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_gravity="center_horizontal"
                 android:background="@drawable/img_codigo_barras" />
-
-
-
 
     </LinearLayout>
 

@@ -7,30 +7,39 @@
     android:orientation="vertical"
     tools:context="com.fime.fsw.huella.huella.barcode.BarcodeReaderActivity">
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/img_codigo_barras" />
+
     <TextView
         android:id="@+id/data_textview"
         style="@style/TextTitulo"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Data" />
+        android:layout_gravity="center"
+        android:background="@color/bb_tabletRightBorderDark"
+        android:padding="8dp"
+        android:text="Codigo" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"/>
-
-    <ImageButton
-        android:id="@+id/identificar_huella_button"
-        android:layout_gravity="center"
-        android:layout_width="50dp"
-        android:layout_height="50dp" />
+        android:layout_weight="1" />
 
     <Button
         android:id="@+id/escanear_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:text="Escanear"/>
+        android:text="Escanear" />
 
 
 </LinearLayout>

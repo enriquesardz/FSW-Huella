@@ -6,12 +6,14 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.fime.fsw.huella.huella.R;
 import com.fime.fsw.huella.huella.fingerprint.BuscarHuellaActivity;
@@ -27,7 +29,6 @@ public class BarcodeReaderActivity extends AppCompatActivity {
     private TextView tvCodigo;
     private Button btnEscanear;
     private ProgressDialog progressDialog;
-    private ImageButton btnIdentHuella;
 
     private Context mContext;
 
@@ -54,14 +55,6 @@ public class BarcodeReaderActivity extends AppCompatActivity {
 
         initComponentes();
 
-        //Inicia actividad para identificar la huella
-        btnIdentHuella.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(mContext, BuscarHuellaActivity.class));
-            }
-        });
-
         //Inicia el escanner para leer codigos de barra
         btnEscanear.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,7 +71,6 @@ public class BarcodeReaderActivity extends AppCompatActivity {
         tvCodigo = (TextView) findViewById(R.id.data_textview);
         btnEscanear = (Button) findViewById(R.id.escanear_button);
         progressDialog = new ProgressDialog(mContext);
-        btnIdentHuella = (ImageButton) findViewById(R.id.identificar_huella_button);
     }
 
     @Override
@@ -155,6 +147,13 @@ public class BarcodeReaderActivity extends AppCompatActivity {
             super.onPostExecute(result);
             //Aqui se puede usar el codigo que regrese el escanner.
             tvCodigo.setText(result);
+            if (!TextUtils.isEmpty(result)) {
+                //Se capturo algo de informacion entonces se inicia erl recog de la huella
+                Toast.makeText(mContext, result, Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(mContext, BuscarHuellaActivity.class));
+            } else {
+                Toast.makeText(mContext, "No se capturo el codigo", Toast.LENGTH_SHORT).show();
+            }
 
         }
 

@@ -48,7 +48,9 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
                     //Puede iniciar vacio/hard coded o se inicia porque
                     //se le dio click a un salon del recorrido actual.
                     mFragment = new DatosVisitaFragment();
-                    mFragment.setArguments(codigoArgs);
+                    if (codigoArgs != null){
+                        mFragment.setArguments(codigoArgs);
+                    }
                 }
                 else if (tabId == R.id.tab_recorrido_actual){
 
