@@ -3,9 +3,13 @@ package com.example.ensardz.registrohuella;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.os.AsyncTask;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -17,10 +21,13 @@ import android.widget.Toast;
 
 import com.example.ensardz.registrohuella.Datos.HuellaContract;
 import com.example.ensardz.registrohuella.Datos.HuellaDBHelper;
+import com.facebook.stetho.Stetho;
 import com.rscja.deviceapi.Fingerprint;
 
 
 public class RegistroActivity extends AppCompatActivity {
+
+    public static final String TAG = RegistroActivity.class.getSimpleName();
 
     public Fingerprint mFingerprint;
     public Context mContext;
@@ -28,11 +35,15 @@ public class RegistroActivity extends AppCompatActivity {
     private EditText edNumero;
     private EditText edNombre;
     private Button btnAgregar;
+    private Button btnMostrar;
+    private Button btnCrearArchivo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registro);
+
+        Stetho.initializeWithDefaults(this);
 
         try {
             mFingerprint = Fingerprint.getInstance();
@@ -44,6 +55,9 @@ public class RegistroActivity extends AppCompatActivity {
         edNumero = (EditText) findViewById(R.id.numero_empleado);
         edNombre = (EditText) findViewById(R.id.nombre);
         btnAgregar = (Button) findViewById(R.id.agregar);
+        btnMostrar = (Button) findViewById(R.id.mostrar);
+        btnCrearArchivo = (Button) findViewById(R.id.crear);
+
 
         btnAgregar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,24 +65,64 @@ public class RegistroActivity extends AppCompatActivity {
 
                 String nombre = edNombre.getText().toString().trim();
                 String empleadoId = edNumero.getText().toString().trim();
-                long empId = Long.parseLong(empleadoId);
-
+                long empId;
 
                 if (TextUtils.isEmpty(nombre) && TextUtils.isEmpty(empleadoId)) {
                     Toast.makeText(mContext, "Los campos no pueden ir vacios.", Toast.LENGTH_SHORT).show();
+
                     return;
                 }
 
-                if (!(empId >= 1000 && empId <= 1030)){
+                empId = Long.parseLong(empleadoId);
+
+                if (!(empId >= 1000 && empId <= 1030)) {
                     Toast.makeText(mContext, "Rangos entre 1000 y 1030 solamente", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
                 new HuellaAcqTask(mContext, mFingerprint, nombre, empleadoId).execute();
-
+                edNombre.setText("");
+                edNumero.setText("");
             }
         });
 
+        btnMostrar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(mContext, ShowActivity.class));
+            }
+        });
+
+        btnCrearArchivo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                btnCrearArchivo_onClick(view);
+            }
+        });
+
+    }
+
+    public void btnCrearArchivo_onClick(View v) {
+        DialogInterface.OnClickListener dialog = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogint, int which) {
+                switch (which) {
+                    case DialogInterface.BUTTON_POSITIVE:
+                        guardarDBaFile();
+                        break;
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        break;
+                }
+            }
+        };
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        builder.setMessage("Estas seguro?").setPositiveButton("Si", dialog)
+                .setNegativeButton("No", dialog).show();
+    }
+
+    public void guardarDBaFile() {
+        Log.i(TAG, mContext.getDatabasePath(HuellaDBHelper.NOMBRE_BASEDATOS).toString());
     }
 
     @Override
@@ -150,6 +204,10 @@ public class RegistroActivity extends AppCompatActivity {
         protected String doInBackground(Integer... params) {
 
             boolean exeSucc = false;
+
+            if (isCancelled()) {
+                return null;
+            }
 
             // Consigue la imagen de la huella
             if (!mFingerprint.getImage()) {
@@ -236,10 +294,57 @@ public class RegistroActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            HuellaDBHelper helper = null;
+            SQLiteDatabase db = null;
+            Cursor cursor = null;
+            try {
+                helper = new HuellaDBHelper(mContext);
+                db = helper.getReadableDatabase();
+
+                String[] projection = {
+                        HuellaContract.HuellaEntry._ID
+                };
+
+                String selection = HuellaContract.HuellaEntry.COLUMNA_NUMERO_EMPLEADO + " = ?";
+                String[] selectionArgs = {numEmpleado};
+
+                cursor = db.query(
+                        HuellaContract.HuellaEntry.TABLA_USUARIO_NOMBRE,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        null
+                );
+
+                if (cursor.getCount() > 0) {
+                    cancel(true);
+                    Log.e(TAG, "Ese numero de empleado ya existe");
+                    Toast.makeText(mContext, "Ya existe num empleado", Toast.LENGTH_SHORT).show();
+                }
+
+            } catch (Exception e) {
+                Log.e(TAG, e.toString());
+            } finally {
+                if (helper != null) {
+                    helper.close();
+                }
+                if (db != null) {
+                    db.close();
+                }
+                if (cursor != null) {
+                    db.close();
+                }
+            }
 
             progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             progressDialog.setCanceledOnTouchOutside(false);
             progressDialog.show();
+
+            if(isCancelled()){
+                progressDialog.cancel();
+            }
         }
 
         @Override

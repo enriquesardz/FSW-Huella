@@ -12,7 +12,7 @@ import android.util.Log;
 
 public class HuellaDBHelper extends SQLiteOpenHelper {
 
-    public static final int BASEDATOS_VERSION = 1;
+    public static final int BASEDATOS_VERSION = 3;
     public static final String NOMBRE_BASEDATOS = "base3.db";
     public static final String SQL_CREATE =
             "CREATE TABLE " + HuellaContract.HuellaEntry.TABLA_USUARIO_NOMBRE + " (" +
