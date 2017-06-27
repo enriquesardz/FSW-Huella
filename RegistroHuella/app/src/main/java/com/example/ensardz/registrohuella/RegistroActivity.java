@@ -49,9 +49,7 @@ public class RegistroActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 String nombre = edNombre.getText().toString();
-                Log.i("test", nombre);
                 String empleado = edNumero.getText().toString();
-                Log.i("test", empleado);
 
                 if (TextUtils.isEmpty(nombre) && TextUtils.isEmpty(empleado)) {
                     Toast.makeText(mContext, "Los campos no pueden ir vacios.", Toast.LENGTH_SHORT).show();
