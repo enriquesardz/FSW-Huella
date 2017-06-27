@@ -11,6 +11,7 @@
         android:id="@+id/numero_empleado"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:inputType="number"
         android:hint="Numero empleado" />
 
     <EditText
@@ -20,9 +21,9 @@
         android:hint="Nombre" />
 
     <Button
-        android:id="@+id/guardar"
+        android:id="@+id/agregar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Guardar"
+        android:text="Agregr"
         />
 </LinearLayout>

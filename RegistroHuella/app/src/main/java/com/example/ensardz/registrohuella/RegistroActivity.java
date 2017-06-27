@@ -19,6 +19,7 @@ import com.example.ensardz.registrohuella.Datos.HuellaContract;
 import com.example.ensardz.registrohuella.Datos.HuellaDBHelper;
 import com.rscja.deviceapi.Fingerprint;
 
+
 public class RegistroActivity extends AppCompatActivity {
 
     public Fingerprint mFingerprint;
@@ -26,7 +27,7 @@ public class RegistroActivity extends AppCompatActivity {
 
     private EditText edNumero;
     private EditText edNombre;
-    private Button btnGuardar;
+    private Button btnAgregar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,20 +43,29 @@ public class RegistroActivity extends AppCompatActivity {
         mContext = RegistroActivity.this;
         edNumero = (EditText) findViewById(R.id.numero_empleado);
         edNombre = (EditText) findViewById(R.id.nombre);
-        btnGuardar = (Button) findViewById(R.id.guardar);
+        btnAgregar = (Button) findViewById(R.id.agregar);
 
-        btnGuardar.setOnClickListener(new View.OnClickListener() {
+        btnAgregar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                String nombre = edNombre.getText().toString();
-                String empleado = edNumero.getText().toString();
+                String nombre = edNombre.getText().toString().trim();
+                String empleadoId = edNumero.getText().toString().trim();
+                long empId = Long.parseLong(empleadoId);
 
-                if (TextUtils.isEmpty(nombre) && TextUtils.isEmpty(empleado)) {
+
+                if (TextUtils.isEmpty(nombre) && TextUtils.isEmpty(empleadoId)) {
                     Toast.makeText(mContext, "Los campos no pueden ir vacios.", Toast.LENGTH_SHORT).show();
-                } else {
-                    new HuellaAcqTask(mContext, mFingerprint, nombre, empleado).execute();
+                    return;
                 }
+
+                if (!(empId >= 1000 && empId <= 1030)){
+                    Toast.makeText(mContext, "Rangos entre 1000 y 1030 solamente", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                new HuellaAcqTask(mContext, mFingerprint, nombre, empleadoId).execute();
+
             }
         });
 
