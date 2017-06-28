@@ -18,6 +18,7 @@ import com.rscja.deviceapi.Fingerprint;
 
 public class BuscarHuellaActivity extends AppCompatActivity {
 
+
     public Fingerprint mFingerprint;
     public Context mContext;
 
@@ -42,8 +43,12 @@ public class BuscarHuellaActivity extends AppCompatActivity {
             Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show();
         }
 
+
+
         mContext = BuscarHuellaActivity.this;
         initComponentes();
+
+
 
         //Inicia el task para buscar la huella con el id que se le pasa,
         //ademas, toma la huella que se encuentre en el escanner para comparar.

@@ -20,10 +20,28 @@
         android:layout_height="wrap_content"
         android:hint="Nombre" />
 
+    <View
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"/>
+
+    <Button
+        android:id="@+id/crear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="GENERAR ARchivo"
+        />
+    <Button
+        android:id="@+id/mostrar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Mostrar"
+        />
+
     <Button
         android:id="@+id/agregar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Agregr"
+        android:text="Agregar"
         />
 </LinearLayout>
