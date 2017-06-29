@@ -4,14 +4,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.fime.fsw.huella.huella.data.objetos.Target;
-import com.fime.fsw.huella.huella.data.services.DescargaRutaServicio;
+import com.fime.fsw.huella.huella.data.API.Modelos.HuellaResponse;
+import com.fime.fsw.huella.huella.data.API.ServiciosAPI.DescargaRecorridoService;
 import com.fime.fsw.huella.huella.utilidad.SesionAplicacion;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 
@@ -26,6 +27,11 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class DescargaRutaActivity extends AppCompatActivity {
+
+    public static final String TAG = DescargaRutaActivity.class.getSimpleName();
+
+    // https://young-escarpment-48238.herokuapp.com/routes
+
 
     private MaterialSpinner spinnerClaveArea;
     private MaterialSpinner spinnerPeriodo;
@@ -50,21 +56,22 @@ public class DescargaRutaActivity extends AppCompatActivity {
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://young-escarpment-48238.herokuapp.com/")
-                //.addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
 
-        DescargaRutaServicio servicio = retrofit.create(DescargaRutaServicio.class);
-        Call<Target> targetCall = servicio.getTarget();
+        DescargaRecorridoService servicio = retrofit.create(DescargaRecorridoService.class);
+        Call<HuellaResponse> targetCall = servicio.descargaRecorrido();
 
-        targetCall.enqueue(new Callback<Target>() {
+        targetCall.enqueue(new Callback<HuellaResponse>() {
             @Override
-            public void onResponse(Call<Target> call, Response<Target> response) {
-                Target target = response.body();
+            public void onResponse(Call<HuellaResponse> call, Response<HuellaResponse> response) {
+                HuellaResponse huellaResponse = response.body();
+                Log.i(TAG, "Exito");
             }
 
             @Override
-            public void onFailure(Call<Target> call, Throwable t) {
+            public void onFailure(Call<HuellaResponse> call, Throwable t) {
                 Toast.makeText(mContext, "Error en la descarga", Toast.LENGTH_SHORT).show();
             }
         });
