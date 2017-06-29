@@ -1,6 +1,6 @@
 package com.ensardz.huellaapitest.Datos.Servicios;
 
-import com.ensardz.huellaapitest.Datos.Objetos.HuellaResponse;
+import com.ensardz.huellaapitest.Datos.API.Models.Task;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -12,5 +12,5 @@ import retrofit2.http.GET;
 public interface DescargaRecorridoService {
 
     @GET("/routes")
-    Call<HuellaResponse> descargaRecorrido();
+    Call<Task> descargaRecorrido();
 }
