@@ -22,15 +22,6 @@ public class TaskDeserializer implements JsonDeserializer<List<Task>>{
         JsonArray m = json.getAsJsonObject().getAsJsonArray("m");
         List<Task> tasks = new ArrayList<Task>();
         for(JsonElement e : m){
-//            this.id = id;
-//            this.room = room;
-//            this.assignment = assignment;
-//            this.academyHour = academyHour;
-//            this.barcode = barcode;
-//            this.employeeNumber = employeeNumber;
-//            this.name = name;
-//            this.fullName = fullName;
-//            this.hexCode = hexCode;
 
             JsonObject task = e.getAsJsonObject();
 
@@ -42,10 +33,15 @@ public class TaskDeserializer implements JsonDeserializer<List<Task>>{
 
             JsonObject owner = task.get("owner").getAsJsonObject();
 
-            
+            String employeeNumber = owner.get("employeeNumber").getAsString();
+            String name = owner.get("name").getAsString();
+            String fullName = owner.get("fullName").getAsString();
 
-            tasks.add((Task)context.deserialize(e, Task.class));
+            JsonObject fingerPrint = owner.get("fingerPrint").getAsJsonObject();
+            String hexCode = fingerPrint.get("hexCode").getAsString();
+
+            tasks.add(new Task(id,room,assigment,academyHour,barcode,employeeNumber,name, fullName,hexCode));
         }
-        return null;
+        return tasks;
     }
 }

@@ -2,17 +2,16 @@ package com.ensardz.huellaapitest;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.widget.Toast;
 
-import com.ensardz.huellaapitest.Datos.Objetos.HuellaResponse;
-import com.ensardz.huellaapitest.Datos.Servicios.DescargaRecorridoService;
+import com.ensardz.huellaapitest.Datos.API.API;
+import com.ensardz.huellaapitest.Datos.API.Models.Task;
+import com.ensardz.huellaapitest.Datos.API.APIServices.DescargaRecorridoService;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -25,24 +24,21 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
 
-        DescargaRecorridoService service = retrofit.create(DescargaRecorridoService.class);
-        Call<HuellaResponse> call = service.descargaRecorrido();
 
-        call.enqueue(new Callback<HuellaResponse>() {
+        DescargaRecorridoService service = API.getApi().create(DescargaRecorridoService.class);
+
+        Call<List<Task>> call = service.descargaRecorrido();
+
+        call.enqueue(new Callback<List<Task>>() {
             @Override
-            public void onResponse(Call<HuellaResponse> call, Response<HuellaResponse> response) {
-                HuellaResponse respusta = response.body();
-                Log.i(TAG, "Exito");
+            public void onResponse(Call<List<Task>> call, Response<List<Task>> response) {
+                List<Task> tasks = response.body();
             }
 
             @Override
-            public void onFailure(Call<HuellaResponse> call, Throwable t) {
-                Toast.makeText(MainActivity.this, "error", Toast.LENGTH_SHORT).show();
-                Log.e(TAG, "fallo");
+            public void onFailure(Call<List<Task>> call, Throwable t) {
+
             }
         });
 

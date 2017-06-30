@@ -1,6 +1,8 @@
-package com.ensardz.huellaapitest.Datos.Servicios;
+package com.ensardz.huellaapitest.Datos.API.APIServices;
 
 import com.ensardz.huellaapitest.Datos.API.Models.Task;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -11,6 +13,6 @@ import retrofit2.http.GET;
 
 public interface DescargaRecorridoService {
 
-    @GET("/routes")
-    Call<Task> descargaRecorrido();
+    @GET("routes/")
+    Call<List<Task>> descargaRecorrido();
 }
