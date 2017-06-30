@@ -1,0 +1,56 @@
+<resources>
+    <string name="app_name">Huella</string>
+
+    <!-- Strings para los menus del registro e inicio de sesion del Prefecto -->
+    <!-- Menu de Inicio de Sesion -->
+    <string name="menu_inicio_titulo">H-FSW</string>
+    <string name="iniciar_sesion">Iniciar Sesión</string>
+    <string name="registrarse">Registrarse</string>
+    <string name="iniciar_con_huella">Iniciar con huella</string>
+    <string name="title_activity_login_activitytest">Sign in</string>
+
+    <!-- Login Prefecto -->
+    <string name="prefecto_login_titulo">Iniciar sesión</string>
+    <string name="usuario">Usuario</string>
+    <string name="contrasena">Contraseña</string>
+
+    <!-- Registro Prefecto -->
+    <string name="prefecto_registro_titulo">Registro</string>
+    <string name="registro">Registro</string>
+    <string name="nombre">Nombre</string>
+    <string name="clave">Clave</string>
+    <string name="aceptar">Aceptar</string>
+    <string name="confirmar_contrasena">Confirmar contraseña</string>
+
+    <!-- Descarga Ruta -->
+    <string name="druta_clave_area">Clave area</string>
+    <string name="druta_periodo">Periodo</string>
+    <string name="druta_tipo">Tipo</string>
+    <string name="druta_tipo_clases">Clases</string>
+    <string name="druta_tipo_laboratorio">Laboratorio</string>
+    <string name="druta_tipo_mixto">Mixto</string>
+    <string name="druta_descargar">Descargar</string>
+    <string-array name="druta_claves_area_spinner">
+        <item>1001</item>
+        <item>1002</item>
+        <item>1003</item>
+    </string-array>
+    <string-array name="druta_periodo_spinner">
+        <item>Matutino</item>
+        <item>Vespertino</item>
+        <item>Nocturno</item>
+    </string-array>
+
+    <!-- Fragment Codigo Barras -->
+    <string name="cbarra_datos_generales">Datos Generales</string>
+    <string name="cbarra_escanear_salon">Escanear salón</string>
+    <string name="cbarra_salon">Salon: </string>
+
+    <!-- Settings Menu Strings -->
+    <string name="menu_cerrar_sesion">Cerrar sesión</string>
+    <string name="title_activity_test">test</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+
+</resources>
