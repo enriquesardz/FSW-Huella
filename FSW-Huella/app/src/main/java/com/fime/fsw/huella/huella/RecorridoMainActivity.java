@@ -10,10 +10,10 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.fime.fsw.huella.huella.fragments.DatosVisitaFragment;
-import com.fime.fsw.huella.huella.fragments.RecorridoActualFragment;
-import com.fime.fsw.huella.huella.fragments.RecorridoFragment;
-import com.fime.fsw.huella.huella.utilidad.SesionAplicacion;
+import com.fime.fsw.huella.huella.Fragments.DatosVisitaFragment;
+import com.fime.fsw.huella.huella.Fragments.RecorridoActualFragment;
+import com.fime.fsw.huella.huella.Fragments.RecorridoFragment;
+import com.fime.fsw.huella.huella.Utilidad.SesionAplicacion;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
 

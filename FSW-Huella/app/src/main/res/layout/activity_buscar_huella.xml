@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.fime.fsw.huella.huella.fingerprint.BuscarHuellaActivity">
+    tools:context="com.fime.fsw.huella.huella.Fingerprint.BuscarHuellaActivity">
 
     <EditText
         android:id="@+id/id_usuario_edittext"

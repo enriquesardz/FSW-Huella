@@ -10,8 +10,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.fime.fsw.huella.huella.utilidad.SesionAplicacion;
-
 public class PrefectoRegistroActivity extends AppCompatActivity {
 
     private Button btnAceptar;

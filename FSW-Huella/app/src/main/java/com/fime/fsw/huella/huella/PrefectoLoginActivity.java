@@ -8,7 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
-import com.fime.fsw.huella.huella.utilidad.ValidacionLogin;
+import com.fime.fsw.huella.huella.Utilidad.ValidacionLogin;
 
 public class PrefectoLoginActivity extends AppCompatActivity {
 
