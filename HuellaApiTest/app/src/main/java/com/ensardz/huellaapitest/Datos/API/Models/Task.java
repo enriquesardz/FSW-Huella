@@ -1,5 +1,7 @@
 package com.ensardz.huellaapitest.Datos.API.Models;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by Quique on 29/06/2017.
  */
@@ -7,7 +9,8 @@ package com.ensardz.huellaapitest.Datos.API.Models;
 public class Task {
     private String id;
     private String room;
-    private String assigment;
+    @SerializedName("assignment")
+    private String assignment;
     private String academyHour;
     private String barcode;
     private String employeeNumber;
@@ -15,10 +18,10 @@ public class Task {
     private String fullName;
     private String hexCode;
 
-    public Task(String id, String room, String assigment, String academyHour, String barcode, String employeeNumber, String name, String fullName, String hexCode) {
+    public Task(String id, String room, String assignment, String academyHour, String barcode, String employeeNumber, String name, String fullName, String hexCode) {
         this.id = id;
         this.room = room;
-        this.assigment = assigment;
+        this.assignment = assignment;
         this.academyHour = academyHour;
         this.barcode = barcode;
         this.employeeNumber = employeeNumber;
@@ -43,12 +46,12 @@ public class Task {
         this.room = room;
     }
 
-    public String getAssigment() {
-        return assigment;
+    public String getAssignment() {
+        return assignment;
     }
 
-    public void setAssigment(String assigment) {
-        this.assigment = assigment;
+    public void setAssignment(String assignment) {
+        this.assignment = assignment;
     }
 
     public String getAcademyHour() {
@@ -97,5 +100,20 @@ public class Task {
 
     public void setHexCode(String hexCode) {
         this.hexCode = hexCode;
+    }
+
+    @Override
+    public String toString() {
+        return "Task{" +
+                "id='" + id + '\'' +
+                ", room='" + room + '\'' +
+                ", assignment='" + assignment + '\'' +
+                ", academyHour='" + academyHour + '\'' +
+                ", barcode='" + barcode + '\'' +
+                ", employeeNumber='" + employeeNumber + '\'' +
+                ", name='" + name + '\'' +
+                ", fullName='" + fullName + '\'' +
+                ", hexCode='" + hexCode + '\'' +
+                '}';
     }
 }
