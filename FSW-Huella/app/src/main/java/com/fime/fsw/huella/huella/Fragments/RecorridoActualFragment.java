@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.fime.fsw.huella.huella.Data.API.Modelos.Task;
 import com.fime.fsw.huella.huella.R;
 import com.fime.fsw.huella.huella.Objetos.RecorridoActualItem;
 import com.fime.fsw.huella.huella.Utilidad.RecorridoActualAdapter;
@@ -19,6 +20,8 @@ import com.fime.fsw.huella.huella.Utilidad.RecyclerViewItemClickListener;
 import java.util.ArrayList;
 
 import io.realm.Realm;
+import io.realm.RealmQuery;
+import io.realm.RealmResults;
 
 
 /**
@@ -37,6 +40,7 @@ public class RecorridoActualFragment extends Fragment {
 
     private Context mContext;
     private Realm mRealm;
+
     public RecorridoActualFragment() {
         // Required empty public constructor
     }
@@ -81,9 +85,9 @@ public class RecorridoActualFragment extends Fragment {
         void onRecorridoActualItemSelected(long id, String horaFime, String salonFime);
     }
 
-    private void initComponentes(View view){
+    private void initComponentes(View view) {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
-        mRecyclerView = (RecyclerView)view.findViewById(R.id.recorrido_actual_recyclerview);
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.recorrido_actual_recyclerview);
         mRecyclerView.setHasFixedSize(true);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(linearLayoutManager);
@@ -92,11 +96,16 @@ public class RecorridoActualFragment extends Fragment {
         //Data prueba
         //TODO: Aqui se debe de llenar con data de la base de datos
         //Jalar info del Realm
-        mData.add(new RecorridoActualItem(1,"M2","2030"));
-        mData.add(new RecorridoActualItem(2,"M2","4200"));
-        mData.add(new RecorridoActualItem(3,"M2","6302"));
-        mData.add(new RecorridoActualItem(4,"M2","1301"));
-        mData.add(new RecorridoActualItem(5,"M2","4208"));
+        RealmResults<Task> query = mRealm.where(Task.class).findAll();
+
+        for (int i = 0; i < query.size(); i++) {
+            Task task = query.get(i);
+            mData.add(new RecorridoActualItem(task.get_id(), task.getAcademyHour(), task.getRoom()));
+        }
+//        mData.add(new RecorridoActualItem(2, "M2", "4200"));
+//        mData.add(new RecorridoActualItem(3, "M2", "6302"));
+//        mData.add(new RecorridoActualItem(4, "M2", "1301"));
+//        mData.add(new RecorridoActualItem(5, "M2", "4208"));
 
         mRecyclerAdapter = new RecorridoActualAdapter(mContext, mData, new RecyclerViewItemClickListener() {
             @Override
@@ -105,11 +114,11 @@ public class RecorridoActualFragment extends Fragment {
                 String horaFime = mData.get(position).getHoraFime();
                 String salonFime = mData.get(position).getSalonFime();
 
-                Toast.makeText(mContext, "ID: "+itemId+" Hora: "+horaFime+" Salon: "+salonFime, Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, "ID: " + itemId + " Hora: " + horaFime + " Salon: " + salonFime, Toast.LENGTH_SHORT).show();
                 //Trigger de onRecorridoActualItemSelected en RecorridoMainActivity para comunicar con
                 //DatosVisitaFragment
-                if (mListener!=null){
-                    mListener.onRecorridoActualItemSelected(itemId,horaFime,salonFime);
+                if (mListener != null) {
+                    mListener.onRecorridoActualItemSelected(itemId, horaFime, salonFime);
                 }
             }
         });
