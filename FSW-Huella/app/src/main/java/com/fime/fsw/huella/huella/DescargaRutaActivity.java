@@ -4,10 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.fime.fsw.huella.huella.Data.API.APICodo;
 import com.fime.fsw.huella.huella.Data.API.Modelos.Task;
@@ -19,6 +21,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import io.realm.Realm;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -28,13 +31,12 @@ public class DescargaRutaActivity extends AppCompatActivity {
     public static final String TAG = DescargaRutaActivity.class.getSimpleName();
 
     // https://young-escarpment-48238.herokuapp.com/routes
-
-
     private MaterialSpinner spinnerClaveArea;
     private MaterialSpinner spinnerPeriodo;
     private Button btnDescargar;
 
     private Context mContext;
+    private Realm mRealm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +44,7 @@ public class DescargaRutaActivity extends AppCompatActivity {
         setContentView(R.layout.activity_descarga_ruta);
 
         mContext = DescargaRutaActivity.this;
+        mRealm = Realm.getDefaultInstance();
 
         initComponentes();
 
@@ -52,6 +55,16 @@ public class DescargaRutaActivity extends AppCompatActivity {
         spinnerPeriodo.setItems(periodoData);
 
 
+        btnDescargar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //El usuario esta logeado; aqui se descarga y ahora la aplicacion continuara a abrir el RecorridoMainActivity.
+                descargarDeWebService();
+            }
+        });
+    }
+
+    private void descargarDeWebService() {
 
         DescargaRecorridoService servicio = APICodo.getApi().create(DescargaRecorridoService.class);
         Call<List<Task>> call = servicio.descargaRecorrido();
@@ -59,31 +72,43 @@ public class DescargaRutaActivity extends AppCompatActivity {
         call.enqueue(new Callback<List<Task>>() {
             @Override
             public void onResponse(Call<List<Task>> call, Response<List<Task>> response) {
-                List<Task> tasks = response.body();
-            }
+                final List<Task> tasks = response.body();
+                Log.i(TAG, tasks.toString());
 
-            @Override
-            public void onFailure(Call<List<Task>> call, Throwable t) {
+                //Se ejecuta si el webservice regresa algo
 
-            }
-        });
+                //AsyncTask de Realm para guardar
+                mRealm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        int i;
+                        for(i = 0; i < tasks.size(); i++){
+                            Task task = tasks.get(i);
+                            Task realmTask = realm.copyToRealmOrUpdate(task);
+                            Log.i(TAG, realmTask.toString());
+                        }
+                    }
+                });
 
-        btnDescargar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //El usuario esta logeado; aqui se descarga y ahora la aplicacion continuara a abrir el RecorridoMainActivity.
                 SesionAplicacion sesionAplicacion = new SesionAplicacion(mContext);
                 sesionAplicacion.crearSesionDescarga();
                 startActivity(new Intent(mContext, RecorridoMainActivity.class));
                 finish();
             }
+
+            @Override
+            public void onFailure(Call<List<Task>> call, Throwable t) {
+                //Si el web service no regresa nada entonces cae aqui
+                Toast.makeText(DescargaRutaActivity.this, "No se descargo", Toast.LENGTH_SHORT).show();
+            }
         });
     }
 
-    private void initComponentes(){
+
+    private void initComponentes() {
         spinnerClaveArea = (MaterialSpinner) findViewById(R.id.clave_area_spinner);
         spinnerPeriodo = (MaterialSpinner) findViewById(R.id.periodo_spinner);
-        btnDescargar = (Button)findViewById(R.id.descargar_button);
+        btnDescargar = (Button) findViewById(R.id.descargar_button);
     }
 
     @Override
@@ -94,8 +119,7 @@ public class DescargaRutaActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId())
-        {
+        switch (item.getItemId()) {
             case R.id.cerrar_sesion:
                 SesionAplicacion sesionAplicacion = new SesionAplicacion(mContext);
                 sesionAplicacion.terminarSesionAplicacion();
@@ -106,4 +130,11 @@ public class DescargaRutaActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mRealm.close();
+    }
+
 }

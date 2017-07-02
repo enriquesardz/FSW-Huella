@@ -53,7 +53,6 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
                     }
                 }
                 else if (tabId == R.id.tab_recorrido_actual){
-
                     mFragment = new RecorridoActualFragment();
                 }
 

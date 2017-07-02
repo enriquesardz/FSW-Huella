@@ -23,15 +23,15 @@ public class TaskDeserializer implements JsonDeserializer<List<Task>>{
         List<Task> tasks = new ArrayList<Task>();
         for(JsonElement e : m){
 
-            JsonObject task = e.getAsJsonObject();
+            JsonObject taskJsonObject = e.getAsJsonObject();
 
-            String id = task.get("id").getAsString();
-            String room = task.get("room").getAsString();
-            String assigment = task.get("assigment").getAsString();
-            String academyHour = task.get("academyHour").getAsString();
-            String barcode = task.get("barcode").getAsString();
+            String id = taskJsonObject.get("id").getAsString();
+            String room = taskJsonObject.get("room").getAsString();
+            String assigment = taskJsonObject.get("assigment").getAsString();
+            String academyHour = taskJsonObject.get("academyHour").getAsString();
+            String barcode = taskJsonObject.get("barcode").getAsString();
 
-            JsonObject owner = task.get("owner").getAsJsonObject();
+            JsonObject owner = taskJsonObject.get("owner").getAsJsonObject();
 
             String employeeNumber = owner.get("employeeNumber").getAsString();
             String name = owner.get("name").getAsString();
@@ -40,7 +40,8 @@ public class TaskDeserializer implements JsonDeserializer<List<Task>>{
             JsonObject fingerPrint = owner.get("fingerPrint").getAsJsonObject();
             String hexCode = fingerPrint.get("hexCode").getAsString();
 
-            tasks.add(new Task(id,room,assigment,academyHour,barcode,employeeNumber,name, fullName,hexCode));
+            Task task = Task.create(id,room,assigment,academyHour,barcode,employeeNumber,name, fullName,hexCode);
+            tasks.add(task);
         }
         return tasks;
     }

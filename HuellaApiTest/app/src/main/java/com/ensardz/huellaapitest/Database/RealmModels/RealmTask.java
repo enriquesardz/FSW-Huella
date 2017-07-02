@@ -1,21 +1,17 @@
-package com.fime.fsw.huella.huella.Data.API.Modelos;
+package com.ensardz.huellaapitest.Database.RealmModels;
 
-import com.fime.fsw.huella.huella.HuellaApplication;
-import com.google.gson.annotations.SerializedName;
 
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
 /**
- * Created by Quique on 29/06/2017.
+ * Created by ensardz on 01/07/2017.
  */
 
-public class Task extends RealmObject {
+public class RealmTask extends RealmObject {
     @PrimaryKey
-    private int _id;
-    private String id;
+    private int id;
     private String room;
-    @SerializedName("assigment")
     private String assignment;
     private String academyHour;
     private String barcode;
@@ -24,33 +20,11 @@ public class Task extends RealmObject {
     private String fullName;
     private String hexCode;
 
-    public Task(){
-
-    }
-    public static Task create(String id, String room, String assignment, String academyHour, String barcode, String employeeNumber, String name, String fullName, String hexCode) {
-        Task task = new Task();
-        task._id = HuellaApplication.TaskID.incrementAndGet();
-        task.id = id;
-        task.room = room;
-        task.assignment = assignment;
-        task.academyHour = academyHour;
-        task.barcode = barcode;
-        task.employeeNumber = employeeNumber;
-        task.name = name;
-        task.fullName = fullName;
-        task.hexCode = hexCode;
-        return task;
-    }
-
-    public int get_id() {
-        return _id;
-    }
-
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 

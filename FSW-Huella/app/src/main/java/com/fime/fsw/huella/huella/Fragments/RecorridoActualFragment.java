@@ -18,6 +18,8 @@ import com.fime.fsw.huella.huella.Utilidad.RecyclerViewItemClickListener;
 
 import java.util.ArrayList;
 
+import io.realm.Realm;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -34,7 +36,7 @@ public class RecorridoActualFragment extends Fragment {
     private ArrayList<RecorridoActualItem> mData = new ArrayList<>();
 
     private Context mContext;
-
+    private Realm mRealm;
     public RecorridoActualFragment() {
         // Required empty public constructor
     }
@@ -45,6 +47,7 @@ public class RecorridoActualFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_recorrido_actual, container, false);
         mContext = getContext();
+        mRealm = Realm.getDefaultInstance();
         initComponentes(view);
         return view;
     }
@@ -66,6 +69,12 @@ public class RecorridoActualFragment extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mRealm.close();
+    }
+
     //Interfaz implementada por RecorridoMainActivity que se encarga de pasarle los datos
     //al fragment DatosVisitaFragment
     public interface OnFragmentInteractionListener {
@@ -82,6 +91,7 @@ public class RecorridoActualFragment extends Fragment {
 
         //Data prueba
         //TODO: Aqui se debe de llenar con data de la base de datos
+        //Jalar info del Realm
         mData.add(new RecorridoActualItem(1,"M2","2030"));
         mData.add(new RecorridoActualItem(2,"M2","4200"));
         mData.add(new RecorridoActualItem(3,"M2","6302"));

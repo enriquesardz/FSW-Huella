@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.ensardz.huellaapitest.Database.HuellaContract;
 import com.ensardz.huellaapitest.Database.HuellaDBHelper;
+import com.ensardz.huellaapitest.Database.RealmModels.RealmTask;
 import com.ensardz.huellaapitest.Datos.API.API;
 import com.ensardz.huellaapitest.Datos.API.Models.Task;
 import com.ensardz.huellaapitest.Datos.API.APIServices.DescargaRecorridoService;
@@ -16,6 +17,9 @@ import com.ensardz.huellaapitest.Datos.API.APIServices.DescargaRecorridoService;
 import java.security.MessageDigest;
 import java.util.List;
 
+import io.realm.Realm;
+import io.realm.RealmQuery;
+import io.realm.RealmResults;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -27,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String BASE_URL = "https://young-escarpment-48238.herokuapp.com/";
 
     private Context mContext;
+    private Realm mRealm;
 
     // https://young-escarpment-48238.herokuapp.com/routes
     @Override
@@ -35,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mContext = MainActivity.this;
+        mRealm.init(mContext);
+        mRealm = Realm.getDefaultInstance();
 
         DescargaRecorridoService service = API.getApi().create(DescargaRecorridoService.class);
 
@@ -54,40 +61,32 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        RealmQuery<RealmTask> query = mRealm.where(RealmTask.class);
+        RealmResults<RealmTask> result = query.findAll();
+
+        Log.i(TAG, result.toString());
+
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mRealm != null) {
+            mRealm.close();
+        }
     }
 
     public void saveTasksToDB(List<Task> tasksList) {
         int i;
-        HuellaDBHelper helper = new HuellaDBHelper(mContext);
-        SQLiteDatabase db = helper.getWritableDatabase();
-        ContentValues values;
+        for (i = 0; i < tasksList.size(); i++) {
+            Task task = tasksList.get(i);
 
-        try {
-            for (i = 0; i < tasksList.size(); i++) {
-                values = new ContentValues();
-                Task task = tasksList.get(i);
+            mRealm.beginTransaction();
+            Task realmTask = mRealm.copyToRealm(task);
+            mRealm.commitTransaction();
 
-                values.put(HuellaContract.HuellaEntry.COLUMNA_ROOM, task.getRoom());
-                values.put(HuellaContract.HuellaEntry.COLUMNA_ASSIGNMENT, task.getAssignment());
-                values.put(HuellaContract.HuellaEntry.COLUMNA_ACADEMY_HOUR, task.getAcademyHour());
-                values.put(HuellaContract.HuellaEntry.COLUMNA_BARCODE, task.getBarcode());
-                values.put(HuellaContract.HuellaEntry.COLUMNA_EMPLOYEE_NUMBER, task.getEmployeeNumber());
-                values.put(HuellaContract.HuellaEntry.COLUMNA_EMPLOYEE_NAME, task.getName());
-                values.put(HuellaContract.HuellaEntry.COLUMNA_EMPLOYEE_FULLNAME, task.getFullName());
-                values.put(HuellaContract.HuellaEntry.COLUMNA_HEXCODE, task.getHexCode());
-
-                long newRowId = db.insert(HuellaContract.HuellaEntry.TASK_TABLA_NOMBRE, null, values);
-                Log.i(TAG, String.valueOf(newRowId) + " id has been inserted into TABLE Task");
-            }
-        } catch (Exception e) {
-            Log.e(TAG, "Error saving data to database");
-        } finally {
-            if (helper != null) {
-                helper.close();
-            }
-            if (db != null) {
-                db.close();
-            }
         }
+
     }
 }

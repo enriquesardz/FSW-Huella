@@ -21,5 +21,4 @@ public class HuellaContract{
         public static final String COLUMNA_EMPLOYEE_FULLNAME = "fullName";
         public static final String COLUMNA_HEXCODE = "hexCode";
     }
-
 }

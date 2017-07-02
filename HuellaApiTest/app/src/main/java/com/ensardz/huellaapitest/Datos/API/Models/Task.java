@@ -2,11 +2,14 @@ package com.ensardz.huellaapitest.Datos.API.Models;
 
 import com.google.gson.annotations.SerializedName;
 
+import io.realm.Realm;
+import io.realm.RealmObject;
+
 /**
  * Created by Quique on 29/06/2017.
  */
 
-public class Task {
+public class Task extends RealmObject{
     private String id;
     private String room;
     @SerializedName("assignment")
@@ -18,16 +21,19 @@ public class Task {
     private String fullName;
     private String hexCode;
 
-    public Task(String id, String room, String assignment, String academyHour, String barcode, String employeeNumber, String name, String fullName, String hexCode) {
-        this.id = id;
-        this.room = room;
-        this.assignment = assignment;
-        this.academyHour = academyHour;
-        this.barcode = barcode;
-        this.employeeNumber = employeeNumber;
-        this.name = name;
-        this.fullName = fullName;
-        this.hexCode = hexCode;
+    public Task(){}
+    public static Task create(String id, String room, String assignment, String academyHour, String barcode, String employeeNumber, String name, String fullName, String hexCode) {
+        Task task = new Task();
+        task.id = id;
+        task.room = room;
+        task.assignment = assignment;
+        task.academyHour = academyHour;
+        task.barcode = barcode;
+        task.employeeNumber = employeeNumber;
+        task.name = name;
+        task.fullName = fullName;
+        task.hexCode = hexCode;
+        return task;
     }
 
     public String getId() {
