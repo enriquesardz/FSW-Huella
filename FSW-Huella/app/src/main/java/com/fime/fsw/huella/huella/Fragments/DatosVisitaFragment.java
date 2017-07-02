@@ -78,9 +78,6 @@ public class DatosVisitaFragment extends Fragment {
         if (mBundle.size() > 0) {
             itemid = -1;
             itemid = mBundle.getLong(RecorridoMainActivity.KEY_ID_RECORRIDO_ITEM);
-            //TODO:Esto posiblmente se puede retirar
-            String horaFime = mBundle.getString(RecorridoMainActivity.KEY_HORA_FIME);
-            String salonFime = mBundle.getString(RecorridoMainActivity.KEY_SALON_FIME);
             if (itemid != -1) {
                 //Trae un task usando el _id que se le pasa cuando le da click al recorrido actual.
                 Task task = mRealm.where(Task.class).equalTo("_id", itemid).findFirst();

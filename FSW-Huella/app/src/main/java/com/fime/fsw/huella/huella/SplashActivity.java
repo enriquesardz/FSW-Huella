@@ -15,9 +15,6 @@ public class SplashActivity extends AppCompatActivity {
         SesionAplicacion sesionAplicacion = new SesionAplicacion(getApplicationContext());
         Intent intent;
 
-        //TODO: Validar si ya hay una sesion en progreso, saltarse a la DescargaRutaActivity si es el caso.
-        //TODO: Si ya se descargo, entonces se salta direco a RecorridoMainActivity
-
         if(!sesionAplicacion.usuarioLogeado()){
             //El usuario no esta logeado
             intent = new Intent(this, MenuInicioSesionActivity.class);

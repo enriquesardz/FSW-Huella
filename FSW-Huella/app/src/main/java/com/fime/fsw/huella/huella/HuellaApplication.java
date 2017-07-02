@@ -5,7 +5,9 @@ import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.facebook.stetho.Stetho;
 import com.fime.fsw.huella.huella.Data.API.Modelos.Task;
+import com.uphyca.stetho_realm.RealmInspectorModulesProvider;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -26,6 +28,12 @@ public class HuellaApplication extends Application {
         super.onCreate();
         Context mContext = getApplicationContext();
         Realm.init(mContext);
+        Stetho.initialize(
+                Stetho.newInitializerBuilder(mContext)
+                        .enableDumpapp(Stetho.defaultDumperPluginsProvider(mContext))
+                        .enableWebKitInspector(RealmInspectorModulesProvider.builder(mContext).build())
+                        .build()
+        );
         RealmConfiguration config = new RealmConfiguration
                 .Builder()
                 .name(REALM_NAME)

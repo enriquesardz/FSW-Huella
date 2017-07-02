@@ -93,9 +93,7 @@ public class RecorridoActualFragment extends Fragment {
         mRecyclerView.setLayoutManager(linearLayoutManager);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(mRecyclerView.getContext(), linearLayoutManager.getOrientation()));
 
-        //Data prueba
-        //TODO: Aqui se debe de llenar con data de la base de datos
-        //Jalar info del Realm
+        //Se obtiene la info de nuestro Realm
         RealmResults<Task> query = mRealm.where(Task.class).findAll();
 
         for (int i = 0; i < query.size(); i++) {

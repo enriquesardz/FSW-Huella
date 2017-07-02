@@ -5,11 +5,9 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,7 +16,6 @@ import com.fime.fsw.huella.huella.R;
 import com.rscja.deviceapi.Fingerprint;
 
 import io.realm.Realm;
-import io.realm.RealmResults;
 
 public class BuscarHuellaActivity extends AppCompatActivity {
 
@@ -27,7 +24,8 @@ public class BuscarHuellaActivity extends AppCompatActivity {
     public Context mContext;
     private Realm mRealm;
 
-    private TextView tvNombreUsuario;
+    private TextView tvNombre;
+    private TextView tvFullNombre;
     private Button btnBuscarHuella;
 
     private String hexCode;
@@ -58,6 +56,9 @@ public class BuscarHuellaActivity extends AppCompatActivity {
         Task task = mRealm.where(Task.class).equalTo("_id", itemid).findFirst();
         hexCode = task.getHexCode();
 
+        tvNombre.setText(task.getName());
+        tvFullNombre.setText(task.getFullName());
+
         initComponentes();
         //Inicia el task para buscar la huella con el id que se le pasa,
         //ademas, toma la huella que se encuentre en el escanner para comparar.
@@ -74,7 +75,8 @@ public class BuscarHuellaActivity extends AppCompatActivity {
     }
 
     private void initComponentes() {
-        tvNombreUsuario = (TextView) findViewById(R.id.nombre_textview);
+        tvNombre = (TextView) findViewById(R.id.nombre_textview);
+        tvFullNombre = (TextView)findViewById(R.id.full_nombre_textview);
         btnBuscarHuella = (Button) findViewById(R.id.buscar_huella_button);
     }
 
