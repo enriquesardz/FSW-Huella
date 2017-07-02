@@ -19,6 +19,10 @@ import com.fime.fsw.huella.huella.Fingerprint.BuscarHuellaActivity;
 import com.rscja.deviceapi.Barcode1D;
 import com.rscja.deviceapi.exception.ConfigurationException;
 
+import org.w3c.dom.Text;
+
+import io.realm.Realm;
+
 public class BarcodeReaderActivity extends AppCompatActivity {
 
     private final static String TAG = BarcodeReaderActivity.class.getSimpleName();
@@ -30,8 +34,12 @@ public class BarcodeReaderActivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
 
     private Context mContext;
+    private Realm mRealm;
 
     private Barcode1D mBarcode;
+
+    private String codigoBarraSalon;
+    private long _id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +60,13 @@ public class BarcodeReaderActivity extends AppCompatActivity {
 
         mContext = BarcodeReaderActivity.this;
 
+        //Trae los datos que le paso el DatosVisitaFragment
+        _id = getIntent().getLongExtra("_id", -1);
+        codigoBarraSalon = getIntent().getStringExtra("barcode");
+
         initComponentes();
+
+        tvCodigo.setText(codigoBarraSalon);
 
         //Inicia el escanner para leer codigos de barra
         btnEscanear.setOnClickListener(new View.OnClickListener() {
@@ -145,11 +159,19 @@ public class BarcodeReaderActivity extends AppCompatActivity {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
             //Aqui se puede usar el codigo que regrese el escanner.
-            tvCodigo.setText(result);
             if (!TextUtils.isEmpty(result)) {
                 //Se capturo algo de informacion entonces se inicia erl recog de la huella
                 Toast.makeText(mContext, result, Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(mContext, BuscarHuellaActivity.class));
+                if (TextUtils.equals(codigoBarraSalon, result)) {
+                    //Si los codigos de barras son iguales, entonces inicia el reconocimiento de la huella.
+                    Intent intent = new Intent(mContext, BuscarHuellaActivity.class);
+                    //Le pasa el id a la nueva actividad de deteccion de huella.
+                    intent.putExtra("_id", _id);
+                    startActivity(intent);
+                }
+                else{
+                    Toast.makeText(mContext, "No coinciden los codigos.", Toast.LENGTH_SHORT).show();
+                }
             } else {
                 Toast.makeText(mContext, "No se capturo el codigo", Toast.LENGTH_SHORT).show();
             }

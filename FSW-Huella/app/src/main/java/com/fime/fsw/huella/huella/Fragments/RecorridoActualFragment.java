@@ -102,10 +102,6 @@ public class RecorridoActualFragment extends Fragment {
             Task task = query.get(i);
             mData.add(new RecorridoActualItem(task.get_id(), task.getAcademyHour(), task.getRoom()));
         }
-//        mData.add(new RecorridoActualItem(2, "M2", "4200"));
-//        mData.add(new RecorridoActualItem(3, "M2", "6302"));
-//        mData.add(new RecorridoActualItem(4, "M2", "1301"));
-//        mData.add(new RecorridoActualItem(5, "M2", "4208"));
 
         mRecyclerAdapter = new RecorridoActualAdapter(mContext, mData, new RecyclerViewItemClickListener() {
             @Override

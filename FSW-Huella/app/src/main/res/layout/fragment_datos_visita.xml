@@ -38,12 +38,13 @@
                         android:text="@string/cbarra_datos_generales" />
 
                     <TextView
+                        android:id="@+id/maestro_textview"
                         style="@style/TextSubTitulo"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingBottom="10dp"
                         android:paddingTop="20dp"
-                        android:text="Maestro: Colunga" />
+                        android:text="" />
 
                     <TextView
                         android:id="@+id/hora_fime_textview"
@@ -51,7 +52,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingBottom="10dp"
-                        android:text="Hora: M1" />
+                        android:text="" />
 
                     <TextView
                         android:id="@+id/salon_fime_textview"
@@ -59,15 +60,16 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingBottom="10dp"
-                        android:text="Salón: 3301" />
+                        android:text="" />
 
 
                     <TextView
+                        android:id="@+id/materia_textview"
                         style="@style/TextSubTitulo"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingBottom="10dp"
-                        android:text="Materia: Matematicas 1" />
+                        android:text="" />
 
                 </LinearLayout>
 

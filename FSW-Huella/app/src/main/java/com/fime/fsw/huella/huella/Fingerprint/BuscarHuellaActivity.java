@@ -13,18 +13,25 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fime.fsw.huella.huella.Data.API.Modelos.Task;
 import com.fime.fsw.huella.huella.R;
 import com.rscja.deviceapi.Fingerprint;
+
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 public class BuscarHuellaActivity extends AppCompatActivity {
 
 
     public Fingerprint mFingerprint;
     public Context mContext;
+    private Realm mRealm;
 
-    private EditText etIdUsuario;
     private TextView tvNombreUsuario;
     private Button btnBuscarHuella;
+
+    private String hexCode;
+    private long itemid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,13 +50,15 @@ public class BuscarHuellaActivity extends AppCompatActivity {
             Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show();
         }
 
-
+        itemid = getIntent().getLongExtra("_id", -1);
 
         mContext = BuscarHuellaActivity.this;
+        mRealm = Realm.getDefaultInstance();
+
+        Task task = mRealm.where(Task.class).equalTo("_id", itemid).findFirst();
+        hexCode = task.getHexCode();
+
         initComponentes();
-
-
-
         //Inicia el task para buscar la huella con el id que se le pasa,
         //ademas, toma la huella que se encuentre en el escanner para comparar.
         //TODO: El id se debe de sacar de los datos que nos pasan los web service
@@ -57,13 +66,8 @@ public class BuscarHuellaActivity extends AppCompatActivity {
         btnBuscarHuella.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String usuarioID = etIdUsuario.getText().toString();
-                if (TextUtils.isEmpty(usuarioID)) {
-                    Toast.makeText(mContext, "El id no puede ir vacio", Toast.LENGTH_SHORT).show();
-                    return;
-                }
                 //Este task utiliza las funciones proporcionadas por el SDK para identificar la huella
-                new HuellaIdentTask(mContext, mFingerprint, usuarioID, tvNombreUsuario).execute();
+                new HuellaIdentTask(mContext, mFingerprint, hexCode).execute();
             }
         });
 
@@ -71,7 +75,6 @@ public class BuscarHuellaActivity extends AppCompatActivity {
 
     private void initComponentes() {
         tvNombreUsuario = (TextView) findViewById(R.id.nombre_textview);
-        etIdUsuario = (EditText) findViewById(R.id.id_usuario_edittext);
         btnBuscarHuella = (Button) findViewById(R.id.buscar_huella_button);
     }
 

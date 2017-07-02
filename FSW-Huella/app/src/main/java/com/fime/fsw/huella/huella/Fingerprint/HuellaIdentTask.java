@@ -27,20 +27,13 @@ public class HuellaIdentTask extends AsyncTask<Integer, Integer, String> {
 
     private Fingerprint mFingerprint;
 
-    private String usuarioNombre;
     private String usuarioHexData;
-    private String usuarioID;
-    private HuellaDBHelper mDBHelper;
 
-    private TextView nombreTV;
-
-    public HuellaIdentTask(Context context, Fingerprint fingerprint, String uid, TextView textview) {
+    public HuellaIdentTask(Context context, Fingerprint fingerprint, String hexCode) {
         mContext = context;
         mFingerprint = fingerprint;
         progressDialog = new ProgressDialog(mContext);
-        usuarioID = uid;
-        mDBHelper = new HuellaDBHelper(mContext);
-        nombreTV = textview;
+        usuarioHexData = hexCode;
     }
 
     @Override
@@ -105,19 +98,14 @@ public class HuellaIdentTask extends AsyncTask<Integer, Integer, String> {
         if (TextUtils.isEmpty(result)) {
             //Fallo la identificacion
             Toast.makeText(mContext, "No se encontro el usuario", Toast.LENGTH_SHORT).show();
-            nombreTV.setText("No se encontro..");
             return;
         }
 
         //Si hay resultado, entonces fue una Identificacion exitosa
-
-        Toast.makeText(mContext, "Se encontro a: " + usuarioNombre, Toast.LENGTH_SHORT).show();
-        nombreTV.setText(usuarioNombre);
+        Toast.makeText(mContext, "Se encontro usuario", Toast.LENGTH_SHORT).show();
 
         //Se "vacian" las variables despues de mostrarlas en la UI
         //TODO: Si la identifiacion es exitosa, la actividad se termina y se regresa al recorrido principal
-        usuarioNombre = null;
-        usuarioHexData = null;
     }
 
     @Override
@@ -128,45 +116,6 @@ public class HuellaIdentTask extends AsyncTask<Integer, Integer, String> {
         //Antes de poder hacer el match con la huella, necesitamos sacar
         //el valor hexadecimal de la huella del maestro utilizando algun identificador
         //como su ID.
-
-        SQLiteDatabase db = null;
-        Cursor cursor = null;
-        try {
-            db = mDBHelper.getReadableDatabase();
-            String[] projection = {
-                    HuellaContract.HuellaEntry.COLUMNA_NOMBRE,
-                    HuellaContract.HuellaEntry.COLUMNA_HUELLA
-            };
-            String selection = HuellaContract.HuellaEntry._ID + " = ?";
-            String[] selectionArgs = {usuarioID.toString()};
-            cursor = db.query(
-                    HuellaContract.HuellaEntry.TABLA_USUARIO_NOMBRE,
-                    projection,
-                    selection,
-                    selectionArgs,
-                    null,
-                    null,
-                    null
-            );
-            while (cursor.moveToNext()) {
-                //Hex data huella Maestro por ID
-                usuarioNombre = cursor.getString(cursor.getColumnIndex(HuellaContract.HuellaEntry.COLUMNA_NOMBRE));
-                usuarioHexData = cursor.getString(cursor.getColumnIndex(HuellaContract.HuellaEntry.COLUMNA_HUELLA));
-            }
-        } catch (Exception e) {
-            Log.e(TAG, e.toString());
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-            if (mDBHelper != null) {
-                mDBHelper.close();
-            }
-            if (db != null) {
-                db.close();
-            }
-
-        }
 
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.setCanceledOnTouchOutside(false);
