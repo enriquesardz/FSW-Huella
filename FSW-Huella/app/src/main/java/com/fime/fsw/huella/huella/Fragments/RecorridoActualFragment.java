@@ -103,7 +103,7 @@ public class RecorridoActualFragment extends Fragment {
 
         for (int i = 0; i < query.size(); i++) {
             Task task = query.get(i);
-            mData.add(new RecorridoActualItem(task.get_id(), task.getAcademyHour(), task.getRoom()));
+            mData.add(new RecorridoActualItem(task.get_id(), task.getAcademyHour(), task.getRoom(), task.getTaskState()));
         }
 
         mRecyclerAdapter = new RecorridoActualAdapter(mContext, mData, new RecyclerViewItemClickListener() {

@@ -2,6 +2,8 @@ package com.fime.fsw.huella.huella.Utilidad;
 
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,6 +55,18 @@ public class RecorridoActualAdapter extends RecyclerView.Adapter<RecorridoActual
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+        int taskState = mData.get(position).getRecorridoState();
+        switch (taskState){
+            case 1:
+                holder.mTVHoraFime.setBackgroundColor(Color.WHITE);
+                break;
+            case 2:
+                holder.mTVHoraFime.setBackgroundColor(Color.RED);
+                break;
+            default:
+                holder.mTVHoraFime.setBackgroundColor(Color.GREEN);
+                break;
+        }
         holder.mTVHoraFime.setText(mData.get(position).getHoraFime());
         holder.mTVSalonFime.setText(mData.get(position).getSalonFime());
     }

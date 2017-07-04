@@ -23,6 +23,7 @@ public class Task extends RealmObject {
     private String name;
     private String fullName;
     private String hexCode;
+    private int taskState;
 
     public Task(){
 
@@ -39,6 +40,7 @@ public class Task extends RealmObject {
         task.name = name;
         task.fullName = fullName;
         task.hexCode = hexCode;
+        task.taskState = 0;
         return task;
     }
 
@@ -116,5 +118,13 @@ public class Task extends RealmObject {
 
     public void setHexCode(String hexCode) {
         this.hexCode = hexCode;
+    }
+
+    public int getTaskState() {
+        return taskState;
+    }
+
+    public void setTaskState(int taskState) {
+        this.taskState = taskState;
     }
 }

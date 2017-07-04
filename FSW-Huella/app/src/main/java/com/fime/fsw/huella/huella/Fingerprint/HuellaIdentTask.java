@@ -11,9 +11,12 @@ import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fime.fsw.huella.huella.Data.API.Modelos.Task;
 import com.fime.fsw.huella.huella.Data.HuellaContract;
 import com.fime.fsw.huella.huella.Data.HuellaDBHelper;
 import com.rscja.deviceapi.Fingerprint;
+
+import io.realm.Realm;
 
 import static android.content.ContentValues.TAG;
 import static com.fime.fsw.huella.huella.HuellaApplication.APP_TAG;
@@ -29,14 +32,18 @@ public class HuellaIdentTask extends AsyncTask<Integer, Integer, String> {
     private Context mContext;
 
     private Fingerprint mFingerprint;
+    private Realm mRealm;
 
     private String usuarioHexData;
+    private long taskId;
 
-    public HuellaIdentTask(Context context, Fingerprint fingerprint, String hexCode) {
+    public HuellaIdentTask(Context context, Fingerprint fingerprint, String hexCode, long id) {
         mContext = context;
         mFingerprint = fingerprint;
         progressDialog = new ProgressDialog(mContext);
         usuarioHexData = hexCode;
+        taskId = id;
+        mRealm = Realm.getDefaultInstance();
     }
 
     @Override
@@ -97,6 +104,7 @@ public class HuellaIdentTask extends AsyncTask<Integer, Integer, String> {
         super.onPostExecute(result);
 
         progressDialog.cancel();
+        Task task = mRealm.where(Task.class).equalTo("_id", taskId).findFirst();
 
         if (TextUtils.isEmpty(result)) {
             //Fallo la identificacion
@@ -106,7 +114,9 @@ public class HuellaIdentTask extends AsyncTask<Integer, Integer, String> {
 
         //Si hay resultado, entonces fue una Identificacion exitosa
         Toast.makeText(mContext, "Se encontro usuario", Toast.LENGTH_SHORT).show();
-
+        mRealm.beginTransaction();
+        task.setTaskState(1);
+        mRealm.commitTransaction();
         ((Activity)mContext).finish();
 
         //Se "vacian" las variables despues de mostrarlas en la UI

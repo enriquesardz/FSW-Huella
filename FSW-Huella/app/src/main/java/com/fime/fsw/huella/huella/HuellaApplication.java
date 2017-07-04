@@ -10,6 +10,7 @@ import com.fime.fsw.huella.huella.Data.API.Modelos.Task;
 import com.uphyca.stetho_realm.RealmInspectorModulesProvider;
 
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.regex.Pattern;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -28,13 +29,8 @@ public class HuellaApplication extends Application {
     public void onCreate() {
         super.onCreate();
         Context mContext = getApplicationContext();
-        Realm.init(mContext);
-        Stetho.initialize(
-                Stetho.newInitializerBuilder(mContext)
-                        .enableDumpapp(Stetho.defaultDumperPluginsProvider(mContext))
-                        .enableWebKitInspector(RealmInspectorModulesProvider.builder(mContext).build())
-                        .build()
-        );
+        Realm.init(this);
+
         RealmConfiguration config = new RealmConfiguration
                 .Builder()
                 .name(REALM_NAME)
@@ -43,6 +39,21 @@ public class HuellaApplication extends Application {
         Realm.setDefaultConfiguration(config);
         Realm realm = Realm.getInstance(config);
         TaskID = setAtomicId(realm, Task.class);
+
+        Stetho.initialize(
+                Stetho.newInitializerBuilder(this)
+                        .enableDumpapp(Stetho.defaultDumperPluginsProvider(this))
+                        .enableWebKitInspector(RealmInspectorModulesProvider.builder(this).build())
+                        .build()
+        );
+//        RealmInspectorModulesProvider.builder(this)
+//                .withFolder(getCacheDir())
+//                .withMetaTables()
+//                .withDescendingOrder()
+//                .withLimit(1000)
+//                .databaseNamePattern(Pattern.compile(".+\\.realm"))
+//                .build();
+
         realm.close();
 
     }

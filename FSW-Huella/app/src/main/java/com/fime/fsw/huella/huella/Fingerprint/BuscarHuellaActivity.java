@@ -69,7 +69,7 @@ public class BuscarHuellaActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //Este task utiliza las funciones proporcionadas por el SDK para identificar la huella
-                new HuellaIdentTask(mContext, mFingerprint, hexCode).execute();
+                new HuellaIdentTask(mContext, mFingerprint, hexCode, itemid).execute();
             }
         });
 

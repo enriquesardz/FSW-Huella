@@ -7,11 +7,13 @@ package com.fime.fsw.huella.huella.Objetos;
 public class RecorridoActualItem {
     private long id;
     private String horaFime, salonFime;
+    private int recorridoState;
 
-    public RecorridoActualItem(long id, String hora, String salon){
+    public RecorridoActualItem(long id, String hora, String salon, int state){
         this.id = id;
         this.horaFime = hora;
         this.salonFime = salon;
+        this.recorridoState = state;
     }
 
     public String getHoraFime(){
@@ -24,5 +26,9 @@ public class RecorridoActualItem {
 
     public long getID(){
         return this.id;
+    }
+
+    public int getRecorridoState() {
+        return recorridoState;
     }
 }
