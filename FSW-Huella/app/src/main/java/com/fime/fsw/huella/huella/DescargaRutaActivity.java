@@ -26,9 +26,11 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.fime.fsw.huella.huella.HuellaApplication.APP_TAG;
+
 public class DescargaRutaActivity extends AppCompatActivity {
 
-    public static final String TAG = DescargaRutaActivity.class.getSimpleName();
+    public static final String TAG = APP_TAG + DescargaRutaActivity.class.getSimpleName();
 
     // https://young-escarpment-48238.herokuapp.com/routes
     private MaterialSpinner spinnerClaveArea;

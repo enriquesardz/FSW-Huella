@@ -16,6 +16,7 @@ import com.fime.fsw.huella.huella.Data.HuellaDBHelper;
 import com.rscja.deviceapi.Fingerprint;
 
 import static android.content.ContentValues.TAG;
+import static com.fime.fsw.huella.huella.HuellaApplication.APP_TAG;
 
 /**
  * Created by ensardz on 20/06/2017.
@@ -23,6 +24,7 @@ import static android.content.ContentValues.TAG;
 
 public class HuellaIdentTask extends AsyncTask<Integer, Integer, String> {
 
+    public static final String TAG = APP_TAG + HuellaIdentTask.class.getSimpleName();
     private ProgressDialog progressDialog;
     private Context mContext;
 

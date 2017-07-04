@@ -20,6 +20,7 @@ import io.realm.RealmResults;
 public class HuellaApplication extends Application {
 
     public static final String REALM_NAME = "Huella.realm";
+    public static final String APP_TAG = "CODO: ";
 
     public static AtomicInteger TaskID = new AtomicInteger();
 

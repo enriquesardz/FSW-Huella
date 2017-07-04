@@ -3,6 +3,7 @@ package com.fime.fsw.huella.huella.Barcode;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -23,15 +24,19 @@ import org.w3c.dom.Text;
 
 import io.realm.Realm;
 
+import static com.fime.fsw.huella.huella.HuellaApplication.APP_TAG;
+
 public class BarcodeReaderActivity extends AppCompatActivity {
 
-    private final static String TAG = BarcodeReaderActivity.class.getSimpleName();
+    private final static String TAG = APP_TAG + BarcodeReaderActivity.class.getSimpleName();
 
     private boolean estaActivo = false;
 
     private TextView tvCodigo;
     private Button btnEscanear;
     private ProgressDialog progressDialog;
+    private MediaPlayer scoutShort;
+    private MediaPlayer scoutLong;
 
     private Context mContext;
     private Realm mRealm;
@@ -51,6 +56,7 @@ public class BarcodeReaderActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
 
+        //Trata de obtener una instancia del codigo de barras, si no lo logra entonces arroja una excepcion
         try {
             mBarcode = Barcode1D.getInstance();
         } catch (ConfigurationException e) {
@@ -110,9 +116,8 @@ public class BarcodeReaderActivity extends AppCompatActivity {
         super.onPause();
         //Si se sale de la actividad y el codigo de barras esta activo,
         //se cierra.
-        if (mBarcode != null) {
-            mBarcode.close();
-        }
+        if (mBarcode != null) mBarcode.close();
+
     }
 
     //Inicia el codigo de barras
@@ -142,12 +147,17 @@ public class BarcodeReaderActivity extends AppCompatActivity {
         }
     }
 
+    //Lee el codigo de barras y lo compara
     public class ScanTask extends AsyncTask<String, Integer, String> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
 
         @Override
         protected String doInBackground(String... params) {
             String code = "";
-
             if (estaActivo) {
                 code = mBarcode.scan();
             }
@@ -158,10 +168,11 @@ public class BarcodeReaderActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
+
             //Aqui se puede usar el codigo que regrese el escanner.
             if (!TextUtils.isEmpty(result)) {
                 //Se capturo algo de informacion entonces se inicia erl recog de la huella
-                Toast.makeText(mContext, result, Toast.LENGTH_SHORT).show();
+                Log.i(TAG, "Codigo de barras encontro: " + result);
                 if (TextUtils.equals(codigoBarraSalon, result)) {
                     //Si los codigos de barras son iguales, entonces inicia el reconocimiento de la huella.
                     Intent intent = new Intent(mContext, BuscarHuellaActivity.class);
@@ -171,10 +182,10 @@ public class BarcodeReaderActivity extends AppCompatActivity {
                     finish();
                 }
                 else{
-                    Toast.makeText(mContext, "No coinciden los codigos.", Toast.LENGTH_SHORT).show();
+                    Log.e(TAG, "No coinciden los codigos: " + codigoBarraSalon + " != " + result);
                 }
             } else {
-                Toast.makeText(mContext, "No se capturo el codigo", Toast.LENGTH_SHORT).show();
+                Log.e(TAG, "No se detecto un codigo");
             }
 
         }

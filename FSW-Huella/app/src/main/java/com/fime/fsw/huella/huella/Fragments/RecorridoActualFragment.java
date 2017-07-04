@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,8 @@ import io.realm.Realm;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
 
+import static com.fime.fsw.huella.huella.HuellaApplication.APP_TAG;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -31,6 +34,8 @@ import io.realm.RealmResults;
  * to handle interaction events.
  */
 public class RecorridoActualFragment extends Fragment {
+
+    private static final String TAG = APP_TAG + RecorridoActualFragment.class.getSimpleName();
 
     private OnFragmentInteractionListener mListener;
 
@@ -108,7 +113,7 @@ public class RecorridoActualFragment extends Fragment {
                 String horaFime = mData.get(position).getHoraFime();
                 String salonFime = mData.get(position).getSalonFime();
 
-                Toast.makeText(mContext, "ID: " + itemId + " Hora: " + horaFime + " Salon: " + salonFime, Toast.LENGTH_SHORT).show();
+                Log.i(TAG, "ID: " + itemId + " Hora: " + horaFime + " Salon: " + salonFime);
                 //Trigger de onRecorridoActualItemSelected en RecorridoMainActivity para comunicar con
                 //DatosVisitaFragment
                 if (mListener != null) {

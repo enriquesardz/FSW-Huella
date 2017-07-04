@@ -14,13 +14,15 @@ import com.fime.fsw.huella.huella.Data.HuellaContract;
 import com.fime.fsw.huella.huella.Data.HuellaDBHelper;
 import com.rscja.deviceapi.Fingerprint;
 
+import static com.fime.fsw.huella.huella.HuellaApplication.APP_TAG;
+
 /**
  * Created by ensardz on 20/06/2017.
  */
 
 public class HuellaAcqTask extends AsyncTask<Integer, Integer, String> {
 
-    private static final String TAG = HuellaAcqTask.class.getSimpleName();
+    private static final String TAG = APP_TAG + HuellaAcqTask.class.getSimpleName();
 
     private Context mContext;
     private Fingerprint mFingerprint;
