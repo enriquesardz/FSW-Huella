@@ -168,6 +168,7 @@ public class BarcodeReaderActivity extends AppCompatActivity {
                     //Le pasa el id a la nueva actividad de deteccion de huella.
                     intent.putExtra("_id", _id);
                     startActivity(intent);
+                    finish();
                 }
                 else{
                     Toast.makeText(mContext, "No coinciden los codigos.", Toast.LENGTH_SHORT).show();

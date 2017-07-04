@@ -9,7 +9,6 @@ import android.util.Log;
 
 import com.ensardz.huellaapitest.Database.HuellaContract;
 import com.ensardz.huellaapitest.Database.HuellaDBHelper;
-import com.ensardz.huellaapitest.Database.RealmModels.RealmTask;
 import com.ensardz.huellaapitest.Datos.API.API;
 import com.ensardz.huellaapitest.Datos.API.Models.Task;
 import com.ensardz.huellaapitest.Datos.API.APIServices.DescargaRecorridoService;
@@ -61,10 +60,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        RealmQuery<RealmTask> query = mRealm.where(RealmTask.class);
-        RealmResults<RealmTask> result = query.findAll();
+//        RealmQuery<RealmTask> query = mRealm.where(RealmTask.class);
+//        RealmResults<RealmTask> result = query.findAll();
 
-        Log.i(TAG, result.toString());
+//        Log.i(TAG, result.toString());
 
 
     }

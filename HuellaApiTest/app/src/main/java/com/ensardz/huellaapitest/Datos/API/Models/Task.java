@@ -1,63 +1,100 @@
 package com.ensardz.huellaapitest.Datos.API.Models;
 
+import com.ensardz.huellaapitest.HuellaApiTestApp;
 import com.google.gson.annotations.SerializedName;
 
 import io.realm.Realm;
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by Quique on 29/06/2017.
  */
 
 public class Task extends RealmObject{
-    private String id;
-    private String room;
-    @SerializedName("assignment")
-    private String assignment;
+    @PrimaryKey
+    private int id;
+    private String _id;
+    private String period;
     private String academyHour;
-    private String barcode;
-    private String employeeNumber;
-    private String name;
-    private String fullName;
-    private String hexCode;
+    private String group;
+    private String language;
+    private String day;
+    private String modality;
+
+    //Owner
+    @SerializedName("_id")
+    private String ownerId;
+    @SerializedName("rawName")
+    private String ownerRawName;
+    @SerializedName("userType")
+    private String ownerUserType;
+    @SerializedName("name")
+    private String ownerName;
+    @SerializedName("lastName")
+    private String ownerLastName;
+    @SerializedName("fingerPrint")
+    private String ownerFingerPrint;
+    @SerializedName("employeeNumber")
+    private String ownerEmployeeNumber;
+
+    //Assignment
+    @SerializedName("_id")
+    private String assignmentId;
+    @SerializedName("rawName")
+    private String assignmentRawName;
+    @SerializedName("code")
+    private String assignmentCode;
+    @SerializedName("name")
+    private String assignmentName;
+    @SerializedName("plan")
+    private String assignmentPlan;
 
     public Task(){}
-    public static Task create(String id, String room, String assignment, String academyHour, String barcode, String employeeNumber, String name, String fullName, String hexCode) {
+
+    public static Task create(String _id, String period, String academyHour, String group, String language, String day, String modality, String ownerId, String ownerRawName, String ownerUserType, String ownerName, String ownerLastName, String ownerFingerPrint, String ownerEmployeeNumber, String assignmentId, String assignmentRawName, String assignmentCode, String assignmentName, String assignmentPlan) {
         Task task = new Task();
-        task.id = id;
-        task.room = room;
-        task.assignment = assignment;
+        task.id = HuellaApiTestApp.TaskID.incrementAndGet();
+        task._id = _id;
+        task.period = period;
         task.academyHour = academyHour;
-        task.barcode = barcode;
-        task.employeeNumber = employeeNumber;
-        task.name = name;
-        task.fullName = fullName;
-        task.hexCode = hexCode;
+        task.group = group;
+        task.language = language;
+        task.day = day;
+        task.modality = modality;
+        task.ownerId = ownerId;
+        task.ownerRawName = ownerRawName;
+        task.ownerUserType = ownerUserType;
+        task.ownerName = ownerName;
+        task.ownerLastName = ownerLastName;
+        task.ownerFingerPrint = ownerFingerPrint;
+        task.ownerEmployeeNumber = ownerEmployeeNumber;
+        task.assignmentId = assignmentId;
+        task.assignmentRawName = assignmentRawName;
+        task.assignmentCode = assignmentCode;
+        task.assignmentName = assignmentName;
+        task.assignmentPlan = assignmentPlan;
         return task;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public String get_id() {
+        return _id;
     }
 
-    public String getRoom() {
-        return room;
+    public void set_id(String _id) {
+        this._id = _id;
     }
 
-    public void setRoom(String room) {
-        this.room = room;
+    public String getPeriod() {
+        return period;
     }
 
-    public String getAssignment() {
-        return assignment;
-    }
-
-    public void setAssignment(String assignment) {
-        this.assignment = assignment;
+    public void setPeriod(String period) {
+        this.period = period;
     }
 
     public String getAcademyHour() {
@@ -68,58 +105,157 @@ public class Task extends RealmObject{
         this.academyHour = academyHour;
     }
 
-    public String getBarcode() {
-        return barcode;
+    public String getGroup() {
+        return group;
     }
 
-    public void setBarcode(String barcode) {
-        this.barcode = barcode;
+    public void setGroup(String group) {
+        this.group = group;
     }
 
-    public String getEmployeeNumber() {
-        return employeeNumber;
+    public String getLanguage() {
+        return language;
     }
 
-    public void setEmployeeNumber(String employeeNumber) {
-        this.employeeNumber = employeeNumber;
+    public void setLanguage(String language) {
+        this.language = language;
     }
 
-    public String getName() {
-        return name;
+    public String getDay() {
+        return day;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setDay(String day) {
+        this.day = day;
     }
 
-    public String getFullName() {
-        return fullName;
+    public String getModality() {
+        return modality;
     }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
+    public void setModality(String modality) {
+        this.modality = modality;
     }
 
-    public String getHexCode() {
-        return hexCode;
+    public String getOwnerId() {
+        return ownerId;
     }
 
-    public void setHexCode(String hexCode) {
-        this.hexCode = hexCode;
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
+    }
+
+    public String getOwnerRawName() {
+        return ownerRawName;
+    }
+
+    public void setOwnerRawName(String ownerRawName) {
+        this.ownerRawName = ownerRawName;
+    }
+
+    public String getOwnerUserType() {
+        return ownerUserType;
+    }
+
+    public void setOwnerUserType(String ownerUserType) {
+        this.ownerUserType = ownerUserType;
+    }
+
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
+    }
+
+    public String getOwnerLastName() {
+        return ownerLastName;
+    }
+
+    public void setOwnerLastName(String ownerLastName) {
+        this.ownerLastName = ownerLastName;
+    }
+
+    public String getOwnerFingerPrint() {
+        return ownerFingerPrint;
+    }
+
+    public void setOwnerFingerPrint(String ownerFingerPrint) {
+        this.ownerFingerPrint = ownerFingerPrint;
+    }
+
+    public String getOwnerEmployeeNumber() {
+        return ownerEmployeeNumber;
+    }
+
+    public void setOwnerEmployeeNumber(String ownerEmployeeNumber) {
+        this.ownerEmployeeNumber = ownerEmployeeNumber;
+    }
+
+    public String getAssignmentId() {
+        return assignmentId;
+    }
+
+    public void setAssignmentId(String assignmentId) {
+        this.assignmentId = assignmentId;
+    }
+
+    public String getAssignmentRawName() {
+        return assignmentRawName;
+    }
+
+    public void setAssignmentRawName(String assignmentRawName) {
+        this.assignmentRawName = assignmentRawName;
+    }
+
+    public String getAssignmentCode() {
+        return assignmentCode;
+    }
+
+    public void setAssignmentCode(String assignmentCode) {
+        this.assignmentCode = assignmentCode;
+    }
+
+    public String getAssignmentName() {
+        return assignmentName;
+    }
+
+    public void setAssignmentName(String assignmentName) {
+        this.assignmentName = assignmentName;
+    }
+
+    public String getAssignmentPlan() {
+        return assignmentPlan;
+    }
+
+    public void setAssignmentPlan(String assignmentPlan) {
+        this.assignmentPlan = assignmentPlan;
     }
 
     @Override
     public String toString() {
         return "Task{" +
                 "id='" + id + '\'' +
-                ", room='" + room + '\'' +
-                ", assignment='" + assignment + '\'' +
+                ", _id='" + _id + '\'' +
+                ", period='" + period + '\'' +
                 ", academyHour='" + academyHour + '\'' +
-                ", barcode='" + barcode + '\'' +
-                ", employeeNumber='" + employeeNumber + '\'' +
-                ", name='" + name + '\'' +
-                ", fullName='" + fullName + '\'' +
-                ", hexCode='" + hexCode + '\'' +
+                ", group='" + group + '\'' +
+                ", language='" + language + '\'' +
+                ", day='" + day + '\'' +
+                ", modality='" + modality + '\'' +
+                ", ownerId='" + ownerId + '\'' +
+                ", ownerRawName='" + ownerRawName + '\'' +
+                ", ownerUserType='" + ownerUserType + '\'' +
+                ", ownerName='" + ownerName + '\'' +
+                ", ownerLastName='" + ownerLastName + '\'' +
+                ", ownerFingerPrint='" + ownerFingerPrint + '\'' +
+                ", ownerEmployeeNumber='" + ownerEmployeeNumber + '\'' +
+                ", assignmentId='" + assignmentId + '\'' +
+                ", assignmentRawName='" + assignmentRawName + '\'' +
+                ", assignmentCode='" + assignmentCode + '\'' +
+                ", assignmentName='" + assignmentName + '\'' +
+                ", assignmentPlan='" + assignmentPlan + '\'' +
                 '}';
     }
 }

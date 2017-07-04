@@ -55,11 +55,12 @@ public class BuscarHuellaActivity extends AppCompatActivity {
 
         Task task = mRealm.where(Task.class).equalTo("_id", itemid).findFirst();
         hexCode = task.getHexCode();
-
-        tvNombre.setText(task.getName());
-        tvFullNombre.setText(task.getFullName());
-
         initComponentes();
+
+        tvNombre.setText("Nombre: " + task.getName());
+        tvFullNombre.setText("Apellido: " + task.getFullName());
+
+
         //Inicia el task para buscar la huella con el id que se le pasa,
         //ademas, toma la huella que se encuentre en el escanner para comparar.
         //TODO: El id se debe de sacar de los datos que nos pasan los web service

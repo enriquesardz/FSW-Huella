@@ -16,32 +16,49 @@ import java.util.List;
  * Created by Quique on 29/06/2017.
  */
 
-public class TaskDeserializer implements JsonDeserializer<List<Task>>{
+public class TaskDeserializer implements JsonDeserializer<List<Task>> {
     @Override
     public List<Task> deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-        JsonArray m = json.getAsJsonObject().getAsJsonArray("m");
+
         List<Task> tasks = new ArrayList<Task>();
-        for(JsonElement e : m){
+        int i;
+        //Clases de m1 a m6
+        for (i = 1; i <= 18; i++) {
+            JsonArray arregloHora = json.getAsJsonObject().getAsJsonArray(String.valueOf(i));
+            //M1 a M6
+            for (JsonElement elemento : arregloHora) {
 
-            JsonObject taskJsonObject = e.getAsJsonObject();
+                JsonObject taskObject = elemento.getAsJsonObject();
 
-            String id = taskJsonObject.get("id").getAsString();
-            String room = taskJsonObject.get("room").getAsString();
-            String assigment = taskJsonObject.get("assigment").getAsString();
-            String academyHour = taskJsonObject.get("academyHour").getAsString();
-            String barcode = taskJsonObject.get("barcode").getAsString();
+                String id = taskObject.get("_id").getAsString();
+                String period = taskObject.get("period").getAsString();
+                String academyHour = taskObject.get("academyHour").getAsString();
+                String group = taskObject.get("group").getAsString();
+                String language = taskObject.get("language").getAsString();
+                String day = taskObject.get("day").getAsString();
+                String modality = taskObject.get("modality").getAsString();
 
-            JsonObject owner = taskJsonObject.get("owner").getAsJsonObject();
+                JsonObject ownerObject = taskObject.get("owner").getAsJsonObject();
 
-            String employeeNumber = owner.get("employeeNumber").getAsString();
-            String name = owner.get("name").getAsString();
-            String fullName = owner.get("fullName").getAsString();
+                String ownerId = ownerObject.get("_id").getAsString();
+                String ownerRawName = ownerObject.get("rawName").getAsString();
+                String ownerUserType = ownerObject.get("userType").getAsString();
+                String ownerName = ownerObject.get("name").getAsString();
+                String ownerLastName = ownerObject.get("lastName").getAsString();
+                String ownerFingerPrint = ownerObject.get("fingerPrint").getAsString();
+                String ownerEmployeeNumber = ownerObject.get("employeeNumber").getAsString();
 
-            JsonObject fingerPrint = owner.get("fingerPrint").getAsJsonObject();
-            String hexCode = fingerPrint.get("hexCode").getAsString();
+                JsonObject assignmentObject = taskObject.get("assigment").getAsJsonObject();
 
-            Task task = Task.create(id,room,assigment,academyHour,barcode,employeeNumber,name, fullName,hexCode);
-            tasks.add(task);
+                String assignmentId = assignmentObject.get("_id").getAsString();
+                String assignmentRawName = assignmentObject.get("rawName").getAsString();
+                String assignmentCode = assignmentObject.get("code").getAsString();
+                String assignmentName = assignmentObject.get("name").getAsString();
+                String assignmentPlan = assignmentObject.get("plan").getAsString();
+
+                Task task = Task.create(id, period, academyHour, group, language, day, modality, ownerId, ownerRawName, ownerUserType, ownerName, ownerLastName, ownerFingerPrint, ownerEmployeeNumber, assignmentId, assignmentRawName, assignmentCode, assignmentName, assignmentPlan);
+                tasks.add(task);
+            }
         }
         return tasks;
     }

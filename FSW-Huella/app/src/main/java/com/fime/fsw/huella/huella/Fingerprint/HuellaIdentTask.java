@@ -1,5 +1,6 @@
 package com.fime.fsw.huella.huella.Fingerprint;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.database.Cursor;
@@ -103,6 +104,8 @@ public class HuellaIdentTask extends AsyncTask<Integer, Integer, String> {
 
         //Si hay resultado, entonces fue una Identificacion exitosa
         Toast.makeText(mContext, "Se encontro usuario", Toast.LENGTH_SHORT).show();
+
+        ((Activity)mContext).finish();
 
         //Se "vacian" las variables despues de mostrarlas en la UI
         //TODO: Si la identifiacion es exitosa, la actividad se termina y se regresa al recorrido principal
