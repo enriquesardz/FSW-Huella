@@ -13,14 +13,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.fime.fsw.huella.huella.R;
-import com.fime.fsw.huella.huella.Fingerprint.BuscarHuellaActivity;
+import com.fime.fsw.huella.huella.Fingerprint.IdentificarHuellaActivity;
 import com.rscja.deviceapi.Barcode1D;
 import com.rscja.deviceapi.exception.ConfigurationException;
-
-import org.w3c.dom.Text;
 
 import io.realm.Realm;
 
@@ -175,7 +172,7 @@ public class BarcodeReaderActivity extends AppCompatActivity {
                 Log.i(TAG, "Codigo de barras encontro: " + result);
                 if (TextUtils.equals(codigoBarraSalon, result)) {
                     //Si los codigos de barras son iguales, entonces inicia el reconocimiento de la huella.
-                    Intent intent = new Intent(mContext, BuscarHuellaActivity.class);
+                    Intent intent = new Intent(mContext, IdentificarHuellaActivity.class);
                     //Le pasa el id a la nueva actividad de deteccion de huella.
                     intent.putExtra("_id", _id);
                     startActivity(intent);

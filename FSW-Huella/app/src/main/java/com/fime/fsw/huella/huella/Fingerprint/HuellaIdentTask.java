@@ -117,6 +117,7 @@ public class HuellaIdentTask extends AsyncTask<Integer, Integer, String> {
         mRealm.beginTransaction();
         task.setTaskState(1);
         mRealm.commitTransaction();
+        mRealm.close();
         ((Activity)mContext).finish();
 
         //Se "vacian" las variables despues de mostrarlas en la UI

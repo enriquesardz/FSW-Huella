@@ -17,7 +17,7 @@ import com.rscja.deviceapi.Fingerprint;
 
 import io.realm.Realm;
 
-public class BuscarHuellaActivity extends AppCompatActivity {
+public class IdentificarHuellaActivity extends AppCompatActivity {
 
 
     public Fingerprint mFingerprint;
@@ -27,14 +27,52 @@ public class BuscarHuellaActivity extends AppCompatActivity {
     private TextView tvNombre;
     private TextView tvFullNombre;
     private Button btnBuscarHuella;
+    private Button btnNoEstaMaestro;
 
     private String hexCode;
     private long itemid;
+
+    private Task task;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_buscar_huella);
+
+        initComponentes();
+
+
+        //Inicia el task para buscar la huella con el id que se le pasa,
+        //ademas, toma la huella que se encuentre en el escanner para comparar.
+        //TODO: El id se debe de sacar de los datos que nos pasan los web service
+
+        btnBuscarHuella.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Este task utiliza las funciones proporcionadas por el SDK para identificar la huella
+                new HuellaIdentTask(mContext, mFingerprint, hexCode, itemid).execute();
+            }
+        });
+
+
+        btnNoEstaMaestro.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mRealm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        task.setTaskState(2);
+                    }
+                });
+                finish();
+            }
+        });
+
+
+
+    }
+
+    private void initComponentes() {
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -50,35 +88,20 @@ public class BuscarHuellaActivity extends AppCompatActivity {
 
         itemid = getIntent().getLongExtra("_id", -1);
 
-        mContext = BuscarHuellaActivity.this;
+        mContext = IdentificarHuellaActivity.this;
         mRealm = Realm.getDefaultInstance();
 
-        Task task = mRealm.where(Task.class).equalTo("_id", itemid).findFirst();
+        task = mRealm.where(Task.class).equalTo("_id", itemid).findFirst();
         hexCode = task.getHexCode();
-        initComponentes();
-
-        tvNombre.setText("Nombre: " + task.getName());
-        tvFullNombre.setText("Apellido: " + task.getFullName());
 
 
-        //Inicia el task para buscar la huella con el id que se le pasa,
-        //ademas, toma la huella que se encuentre en el escanner para comparar.
-        //TODO: El id se debe de sacar de los datos que nos pasan los web service
-
-        btnBuscarHuella.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //Este task utiliza las funciones proporcionadas por el SDK para identificar la huella
-                new HuellaIdentTask(mContext, mFingerprint, hexCode, itemid).execute();
-            }
-        });
-
-    }
-
-    private void initComponentes() {
         tvNombre = (TextView) findViewById(R.id.nombre_textview);
         tvFullNombre = (TextView)findViewById(R.id.full_nombre_textview);
         btnBuscarHuella = (Button) findViewById(R.id.buscar_huella_button);
+        btnNoEstaMaestro = (Button) findViewById(R.id.no_esta_maestro_button);
+
+        tvNombre.setText("Nombre: " + task.getName());
+        tvFullNombre.setText("Apellido: " + task.getFullName());
     }
 
     @Override
@@ -132,7 +155,7 @@ public class BuscarHuellaActivity extends AppCompatActivity {
             mypDialog.cancel();
 
             if (!result) {
-                Toast.makeText(BuscarHuellaActivity.this, "init fail",
+                Toast.makeText(IdentificarHuellaActivity.this, "init fail",
                         Toast.LENGTH_SHORT).show();
             }
         }
@@ -142,7 +165,7 @@ public class BuscarHuellaActivity extends AppCompatActivity {
             // TODO Auto-generated method stub
             super.onPreExecute();
 
-            mypDialog = new ProgressDialog(BuscarHuellaActivity.this);
+            mypDialog = new ProgressDialog(IdentificarHuellaActivity.this);
             mypDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             mypDialog.setMessage("Iniciando escanner");
             mypDialog.setCanceledOnTouchOutside(false);

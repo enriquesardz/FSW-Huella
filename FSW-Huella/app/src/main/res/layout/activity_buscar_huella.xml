@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.fime.fsw.huella.huella.Fingerprint.BuscarHuellaActivity">
+    tools:context="com.fime.fsw.huella.huella.Fingerprint.IdentificarHuellaActivity">
 
     <!--<EditText-->
         <!--android:id="@+id/id_usuario_edittext"-->
@@ -32,4 +32,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Buscar Huella"/>
+    
+    <Button
+        android:id="@+id/no_esta_maestro_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="No esta maestro"/>
+
 </LinearLayout>

@@ -21,33 +21,34 @@ import java.util.ArrayList;
  * Created by Quique on 11/06/2017.
  */
 
-public class RecorridoActualAdapter extends RecyclerView.Adapter<RecorridoActualAdapter.ViewHolder>{
+public class RecorridoActualAdapter extends RecyclerView.Adapter<RecorridoActualAdapter.ViewHolder> {
     ArrayList<RecorridoActualItem> mData;
     Context mContext;
     RecyclerViewItemClickListener mListener;
 
-    public RecorridoActualAdapter(Context context, ArrayList<RecorridoActualItem> data, RecyclerViewItemClickListener listener){
+    public RecorridoActualAdapter(Context context, ArrayList<RecorridoActualItem> data, RecyclerViewItemClickListener listener) {
         this.mContext = context;
         this.mData = data;
         this.mListener = listener;
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder{
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView mTVHoraFime;
         public TextView mTVSalonFime;
         public View listItemContainer;
 
-        public ViewHolder(View v){
+        public ViewHolder(View v) {
             super(v);
-            mTVHoraFime = (TextView)v.findViewById(R.id.hora_fime_textview);
-            mTVSalonFime = (TextView)v.findViewById(R.id.salon_fime_textview);
+            mTVHoraFime = (TextView) v.findViewById(R.id.hora_fime_textview);
+            mTVSalonFime = (TextView) v.findViewById(R.id.salon_fime_textview);
             listItemContainer = v.findViewById(R.id.list_item_container);
         }
     }
+
     public RecorridoActualAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_recorrido_actual, parent, false);
         final ViewHolder viewHolder = new ViewHolder(view);
-        view.setOnClickListener(new View.OnClickListener(){
+        view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mListener.onItemClick(v, viewHolder.getAdapterPosition());
@@ -60,9 +61,11 @@ public class RecorridoActualAdapter extends RecyclerView.Adapter<RecorridoActual
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         int taskState = mData.get(position).getRecorridoState();
-        switch (taskState){
+        switch (taskState) {
             case 0:
                 holder.listItemContainer.setBackgroundColor(ContextCompat.getColor(mContext, R.color.fime_mint));
+                holder.mTVHoraFime.setTextColor(ContextCompat.getColor(mContext, R.color.primary_text));
+                holder.mTVSalonFime.setTextColor(ContextCompat.getColor(mContext, R.color.primary_text));
                 break;
             case 1:
                 holder.listItemContainer.setBackgroundColor(ContextCompat.getColor(mContext, R.color.verde_obscuro));
