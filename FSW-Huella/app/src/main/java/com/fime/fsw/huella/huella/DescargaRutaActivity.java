@@ -1,5 +1,6 @@
 package com.fime.fsw.huella.huella;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -50,13 +51,6 @@ public class DescargaRutaActivity extends AppCompatActivity {
 
         initComponentes();
 
-        List<String> claveAreaData = new LinkedList<>(Arrays.asList(getResources().getStringArray(R.array.druta_claves_area_spinner)));
-        List<String> periodoData = new LinkedList<>(Arrays.asList(getResources().getStringArray(R.array.druta_periodo_spinner)));
-
-        spinnerClaveArea.setItems(claveAreaData);
-        spinnerPeriodo.setItems(periodoData);
-
-
         btnDescargar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -71,6 +65,11 @@ public class DescargaRutaActivity extends AppCompatActivity {
         DescargaRecorridoService servicio = APICodo.getApi().create(DescargaRecorridoService.class);
         Call<List<Task>> call = servicio.descargaRecorrido();
 
+        final ProgressDialog progressDialog = new ProgressDialog(mContext);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.show();
+
         call.enqueue(new Callback<List<Task>>() {
             @Override
             public void onResponse(Call<List<Task>> call, Response<List<Task>> response) {
@@ -79,7 +78,7 @@ public class DescargaRutaActivity extends AppCompatActivity {
 
                 //Se ejecuta si el webservice regresa algo
 
-                //AsyncTask de Realm para guardar
+                //Se guardan los datos descargados a Realm
                 mRealm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
@@ -92,6 +91,8 @@ public class DescargaRutaActivity extends AppCompatActivity {
                     }
                 });
 
+                progressDialog.cancel();
+
                 SesionAplicacion sesionAplicacion = new SesionAplicacion(mContext);
                 sesionAplicacion.crearSesionDescarga();
                 startActivity(new Intent(mContext, RecorridoMainActivity.class));
@@ -101,6 +102,7 @@ public class DescargaRutaActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<List<Task>> call, Throwable t) {
                 //Si el web service no regresa nada entonces cae aqui
+                progressDialog.cancel();
                 Toast.makeText(DescargaRutaActivity.this, "No se descargo", Toast.LENGTH_SHORT).show();
             }
         });
@@ -111,6 +113,12 @@ public class DescargaRutaActivity extends AppCompatActivity {
         spinnerClaveArea = (MaterialSpinner) findViewById(R.id.clave_area_spinner);
         spinnerPeriodo = (MaterialSpinner) findViewById(R.id.periodo_spinner);
         btnDescargar = (Button) findViewById(R.id.descargar_button);
+
+        List<String> claveAreaData = new LinkedList<>(Arrays.asList(getResources().getStringArray(R.array.druta_claves_area_spinner)));
+        List<String> periodoData = new LinkedList<>(Arrays.asList(getResources().getStringArray(R.array.druta_periodo_spinner)));
+
+        spinnerClaveArea.setItems(claveAreaData);
+        spinnerPeriodo.setItems(periodoData);
     }
 
     @Override
