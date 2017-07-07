@@ -12,15 +12,12 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.fime.fsw.huella.huella.Data.API.Modelos.Task;
+import com.fime.fsw.huella.huella.Data.Modelos.Task;
 import com.fime.fsw.huella.huella.R;
-import com.fime.fsw.huella.huella.RecorridoMainActivity;
+import com.fime.fsw.huella.huella.Activities.RecorridoMain.RecorridoMainActivity;
 import com.fime.fsw.huella.huella.Barcode.BarcodeReaderActivity;
 
-import org.w3c.dom.Text;
-
 import io.realm.Realm;
-import io.realm.RealmResults;
 
 
 /**

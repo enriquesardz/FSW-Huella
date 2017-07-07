@@ -21,7 +21,7 @@ import com.rscja.deviceapi.exception.ConfigurationException;
 
 import io.realm.Realm;
 
-import static com.fime.fsw.huella.huella.HuellaApplication.APP_TAG;
+import static com.fime.fsw.huella.huella.Activities.HuellaApplication.APP_TAG;
 
 public class BarcodeReaderActivity extends AppCompatActivity {
 

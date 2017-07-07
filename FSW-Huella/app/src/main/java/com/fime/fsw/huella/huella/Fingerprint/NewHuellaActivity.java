@@ -13,7 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.fime.fsw.huella.huella.MenuInicioSesionActivity;
+import com.fime.fsw.huella.huella.Activities.InicioSesion.MenuInicioSesionActivity;
 import com.fime.fsw.huella.huella.R;
 import com.rscja.deviceapi.Fingerprint;
 

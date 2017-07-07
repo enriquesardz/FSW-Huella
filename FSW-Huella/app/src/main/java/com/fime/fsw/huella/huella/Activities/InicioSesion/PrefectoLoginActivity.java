@@ -1,4 +1,4 @@
-package com.fime.fsw.huella.huella;
+package com.fime.fsw.huella.huella.Activities.InicioSesion;
 
 import android.content.Context;
 import android.content.Intent;
@@ -7,44 +7,40 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
 
-public class PrefectoRegistroActivity extends AppCompatActivity {
+import com.fime.fsw.huella.huella.Activities.DescargaRutaActivity;
+import com.fime.fsw.huella.huella.R;
+import com.fime.fsw.huella.huella.Utilidad.ValidacionLogin;
 
-    private Button btnAceptar;
-    private TextView tvNombre;
+public class PrefectoLoginActivity extends AppCompatActivity {
 
+    private Button btnIniciarSesion;
     private Context mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_prefecto_registro);
-
+        setContentView(R.layout.activity_prefecto_login);
         mContext = this;
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
-            getSupportActionBar().setTitle(getResources().getString(R.string.prefecto_registro_titulo));
+            getSupportActionBar().setTitle(getResources().getString(R.string.prefecto_login_titulo));
         }
 
-        initComponentes();
+        btnIniciarSesion = (Button) findViewById(R.id.iniciar_sesion_button);
 
-        btnAceptar.setOnClickListener(new View.OnClickListener() {
+        btnIniciarSesion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(mContext, "Bienvenido: " + tvNombre.getText(), Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(mContext, MenuInicioSesionActivity.class));
+                //TODO: Algun tipo de validacion usando ValidacionLogin.class quitar valores hard coded
+                //Guarda la sesion del usuario; el usuario ahora esta logeado, pero no ha descargado.
+                ValidacionLogin validacionLogin = new ValidacionLogin(mContext, "text");
+                startActivity(new Intent(mContext, DescargaRutaActivity.class));
                 finish();
             }
         });
-    }
-
-    private void initComponentes() {
-        btnAceptar = (Button) findViewById(R.id.aceptar_button);
-        tvNombre = (TextView) findViewById(R.id.nombre_textview);
     }
 
     @Override
@@ -60,6 +56,8 @@ public class PrefectoRegistroActivity extends AppCompatActivity {
             case android.R.id.home:
                 startActivity(new Intent(mContext, MenuInicioSesionActivity.class));
                 finish();
+                return true;
+
             default:
                 return super.onOptionsItemSelected(item);
         }

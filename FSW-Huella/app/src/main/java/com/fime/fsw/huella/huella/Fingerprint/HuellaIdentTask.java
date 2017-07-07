@@ -3,23 +3,17 @@ package com.fime.fsw.huella.huella.Fingerprint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.text.TextUtils;
 import android.util.Log;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.fime.fsw.huella.huella.Data.API.Modelos.Task;
-import com.fime.fsw.huella.huella.Data.HuellaContract;
-import com.fime.fsw.huella.huella.Data.HuellaDBHelper;
+import com.fime.fsw.huella.huella.Data.Modelos.Task;
 import com.rscja.deviceapi.Fingerprint;
 
 import io.realm.Realm;
 
-import static android.content.ContentValues.TAG;
-import static com.fime.fsw.huella.huella.HuellaApplication.APP_TAG;
+import static com.fime.fsw.huella.huella.Activities.HuellaApplication.APP_TAG;
 
 /**
  * Created by ensardz on 20/06/2017.

@@ -10,9 +10,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
-import com.fime.fsw.huella.huella.Data.API.Modelos.Task;
+import com.fime.fsw.huella.huella.Data.Modelos.Task;
 import com.fime.fsw.huella.huella.R;
 import com.fime.fsw.huella.huella.Objetos.RecorridoActualItem;
 import com.fime.fsw.huella.huella.Utilidad.RecorridoActualAdapter;
@@ -21,10 +20,9 @@ import com.fime.fsw.huella.huella.Utilidad.RecyclerViewItemClickListener;
 import java.util.ArrayList;
 
 import io.realm.Realm;
-import io.realm.RealmQuery;
 import io.realm.RealmResults;
 
-import static com.fime.fsw.huella.huella.HuellaApplication.APP_TAG;
+import static com.fime.fsw.huella.huella.Activities.HuellaApplication.APP_TAG;
 
 
 /**

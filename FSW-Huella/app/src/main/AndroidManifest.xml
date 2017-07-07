@@ -9,16 +9,16 @@
     <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <application
-        android:name=".HuellaApplication"
+        android:name=".Activities.HuellaApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/FimeTheme">
-        <activity android:name=".RecorridoMainActivity" />
+        <activity android:name=".Activities.RecorridoMain.RecorridoMainActivity" />
         <activity
-            android:name=".SplashActivity"
+            android:name=".Activities.SplashActivity"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,10 +26,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MenuInicioSesionActivity" />
-        <activity android:name=".PrefectoLoginActivity" />
-        <activity android:name=".PrefectoRegistroActivity" />
-        <activity android:name=".DescargaRutaActivity" />
+        <activity android:name=".Activities.InicioSesion.MenuInicioSesionActivity" />
+        <activity android:name=".Activities.InicioSesion.PrefectoLoginActivity" />
+        <activity android:name=".Activities.InicioSesion.PrefectoRegistroActivity" />
+        <activity android:name=".Activities.DescargaRutaActivity" />
         <activity android:name=".Fingerprint.NewHuellaActivity" />
         <activity android:name=".Barcode.BarcodeReaderActivity" />
         <activity android:name=".Fingerprint.IdentificarHuellaActivity" />

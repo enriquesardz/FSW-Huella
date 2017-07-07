@@ -1,6 +1,6 @@
-package com.fime.fsw.huella.huella.Data.API.Modelos;
+package com.fime.fsw.huella.huella.Data.Modelos;
 
-import com.fime.fsw.huella.huella.HuellaApplication;
+import com.fime.fsw.huella.huella.Activities.HuellaApplication;
 import com.google.gson.annotations.SerializedName;
 
 import io.realm.RealmObject;

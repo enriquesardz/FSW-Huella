@@ -1,4 +1,4 @@
-package com.fime.fsw.huella.huella;
+package com.fime.fsw.huella.huella.Activities.InicioSesion;
 
 import android.content.Context;
 import android.content.Intent;
@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.fime.fsw.huella.huella.Fingerprint.NewHuellaActivity;
+import com.fime.fsw.huella.huella.R;
 
 public class MenuInicioSesionActivity extends AppCompatActivity {
 

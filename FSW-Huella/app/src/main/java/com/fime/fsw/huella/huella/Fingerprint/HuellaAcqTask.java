@@ -1,20 +1,13 @@
 package com.fime.fsw.huella.huella.Fingerprint;
 
 import android.app.ProgressDialog;
-import android.content.ContentValues;
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
 import android.os.AsyncTask;
 import android.text.TextUtils;
-import android.util.Log;
-import android.widget.Toast;
 
-import com.fime.fsw.huella.huella.Data.HuellaContract;
-import com.fime.fsw.huella.huella.Data.HuellaDBHelper;
 import com.rscja.deviceapi.Fingerprint;
 
-import static com.fime.fsw.huella.huella.HuellaApplication.APP_TAG;
+import static com.fime.fsw.huella.huella.Activities.HuellaApplication.APP_TAG;
 
 /**
  * Created by ensardz on 20/06/2017.
@@ -30,7 +23,6 @@ public class HuellaAcqTask extends AsyncTask<Integer, Integer, String> {
     private String usuarioHexData;
     private String usuarioNombre;
 
-    private HuellaDBHelper mDBHelper;
     private ProgressDialog progressDialog;
 
 
@@ -39,7 +31,6 @@ public class HuellaAcqTask extends AsyncTask<Integer, Integer, String> {
         mContext = context;
         mFingerprint = fingerprint;
         usuarioNombre = nombre;
-        mDBHelper = new HuellaDBHelper(mContext);
         progressDialog = new ProgressDialog(mContext);
     }
 
@@ -97,34 +88,6 @@ public class HuellaAcqTask extends AsyncTask<Integer, Integer, String> {
 
         //Si el if anterior no atrapa nada, entonces la adquisicion fue exitosa y los datos pueden ser guardados
         //en esta funcion.
-        SQLiteDatabase db = null;
-        try {
-            db = mDBHelper.getWritableDatabase();
-            ContentValues values = new ContentValues();
-            values.put(HuellaContract.HuellaEntry.COLUMNA_NOMBRE, usuarioNombre);
-            values.put(HuellaContract.HuellaEntry.COLUMNA_HUELLA, usuarioHexData);
-            long rowID = db.insert(HuellaContract.HuellaEntry.TABLA_USUARIO_NOMBRE, null, values);
-
-            if (rowID != -1) {
-                Toast.makeText(mContext, "El usuario " + usuarioNombre + " fue agregado exitosamente.", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(mContext, "Error al agregar usuario.", Toast.LENGTH_SHORT).show();
-            }
-
-            Log.i(TAG, usuarioNombre);
-            Log.i(TAG, usuarioHexData);
-            Log.i(TAG, Long.toString(rowID) + " agregado.");
-
-        } catch (SQLiteException e) {
-            Log.e(TAG, e.toString());
-        } finally {
-            if (mDBHelper != null) {
-                mDBHelper.close();
-            }
-            if (db != null) {
-                db.close();
-            }
-        }
 
     }
 

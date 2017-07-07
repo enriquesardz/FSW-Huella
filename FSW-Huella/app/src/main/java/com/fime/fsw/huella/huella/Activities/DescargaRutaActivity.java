@@ -1,4 +1,4 @@
-package com.fime.fsw.huella.huella;
+package com.fime.fsw.huella.huella.Activities;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -12,9 +12,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.fime.fsw.huella.huella.Data.API.APICodo;
-import com.fime.fsw.huella.huella.Data.API.Modelos.Task;
-import com.fime.fsw.huella.huella.Data.API.ServiciosAPI.DescargaRecorridoService;
+import com.fime.fsw.huella.huella.API.APICodo;
+import com.fime.fsw.huella.huella.Activities.InicioSesion.MenuInicioSesionActivity;
+import com.fime.fsw.huella.huella.Activities.RecorridoMain.RecorridoMainActivity;
+import com.fime.fsw.huella.huella.Data.Modelos.Task;
+import com.fime.fsw.huella.huella.API.ServiciosAPI.DescargaRecorridoService;
+import com.fime.fsw.huella.huella.R;
 import com.fime.fsw.huella.huella.Utilidad.SesionAplicacion;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 
@@ -27,11 +30,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.fime.fsw.huella.huella.HuellaApplication.APP_TAG;
-
 public class DescargaRutaActivity extends AppCompatActivity {
 
-    public static final String TAG = APP_TAG + DescargaRutaActivity.class.getSimpleName();
+    public static final String TAG = HuellaApplication.APP_TAG + DescargaRutaActivity.class.getSimpleName();
 
     // https://young-escarpment-48238.herokuapp.com/routes
     private MaterialSpinner spinnerClaveArea;

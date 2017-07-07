@@ -1,9 +1,12 @@
-package com.fime.fsw.huella.huella;
+package com.fime.fsw.huella.huella.Activities;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.fime.fsw.huella.huella.Activities.InicioSesion.MenuInicioSesionActivity;
+import com.fime.fsw.huella.huella.Activities.RecorridoMain.RecorridoMainActivity;
+import com.fime.fsw.huella.huella.R;
 import com.fime.fsw.huella.huella.Utilidad.SesionAplicacion;
 
 public class SplashActivity extends AppCompatActivity {

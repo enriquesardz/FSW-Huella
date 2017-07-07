@@ -1,6 +1,6 @@
-package com.fime.fsw.huella.huella.Data.API.Deserializadores;
+package com.fime.fsw.huella.huella.API.Deserializadores;
 
-import com.fime.fsw.huella.huella.Data.API.Modelos.Task;
+import com.fime.fsw.huella.huella.Data.Modelos.Task;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;

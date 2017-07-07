@@ -1,4 +1,4 @@
-package com.fime.fsw.huella.huella;
+package com.fime.fsw.huella.huella.Activities.RecorridoMain;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -12,9 +12,11 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.fime.fsw.huella.huella.Activities.InicioSesion.MenuInicioSesionActivity;
 import com.fime.fsw.huella.huella.Fragments.DatosVisitaFragment;
 import com.fime.fsw.huella.huella.Fragments.RecorridoActualFragment;
 import com.fime.fsw.huella.huella.Fragments.RecorridoFragment;
+import com.fime.fsw.huella.huella.R;
 import com.fime.fsw.huella.huella.Utilidad.SesionAplicacion;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;

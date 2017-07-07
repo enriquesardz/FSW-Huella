@@ -1,7 +1,7 @@
-package com.fime.fsw.huella.huella.Data.API.ServiciosAPI;
+package com.fime.fsw.huella.huella.API.ServiciosAPI;
 
 
-import com.fime.fsw.huella.huella.Data.API.Modelos.Task;
+import com.fime.fsw.huella.huella.Data.Modelos.Task;
 
 import java.util.List;
 
