@@ -11,6 +11,11 @@ import io.realm.annotations.PrimaryKey;
  */
 
 public class Task extends RealmObject {
+
+    //Keys para el objeto Task
+    public static final String _ID_KEY = "_id";
+    public static final String ROOM_KEY = "room";
+
     @PrimaryKey
     private int _id;
     private String id;
@@ -126,5 +131,22 @@ public class Task extends RealmObject {
 
     public void setTaskState(int taskState) {
         this.taskState = taskState;
+    }
+
+    @Override
+    public String toString() {
+        return "Task{" +
+                "_id=" + _id +
+                ", id='" + id + '\'' +
+                ", room='" + room + '\'' +
+                ", assignment='" + assignment + '\'' +
+                ", academyHour='" + academyHour + '\'' +
+                ", barcode='" + barcode + '\'' +
+                ", employeeNumber='" + employeeNumber + '\'' +
+                ", name='" + name + '\'' +
+                ", fullName='" + fullName + '\'' +
+                ", hexCode='" + hexCode + '\'' +
+                ", taskState=" + taskState +
+                '}';
     }
 }

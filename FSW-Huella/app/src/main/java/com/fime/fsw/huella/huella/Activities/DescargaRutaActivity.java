@@ -26,6 +26,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import io.realm.Realm;
+import io.realm.RealmResults;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -91,6 +92,11 @@ public class DescargaRutaActivity extends AppCompatActivity {
 
         spinnerClaveArea.setItems(claveAreaData);
         spinnerPeriodo.setItems(periodoData);
+
+        //TODO: No se deben dropear los valores si no hacerles update,
+        //por ahora se borran cuando regresa a esta pantalla.
+
+        eliminarTasksDeRealm();
 
         btnDescargar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -160,6 +166,15 @@ public class DescargaRutaActivity extends AppCompatActivity {
                 }
             }
         });
+    }
 
+    public void eliminarTasksDeRealm(){
+        final RealmResults<Task> tasks = mRealm.where(Task.class).findAll();
+        mRealm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                tasks.deleteAllFromRealm();
+            }
+        });
     }
 }

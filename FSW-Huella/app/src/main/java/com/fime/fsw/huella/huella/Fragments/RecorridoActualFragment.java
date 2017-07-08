@@ -3,7 +3,6 @@ package com.fime.fsw.huella.huella.Fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -18,7 +17,6 @@ import com.fime.fsw.huella.huella.UI.RecyclerView.RecyclerViewItemClickListener;
 
 import io.realm.OrderedRealmCollection;
 import io.realm.Realm;
-import io.realm.RealmResults;
 
 import static com.fime.fsw.huella.huella.Activities.HuellaApplication.APP_TAG;
 
@@ -92,8 +90,6 @@ public class RecorridoActualFragment extends Fragment {
 
         rvRecorrido.setHasFixedSize(true);
         rvRecorrido.setLayoutManager(linearLayoutManager);
-        rvRecorrido.addItemDecoration(new DividerItemDecoration(rvRecorrido.getContext(), linearLayoutManager.getOrientation()));
-
 
         //Se obtiene la info de nuestro Realm
         final OrderedRealmCollection<Task> recorridoData = getAllRealmTasks();
@@ -110,17 +106,11 @@ public class RecorridoActualFragment extends Fragment {
     }
 
     public OrderedRealmCollection<Task> getAllRealmTasks(){
-
-        RealmResults<Task> query = mRealm.where(Task.class).findAll();
-        return query;
+        return mRealm.where(Task.class).findAllSorted(Task.ROOM_KEY);
     }
 
     public void sendToDetailFragment(Task task){
-        long itemId = task.get_id();
-        String horaFime = task.getAcademyHour();
-        String salonFime = task.getRoom();
-
-        Log.i(TAG, "ID: " + itemId + " Hora: " + horaFime + " Salon: " + salonFime);
+        Log.i(TAG, task.toString());
         //Trigger de onRecorridoActualItemSelected en RecorridoMainActivity para comunicar con
         //DatosVisitaFragment
         if (mListener != null) {

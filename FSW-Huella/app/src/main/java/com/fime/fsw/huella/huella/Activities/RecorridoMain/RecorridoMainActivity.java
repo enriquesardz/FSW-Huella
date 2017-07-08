@@ -39,6 +39,7 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
         setContentView(R.layout.activity_recorrido_main);
 
         mContext = RecorridoMainActivity.this;
+        mSesionApp = new SesionAplicacion(mContext);
 
         initComponents();
     }
@@ -84,7 +85,7 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
     @Override
     public void onRecorridoActualItemSelected(Task task) {
         long id = task.get_id();
-        mBundle.putLong(KEY_ID_TASK, id);
+        mBundle.putLong(Task._ID_KEY, id);
         mBarraNav.selectTabWithId(R.id.tab_datos_visita);
     }
 

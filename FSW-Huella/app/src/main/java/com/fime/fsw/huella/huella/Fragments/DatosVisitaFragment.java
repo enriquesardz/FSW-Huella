@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,10 +11,9 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.fime.fsw.huella.huella.Barcode.BarcodeReaderActivity;
 import com.fime.fsw.huella.huella.Data.Modelos.Task;
 import com.fime.fsw.huella.huella.R;
-import com.fime.fsw.huella.huella.Activities.RecorridoMain.RecorridoMainActivity;
-import com.fime.fsw.huella.huella.Barcode.BarcodeReaderActivity;
 
 import io.realm.Realm;
 
@@ -38,24 +36,12 @@ public class DatosVisitaFragment extends Fragment {
     private View infoContainer;
 
     private Bundle mBundle;
-
     private Context mContext;
-
     private Realm mRealm;
-
-    private long itemid = -1;
-    private String codigoBarras;
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mBundle = this.getArguments();
-    }
 
     public DatosVisitaFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container,
@@ -64,54 +50,12 @@ public class DatosVisitaFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_datos_visita, container, false);
 
         mContext = getContext();
-
+        mBundle = this.getArguments();
         mRealm = Realm.getDefaultInstance();
 
         initComponentes(view);
 
-        infoContainer.setVisibility(View.INVISIBLE);
-
-        //Si el bundle tiene contenido entonces cambian los valores de los textviews.
-        if (mBundle.size() > 0) {
-            itemid = -1;
-            itemid = mBundle.getLong(RecorridoMainActivity.KEY_ID_TASK);
-            if (itemid != -1) {
-                //Trae un task usando el _id que se le pasa cuando le da click al recorrido actual.
-                Task task = mRealm.where(Task.class).equalTo("_id", itemid).findFirst();
-                tvMaestro.setText("Maestro: " + task.getName() + " " + task.getFullName());
-                tvHoraFime.setText("Hora: " + task.getAcademyHour());
-                tvSalonFime.setText("Salon: " + task.getRoom());
-                tvMateria.setText("Materia: " + task.getAssignment());
-                //Se guarda el codigo de barras de una vez.
-                codigoBarras = task.getBarcode();
-                infoContainer.setVisibility(View.VISIBLE);
-            }
-        }
-
-        //Inicia la actividad de lector de codigo de barras
-        btnEscanner.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (itemid != -1) {
-                    Intent intent = new Intent(mContext, BarcodeReaderActivity.class);
-                    //Se pasa el _id y el codigo de barras a la actividad codigo de barras.
-                    intent.putExtra("_id", itemid);
-                    intent.putExtra("barcode", codigoBarras);
-                    startActivity(intent);
-                }
-            }
-        });
-
         return view;
-    }
-
-    private void initComponentes(View view) {
-        infoContainer = view.findViewById(R.id.informacion_container);
-        tvMaestro = (TextView) view.findViewById(R.id.maestro_textview);
-        tvHoraFime = (TextView) view.findViewById(R.id.hora_fime_textview);
-        tvSalonFime = (TextView) view.findViewById(R.id.salon_fime_textview);
-        tvMateria = (TextView) view.findViewById(R.id.materia_textview);
-        btnEscanner = (ImageButton) view.findViewById(R.id.escaner_salon_button);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -138,19 +82,68 @@ public class DatosVisitaFragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mRealm.close();
+    }
+
+    //Este metodo permite la comunicacion entre este Fragment y la actividad host, y por ende,
+    //otros Fragments tambien.
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onCodigoBarrasFragmentInteraction(Uri uri);
+    }
+
+    private void initComponentes(View view) {
+        infoContainer = view.findViewById(R.id.informacion_container);
+        tvMaestro = (TextView) view.findViewById(R.id.maestro_textview);
+        tvHoraFime = (TextView) view.findViewById(R.id.hora_fime_textview);
+        tvSalonFime = (TextView) view.findViewById(R.id.salon_fime_textview);
+        tvMateria = (TextView) view.findViewById(R.id.materia_textview);
+        btnEscanner = (ImageButton) view.findViewById(R.id.escaner_salon_button);
+
+        infoContainer.setVisibility(View.INVISIBLE);
+
+        //Valor default del itemid, con intencion de que si el Bundle no regresa un id,
+        //se pueda validar.
+        final long itemid = mBundle.getLong(Task._ID_KEY, -1);
+        Task task;
+
+        //Si el bundle regreso un id, entonces actualiza la UI con datos del Task, y
+        //hace visible el contenedor.
+        if (itemid != -1) {
+            task = getTaskConId(itemid);
+            cargarDatosTask(task);
+        }
+
+
+        //Inicia la actividad de lector de codigo de barras
+        btnEscanner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (itemid != -1) {
+                    //Si mBundle regreso un id, entonces se puede iniciar la actividad del Scanner con un Task id,
+                    //y si no, el boton no hace nada.
+                    Intent intent = new Intent(mContext, BarcodeReaderActivity.class);
+                    intent.putExtra(Task._ID_KEY, itemid);
+                    startActivity(intent);
+                }
+            }
+        });
+    }
+
+    public Task getTaskConId(long id) {
+        Task task = mRealm.where(Task.class).equalTo("_id", id).findFirst();
+        return task;
+    }
+
+    public void cargarDatosTask(Task task){
+        tvMaestro.setText(getResources().getString(R.string.cbarra_maestro, task.getName(), task.getFullName()));
+        tvHoraFime.setText(getResources().getString(R.string.cbarra_hora, task.getAcademyHour()));
+        tvSalonFime.setText(getResources().getString(R.string.cbarra_salon, task.getRoom()));
+        tvMateria.setText(getResources().getString(R.string.cbarra_materia, task.getAssignment()));
+        infoContainer.setVisibility(View.VISIBLE);
     }
 
 }

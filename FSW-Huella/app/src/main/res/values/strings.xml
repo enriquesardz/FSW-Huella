@@ -49,8 +49,11 @@
 
     <!-- Fragment Codigo Barras -->
     <string name="cbarra_datos_generales">Datos Generales</string>
+    <string name="cbarra_maestro">Maestro: %1$s %2$s</string>
+    <string name="cbarra_hora">Hora: %1$s</string>
+    <string name="cbarra_salon">Salon: %1$s</string>
+    <string name="cbarra_materia">Materia: %1$s</string>
     <string name="cbarra_escanear_salon">Escanear salón</string>
-    <string name="cbarra_salon">Salon: </string>
 
     <!-- Settings Menu Strings -->
     <string name="menu_cerrar_sesion">Cerrar sesión</string>
