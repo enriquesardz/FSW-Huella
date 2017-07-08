@@ -22,22 +22,28 @@ import static com.fime.fsw.huella.huella.Activities.HuellaApplication.APP_TAG;
 public class HuellaIdentTask extends AsyncTask<Integer, Integer, String> {
 
     public static final String TAG = APP_TAG + HuellaIdentTask.class.getSimpleName();
-    private ProgressDialog progressDialog;
-    private Context mContext;
 
+    private ProgressDialog progressDialog;
+
+    private Context mContext;
     private Fingerprint mFingerprint;
     private Realm mRealm;
+    private Task mTask;
 
     private String usuarioHexData;
     private long taskId;
 
-    public HuellaIdentTask(Context context, Fingerprint fingerprint, String hexCode, long id) {
+    public HuellaIdentTask(Context context, Fingerprint fingerprint, Realm realm, Task task) {
         mContext = context;
         mFingerprint = fingerprint;
+        mRealm = realm;
+        mTask = task;
+
+        usuarioHexData = task.getHexCode();
+        taskId = task.get_id();
+
         progressDialog = new ProgressDialog(mContext);
-        usuarioHexData = hexCode;
-        taskId = id;
-        mRealm = Realm.getDefaultInstance();
+
     }
 
     @Override
@@ -98,7 +104,6 @@ public class HuellaIdentTask extends AsyncTask<Integer, Integer, String> {
         super.onPostExecute(result);
 
         progressDialog.cancel();
-        Task task = mRealm.where(Task.class).equalTo("_id", taskId).findFirst();
 
         if (TextUtils.isEmpty(result)) {
             //Fallo la identificacion
@@ -108,21 +113,19 @@ public class HuellaIdentTask extends AsyncTask<Integer, Integer, String> {
 
         //Si hay resultado, entonces fue una Identificacion exitosa
         Toast.makeText(mContext, "Se encontro usuario", Toast.LENGTH_SHORT).show();
-        mRealm.beginTransaction();
-        task.setTaskState(1);
-        mRealm.commitTransaction();
-        mRealm.close();
-        ((Activity)mContext).finish();
+        mRealm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                mTask.setTaskState(Task.STATE_PASO_VINO_MAESTRO);
+            }
+        });
 
-        //Se "vacian" las variables despues de mostrarlas en la UI
-        //TODO: Si la identifiacion es exitosa, la actividad se termina y se regresa al recorrido principal
+        ((Activity)mContext).finish();
     }
 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        //TODO: Sacar el hex huella con el id del maestro
-
         //Antes de poder hacer el match con la huella, necesitamos sacar
         //el valor hexadecimal de la huella del maestro utilizando algun identificador
         //como su ID.

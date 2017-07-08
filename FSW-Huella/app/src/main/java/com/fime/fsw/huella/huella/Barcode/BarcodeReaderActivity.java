@@ -3,10 +3,9 @@ package com.fime.fsw.huella.huella.Barcode;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.media.MediaPlayer;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
@@ -14,8 +13,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.fime.fsw.huella.huella.R;
+import com.fime.fsw.huella.huella.Data.Modelos.Task;
 import com.fime.fsw.huella.huella.Fingerprint.IdentificarHuellaActivity;
+import com.fime.fsw.huella.huella.R;
 import com.rscja.deviceapi.Barcode1D;
 import com.rscja.deviceapi.exception.ConfigurationException;
 
@@ -29,29 +29,22 @@ public class BarcodeReaderActivity extends AppCompatActivity {
 
     private boolean estaActivo = false;
 
-    private TextView tvCodigo;
-    private Button btnEscanear;
-    private ProgressDialog progressDialog;
-    private MediaPlayer scoutShort;
-    private MediaPlayer scoutLong;
-
     private Context mContext;
     private Realm mRealm;
-
     private Barcode1D mBarcode;
 
-    private String codigoBarraSalon;
-    private long _id;
+    private TextView tvCodigo;
+    private Button btnEscanear;
+
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_barcode_reader);
 
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
-        }
+        mContext = BarcodeReaderActivity.this;
+        mRealm = Realm.getDefaultInstance();
 
         //Trata de obtener una instancia del codigo de barras, si no lo logra entonces arroja una excepcion
         try {
@@ -61,33 +54,10 @@ public class BarcodeReaderActivity extends AppCompatActivity {
             return;
         }
 
-        mContext = BarcodeReaderActivity.this;
-
-        //Trae los datos que le paso el DatosVisitaFragment
-        _id = getIntent().getLongExtra("_id", -1);
-        codigoBarraSalon = getIntent().getStringExtra("barcode");
-
         initComponentes();
 
-        tvCodigo.setText(codigoBarraSalon);
-
-        //Inicia el escanner para leer codigos de barra
-        btnEscanear.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //Si el codigo de barras esta activo entonces puede escanear
-                if (estaActivo) {
-                    new ScanTask().execute();
-                }
-            }
-        });
     }
 
-    private void initComponentes() {
-        tvCodigo = (TextView) findViewById(R.id.data_textview);
-        btnEscanear = (Button) findViewById(R.id.escanear_button);
-        progressDialog = new ProgressDialog(mContext);
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -117,6 +87,50 @@ public class BarcodeReaderActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mRealm.close();
+    }
+
+    private void initComponentes() {
+
+        tvCodigo = (TextView) findViewById(R.id.data_textview);
+        btnEscanear = (Button) findViewById(R.id.escanear_button);
+        progressDialog = new ProgressDialog(mContext);
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+
+        //Trae los datos que le paso el DatosVisitaFragment
+        long id = getIntent().getLongExtra(Task._ID_KEY, -1);
+
+        final Task task = getTaskConId(id);
+
+        //Posiblemente se deba mostrar mas informacion, por ahora solo el codigo de barras.
+        tvCodigo.setText(task.getBarcode());
+
+        //Inicia el escanner para leer codigos de barra
+        btnEscanear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Si el codigo de barras esta activo entonces puede escanear
+                if (estaActivo) {
+                    new ScanTask(task).execute();
+                }
+            }
+        });
+    }
+
+    public Task getTaskConId(long id){
+        return mRealm.where(Task.class).equalTo(Task._ID_KEY, id).findFirst();
+    }
+
+    /*
+    * TASKS ASINCRONAS PARA EL CODIGO DE BARRAS
+    * */
     //Inicia el codigo de barras
     public class BarcodeInitTask extends AsyncTask<String, Integer, Boolean> {
 
@@ -147,6 +161,14 @@ public class BarcodeReaderActivity extends AppCompatActivity {
     //Lee el codigo de barras y lo compara
     public class ScanTask extends AsyncTask<String, Integer, String> {
 
+        private String barcodeSalon;
+        private long taskId;
+
+        public ScanTask (Task task){
+            taskId = task.get_id();
+            barcodeSalon = task.getBarcode();
+        }
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -168,18 +190,25 @@ public class BarcodeReaderActivity extends AppCompatActivity {
 
             //Aqui se puede usar el codigo que regrese el escanner.
             if (!TextUtils.isEmpty(result)) {
+
                 //Se capturo algo de informacion entonces se inicia erl recog de la huella
                 Log.i(TAG, "Codigo de barras encontro: " + result);
-                if (TextUtils.equals(codigoBarraSalon, result)) {
+
+                if (TextUtils.equals(barcodeSalon, result)) {
+
                     //Si los codigos de barras son iguales, entonces inicia el reconocimiento de la huella.
                     Intent intent = new Intent(mContext, IdentificarHuellaActivity.class);
+
                     //Le pasa el id a la nueva actividad de deteccion de huella.
-                    intent.putExtra("_id", _id);
+                    intent.putExtra(Task._ID_KEY, taskId);
+
+                    Log.i(TAG, "Barcode: " + barcodeSalon + " TaskId: " + taskId);
+                    
                     startActivity(intent);
                     finish();
                 }
                 else{
-                    Log.e(TAG, "No coinciden los codigos: " + codigoBarraSalon + " != " + result);
+                    Log.e(TAG, "No coinciden los codigos: " + barcodeSalon + " != " + result);
                 }
             } else {
                 Log.e(TAG, "No se detecto un codigo");

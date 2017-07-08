@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:focusableInTouchMode="false"
-    tools:context="com.fime.fsw.huella.huella.Fingerprint.NewHuellaActivity">
+    tools:context="com.fime.fsw.huella.huella.Fingerprint.Unused.NewHuellaActivity">
 
     <EditText
         android:id="@+id/page_id_edittext"

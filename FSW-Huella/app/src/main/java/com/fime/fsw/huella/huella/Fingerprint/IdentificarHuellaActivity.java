@@ -29,56 +29,13 @@ public class IdentificarHuellaActivity extends AppCompatActivity {
     private Button btnBuscarHuella;
     private Button btnNoEstaMaestro;
 
-    private String hexCode;
-    private long itemid;
-
-    private Task task;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_buscar_huella);
 
-        initComponentes();
-
-
-        //Inicia el task para buscar la huella con el id que se le pasa,
-        //ademas, toma la huella que se encuentre en el escanner para comparar.
-        //TODO: El id se debe de sacar de los datos que nos pasan los web service
-
-        btnBuscarHuella.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //Este task utiliza las funciones proporcionadas por el SDK para identificar la huella
-                new HuellaIdentTask(mContext, mFingerprint, hexCode, itemid).execute();
-            }
-        });
-
-
-        btnNoEstaMaestro.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mRealm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        task.setTaskState(2);
-                    }
-                });
-                finish();
-            }
-        });
-
-
-
-    }
-
-    private void initComponentes() {
-
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
-            getSupportActionBar().setTitle("Buscar Huella");
-        }
+        mContext = IdentificarHuellaActivity.this;
+        mRealm = Realm.getDefaultInstance();
 
         try {
             mFingerprint = Fingerprint.getInstance();
@@ -86,22 +43,8 @@ public class IdentificarHuellaActivity extends AppCompatActivity {
             Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show();
         }
 
-        itemid = getIntent().getLongExtra("_id", -1);
+        initComponentes();
 
-        mContext = IdentificarHuellaActivity.this;
-        mRealm = Realm.getDefaultInstance();
-
-        task = mRealm.where(Task.class).equalTo("_id", itemid).findFirst();
-        hexCode = task.getHexCode();
-
-
-        tvNombre = (TextView) findViewById(R.id.nombre_textview);
-        tvFullNombre = (TextView)findViewById(R.id.full_nombre_textview);
-        btnBuscarHuella = (Button) findViewById(R.id.buscar_huella_button);
-        btnNoEstaMaestro = (Button) findViewById(R.id.no_esta_maestro_button);
-
-        tvNombre.setText("Nombre: " + task.getName());
-        tvFullNombre.setText("Apellido: " + task.getFullName());
     }
 
     @Override
@@ -137,6 +80,68 @@ public class IdentificarHuellaActivity extends AppCompatActivity {
         //Inicia la huella cuando se inicia la actividad.
         new InitTask().execute();
     }
+
+    private void initComponentes() {
+
+        tvNombre = (TextView) findViewById(R.id.nombre_textview);
+        tvFullNombre = (TextView)findViewById(R.id.full_nombre_textview);
+        btnBuscarHuella = (Button) findViewById(R.id.buscar_huella_button);
+        btnNoEstaMaestro = (Button) findViewById(R.id.no_esta_maestro_button);
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setTitle("Buscar Huella");
+        }
+
+        long itemid = getIntent().getLongExtra(Task._ID_KEY, -1);
+
+        final Task task = getTaskConId(itemid);
+
+        cargarDatosTask(task);
+
+        //Inicia el task para buscar la huella con el id que se le pasa,
+        //ademas, toma la huella que se encuentre en el escanner para comparar.
+        //TODO: El id se debe de sacar de los datos que nos pasan los web service
+
+        btnBuscarHuella.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Este task utiliza las funciones proporcionadas por el SDK para identificar la huella
+                new HuellaIdentTask(mContext, mFingerprint, mRealm, task).execute();
+            }
+        });
+
+
+        btnNoEstaMaestro.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mRealm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        task.setTaskState(Task.STATE_PASO_NO_VINO_MAESTRO);
+                    }
+                });
+                finish();
+            }
+        });
+    }
+
+    public Task getTaskConId(long id){
+        return mRealm.where(Task.class).equalTo(Task._ID_KEY, id).findFirst();
+    }
+
+    public void cargarDatosTask(Task task){
+        tvNombre.setText(getResources().getString(R.string.ih_nombre, task.getName()));
+        tvFullNombre.setText(getResources().getString(R.string.ih_apellido, task.getFullName()));
+    }
+
+
+    /*
+    *
+    * ASYNC TASK PARA INICIAR EL LEECTOR DACTILAR
+    *
+    * */
 
     //Este task inicia se encarga de iniciar el lector de la huella.
     public class InitTask extends AsyncTask<String, Integer, Boolean> {

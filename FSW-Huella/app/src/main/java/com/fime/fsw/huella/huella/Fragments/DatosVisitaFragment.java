@@ -134,8 +134,7 @@ public class DatosVisitaFragment extends Fragment {
     }
 
     public Task getTaskConId(long id) {
-        Task task = mRealm.where(Task.class).equalTo("_id", id).findFirst();
-        return task;
+        return mRealm.where(Task.class).equalTo(Task._ID_KEY, id).findFirst();
     }
 
     public void cargarDatosTask(Task task){

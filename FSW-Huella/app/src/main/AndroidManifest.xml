@@ -30,7 +30,7 @@
         <activity android:name=".Activities.InicioSesion.PrefectoLoginActivity" />
         <activity android:name=".Activities.InicioSesion.PrefectoRegistroActivity" />
         <activity android:name=".Activities.DescargaRutaActivity" />
-        <activity android:name=".Fingerprint.NewHuellaActivity" />
+        <activity android:name=".Fingerprint.Unused.NewHuellaActivity" />
         <activity android:name=".Barcode.BarcodeReaderActivity" />
         <activity android:name=".Fingerprint.IdentificarHuellaActivity" />
     </application>

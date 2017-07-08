@@ -21,11 +21,6 @@ import io.realm.RealmRecyclerViewAdapter;
 
 public class RecorridoAdapter extends RealmRecyclerViewAdapter<Task, RecorridoAdapter.ViewHolder>{
 
-    public static final int NO_HA_PASADO = 0;
-    public static final int PASO_VINO_MAESTRO = 1;
-    public static final int PASO_NO_VINO_MAESTRO = 2;
-
-
     Context mContext;
     RecyclerViewItemClickListener mListener;
 
@@ -75,17 +70,17 @@ public class RecorridoAdapter extends RealmRecyclerViewAdapter<Task, RecorridoAd
         holder.tvSalonFime.setText(task.getRoom());
 
         switch (taskState){
-            case NO_HA_PASADO:
+            case Task.STATE_NO_HA_PASADO:
                 holder.listItemContainer.setBackgroundColor(ContextCompat.getColor(mContext, R.color.fime_mint));
                 holder.tvHoraFime.setTextColor(ContextCompat.getColor(mContext, R.color.primary_text));
                 holder.tvSalonFime.setTextColor(ContextCompat.getColor(mContext, R.color.primary_text));
                 break;
-            case PASO_VINO_MAESTRO:
+            case Task.STATE_PASO_VINO_MAESTRO:
                 holder.listItemContainer.setBackgroundColor(ContextCompat.getColor(mContext, R.color.verde_obscuro));
                 holder.tvHoraFime.setTextColor(ContextCompat.getColor(mContext, R.color.blanco));
                 holder.tvSalonFime.setTextColor(ContextCompat.getColor(mContext, R.color.blanco));
                 break;
-            case PASO_NO_VINO_MAESTRO:
+            case Task.STATE_PASO_NO_VINO_MAESTRO:
                 holder.listItemContainer.setBackgroundColor(ContextCompat.getColor(mContext, R.color.verde_obscuro));
                 holder.tvHoraFime.setTextColor(ContextCompat.getColor(mContext, R.color.rojo_error));
                 holder.tvSalonFime.setTextColor(ContextCompat.getColor(mContext, R.color.rojo_error));

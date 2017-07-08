@@ -16,14 +16,13 @@ import com.fime.fsw.huella.huella.Activities.InicioSesion.MenuInicioSesionActivi
 import com.fime.fsw.huella.huella.Data.Modelos.Task;
 import com.fime.fsw.huella.huella.Fragments.DatosVisitaFragment;
 import com.fime.fsw.huella.huella.Fragments.RecorridoActualFragment;
-import com.fime.fsw.huella.huella.Fragments.RecorridoFragment;
 import com.fime.fsw.huella.huella.R;
 import com.fime.fsw.huella.huella.Utilidad.SesionAplicacion;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
 
 
-public class RecorridoMainActivity extends AppCompatActivity implements RecorridoFragment.OnFragmentInteractionListener, RecorridoActualFragment.OnFragmentInteractionListener, DatosVisitaFragment.OnFragmentInteractionListener {
+public class RecorridoMainActivity extends AppCompatActivity implements RecorridoActualFragment.OnFragmentInteractionListener, DatosVisitaFragment.OnFragmentInteractionListener {
 
     public static final String KEY_ID_TASK = "_id";
 
@@ -76,10 +75,6 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
                         })
                 .setNegativeButton(getResources().getString(R.string.mrecorrido_no), null)
                 .show();
-    }
-
-    @Override
-    public void onRecorridoFragmentInteraction(Uri uri) {
     }
 
     @Override

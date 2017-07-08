@@ -55,6 +55,10 @@
     <string name="cbarra_materia">Materia: %1$s</string>
     <string name="cbarra_escanear_salon">Escanear salón</string>
 
+    <!-- Identificar Huella Activity -->
+    <string name="ih_nombre">Nombre: %1$s</string>
+    <string name="ih_apellido">Apellido: %1$s</string>
+
     <!-- Settings Menu Strings -->
     <string name="menu_cerrar_sesion">Cerrar sesión</string>
     <string name="title_activity_test">test</string>
