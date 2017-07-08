@@ -8,7 +8,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.fime.fsw.huella.huella.R;
 
@@ -26,27 +25,8 @@ public class PrefectoRegistroActivity extends AppCompatActivity {
 
         mContext = this;
 
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
-            getSupportActionBar().setTitle(getResources().getString(R.string.prefecto_registro_titulo));
-        }
-
         initComponentes();
 
-        btnAceptar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(mContext, "Bienvenido: " + tvNombre.getText(), Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(mContext, MenuInicioSesionActivity.class));
-                finish();
-            }
-        });
-    }
-
-    private void initComponentes() {
-        btnAceptar = (Button) findViewById(R.id.aceptar_button);
-        tvNombre = (TextView) findViewById(R.id.nombre_textview);
     }
 
     @Override
@@ -65,5 +45,25 @@ public class PrefectoRegistroActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void initComponentes() {
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setTitle(getResources().getString(R.string.prefecto_registro_titulo));
+        }
+
+        btnAceptar = (Button) findViewById(R.id.aceptar_button);
+        tvNombre = (TextView) findViewById(R.id.nombre_textview);
+
+        btnAceptar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(mContext, MenuInicioSesionActivity.class));
+                finish();
+            }
+        });
     }
 }

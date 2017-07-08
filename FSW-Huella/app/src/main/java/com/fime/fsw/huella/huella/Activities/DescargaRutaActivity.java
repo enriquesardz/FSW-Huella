@@ -41,6 +41,7 @@ public class DescargaRutaActivity extends AppCompatActivity {
 
     private Context mContext;
     private Realm mRealm;
+    private SesionAplicacion mSesionApp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,77 +50,10 @@ public class DescargaRutaActivity extends AppCompatActivity {
 
         mContext = DescargaRutaActivity.this;
         mRealm = Realm.getDefaultInstance();
+        mSesionApp = new SesionAplicacion(mContext);
 
         initComponentes();
 
-        btnDescargar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //El usuario esta logeado; aqui se descarga y ahora la aplicacion continuara a abrir el RecorridoMainActivity.
-                descargarDeWebService();
-            }
-        });
-    }
-
-    private void descargarDeWebService() {
-
-        DescargaRecorridoService servicio = APICodo.getApi().create(DescargaRecorridoService.class);
-        Call<List<Task>> call = servicio.descargaRecorrido();
-
-        final ProgressDialog progressDialog = new ProgressDialog(mContext);
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.show();
-
-        call.enqueue(new Callback<List<Task>>() {
-            @Override
-            public void onResponse(Call<List<Task>> call, Response<List<Task>> response) {
-                final List<Task> tasks = response.body();
-                Log.i(TAG, tasks.toString());
-
-                //Se ejecuta si el webservice regresa algo
-
-                //Se guardan los datos descargados a Realm
-                mRealm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        int i;
-                        for(i = 0; i < tasks.size(); i++){
-                            Task task = tasks.get(i);
-                            Task realmTask = realm.copyToRealmOrUpdate(task);
-                            Log.i(TAG, realmTask.toString());
-                        }
-                    }
-                });
-
-                progressDialog.cancel();
-
-                SesionAplicacion sesionAplicacion = new SesionAplicacion(mContext);
-                sesionAplicacion.crearSesionDescarga();
-                startActivity(new Intent(mContext, RecorridoMainActivity.class));
-                finish();
-            }
-
-            @Override
-            public void onFailure(Call<List<Task>> call, Throwable t) {
-                //Si el web service no regresa nada entonces cae aqui
-                progressDialog.cancel();
-                Toast.makeText(DescargaRutaActivity.this, "No se descargo", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-
-    private void initComponentes() {
-        spinnerClaveArea = (MaterialSpinner) findViewById(R.id.clave_area_spinner);
-        spinnerPeriodo = (MaterialSpinner) findViewById(R.id.periodo_spinner);
-        btnDescargar = (Button) findViewById(R.id.descargar_button);
-
-        List<String> claveAreaData = new LinkedList<>(Arrays.asList(getResources().getStringArray(R.array.druta_claves_area_spinner)));
-        List<String> periodoData = new LinkedList<>(Arrays.asList(getResources().getStringArray(R.array.druta_periodo_spinner)));
-
-        spinnerClaveArea.setItems(claveAreaData);
-        spinnerPeriodo.setItems(periodoData);
     }
 
     @Override
@@ -132,8 +66,7 @@ public class DescargaRutaActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.cerrar_sesion:
-                SesionAplicacion sesionAplicacion = new SesionAplicacion(mContext);
-                sesionAplicacion.terminarSesionAplicacion();
+                mSesionApp.terminarSesionAplicacion();
                 startActivity(new Intent(mContext, MenuInicioSesionActivity.class));
                 finish();
                 return true;
@@ -148,4 +81,85 @@ public class DescargaRutaActivity extends AppCompatActivity {
         mRealm.close();
     }
 
+    private void initComponentes() {
+        spinnerClaveArea = (MaterialSpinner) findViewById(R.id.clave_area_spinner);
+        spinnerPeriodo = (MaterialSpinner) findViewById(R.id.periodo_spinner);
+        btnDescargar = (Button) findViewById(R.id.descargar_button);
+
+        List<String> claveAreaData = new LinkedList<>(Arrays.asList(getResources().getStringArray(R.array.druta_claves_area_spinner)));
+        List<String> periodoData = new LinkedList<>(Arrays.asList(getResources().getStringArray(R.array.druta_periodo_spinner)));
+
+        spinnerClaveArea.setItems(claveAreaData);
+        spinnerPeriodo.setItems(periodoData);
+
+        btnDescargar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                descargarDeWebService();
+            }
+        });
+    }
+
+    private void descargarDeWebService() {
+
+        //El usuario esta logeado; aqui se descarga y ahora la aplicacion continuara a
+        //abrir el RecorridoMainActivity si la descarga es exitosa.
+
+        //Si la descarga regresa error, se queda en la pagina de descarga.
+
+        DescargaRecorridoService servicio = APICodo.getApi().create(DescargaRecorridoService.class);
+        Call<List<Task>> call = servicio.descargaRecorrido();
+
+        final ProgressDialog progressDialog = new ProgressDialog(mContext);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.show();
+
+        call.enqueue(new Callback<List<Task>>() {
+            @Override
+            public void onResponse(Call<List<Task>> call, Response<List<Task>> response) {
+
+                //Se ejecuta si el webservice regresa algo, la respuesta
+                //es una lista de Tasks, entonces la respuesta se guarda en una Lista de tipo Tasks
+
+                final List<Task> tasks = response.body();
+                Log.i(TAG, tasks.toString());
+
+                //Se guardan los datos a nuestro Realm
+                guardarRespuestaARealm(tasks);
+
+                //Se inicia sesion de descarga
+                mSesionApp.crearSesionDescarga();
+
+                progressDialog.cancel();
+
+                startActivity(new Intent(mContext, RecorridoMainActivity.class));
+                finish();
+            }
+
+            @Override
+            public void onFailure(Call<List<Task>> call, Throwable t) {
+                //Si el web service no regresa nada entonces cae aqui
+                progressDialog.cancel();
+                Toast.makeText(DescargaRutaActivity.this, getResources().getString(R.string.druta_error_descarga), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void guardarRespuestaARealm(final List<Task> tasks){
+
+        //Se recorre la lista y se guarda cada objeto Task a Realm
+        mRealm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                int i;
+                for(i = 0; i < tasks.size(); i++){
+                    Task task = tasks.get(i);
+                    Task realmTask = realm.copyToRealmOrUpdate(task);
+                    Log.i(TAG, realmTask.toString());
+                }
+            }
+        });
+
+    }
 }

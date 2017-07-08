@@ -21,26 +21,11 @@ public class PrefectoLoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_prefecto_login);
+
         mContext = this;
 
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
-            getSupportActionBar().setTitle(getResources().getString(R.string.prefecto_login_titulo));
-        }
+        initComponentes();
 
-        btnIniciarSesion = (Button) findViewById(R.id.iniciar_sesion_button);
-
-        btnIniciarSesion.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //TODO: Algun tipo de validacion usando ValidacionLogin.class quitar valores hard coded
-                //Guarda la sesion del usuario; el usuario ahora esta logeado, pero no ha descargado.
-                ValidacionLogin validacionLogin = new ValidacionLogin(mContext, "text");
-                startActivity(new Intent(mContext, DescargaRutaActivity.class));
-                finish();
-            }
-        });
     }
 
     @Override
@@ -61,5 +46,27 @@ public class PrefectoLoginActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    public void initComponentes() {
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setTitle(getResources().getString(R.string.prefecto_login_titulo));
+        }
+
+        btnIniciarSesion = (Button) findViewById(R.id.iniciar_sesion_button);
+
+        btnIniciarSesion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //TODO: Algun tipo de validacion usando ValidacionLogin.class quitar valores hard coded
+                //Guarda la sesion del usuario; el usuario ahora esta logeado, pero no ha descargado.
+                ValidacionLogin validacionLogin = new ValidacionLogin(mContext, "text");
+                startActivity(new Intent(mContext, DescargaRutaActivity.class));
+                finish();
+            }
+        });
     }
 }

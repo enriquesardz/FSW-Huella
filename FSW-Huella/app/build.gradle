@@ -49,6 +49,8 @@ dependencies {
     compile 'com.android.support:design:25.3.1'
     //Bottom nav bar
     compile 'com.roughike:bottom-bar:2.3.1'
+    //Realm Adapters
+    compile 'io.realm:android-adapters:2.0.0'
     //Stetho
     compile 'com.facebook.stetho:stetho:1.5.0'
     //Stetho Realm

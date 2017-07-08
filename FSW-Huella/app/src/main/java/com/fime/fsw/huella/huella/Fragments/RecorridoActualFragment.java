@@ -12,8 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.fime.fsw.huella.huella.Data.Modelos.Task;
-import com.fime.fsw.huella.huella.R;
 import com.fime.fsw.huella.huella.Objetos.RecorridoActualItem;
+import com.fime.fsw.huella.huella.R;
 import com.fime.fsw.huella.huella.Utilidad.RecorridoActualAdapter;
 import com.fime.fsw.huella.huella.Utilidad.RecyclerViewItemClickListener;
 
@@ -25,21 +25,14 @@ import io.realm.RealmResults;
 import static com.fime.fsw.huella.huella.Activities.HuellaApplication.APP_TAG;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link RecorridoActualFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- */
 public class RecorridoActualFragment extends Fragment {
 
     private static final String TAG = APP_TAG + RecorridoActualFragment.class.getSimpleName();
 
     private OnFragmentInteractionListener mListener;
 
-    private RecyclerView mRecyclerView;
-    private RecorridoActualAdapter mRecyclerAdapter;
-    private ArrayList<RecorridoActualItem> mData = new ArrayList<>();
+    private RecyclerView rvRecorrido;
+    private RecorridoActualAdapter rvRecorridoAdapter;
 
     private Context mContext;
     private Realm mRealm;
@@ -55,10 +48,13 @@ public class RecorridoActualFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_recorrido_actual, container, false);
         mContext = getContext();
         mRealm = Realm.getDefaultInstance();
+
         initComponentes(view);
+
         return view;
     }
 
+    //Se asegura de que se este implementando el OnFragmentInteractionListener
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -89,36 +85,54 @@ public class RecorridoActualFragment extends Fragment {
     }
 
     private void initComponentes(View view) {
+
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.recorrido_actual_recyclerview);
-        mRecyclerView.setHasFixedSize(true);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        mRecyclerView.setLayoutManager(linearLayoutManager);
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(mRecyclerView.getContext(), linearLayoutManager.getOrientation()));
+
+        //Se inicia el Recycler View Recorrido
+        rvRecorrido = (RecyclerView) view.findViewById(R.id.recorrido_actual_recyclerview);
+
+        rvRecorrido.setHasFixedSize(true);
+        rvRecorrido.setLayoutManager(linearLayoutManager);
+        rvRecorrido.addItemDecoration(new DividerItemDecoration(rvRecorrido.getContext(), linearLayoutManager.getOrientation()));
+
 
         //Se obtiene la info de nuestro Realm
-        RealmResults<Task> query = mRealm.where(Task.class).findAll();
+        final ArrayList<RecorridoActualItem> recorridoData = getAllRealmTasks();
 
-        for (int i = 0; i < query.size(); i++) {
-            Task task = query.get(i);
-            mData.add(new RecorridoActualItem(task.get_id(), task.getAcademyHour(), task.getRoom(), task.getTaskState()));
-        }
-
-        mRecyclerAdapter = new RecorridoActualAdapter(mContext, mData, new RecyclerViewItemClickListener() {
+        //Creamos un adaptador nuevo, con un onItemClickListener
+        rvRecorridoAdapter = new RecorridoActualAdapter(mContext, recorridoData, new RecyclerViewItemClickListener() {
             @Override
             public void onItemClick(View v, int position) {
-                long itemId = mData.get(position).getID();
-                String horaFime = mData.get(position).getHoraFime();
-                String salonFime = mData.get(position).getSalonFime();
-
-                Log.i(TAG, "ID: " + itemId + " Hora: " + horaFime + " Salon: " + salonFime);
-                //Trigger de onRecorridoActualItemSelected en RecorridoMainActivity para comunicar con
-                //DatosVisitaFragment
-                if (mListener != null) {
-                    mListener.onRecorridoActualItemSelected(itemId, horaFime, salonFime);
-                }
+                RecorridoActualItem item = recorridoData.get(position);
+                sendToDetailFragment(item);
             }
         });
-        mRecyclerView.setAdapter(mRecyclerAdapter);
+        rvRecorrido.setAdapter(rvRecorridoAdapter);
+    }
+
+    public ArrayList<RecorridoActualItem> getAllRealmTasks(){
+
+        ArrayList<RecorridoActualItem> data = new ArrayList<>();
+        RealmResults<Task> query = mRealm.where(Task.class).findAll();
+
+        for (Task task : query) {
+            data.add(new RecorridoActualItem(task.get_id(), task.getAcademyHour(), task.getRoom(), task.getTaskState()));
+        }
+
+        return data;
+    }
+
+    public void sendToDetailFragment(RecorridoActualItem item){
+        long itemId = item.getID();
+        String horaFime = item.getHoraFime();
+        String salonFime = item.getSalonFime();
+
+        Log.i(TAG, "ID: " + itemId + " Hora: " + horaFime + " Salon: " + salonFime);
+        //Trigger de onRecorridoActualItemSelected en RecorridoMainActivity para comunicar con
+        //DatosVisitaFragment
+        if (mListener != null) {
+            mListener.onRecorridoActualItemSelected(itemId, horaFime, salonFime);
+        }
     }
 }
