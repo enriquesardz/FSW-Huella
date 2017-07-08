@@ -12,13 +12,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.fime.fsw.huella.huella.Data.Modelos.Task;
-import com.fime.fsw.huella.huella.Objetos.RecorridoActualItem;
 import com.fime.fsw.huella.huella.R;
-import com.fime.fsw.huella.huella.Utilidad.RecorridoActualAdapter;
-import com.fime.fsw.huella.huella.Utilidad.RecyclerViewItemClickListener;
+import com.fime.fsw.huella.huella.UI.RecyclerView.RecorridoAdapter;
+import com.fime.fsw.huella.huella.UI.RecyclerView.RecyclerViewItemClickListener;
 
-import java.util.ArrayList;
-
+import io.realm.OrderedRealmCollection;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
@@ -32,7 +30,7 @@ public class RecorridoActualFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
 
     private RecyclerView rvRecorrido;
-    private RecorridoActualAdapter rvRecorridoAdapter;
+    private RecorridoAdapter rvRecorridoAdapter;
 
     private Context mContext;
     private Realm mRealm;
@@ -81,7 +79,7 @@ public class RecorridoActualFragment extends Fragment {
     //Interfaz implementada por RecorridoMainActivity que se encarga de pasarle los datos
     //al fragment DatosVisitaFragment
     public interface OnFragmentInteractionListener {
-        void onRecorridoActualItemSelected(long id, String horaFime, String salonFime);
+        void onRecorridoActualItemSelected(Task task);
     }
 
     private void initComponentes(View view) {
@@ -98,41 +96,35 @@ public class RecorridoActualFragment extends Fragment {
 
 
         //Se obtiene la info de nuestro Realm
-        final ArrayList<RecorridoActualItem> recorridoData = getAllRealmTasks();
+        final OrderedRealmCollection<Task> recorridoData = getAllRealmTasks();
 
         //Creamos un adaptador nuevo, con un onItemClickListener
-        rvRecorridoAdapter = new RecorridoActualAdapter(mContext, recorridoData, new RecyclerViewItemClickListener() {
+        rvRecorridoAdapter = new RecorridoAdapter(mContext, recorridoData, new RecyclerViewItemClickListener() {
             @Override
             public void onItemClick(View v, int position) {
-                RecorridoActualItem item = recorridoData.get(position);
+                Task item = rvRecorridoAdapter.getItem(position);
                 sendToDetailFragment(item);
             }
         });
         rvRecorrido.setAdapter(rvRecorridoAdapter);
     }
 
-    public ArrayList<RecorridoActualItem> getAllRealmTasks(){
+    public OrderedRealmCollection<Task> getAllRealmTasks(){
 
-        ArrayList<RecorridoActualItem> data = new ArrayList<>();
         RealmResults<Task> query = mRealm.where(Task.class).findAll();
-
-        for (Task task : query) {
-            data.add(new RecorridoActualItem(task.get_id(), task.getAcademyHour(), task.getRoom(), task.getTaskState()));
-        }
-
-        return data;
+        return query;
     }
 
-    public void sendToDetailFragment(RecorridoActualItem item){
-        long itemId = item.getID();
-        String horaFime = item.getHoraFime();
-        String salonFime = item.getSalonFime();
+    public void sendToDetailFragment(Task task){
+        long itemId = task.get_id();
+        String horaFime = task.getAcademyHour();
+        String salonFime = task.getRoom();
 
         Log.i(TAG, "ID: " + itemId + " Hora: " + horaFime + " Salon: " + salonFime);
         //Trigger de onRecorridoActualItemSelected en RecorridoMainActivity para comunicar con
         //DatosVisitaFragment
         if (mListener != null) {
-            mListener.onRecorridoActualItemSelected(itemId, horaFime, salonFime);
+            mListener.onRecorridoActualItemSelected(task);
         }
     }
 }

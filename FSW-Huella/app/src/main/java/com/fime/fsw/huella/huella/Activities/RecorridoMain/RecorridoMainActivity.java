@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.fime.fsw.huella.huella.Activities.InicioSesion.MenuInicioSesionActivity;
+import com.fime.fsw.huella.huella.Data.Modelos.Task;
 import com.fime.fsw.huella.huella.Fragments.DatosVisitaFragment;
 import com.fime.fsw.huella.huella.Fragments.RecorridoActualFragment;
 import com.fime.fsw.huella.huella.Fragments.RecorridoFragment;
@@ -21,11 +22,10 @@ import com.fime.fsw.huella.huella.Utilidad.SesionAplicacion;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
 
+
 public class RecorridoMainActivity extends AppCompatActivity implements RecorridoFragment.OnFragmentInteractionListener, RecorridoActualFragment.OnFragmentInteractionListener, DatosVisitaFragment.OnFragmentInteractionListener {
 
-    public static final String KEY_ID_RECORRIDO_ITEM = "id";
-    public static final String KEY_HORA_FIME = "hora_fime";
-    public static final String KEY_SALON_FIME = "salon_fime";
+    public static final String KEY_ID_TASK = "_id";
 
     private BottomBar mBarraNav;
     private Fragment mFragment;
@@ -82,10 +82,9 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
     }
 
     @Override
-    public void onRecorridoActualItemSelected(long id, String horaFime, String salonFime) {
-        mBundle.putLong(KEY_ID_RECORRIDO_ITEM, id);
-        mBundle.putString(KEY_HORA_FIME, horaFime);
-        mBundle.putString(KEY_SALON_FIME, salonFime);
+    public void onRecorridoActualItemSelected(Task task) {
+        long id = task.get_id();
+        mBundle.putLong(KEY_ID_TASK, id);
         mBarraNav.selectTabWithId(R.id.tab_datos_visita);
     }
 

@@ -74,7 +74,7 @@ public class DatosVisitaFragment extends Fragment {
         //Si el bundle tiene contenido entonces cambian los valores de los textviews.
         if (mBundle.size() > 0) {
             itemid = -1;
-            itemid = mBundle.getLong(RecorridoMainActivity.KEY_ID_RECORRIDO_ITEM);
+            itemid = mBundle.getLong(RecorridoMainActivity.KEY_ID_TASK);
             if (itemid != -1) {
                 //Trae un task usando el _id que se le pasa cuando le da click al recorrido actual.
                 Task task = mRealm.where(Task.class).equalTo("_id", itemid).findFirst();

@@ -1,4 +1,4 @@
-package com.fime.fsw.huella.huella.Utilidad;
+package com.fime.fsw.huella.huella.UI.RecyclerView;
 
 import android.view.View;
 
