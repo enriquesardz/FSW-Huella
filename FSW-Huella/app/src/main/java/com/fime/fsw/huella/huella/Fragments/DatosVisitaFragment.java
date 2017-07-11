@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.fime.fsw.huella.huella.Barcode.BarcodeReaderActivity;
 import com.fime.fsw.huella.huella.Data.Modelos.Task;
 import com.fime.fsw.huella.huella.R;
+import com.fime.fsw.huella.huella.Utilidad.SesionAplicacion;
 
 import io.realm.Realm;
 
@@ -38,6 +39,7 @@ public class DatosVisitaFragment extends Fragment {
     private Bundle mBundle;
     private Context mContext;
     private Realm mRealm;
+    private SesionAplicacion mSesion;
 
     public DatosVisitaFragment() {
         // Required empty public constructor
@@ -52,6 +54,7 @@ public class DatosVisitaFragment extends Fragment {
         mContext = getContext();
         mBundle = this.getArguments();
         mRealm = Realm.getDefaultInstance();
+        mSesion = new SesionAplicacion(mContext);
 
         initComponentes(view);
 
@@ -117,7 +120,11 @@ public class DatosVisitaFragment extends Fragment {
             cargarDatosTask(task);
         }
 
-
+        if (itemid >= mSesion.getCurrentItemLista()){
+            btnEscanner.setVisibility(View.VISIBLE);
+        }else {
+            btnEscanner.setVisibility(View.INVISIBLE);
+        }
         //Inicia la actividad de lector de codigo de barras
         btnEscanner.setOnClickListener(new View.OnClickListener() {
             @Override

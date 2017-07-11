@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.fime.fsw.huella.huella.Data.Modelos.Task;
 import com.fime.fsw.huella.huella.R;
+import com.fime.fsw.huella.huella.Utilidad.SesionAplicacion;
 import com.rscja.deviceapi.Fingerprint;
 
 import io.realm.Realm;
@@ -23,6 +24,7 @@ public class IdentificarHuellaActivity extends AppCompatActivity {
     public Fingerprint mFingerprint;
     public Context mContext;
     private Realm mRealm;
+    private SesionAplicacion mSesion;
 
     private TextView tvNombre;
     private TextView tvFullNombre;
@@ -36,6 +38,7 @@ public class IdentificarHuellaActivity extends AppCompatActivity {
 
         mContext = IdentificarHuellaActivity.this;
         mRealm = Realm.getDefaultInstance();
+        mSesion = new SesionAplicacion(mContext);
 
         try {
             mFingerprint = Fingerprint.getInstance();
@@ -108,7 +111,7 @@ public class IdentificarHuellaActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //Este task utiliza las funciones proporcionadas por el SDK para identificar la huella
-                new HuellaIdentTask(mContext, mFingerprint, mRealm, task).execute();
+                new HuellaIdentTask(mContext, mFingerprint, mRealm, mSesion, task).execute();
             }
         });
 
@@ -122,6 +125,7 @@ public class IdentificarHuellaActivity extends AppCompatActivity {
                         task.setTaskState(Task.STATE_PASO_NO_VINO_MAESTRO);
                     }
                 });
+                mSesion.setCurrentItemLista(mSesion.getCurrentItemLista() + 1);
                 finish();
             }
         });

@@ -94,7 +94,7 @@ public class RecorridoActualFragment extends Fragment {
         rvRecorrido.setHasFixedSize(true);
         rvRecorrido.setLayoutManager(linearLayoutManager);
 
-        int currentItem = mSesion.getCurrentItemLista();
+        long currentItem = mSesion.getCurrentItemLista();
 
         //Se obtiene la info de nuestro Realm
         final OrderedRealmCollection<Task> recorridoData = getAllRealmTasks();

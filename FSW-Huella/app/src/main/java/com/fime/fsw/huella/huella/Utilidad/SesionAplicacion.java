@@ -43,13 +43,13 @@ public class SesionAplicacion {
         editor.commit();
     }
 
-    public void setCurrentItemLista(int itemLista){
-        editor.putInt(KEY_CURRENT_ITEM_LISTA, itemLista);
+    public void setCurrentItemLista(long itemLista){
+        editor.putLong(KEY_CURRENT_ITEM_LISTA, itemLista);
         editor.commit();
     }
 
-    public int getCurrentItemLista(){
-        return preferences.getInt(KEY_CURRENT_ITEM_LISTA, -1);
+    public long getCurrentItemLista(){
+        return preferences.getLong(KEY_CURRENT_ITEM_LISTA, -1);
     }
 
     //Borra todo, es decir, se termina la sesion de descarga y login

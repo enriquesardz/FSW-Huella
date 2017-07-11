@@ -26,9 +26,9 @@ public class RecorridoAdapter extends RealmRecyclerViewAdapter<Task, RecorridoAd
     Context mContext;
     RecyclerViewItemClickListener mListener;
 
-    int currentId;
+    long currentId;
 
-    public RecorridoAdapter(Context context, @Nullable OrderedRealmCollection<Task> data, int currentId, RecyclerViewItemClickListener listener) {
+    public RecorridoAdapter(Context context, @Nullable OrderedRealmCollection<Task> data, long currentId, RecyclerViewItemClickListener listener) {
         super(data, true);
         setHasStableIds(true);
 
@@ -81,11 +81,15 @@ public class RecorridoAdapter extends RealmRecyclerViewAdapter<Task, RecorridoAd
         if(task.get_id() > currentId) {
             holder.cardViewContainer.setClickable(false);
             holder.cardViewContainer.setActivated(false);
+            holder.listItemContainer.setBackgroundColor(ContextCompat.getColor(mContext, R.color.gray_disabled));
+        } else{
+            holder.cardViewContainer.setClickable(true);
+            holder.cardViewContainer.setActivated(true);
+            holder.listItemContainer.setBackgroundColor(ContextCompat.getColor(mContext, R.color.fime_mint));
         }
 
         switch (taskState){
             case Task.STATE_NO_HA_PASADO:
-                holder.listItemContainer.setBackgroundColor(ContextCompat.getColor(mContext, R.color.fime_mint));
                 holder.tvHoraFime.setTextColor(ContextCompat.getColor(mContext, R.color.primary_text));
                 holder.tvSalonFime.setTextColor(ContextCompat.getColor(mContext, R.color.primary_text));
                 break;

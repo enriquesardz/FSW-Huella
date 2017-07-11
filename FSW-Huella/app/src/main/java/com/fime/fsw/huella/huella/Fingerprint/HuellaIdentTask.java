@@ -9,6 +9,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.fime.fsw.huella.huella.Data.Modelos.Task;
+import com.fime.fsw.huella.huella.Utilidad.SesionAplicacion;
 import com.rscja.deviceapi.Fingerprint;
 
 import io.realm.Realm;
@@ -29,15 +30,17 @@ public class HuellaIdentTask extends AsyncTask<Integer, Integer, String> {
     private Fingerprint mFingerprint;
     private Realm mRealm;
     private Task mTask;
+    private SesionAplicacion mSesion;
 
     private String usuarioHexData;
     private long taskId;
 
-    public HuellaIdentTask(Context context, Fingerprint fingerprint, Realm realm, Task task) {
+    public HuellaIdentTask(Context context, Fingerprint fingerprint, Realm realm, SesionAplicacion sesionAplicacion, Task task) {
         mContext = context;
         mFingerprint = fingerprint;
         mRealm = realm;
         mTask = task;
+        mSesion = sesionAplicacion;
 
         usuarioHexData = task.getHexCode();
         taskId = task.get_id();
@@ -119,6 +122,12 @@ public class HuellaIdentTask extends AsyncTask<Integer, Integer, String> {
                 mTask.setTaskState(Task.STATE_PASO_VINO_MAESTRO);
             }
         });
+
+        long currentItem = mSesion.getCurrentItemLista();
+
+        if(currentItem == taskId){
+            mSesion.setCurrentItemLista(currentItem + 1);
+        }
 
         ((Activity)mContext).finish();
     }

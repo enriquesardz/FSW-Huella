@@ -21,4 +21,5 @@
     <color name="verde_obscuro">#3E9A49</color>
     <color name="rojo_error">#D51B1B</color>
     <color name="blanco">#FFFFFF</color>
+    <color name="gray_disabled">#d3d3d3</color>
 </resources>
