@@ -14,6 +14,7 @@ import com.fime.fsw.huella.huella.Data.Modelos.Task;
 import com.fime.fsw.huella.huella.R;
 import com.fime.fsw.huella.huella.UI.RecyclerView.RecorridoAdapter;
 import com.fime.fsw.huella.huella.UI.RecyclerView.RecyclerViewItemClickListener;
+import com.fime.fsw.huella.huella.Utilidad.SesionAplicacion;
 
 import io.realm.OrderedRealmCollection;
 import io.realm.Realm;
@@ -32,6 +33,7 @@ public class RecorridoActualFragment extends Fragment {
 
     private Context mContext;
     private Realm mRealm;
+    private SesionAplicacion mSesion;
 
     public RecorridoActualFragment() {
         // Required empty public constructor
@@ -44,6 +46,7 @@ public class RecorridoActualFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_recorrido_actual, container, false);
         mContext = getContext();
         mRealm = Realm.getDefaultInstance();
+        mSesion = new SesionAplicacion(mContext);
 
         initComponentes(view);
 
@@ -91,11 +94,13 @@ public class RecorridoActualFragment extends Fragment {
         rvRecorrido.setHasFixedSize(true);
         rvRecorrido.setLayoutManager(linearLayoutManager);
 
+        int currentItem = mSesion.getCurrentItemLista();
+
         //Se obtiene la info de nuestro Realm
         final OrderedRealmCollection<Task> recorridoData = getAllRealmTasks();
 
         //Creamos un adaptador nuevo, con un onItemClickListener
-        rvRecorridoAdapter = new RecorridoAdapter(mContext, recorridoData, new RecyclerViewItemClickListener() {
+        rvRecorridoAdapter = new RecorridoAdapter(mContext, recorridoData, currentItem, new RecyclerViewItemClickListener() {
             @Override
             public void onItemClick(View v, int position) {
                 Task item = rvRecorridoAdapter.getItem(position);
@@ -105,11 +110,11 @@ public class RecorridoActualFragment extends Fragment {
         rvRecorrido.setAdapter(rvRecorridoAdapter);
     }
 
-    public OrderedRealmCollection<Task> getAllRealmTasks(){
-        return mRealm.where(Task.class).findAllSorted(Task.ROOM_KEY);
+    public OrderedRealmCollection<Task> getAllRealmTasks() {
+        return mRealm.where(Task.class).findAllSorted(Task._ID_KEY);
     }
 
-    public void sendToDetailFragment(Task task){
+    public void sendToDetailFragment(Task task) {
         Log.i(TAG, task.toString());
         //Trigger de onRecorridoActualItemSelected en RecorridoMainActivity para comunicar con
         //DatosVisitaFragment

@@ -133,6 +133,8 @@ public class DescargaRutaActivity extends AppCompatActivity {
 
                 //Se guardan los datos a nuestro Realm
                 guardarRespuestaARealm(tasks);
+                //Despues de guardar al Realm, se setea el primer item de la lista.
+                setInitialTask();
 
                 //Se inicia sesion de descarga
                 mSesionApp.crearSesionDescarga();
@@ -176,5 +178,9 @@ public class DescargaRutaActivity extends AppCompatActivity {
                 tasks.deleteAllFromRealm();
             }
         });
+    }
+
+    public void setInitialTask(){
+        mSesionApp.setCurrentItemLista(mRealm.where(Task.class).findFirst().get_id());
     }
 }

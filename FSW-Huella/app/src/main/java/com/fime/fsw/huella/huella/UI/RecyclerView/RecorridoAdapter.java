@@ -3,6 +3,7 @@ package com.fime.fsw.huella.huella.UI.RecyclerView;
 import android.content.Context;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 
 import com.fime.fsw.huella.huella.Data.Modelos.Task;
 import com.fime.fsw.huella.huella.R;
+import com.fime.fsw.huella.huella.Utilidad.SesionAplicacion;
 
 import io.realm.OrderedRealmCollection;
 import io.realm.RealmRecyclerViewAdapter;
@@ -24,18 +26,22 @@ public class RecorridoAdapter extends RealmRecyclerViewAdapter<Task, RecorridoAd
     Context mContext;
     RecyclerViewItemClickListener mListener;
 
-    public RecorridoAdapter(Context context, @Nullable OrderedRealmCollection<Task> data, RecyclerViewItemClickListener listener) {
+    int currentId;
+
+    public RecorridoAdapter(Context context, @Nullable OrderedRealmCollection<Task> data, int currentId, RecyclerViewItemClickListener listener) {
         super(data, true);
         setHasStableIds(true);
 
         this.mContext = context;
         this.mListener = listener;
+        this.currentId = currentId;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
         public TextView tvHoraFime;
         public TextView tvSalonFime;
         public View listItemContainer;
+        public CardView cardViewContainer;
         public Task task;
 
         public ViewHolder(View v){
@@ -43,6 +49,8 @@ public class RecorridoAdapter extends RealmRecyclerViewAdapter<Task, RecorridoAd
             tvHoraFime = (TextView) v.findViewById(R.id.hora_fime_textview);
             tvSalonFime = (TextView) v.findViewById(R.id.salon_fime_textview);
             listItemContainer = v.findViewById(R.id.list_item_container);
+            //  Card view para desactivar el onClick
+            cardViewContainer = (CardView)v.findViewById(R.id.cardview_container);
         }
     }
 
@@ -68,6 +76,12 @@ public class RecorridoAdapter extends RealmRecyclerViewAdapter<Task, RecorridoAd
 
         holder.tvHoraFime.setText(task.getAcademyHour());
         holder.tvSalonFime.setText(task.getRoom());
+
+        //Si el task no ha pasado, entonces se desactiva
+        if(task.get_id() > currentId) {
+            holder.cardViewContainer.setClickable(false);
+            holder.cardViewContainer.setActivated(false);
+        }
 
         switch (taskState){
             case Task.STATE_NO_HA_PASADO:
