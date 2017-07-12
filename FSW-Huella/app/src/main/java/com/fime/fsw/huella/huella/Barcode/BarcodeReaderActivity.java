@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.fime.fsw.huella.huella.Data.Modelos.Task;
 import com.fime.fsw.huella.huella.Fingerprint.IdentificarHuellaActivity;
 import com.fime.fsw.huella.huella.R;
+import com.fime.fsw.huella.huella.Utilidad.SesionAplicacion;
 import com.rscja.deviceapi.Barcode1D;
 import com.rscja.deviceapi.exception.ConfigurationException;
 
@@ -32,9 +33,11 @@ public class BarcodeReaderActivity extends AppCompatActivity {
     private Context mContext;
     private Realm mRealm;
     private Barcode1D mBarcode;
+    private SesionAplicacion mSesion;
 
     private TextView tvCodigo;
     private Button btnEscanear;
+    private Button btnNoSalon;
 
     private ProgressDialog progressDialog;
 
@@ -45,6 +48,7 @@ public class BarcodeReaderActivity extends AppCompatActivity {
 
         mContext = BarcodeReaderActivity.this;
         mRealm = Realm.getDefaultInstance();
+        mSesion = new SesionAplicacion(mContext);
 
         //Trata de obtener una instancia del codigo de barras, si no lo logra entonces arroja una excepcion
         try {
@@ -97,6 +101,8 @@ public class BarcodeReaderActivity extends AppCompatActivity {
 
         tvCodigo = (TextView) findViewById(R.id.data_textview);
         btnEscanear = (Button) findViewById(R.id.escanear_button);
+        btnNoSalon = (Button) findViewById(R.id.no_salon_button);
+
         progressDialog = new ProgressDialog(mContext);
 
         if (getSupportActionBar() != null) {
@@ -120,6 +126,20 @@ public class BarcodeReaderActivity extends AppCompatActivity {
                 if (estaActivo) {
                     new ScanTask(task).execute();
                 }
+            }
+        });
+
+        btnNoSalon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mRealm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        task.setTaskState(Task.STATE_PASO_NO_VINO_MAESTRO);
+                    }
+                });
+                mSesion.setCurrentItemLista(mSesion.getCurrentItemLista() + 1);
+                finish();
             }
         });
     }
@@ -172,6 +192,10 @@ public class BarcodeReaderActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progressDialog.setMessage("Escaneando");
+            progressDialog.setCanceledOnTouchOutside(false);
+            progressDialog.show();
         }
 
         @Override
@@ -187,6 +211,8 @@ public class BarcodeReaderActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
+
+            progressDialog.cancel();
 
             //Aqui se puede usar el codigo que regrese el escanner.
             if (!TextUtils.isEmpty(result)) {

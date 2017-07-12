@@ -41,5 +41,12 @@
         android:layout_gravity="center_vertical"
         android:text="Escanear" />
 
+    <Button
+        android:id="@+id/no_salon_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="No se encontro salon"
+        />
+
 
 </LinearLayout>

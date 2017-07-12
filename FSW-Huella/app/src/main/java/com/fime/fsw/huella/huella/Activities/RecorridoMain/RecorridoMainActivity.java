@@ -54,6 +54,7 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
         switch (item.getItemId()) {
             case R.id.cerrar_sesion:
                 mSesionApp.terminarSesionAplicacion();
+                //TODO: Aqui se deben de regresar los checkouts al web service.
                 startActivity(new Intent(mContext, MenuInicioSesionActivity.class));
                 finish();
                 return true;
@@ -112,6 +113,8 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, mFragment).commit();
             }
         });
+
+        mBarraNav.selectTabWithId(R.id.tab_recorrido_actual);
     }
 
 
