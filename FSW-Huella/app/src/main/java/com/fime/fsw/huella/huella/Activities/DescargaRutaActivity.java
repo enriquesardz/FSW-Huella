@@ -163,8 +163,8 @@ public class DescargaRutaActivity extends AppCompatActivity {
                 Log.i(TAG, "Created at: " + timeInMillis);
 
                 for(Task task : tasks){
-                    Task realmTask = realm.copyToRealmOrUpdate(task);
                     task.getCheckout().setCreatedAt(timeInMillis);
+                    Task realmTask = realm.copyToRealmOrUpdate(task);
                     Log.i(TAG, realmTask.toString());
                 }
             }
