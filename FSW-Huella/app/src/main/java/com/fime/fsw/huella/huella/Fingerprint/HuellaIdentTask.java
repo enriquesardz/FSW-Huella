@@ -13,6 +13,7 @@ import com.fime.fsw.huella.huella.Utilidad.SesionAplicacion;
 import com.rscja.deviceapi.Fingerprint;
 
 import io.realm.Realm;
+import io.realm.RealmResults;
 
 import static com.fime.fsw.huella.huella.Activities.HuellaApplication.APP_TAG;
 
@@ -116,20 +117,41 @@ public class HuellaIdentTask extends AsyncTask<Integer, Integer, String> {
 
         //Si hay resultado, entonces fue una Identificacion exitosa
         Toast.makeText(mContext, "Se encontro usuario", Toast.LENGTH_SHORT).show();
+
+        final String timeInMillis = String.valueOf(System.currentTimeMillis());
         mRealm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 mTask.setTaskState(Task.STATE_PASO_VINO_MAESTRO);
+                mTask.getCheckout().setSignedAt(timeInMillis);
+                mTask.getCheckout().setUpdatedAt(timeInMillis);
+
+                Log.i(TAG, "Signed and updated at (vino maestro): " + timeInMillis);
             }
         });
 
         long currentItem = mSesion.getCurrentItemLista();
+        long lastItem = mSesion.getLastItemLista();
 
-        if(currentItem == taskId){
+        if (currentItem == taskId) {
             mSesion.setCurrentItemLista(currentItem + 1);
         }
 
-        ((Activity)mContext).finish();
+        //TODO: El valor se debe cambiar 1 sola vez por todas las tasks
+        if (lastItem == taskId) {
+            Log.i(TAG, "Finished at :" + timeInMillis);
+            mRealm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    RealmResults<Task> tasks = mRealm.where(Task.class).findAll();
+                    for (Task task : tasks){
+                        task.getCheckout().setFinishedAt(timeInMillis);
+                    }
+                }
+            });
+        }
+
+        ((Activity) mContext).finish();
     }
 
     @Override

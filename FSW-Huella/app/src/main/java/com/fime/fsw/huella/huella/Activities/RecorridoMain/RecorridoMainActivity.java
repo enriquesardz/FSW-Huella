@@ -9,9 +9,11 @@ import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.fime.fsw.huella.huella.Activities.HuellaApplication;
 import com.fime.fsw.huella.huella.Activities.InicioSesion.MenuInicioSesionActivity;
 import com.fime.fsw.huella.huella.Data.Modelos.Task;
 import com.fime.fsw.huella.huella.Fragments.DatosVisitaFragment;
@@ -21,15 +23,20 @@ import com.fime.fsw.huella.huella.Utilidad.SesionAplicacion;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
 
+import io.realm.Realm;
+import io.realm.RealmResults;
+
 
 public class RecorridoMainActivity extends AppCompatActivity implements RecorridoActualFragment.OnFragmentInteractionListener, DatosVisitaFragment.OnFragmentInteractionListener {
 
+    public static final String TAG = HuellaApplication.APP_TAG + RecorridoMainActivity.class.getSimpleName();
     public static final String KEY_ID_TASK = "_id";
 
     private BottomBar mBarraNav;
     private Fragment mFragment;
     private Context mContext;
     private Bundle mBundle;
+    private Realm mRealm;
     private SesionAplicacion mSesionApp;
 
     @Override
@@ -39,6 +46,7 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
 
         mContext = RecorridoMainActivity.this;
         mSesionApp = new SesionAplicacion(mContext);
+        mRealm = Realm.getDefaultInstance();
 
         initComponents();
     }
@@ -115,7 +123,23 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
         });
 
         mBarraNav.selectTabWithId(R.id.tab_recorrido_actual);
+
+        marcarTiempoDeInicio();
     }
 
+    public void marcarTiempoDeInicio(){
+        final String timeInMillis = String.valueOf(System.currentTimeMillis());
+        Log.i(TAG, "Started at: " + timeInMillis);
+
+        mRealm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmResults<Task> tasks = mRealm.where(Task.class).findAll();
+                for (Task task : tasks){
+                    task.getCheckout().setStartedAt(timeInMillis);
+                }
+            }
+        });
+    }
 
 }

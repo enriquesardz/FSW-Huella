@@ -22,6 +22,7 @@ public class SesionAplicacion {
     public static final String KEY_DESCARGA = "descarga";
     public static final String KEY_USUARIO = "usuario";
     public static final String KEY_CURRENT_ITEM_LISTA = "currentItem";
+    public static final String KEY_LAST_ITEM_LISTA = "lastItem";
 
     public SesionAplicacion(Context context){
         mContext = context;
@@ -50,6 +51,15 @@ public class SesionAplicacion {
 
     public long getCurrentItemLista(){
         return preferences.getLong(KEY_CURRENT_ITEM_LISTA, -1);
+    }
+
+    public void setLastItemLista(long maxId){
+        editor.putLong(KEY_LAST_ITEM_LISTA, maxId);
+        editor.commit();
+    }
+
+    public long getLastItemLista(){
+        return preferences.getLong(KEY_LAST_ITEM_LISTA, -1);
     }
 
     //Borra todo, es decir, se termina la sesion de descarga y login

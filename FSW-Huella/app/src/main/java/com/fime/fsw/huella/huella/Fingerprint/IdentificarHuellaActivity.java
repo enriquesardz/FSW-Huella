@@ -119,12 +119,7 @@ public class IdentificarHuellaActivity extends AppCompatActivity {
         btnNoEstaMaestro.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mRealm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        task.setTaskState(Task.STATE_PASO_NO_VINO_MAESTRO);
-                    }
-                });
+                actualizarDatosTask(task);
                 mSesion.setCurrentItemLista(mSesion.getCurrentItemLista() + 1);
                 finish();
             }
@@ -139,6 +134,18 @@ public class IdentificarHuellaActivity extends AppCompatActivity {
         tvNombre.setText(getResources().getString(R.string.ih_nombre, task.getOwner().getEmployeeName()));
         tvFullNombre.setText(getResources().getString(R.string.ih_apellido, task.getOwner().getEmployeeFullName()));
     }
+
+    public void actualizarDatosTask(final Task task){
+        final String timeInMillis = String.valueOf(System.currentTimeMillis());
+        mRealm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                task.setTaskState(Task.STATE_PASO_NO_VINO_MAESTRO);
+                task.getCheckout().setSignedAt(timeInMillis);
+                task.getCheckout().setUpdatedAt(timeInMillis);
+            }
+        });
+        }
 
 
     /*

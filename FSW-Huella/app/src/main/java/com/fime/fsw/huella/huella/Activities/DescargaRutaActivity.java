@@ -133,7 +133,7 @@ public class DescargaRutaActivity extends AppCompatActivity {
                 //Se guardan los datos a nuestro Realm
                 guardarRespuestaARealm(tasks);
                 //Despues de guardar al Realm, se setea el primer item de la lista.
-                setInitialTask();
+                setInitialAndFinalTask();
 
                 //Se inicia sesion de descarga
                 mSesionApp.crearSesionDescarga();
@@ -159,10 +159,12 @@ public class DescargaRutaActivity extends AppCompatActivity {
         mRealm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                int i;
-                for(i = 0; i < tasks.size(); i++){
-                    Task task = tasks.get(i);
+                String timeInMillis = String.valueOf(System.currentTimeMillis());
+                Log.i(TAG, "Created at: " + timeInMillis);
+
+                for(Task task : tasks){
                     Task realmTask = realm.copyToRealmOrUpdate(task);
+                    task.getCheckout().setCreatedAt(timeInMillis);
                     Log.i(TAG, realmTask.toString());
                 }
             }
@@ -179,7 +181,8 @@ public class DescargaRutaActivity extends AppCompatActivity {
         });
     }
 
-    public void setInitialTask(){
+    public void setInitialAndFinalTask(){
         mSesionApp.setCurrentItemLista(mRealm.where(Task.class).findFirst().get_id());
+        mSesionApp.setLastItemLista(mRealm.where(Task.class).max(Task._ID_KEY).longValue());
     }
 }

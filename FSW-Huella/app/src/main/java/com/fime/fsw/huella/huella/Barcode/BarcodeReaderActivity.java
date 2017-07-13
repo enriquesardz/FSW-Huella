@@ -132,12 +132,7 @@ public class BarcodeReaderActivity extends AppCompatActivity {
         btnNoSalon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mRealm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        task.setTaskState(Task.STATE_PASO_NO_VINO_MAESTRO);
-                    }
-                });
+                actualizarValoresTask(task);
                 mSesion.setCurrentItemLista(mSesion.getCurrentItemLista() + 1);
                 finish();
             }
@@ -146,6 +141,20 @@ public class BarcodeReaderActivity extends AppCompatActivity {
 
     public Task getTaskConId(long id){
         return mRealm.where(Task.class).equalTo(Task._ID_KEY, id).findFirst();
+    }
+
+    public void actualizarValoresTask(final Task task){
+        final long timeInMillis = System.currentTimeMillis();
+        mRealm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                task.setTaskState(Task.STATE_PASO_NO_VINO_MAESTRO);
+                task.getCheckout().setVisitAt(String.valueOf(timeInMillis));
+                task.getCheckout().setSignedAt(String.valueOf(timeInMillis));
+
+                Log.i(TAG, "No se encontro salon visitAt signedAt: " + String.valueOf(timeInMillis));
+            }
+        });
     }
 
     /*
@@ -183,8 +192,10 @@ public class BarcodeReaderActivity extends AppCompatActivity {
 
         private String barcodeSalon;
         private long taskId;
+        private Task task;
 
         public ScanTask (Task task){
+            this.task = task;
             taskId = task.get_id();
             barcodeSalon = task.getBarcode();
         }
@@ -221,6 +232,17 @@ public class BarcodeReaderActivity extends AppCompatActivity {
                 Log.i(TAG, "Codigo de barras encontro: " + result);
 
                 if (TextUtils.equals(barcodeSalon, result)) {
+
+                    final String timeInMillis = String.valueOf(System.currentTimeMillis());
+                    //Se actualiza el visitAt del Checkout del Task
+                    mRealm.executeTransaction(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            task.getCheckout().setVisitAt(timeInMillis);
+                        }
+                    });
+
+                    Log.i(TAG, "Visit at: " + timeInMillis);
 
                     //Si los codigos de barras son iguales, entonces inicia el reconocimiento de la huella.
                     Intent intent = new Intent(mContext, IdentificarHuellaActivity.class);
