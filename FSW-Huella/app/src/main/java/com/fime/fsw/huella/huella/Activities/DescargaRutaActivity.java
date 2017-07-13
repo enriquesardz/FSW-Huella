@@ -129,7 +129,6 @@ public class DescargaRutaActivity extends AppCompatActivity {
                 //es una lista de Tasks, entonces la respuesta se guarda en una Lista de tipo Tasks
 
                 final List<Task> tasks = response.body();
-                Log.i(TAG, tasks.toString());
 
                 //Se guardan los datos a nuestro Realm
                 guardarRespuestaARealm(tasks);

@@ -136,8 +136,8 @@ public class IdentificarHuellaActivity extends AppCompatActivity {
     }
 
     public void cargarDatosTask(Task task){
-        tvNombre.setText(getResources().getString(R.string.ih_nombre, task.getName()));
-        tvFullNombre.setText(getResources().getString(R.string.ih_apellido, task.getFullName()));
+        tvNombre.setText(getResources().getString(R.string.ih_nombre, task.getOwner().getEmployeeName()));
+        tvFullNombre.setText(getResources().getString(R.string.ih_apellido, task.getOwner().getEmployeeFullName()));
     }
 
 

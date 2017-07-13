@@ -21,40 +21,54 @@ public class Task extends RealmObject {
     public static final int STATE_PASO_NO_VINO_MAESTRO = 2;
 
     @PrimaryKey
-    private int _id;
+    private long _id;
+    private String plan;
     private String id;
     private String room;
-    @SerializedName("assigment")
+    private String roomDescription;
+    private String assignmentCode;
     private String assignment;
     private String academyHour;
+    private String startClassAt;
+    private String finishClassAt;
     private String barcode;
-    private String employeeNumber;
-    private String name;
-    private String fullName;
-    private String hexCode;
+    private Owner owner;
+    private Checkout checkout;
     private int taskState;
 
     public Task(){
 
     }
-    public static Task create(String id, String room, String assignment, String academyHour, String barcode, String employeeNumber, String name, String fullName, String hexCode) {
+
+    public static Task create(String plan, String id, String room, String roomDescription, String assignmentCode, String assignment, String academyHour, String startClassAt, String finishClassAt, String barcode, Owner owner, Checkout checkout) {
         Task task = new Task();
         task._id = HuellaApplication.TaskID.incrementAndGet();
+        task.plan = plan;
         task.id = id;
         task.room = room;
+        task.roomDescription = roomDescription;
+        task.assignmentCode = assignmentCode;
         task.assignment = assignment;
         task.academyHour = academyHour;
+        task.startClassAt = startClassAt;
+        task.finishClassAt = finishClassAt;
         task.barcode = barcode;
-        task.employeeNumber = employeeNumber;
-        task.name = name;
-        task.fullName = fullName;
-        task.hexCode = hexCode;
+        task.owner = owner;
+        task.checkout = checkout;
         task.taskState = 0;
         return task;
     }
 
-    public int get_id() {
+    public long get_id() {
         return _id;
+    }
+
+    public String getPlan() {
+        return plan;
+    }
+
+    public void setPlan(String plan) {
+        this.plan = plan;
     }
 
     public String getId() {
@@ -73,6 +87,22 @@ public class Task extends RealmObject {
         this.room = room;
     }
 
+    public String getRoomDescription() {
+        return roomDescription;
+    }
+
+    public void setRoomDescription(String roomDescription) {
+        this.roomDescription = roomDescription;
+    }
+
+    public String getAssignmentCode() {
+        return assignmentCode;
+    }
+
+    public void setAssignmentCode(String assignmentCode) {
+        this.assignmentCode = assignmentCode;
+    }
+
     public String getAssignment() {
         return assignment;
     }
@@ -89,6 +119,22 @@ public class Task extends RealmObject {
         this.academyHour = academyHour;
     }
 
+    public String getStartClassAt() {
+        return startClassAt;
+    }
+
+    public void setStartClassAt(String startClassAt) {
+        this.startClassAt = startClassAt;
+    }
+
+    public String getFinishClassAt() {
+        return finishClassAt;
+    }
+
+    public void setFinishClassAt(String finishClassAt) {
+        this.finishClassAt = finishClassAt;
+    }
+
     public String getBarcode() {
         return barcode;
     }
@@ -97,36 +143,20 @@ public class Task extends RealmObject {
         this.barcode = barcode;
     }
 
-    public String getEmployeeNumber() {
-        return employeeNumber;
+    public Owner getOwner() {
+        return owner;
     }
 
-    public void setEmployeeNumber(String employeeNumber) {
-        this.employeeNumber = employeeNumber;
+    public void setOwner(Owner owner) {
+        this.owner = owner;
     }
 
-    public String getName() {
-        return name;
+    public Checkout getCheckout() {
+        return checkout;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getFullName() {
-        return fullName;
-    }
-
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
-
-    public String getHexCode() {
-        return hexCode;
-    }
-
-    public void setHexCode(String hexCode) {
-        this.hexCode = hexCode;
+    public void setCheckout(Checkout checkout) {
+        this.checkout = checkout;
     }
 
     public int getTaskState() {
@@ -141,15 +171,18 @@ public class Task extends RealmObject {
     public String toString() {
         return "Task{" +
                 "_id=" + _id +
+                ", plan='" + plan + '\'' +
                 ", id='" + id + '\'' +
                 ", room='" + room + '\'' +
+                ", roomDescription='" + roomDescription + '\'' +
+                ", assignmentCode='" + assignmentCode + '\'' +
                 ", assignment='" + assignment + '\'' +
                 ", academyHour='" + academyHour + '\'' +
+                ", startClassAt='" + startClassAt + '\'' +
+                ", finishClassAt='" + finishClassAt + '\'' +
                 ", barcode='" + barcode + '\'' +
-                ", employeeNumber='" + employeeNumber + '\'' +
-                ", name='" + name + '\'' +
-                ", fullName='" + fullName + '\'' +
-                ", hexCode='" + hexCode + '\'' +
+                ", owner=" + owner +
+                ", checkout=" + checkout +
                 ", taskState=" + taskState +
                 '}';
     }

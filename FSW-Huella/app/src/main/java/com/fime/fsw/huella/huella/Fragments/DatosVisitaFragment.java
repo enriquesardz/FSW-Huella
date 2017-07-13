@@ -145,7 +145,7 @@ public class DatosVisitaFragment extends Fragment {
     }
 
     public void cargarDatosTask(Task task){
-        tvMaestro.setText(getResources().getString(R.string.cbarra_maestro, task.getName(), task.getFullName()));
+        tvMaestro.setText(getResources().getString(R.string.cbarra_maestro, task.getOwner().getEmployeeName(), task.getOwner().getEmployeeFullName()));
         tvHoraFime.setText(getResources().getString(R.string.cbarra_hora, task.getAcademyHour()));
         tvSalonFime.setText(getResources().getString(R.string.cbarra_salon, task.getRoom()));
         tvMateria.setText(getResources().getString(R.string.cbarra_materia, task.getAssignment()));

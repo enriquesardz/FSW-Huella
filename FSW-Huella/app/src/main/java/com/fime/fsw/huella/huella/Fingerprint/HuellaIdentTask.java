@@ -42,7 +42,7 @@ public class HuellaIdentTask extends AsyncTask<Integer, Integer, String> {
         mTask = task;
         mSesion = sesionAplicacion;
 
-        usuarioHexData = task.getHexCode();
+        usuarioHexData = task.getOwner().getFingerPrint();
         taskId = task.get_id();
 
         progressDialog = new ProgressDialog(mContext);
