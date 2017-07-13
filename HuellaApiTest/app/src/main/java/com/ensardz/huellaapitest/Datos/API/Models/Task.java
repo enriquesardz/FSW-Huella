@@ -13,200 +13,74 @@ import io.realm.annotations.PrimaryKey;
 
 public class Task extends RealmObject{
     @PrimaryKey
-    private int id;
-    private String _id;
-    private String period;
-    private String academyHour;
-    private String group;
-    private String language;
-    private String day;
-    private String modality;
-
-    //Owner
-    @SerializedName("_id")
-    private String ownerId;
-    @SerializedName("rawName")
-    private String ownerRawName;
-    @SerializedName("userType")
-    private String ownerUserType;
-    @SerializedName("name")
-    private String ownerName;
-    @SerializedName("lastName")
-    private String ownerLastName;
-    @SerializedName("fingerPrint")
-    private String ownerFingerPrint;
-    @SerializedName("employeeNumber")
-    private String ownerEmployeeNumber;
-
-    //Assignment
-    @SerializedName("_id")
-    private String assignmentId;
-    @SerializedName("rawName")
-    private String assignmentRawName;
-    @SerializedName("code")
+    private long _id;
+    private String plan;
+    private String id;
+    private String room;
+    private String roomDescription;
     private String assignmentCode;
-    @SerializedName("name")
-    private String assignmentName;
-    @SerializedName("plan")
-    private String assignmentPlan;
+    private String assignment;
+    private String academyHour;
+    private String startClassAt;
+    private String finishClassAt;
+    private String barcode;
+    private Owner owner;
+    private Checkout checkout;
 
     public Task(){}
 
-    public static Task create(String _id, String period, String academyHour, String group, String language, String day, String modality, String ownerId, String ownerRawName, String ownerUserType, String ownerName, String ownerLastName, String ownerFingerPrint, String ownerEmployeeNumber, String assignmentId, String assignmentRawName, String assignmentCode, String assignmentName, String assignmentPlan) {
+    public static Task create(String plan, String id, String room, String roomDescription, String assignmentCode, String assignment, String academyHour, String startClassAt, String finishClassAt, String barcode, Owner owner, Checkout checkout) {
         Task task = new Task();
-        task.id = HuellaApiTestApp.TaskID.incrementAndGet();
-        task._id = _id;
-        task.period = period;
-        task.academyHour = academyHour;
-        task.group = group;
-        task.language = language;
-        task.day = day;
-        task.modality = modality;
-        task.ownerId = ownerId;
-        task.ownerRawName = ownerRawName;
-        task.ownerUserType = ownerUserType;
-        task.ownerName = ownerName;
-        task.ownerLastName = ownerLastName;
-        task.ownerFingerPrint = ownerFingerPrint;
-        task.ownerEmployeeNumber = ownerEmployeeNumber;
-        task.assignmentId = assignmentId;
-        task.assignmentRawName = assignmentRawName;
+        task._id = HuellaApiTestApp.TaskID.incrementAndGet();
+        task.plan = plan;
+        task.id = id;
+        task.room = room;
+        task.roomDescription = roomDescription;
         task.assignmentCode = assignmentCode;
-        task.assignmentName = assignmentName;
-        task.assignmentPlan = assignmentPlan;
+        task.assignment = assignment;
+        task.academyHour = academyHour;
+        task.startClassAt = startClassAt;
+        task.finishClassAt = finishClassAt;
+        task.barcode = barcode;
+        task.owner = owner;
+        task.checkout = checkout;
         return task;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public String get_id() {
+    public long get_id() {
         return _id;
     }
 
-    public void set_id(String _id) {
-        this._id = _id;
+    public String getPlan() {
+        return plan;
     }
 
-    public String getPeriod() {
-        return period;
+    public void setPlan(String plan) {
+        this.plan = plan;
     }
 
-    public void setPeriod(String period) {
-        this.period = period;
+    public String getId() {
+        return id;
     }
 
-    public String getAcademyHour() {
-        return academyHour;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public void setAcademyHour(String academyHour) {
-        this.academyHour = academyHour;
+    public String getRoom() {
+        return room;
     }
 
-    public String getGroup() {
-        return group;
+    public void setRoom(String room) {
+        this.room = room;
     }
 
-    public void setGroup(String group) {
-        this.group = group;
+    public String getRoomDescription() {
+        return roomDescription;
     }
 
-    public String getLanguage() {
-        return language;
-    }
-
-    public void setLanguage(String language) {
-        this.language = language;
-    }
-
-    public String getDay() {
-        return day;
-    }
-
-    public void setDay(String day) {
-        this.day = day;
-    }
-
-    public String getModality() {
-        return modality;
-    }
-
-    public void setModality(String modality) {
-        this.modality = modality;
-    }
-
-    public String getOwnerId() {
-        return ownerId;
-    }
-
-    public void setOwnerId(String ownerId) {
-        this.ownerId = ownerId;
-    }
-
-    public String getOwnerRawName() {
-        return ownerRawName;
-    }
-
-    public void setOwnerRawName(String ownerRawName) {
-        this.ownerRawName = ownerRawName;
-    }
-
-    public String getOwnerUserType() {
-        return ownerUserType;
-    }
-
-    public void setOwnerUserType(String ownerUserType) {
-        this.ownerUserType = ownerUserType;
-    }
-
-    public String getOwnerName() {
-        return ownerName;
-    }
-
-    public void setOwnerName(String ownerName) {
-        this.ownerName = ownerName;
-    }
-
-    public String getOwnerLastName() {
-        return ownerLastName;
-    }
-
-    public void setOwnerLastName(String ownerLastName) {
-        this.ownerLastName = ownerLastName;
-    }
-
-    public String getOwnerFingerPrint() {
-        return ownerFingerPrint;
-    }
-
-    public void setOwnerFingerPrint(String ownerFingerPrint) {
-        this.ownerFingerPrint = ownerFingerPrint;
-    }
-
-    public String getOwnerEmployeeNumber() {
-        return ownerEmployeeNumber;
-    }
-
-    public void setOwnerEmployeeNumber(String ownerEmployeeNumber) {
-        this.ownerEmployeeNumber = ownerEmployeeNumber;
-    }
-
-    public String getAssignmentId() {
-        return assignmentId;
-    }
-
-    public void setAssignmentId(String assignmentId) {
-        this.assignmentId = assignmentId;
-    }
-
-    public String getAssignmentRawName() {
-        return assignmentRawName;
-    }
-
-    public void setAssignmentRawName(String assignmentRawName) {
-        this.assignmentRawName = assignmentRawName;
+    public void setRoomDescription(String roomDescription) {
+        this.roomDescription = roomDescription;
     }
 
     public String getAssignmentCode() {
@@ -217,45 +91,78 @@ public class Task extends RealmObject{
         this.assignmentCode = assignmentCode;
     }
 
-    public String getAssignmentName() {
-        return assignmentName;
+    public String getAssignment() {
+        return assignment;
     }
 
-    public void setAssignmentName(String assignmentName) {
-        this.assignmentName = assignmentName;
+    public void setAssignment(String assignment) {
+        this.assignment = assignment;
     }
 
-    public String getAssignmentPlan() {
-        return assignmentPlan;
+    public String getAcademyHour() {
+        return academyHour;
     }
 
-    public void setAssignmentPlan(String assignmentPlan) {
-        this.assignmentPlan = assignmentPlan;
+    public void setAcademyHour(String academyHour) {
+        this.academyHour = academyHour;
+    }
+
+    public String getStartClassAt() {
+        return startClassAt;
+    }
+
+    public void setStartClassAt(String startClassAt) {
+        this.startClassAt = startClassAt;
+    }
+
+    public String getFinishClassAt() {
+        return finishClassAt;
+    }
+
+    public void setFinishClassAt(String finishClassAt) {
+        this.finishClassAt = finishClassAt;
+    }
+
+    public String getBarcode() {
+        return barcode;
+    }
+
+    public void setBarcode(String barcode) {
+        this.barcode = barcode;
+    }
+
+    public Owner getOwner() {
+        return owner;
+    }
+
+    public void setOwner(Owner owner) {
+        this.owner = owner;
+    }
+
+    public Checkout getCheckout() {
+        return checkout;
+    }
+
+    public void setCheckout(Checkout checkout) {
+        this.checkout = checkout;
     }
 
     @Override
     public String toString() {
         return "Task{" +
-                "id='" + id + '\'' +
-                ", _id='" + _id + '\'' +
-                ", period='" + period + '\'' +
-                ", academyHour='" + academyHour + '\'' +
-                ", group='" + group + '\'' +
-                ", language='" + language + '\'' +
-                ", day='" + day + '\'' +
-                ", modality='" + modality + '\'' +
-                ", ownerId='" + ownerId + '\'' +
-                ", ownerRawName='" + ownerRawName + '\'' +
-                ", ownerUserType='" + ownerUserType + '\'' +
-                ", ownerName='" + ownerName + '\'' +
-                ", ownerLastName='" + ownerLastName + '\'' +
-                ", ownerFingerPrint='" + ownerFingerPrint + '\'' +
-                ", ownerEmployeeNumber='" + ownerEmployeeNumber + '\'' +
-                ", assignmentId='" + assignmentId + '\'' +
-                ", assignmentRawName='" + assignmentRawName + '\'' +
+                "_id=" + _id +
+                ", plan='" + plan + '\'' +
+                ", id='" + id + '\'' +
+                ", room='" + room + '\'' +
+                ", roomDescription='" + roomDescription + '\'' +
                 ", assignmentCode='" + assignmentCode + '\'' +
-                ", assignmentName='" + assignmentName + '\'' +
-                ", assignmentPlan='" + assignmentPlan + '\'' +
+                ", assignment='" + assignment + '\'' +
+                ", academyHour='" + academyHour + '\'' +
+                ", startClassAt='" + startClassAt + '\'' +
+                ", finishClassAt='" + finishClassAt + '\'' +
+                ", barcode='" + barcode + '\'' +
+                ", owner=" + owner +
+                ", checkout=" + checkout +
                 '}';
     }
 }

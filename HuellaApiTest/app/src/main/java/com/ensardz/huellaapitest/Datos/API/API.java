@@ -21,7 +21,7 @@ public class API {
     public static final String BASE_URL = "https://young-escarpment-48238.herokuapp.com/";
     private static Retrofit retrofit = null;
 
-    public static Retrofit getApi(){
+    public static Retrofit getAllTasks(){
         if(retrofit == null){
             Type listType = new TypeToken<List<Task>>(){}.getType();
 
