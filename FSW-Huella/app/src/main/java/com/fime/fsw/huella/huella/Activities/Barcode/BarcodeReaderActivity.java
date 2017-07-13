@@ -132,7 +132,7 @@ public class BarcodeReaderActivity extends AppCompatActivity {
         btnNoSalon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                actualizarValoresTask(task);
+                setCheckoutsAndValoresTask(task);
                 mSesion.setCurrentItemLista(mSesion.getCurrentItemLista() + 1);
                 finish();
             }
@@ -143,16 +143,17 @@ public class BarcodeReaderActivity extends AppCompatActivity {
         return mRealm.where(Task.class).equalTo(Task._ID_KEY, id).findFirst();
     }
 
-    public void actualizarValoresTask(final Task task){
-        final long timeInMillis = System.currentTimeMillis();
+    public void setCheckoutsAndValoresTask(final Task task){
         mRealm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 task.setTaskState(Task.STATE_PASO_NO_VINO_MAESTRO);
-                task.getCheckout().setVisitAt(String.valueOf(timeInMillis));
-                task.getCheckout().setSignedAt(String.valueOf(timeInMillis));
+                task.getCheckout().setVisitAt(String.valueOf(System.currentTimeMillis()));
+                task.getCheckout().setSignedAt(String.valueOf(System.currentTimeMillis()));
+                task.getCheckout().setFinishedAt(String.valueOf(System.currentTimeMillis()));
+                task.getCheckout().setUpdatedAt(String.valueOf(System.currentTimeMillis()));
 
-                Log.i(TAG, "No se encontro salon visitAt signedAt: " + String.valueOf(timeInMillis));
+                Log.i(TAG, "No se encontro salon visitAt signedAt: " + task.getCheckout().toString());
             }
         });
     }

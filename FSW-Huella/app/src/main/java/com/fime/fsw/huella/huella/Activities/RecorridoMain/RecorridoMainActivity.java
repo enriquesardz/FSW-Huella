@@ -123,23 +123,5 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
         });
 
         mBarraNav.selectTabWithId(R.id.tab_recorrido_actual);
-
-        marcarTiempoDeInicio();
     }
-
-    public void marcarTiempoDeInicio(){
-        final String timeInMillis = String.valueOf(System.currentTimeMillis());
-        Log.i(TAG, "Started at: " + timeInMillis);
-
-        mRealm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmResults<Task> tasks = mRealm.where(Task.class).findAll();
-                for (Task task : tasks){
-                    task.getCheckout().setStartedAt(timeInMillis);
-                }
-            }
-        });
-    }
-
 }

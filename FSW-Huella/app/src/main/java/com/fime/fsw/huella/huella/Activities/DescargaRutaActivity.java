@@ -159,11 +159,7 @@ public class DescargaRutaActivity extends AppCompatActivity {
         mRealm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                String timeInMillis = String.valueOf(System.currentTimeMillis());
-                Log.i(TAG, "Created at: " + timeInMillis);
-
                 for(Task task : tasks){
-                    task.getCheckout().setCreatedAt(timeInMillis);
                     Task realmTask = realm.copyToRealmOrUpdate(task);
                     Log.i(TAG, realmTask.toString());
                 }

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -18,7 +19,11 @@ import com.rscja.deviceapi.Fingerprint;
 
 import io.realm.Realm;
 
+import static com.fime.fsw.huella.huella.Activities.HuellaApplication.APP_TAG;
+
 public class IdentificarHuellaActivity extends AppCompatActivity {
+
+    public static final String TAG = APP_TAG + IdentificarHuellaActivity.class.getSimpleName();
 
 
     public Fingerprint mFingerprint;
@@ -136,13 +141,14 @@ public class IdentificarHuellaActivity extends AppCompatActivity {
     }
 
     public void actualizarDatosTask(final Task task){
-        final String timeInMillis = String.valueOf(System.currentTimeMillis());
         mRealm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 task.setTaskState(Task.STATE_PASO_NO_VINO_MAESTRO);
-                task.getCheckout().setSignedAt(timeInMillis);
-                task.getCheckout().setUpdatedAt(timeInMillis);
+                task.getCheckout().setSignedAt(String.valueOf(System.currentTimeMillis()));
+                task.getCheckout().setUpdatedAt(String.valueOf(System.currentTimeMillis()));
+                task.getCheckout().setFinishedAt(String.valueOf(System.currentTimeMillis()));
+                Log.i(TAG, task.getCheckout().toString());
             }
         });
         }

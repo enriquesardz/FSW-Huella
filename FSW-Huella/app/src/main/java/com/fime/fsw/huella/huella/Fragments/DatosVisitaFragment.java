@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,11 +13,14 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.fime.fsw.huella.huella.Activities.Barcode.BarcodeReaderActivity;
+import com.fime.fsw.huella.huella.Activities.Fingerprint.HuellaIdentTask;
 import com.fime.fsw.huella.huella.Data.Modelos.Task;
 import com.fime.fsw.huella.huella.R;
 import com.fime.fsw.huella.huella.Utilidad.SesionAplicacion;
 
 import io.realm.Realm;
+
+import static com.fime.fsw.huella.huella.Activities.HuellaApplication.APP_TAG;
 
 
 /**
@@ -26,6 +30,9 @@ import io.realm.Realm;
  * to handle interaction events.
  */
 public class DatosVisitaFragment extends Fragment {
+
+    public static final String TAG = APP_TAG + DatosVisitaFragment.class.getSimpleName();
+
 
     private OnFragmentInteractionListener mListener;
 
@@ -111,27 +118,28 @@ public class DatosVisitaFragment extends Fragment {
         //Valor default del itemid, con intencion de que si el Bundle no regresa un id,
         //se pueda validar.
         final long itemid = mBundle.getLong(Task._ID_KEY, -1);
-        Task task;
+        final Task task = getTaskConId(itemid);
 
         //Si el bundle regreso un id, entonces actualiza la UI con datos del Task, y
         //hace visible el contenedor.
-        if (itemid != -1) {
-            task = getTaskConId(itemid);
+        if (itemid != -1){
             cargarDatosTask(task);
         }
 
-        if (itemid >= mSesion.getCurrentItemLista()){
+        if (itemid >= mSesion.getCurrentItemLista()) {
             btnEscanner.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             btnEscanner.setVisibility(View.INVISIBLE);
         }
+
         //Inicia la actividad de lector de codigo de barras
         btnEscanner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (itemid != -1) {
+                if (itemid != -1 && itemid >= mSesion.getCurrentItemLista()) {
                     //Si mBundle regreso un id, entonces se puede iniciar la actividad del Scanner con un Task id,
                     //y si no, el boton no hace nada.
+                    setStartedAtTask(task);
                     Intent intent = new Intent(mContext, BarcodeReaderActivity.class);
                     intent.putExtra(Task._ID_KEY, itemid);
                     startActivity(intent);
@@ -144,12 +152,22 @@ public class DatosVisitaFragment extends Fragment {
         return mRealm.where(Task.class).equalTo(Task._ID_KEY, id).findFirst();
     }
 
-    public void cargarDatosTask(Task task){
+    public void cargarDatosTask(Task task) {
         tvMaestro.setText(getResources().getString(R.string.cbarra_maestro, task.getOwner().getEmployeeName(), task.getOwner().getEmployeeFullName()));
         tvHoraFime.setText(getResources().getString(R.string.cbarra_hora, task.getAcademyHour()));
         tvSalonFime.setText(getResources().getString(R.string.cbarra_salon, task.getRoom()));
         tvMateria.setText(getResources().getString(R.string.cbarra_materia, task.getAssignment()));
         infoContainer.setVisibility(View.VISIBLE);
+    }
+
+    public void setStartedAtTask(final Task task) {
+        mRealm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                task.getCheckout().setStartedAt(String.valueOf(System.currentTimeMillis()));
+                Log.i(TAG, task.getCheckout().toString());
+            }
+        });
     }
 
 }
