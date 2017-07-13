@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.fime.fsw.huella.huella.Barcode.BarcodeReaderActivity">
+    tools:context=".Activities.Barcode.BarcodeReaderActivity">
 
     <View
         android:layout_width="match_parent"

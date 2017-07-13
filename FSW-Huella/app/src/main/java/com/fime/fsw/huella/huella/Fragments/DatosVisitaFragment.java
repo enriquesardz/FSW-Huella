@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.fime.fsw.huella.huella.Barcode.BarcodeReaderActivity;
+import com.fime.fsw.huella.huella.Activities.Barcode.BarcodeReaderActivity;
 import com.fime.fsw.huella.huella.Data.Modelos.Task;
 import com.fime.fsw.huella.huella.R;
 import com.fime.fsw.huella.huella.Utilidad.SesionAplicacion;

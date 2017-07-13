@@ -1,4 +1,4 @@
-package com.fime.fsw.huella.huella.Fingerprint.Unused;
+package com.fime.fsw.huella.huella.Activities.Fingerprint.Unused;
 
 import android.app.ProgressDialog;
 import android.content.Context;

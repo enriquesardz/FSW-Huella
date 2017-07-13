@@ -1,4 +1,4 @@
-package com.fime.fsw.huella.huella.Barcode;
+package com.fime.fsw.huella.huella.Activities.Barcode;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -14,7 +14,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.fime.fsw.huella.huella.Data.Modelos.Task;
-import com.fime.fsw.huella.huella.Fingerprint.IdentificarHuellaActivity;
+import com.fime.fsw.huella.huella.Activities.Fingerprint.IdentificarHuellaActivity;
 import com.fime.fsw.huella.huella.R;
 import com.fime.fsw.huella.huella.Utilidad.SesionAplicacion;
 import com.rscja.deviceapi.Barcode1D;
