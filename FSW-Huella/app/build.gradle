@@ -25,6 +25,11 @@ android {
             url 'https://github.com/uPhyca/stetho-realm/raw/master/maven-repo'
         }
     }
+
+    packagingOptions{
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+    }
 }
 
 dependencies {
@@ -59,5 +64,4 @@ dependencies {
     compile 'com.android.support:support-v4:25.3.1'
     compile 'com.android.support:support-vector-drawable:25.3.1'
     testCompile 'junit:junit:4.12'
-    compile files('libs/amqp-client-4.1.1.jar')
 }

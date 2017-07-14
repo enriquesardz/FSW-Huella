@@ -12,6 +12,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 import com.fime.fsw.huella.huella.Activities.HuellaApplication;
 import com.fime.fsw.huella.huella.Activities.InicioSesion.MenuInicioSesionActivity;
@@ -20,8 +22,19 @@ import com.fime.fsw.huella.huella.Fragments.DatosVisitaFragment;
 import com.fime.fsw.huella.huella.Fragments.RecorridoActualFragment;
 import com.fime.fsw.huella.huella.R;
 import com.fime.fsw.huella.huella.Utilidad.SesionAplicacion;
+import com.rabbitmq.client.AMQP;
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.Connection;
+import com.rabbitmq.client.ConnectionFactory;
+import com.rabbitmq.client.QueueingConsumer;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
+
+import java.net.URISyntaxException;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.util.concurrent.BlockingDeque;
+import java.util.concurrent.LinkedBlockingDeque;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -39,6 +52,13 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
     private Realm mRealm;
     private SesionAplicacion mSesionApp;
 
+    private Button btnSubir;
+
+    //RabbitMQ
+    private BlockingDeque<String> queue = new LinkedBlockingDeque<String>();
+    private ConnectionFactory mFactory = new ConnectionFactory();
+    Thread publishThread;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +67,9 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
         mContext = RecorridoMainActivity.this;
         mSesionApp = new SesionAplicacion(mContext);
         mRealm = Realm.getDefaultInstance();
+
+        setupConnectionFactory();
+        publishToAMQP();
 
         initComponents();
     }
@@ -98,10 +121,17 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
 
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        publishThread.interrupt();
+    }
+
     public void initComponents() {
         mBundle = new Bundle();
 
         mBarraNav = (BottomBar) findViewById(R.id.barra_navegacion);
+        btnSubir = (Button) findViewById(R.id.subida_test);
 
         mBarraNav.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
@@ -122,6 +152,73 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
             }
         });
 
+        btnSubir.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                publishMessage("Test lmao");
+            }
+        });
+
         mBarraNav.selectTabWithId(R.id.tab_recorrido_actual);
+    }
+
+    //Agrega mensajes al queue local
+    void publishMessage(String mensaje){
+        try{
+            Log.d(TAG, mensaje);
+            queue.putLast(mensaje);
+        }
+        catch (InterruptedException e){
+            e.printStackTrace();
+        }
+    }
+
+    private void setupConnectionFactory(){
+        String URI = "amqp://wbqxpthl:zDpgVEdbi1mfLdrEYuyoMB35sfIP7zxN@weasel.rmq.cloudamqp.com/wbqxpthl";
+        try{
+            mFactory.setAutomaticRecoveryEnabled(false);
+            mFactory.setUri(URI);
+        }
+        catch (KeyManagementException | NoSuchAlgorithmException | URISyntaxException e){
+            e.printStackTrace();
+        }
+    }
+
+    public void publishToAMQP(){
+        publishThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (true){
+                    try{
+                        Connection cn = mFactory.newConnection();
+                        Channel ch = cn.createChannel();
+                        ch.confirmSelect();
+
+                        while(true){
+                            String message = queue.takeFirst();
+                            try{
+                                ch.basicPublish("", "checkouts", null, message.getBytes());
+                                ch.waitForConfirmsOrDie();
+                                Log.i(TAG, "Se mando el mensaje: " + message);
+                            }catch (Exception e){
+                                queue.putFirst(message);
+                                Log.e(TAG, "No se pudo mandar el mensaje: " + message);
+                                throw e;
+                            }
+                        }
+                    } catch(InterruptedException e){
+                        break;
+                    } catch (Exception e1){
+                        Log.d(TAG, "Se rompio la conexion porque la UNI bloquea todo lo que se mueva y les vale queso");
+                        try{
+                            Thread.sleep(5000);
+                        } catch (InterruptedException e){
+                            break;
+                        }
+                    }
+                }
+            }
+        });
+        publishThread.start();
     }
 }
