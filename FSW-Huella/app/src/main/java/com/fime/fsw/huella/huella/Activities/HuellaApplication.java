@@ -8,6 +8,7 @@ import com.fime.fsw.huella.huella.Data.Modelos.Task;
 import com.uphyca.stetho_realm.RealmInspectorModulesProvider;
 
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.regex.Pattern;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -43,13 +44,13 @@ public class HuellaApplication extends Application {
                         .enableWebKitInspector(RealmInspectorModulesProvider.builder(this).build())
                         .build()
         );
-//        RealmInspectorModulesProvider.builder(this)
-//                .withFolder(getCacheDir())
-//                .withMetaTables()
-//                .withDescendingOrder()
-//                .withLimit(1000)
-//                .databaseNamePattern(Pattern.compile(".+\\.realm"))
-//                .build();
+        RealmInspectorModulesProvider.builder(this)
+                .withFolder(getCacheDir())
+                .withMetaTables()
+                .withDescendingOrder()
+                .withLimit(1000)
+                .databaseNamePattern(Pattern.compile(REALM_NAME))
+                .build();
 
         realm.close();
 

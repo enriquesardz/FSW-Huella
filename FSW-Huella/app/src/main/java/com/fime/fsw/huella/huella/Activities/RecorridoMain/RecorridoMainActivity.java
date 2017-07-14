@@ -17,22 +17,26 @@ import android.widget.Button;
 
 import com.fime.fsw.huella.huella.Activities.HuellaApplication;
 import com.fime.fsw.huella.huella.Activities.InicioSesion.MenuInicioSesionActivity;
+import com.fime.fsw.huella.huella.Data.Modelos.Checkout;
+import com.fime.fsw.huella.huella.Data.Modelos.Owner;
 import com.fime.fsw.huella.huella.Data.Modelos.Task;
 import com.fime.fsw.huella.huella.Fragments.DatosVisitaFragment;
 import com.fime.fsw.huella.huella.Fragments.RecorridoActualFragment;
 import com.fime.fsw.huella.huella.R;
 import com.fime.fsw.huella.huella.Utilidad.SesionAplicacion;
-import com.rabbitmq.client.AMQP;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
-import com.rabbitmq.client.QueueingConsumer;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
 
+import java.lang.reflect.Type;
 import java.net.URISyntaxException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.LinkedBlockingDeque;
 
@@ -68,6 +72,7 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
         mSesionApp = new SesionAplicacion(mContext);
         mRealm = Realm.getDefaultInstance();
 
+        getCheckoutsFromRealmToJson();
         setupConnectionFactory();
         publishToAMQP();
 
@@ -155,7 +160,7 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
         btnSubir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                publishMessage("Test lmao");
+                publishMessage();
             }
         });
 
@@ -163,56 +168,55 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
     }
 
     //Agrega mensajes al queue local
-    void publishMessage(String mensaje){
-        try{
-            Log.d(TAG, mensaje);
-            queue.putLast(mensaje);
-        }
-        catch (InterruptedException e){
+    void publishMessage() {
+        try {
+            String jsonCheckouts = getCheckoutsFromRealmToJson();
+            Log.d(TAG, jsonCheckouts);
+            queue.putLast(jsonCheckouts);
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
 
-    private void setupConnectionFactory(){
-        String URI = "amqp://wbqxpthl:zDpgVEdbi1mfLdrEYuyoMB35sfIP7zxN@weasel.rmq.cloudamqp.com/wbqxpthl";
-        try{
+    private void setupConnectionFactory() {
+        String URI = "amqp://tjttatfr:q2yhgpI_sIXXlQFiZUSAizmjH9I2vASr@wasp.rmq.cloudamqp.com/tjttatfr";
+        try {
             mFactory.setAutomaticRecoveryEnabled(false);
             mFactory.setUri(URI);
-        }
-        catch (KeyManagementException | NoSuchAlgorithmException | URISyntaxException e){
+        } catch (KeyManagementException | NoSuchAlgorithmException | URISyntaxException e) {
             e.printStackTrace();
         }
     }
 
-    public void publishToAMQP(){
+    public void publishToAMQP() {
         publishThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                while (true){
-                    try{
+                while (true) {
+                    try {
                         Connection cn = mFactory.newConnection();
                         Channel ch = cn.createChannel();
                         ch.confirmSelect();
 
-                        while(true){
+                        while (true) {
                             String message = queue.takeFirst();
-                            try{
+                            try {
                                 ch.basicPublish("", "checkouts", null, message.getBytes());
-                                ch.waitForConfirmsOrDie();
                                 Log.i(TAG, "Se mando el mensaje: " + message);
-                            }catch (Exception e){
+                                ch.waitForConfirmsOrDie();
+                            } catch (Exception e) {
                                 queue.putFirst(message);
                                 Log.e(TAG, "No se pudo mandar el mensaje: " + message);
                                 throw e;
                             }
                         }
-                    } catch(InterruptedException e){
+                    } catch (InterruptedException e) {
                         break;
-                    } catch (Exception e1){
+                    } catch (Exception e1) {
                         Log.d(TAG, "Se rompio la conexion porque la UNI bloquea todo lo que se mueva y les vale queso");
-                        try{
+                        try {
                             Thread.sleep(5000);
-                        } catch (InterruptedException e){
+                        } catch (InterruptedException e) {
                             break;
                         }
                     }
@@ -220,5 +224,9 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
             }
         });
         publishThread.start();
+    }
+
+    public String getCheckoutsFromRealmToJson() {
+
     }
 }

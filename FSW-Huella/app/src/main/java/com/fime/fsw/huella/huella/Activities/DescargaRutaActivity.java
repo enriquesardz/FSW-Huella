@@ -15,6 +15,8 @@ import android.widget.Toast;
 import com.fime.fsw.huella.huella.API.APICodo;
 import com.fime.fsw.huella.huella.Activities.InicioSesion.MenuInicioSesionActivity;
 import com.fime.fsw.huella.huella.Activities.RecorridoMain.RecorridoMainActivity;
+import com.fime.fsw.huella.huella.Data.Modelos.Checkout;
+import com.fime.fsw.huella.huella.Data.Modelos.Owner;
 import com.fime.fsw.huella.huella.Data.Modelos.Task;
 import com.fime.fsw.huella.huella.API.ServiciosAPI.DescargaRecorridoService;
 import com.fime.fsw.huella.huella.R;
@@ -169,9 +171,13 @@ public class DescargaRutaActivity extends AppCompatActivity {
 
     public void eliminarTasksDeRealm(){
         final RealmResults<Task> tasks = mRealm.where(Task.class).findAll();
-        mRealm.executeTransaction(new Realm.Transaction() {
+       mRealm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
+                for (Task task : tasks){
+                    task.getOwner().deleteFromRealm();
+                    task.getCheckout().deleteFromRealm();
+                }
                 tasks.deleteAllFromRealm();
             }
         });
