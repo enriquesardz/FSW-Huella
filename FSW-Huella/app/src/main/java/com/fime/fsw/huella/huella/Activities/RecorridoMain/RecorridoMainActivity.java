@@ -20,6 +20,7 @@ import com.fime.fsw.huella.huella.Activities.InicioSesion.MenuInicioSesionActivi
 import com.fime.fsw.huella.huella.Data.Modelos.Checkout;
 import com.fime.fsw.huella.huella.Data.Modelos.Owner;
 import com.fime.fsw.huella.huella.Data.Modelos.Task;
+import com.fime.fsw.huella.huella.Data.Modelos.UploadCheckout;
 import com.fime.fsw.huella.huella.Fragments.DatosVisitaFragment;
 import com.fime.fsw.huella.huella.Fragments.RecorridoActualFragment;
 import com.fime.fsw.huella.huella.R;
@@ -36,6 +37,7 @@ import java.lang.reflect.Type;
 import java.net.URISyntaxException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.LinkedBlockingDeque;
@@ -72,7 +74,7 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
         mSesionApp = new SesionAplicacion(mContext);
         mRealm = Realm.getDefaultInstance();
 
-//        getCheckoutsFromRealmToJson();
+        String test = getCheckoutsFromRealmToJson();
 //        setupConnectionFactory();
 //        publishToAMQP();
 
@@ -230,7 +232,17 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
 //        publishThread.start();
 //    }
 //
-//    public String getCheckoutsFromRealmToJson() {
+    public String getCheckoutsFromRealmToJson() {
+        RealmResults<Task> tasks = mRealm.where(Task.class).findAll();
+        List<UploadCheckout> uploadCheckouts = new ArrayList<UploadCheckout>();
+        for (Task task : tasks){
+            uploadCheckouts.add(new UploadCheckout(String.valueOf(task.get_id()),mRealm.copyFromRealm(task.getCheckout())));
+        }
 //
-//    }
+//        Task task = mRealm.where(Task.class).findFirst();
+//        Task task2 = mRealm.copyFromRealm(task);
+        Gson gson = new Gson();
+        String json = gson.toJson(uploadCheckouts);
+        return json;
+    }
 }
