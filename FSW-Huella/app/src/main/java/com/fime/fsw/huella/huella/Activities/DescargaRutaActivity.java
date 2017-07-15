@@ -13,12 +13,10 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.fime.fsw.huella.huella.API.APICodo;
+import com.fime.fsw.huella.huella.API.ServiciosAPI.DescargaRecorridoService;
 import com.fime.fsw.huella.huella.Activities.InicioSesion.MenuInicioSesionActivity;
 import com.fime.fsw.huella.huella.Activities.RecorridoMain.RecorridoMainActivity;
-import com.fime.fsw.huella.huella.Data.Modelos.Checkout;
-import com.fime.fsw.huella.huella.Data.Modelos.Owner;
 import com.fime.fsw.huella.huella.Data.Modelos.Task;
-import com.fime.fsw.huella.huella.API.ServiciosAPI.DescargaRecorridoService;
 import com.fime.fsw.huella.huella.R;
 import com.fime.fsw.huella.huella.Utilidad.SesionAplicacion;
 import com.jaredrummler.materialspinner.MaterialSpinner;
@@ -134,7 +132,7 @@ public class DescargaRutaActivity extends AppCompatActivity {
 
                 //Se guardan los datos a nuestro Realm
                 guardarRespuestaARealm(tasks);
-                //Despues de guardar al Realm, se setea el primer item de la lista.
+                //Despues de guardar al Realm, se setea el primer item de la lista y el final.
                 setInitialAndFinalTask();
 
                 //Se inicia sesion de descarga
@@ -142,6 +140,7 @@ public class DescargaRutaActivity extends AppCompatActivity {
 
                 progressDialog.cancel();
 
+                //TODO: Pasar un booleano para saber si se va a cargar el empty state
                 startActivity(new Intent(mContext, RecorridoMainActivity.class));
                 finish();
             }
