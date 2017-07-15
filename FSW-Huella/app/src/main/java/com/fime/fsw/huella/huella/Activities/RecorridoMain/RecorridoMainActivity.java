@@ -58,10 +58,10 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
 
     private Button btnSubir;
 
-    //RabbitMQ
-    private BlockingDeque<String> queue = new LinkedBlockingDeque<String>();
-    private ConnectionFactory mFactory = new ConnectionFactory();
-    Thread publishThread;
+//    //RabbitMQ
+//    private BlockingDeque<String> queue = new LinkedBlockingDeque<String>();
+//    private ConnectionFactory mFactory = new ConnectionFactory();
+//    Thread publishThread;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,9 +72,9 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
         mSesionApp = new SesionAplicacion(mContext);
         mRealm = Realm.getDefaultInstance();
 
-        getCheckoutsFromRealmToJson();
-        setupConnectionFactory();
-        publishToAMQP();
+//        getCheckoutsFromRealmToJson();
+//        setupConnectionFactory();
+//        publishToAMQP();
 
         initComponents();
     }
@@ -101,17 +101,21 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
 
     @Override
     public void onBackPressed() {
-        new AlertDialog.Builder(mContext)
-                .setMessage(getResources().getString(R.string.mrecorrido_seguro_salir))
-                .setPositiveButton(getResources().getString(R.string.mrecorrido_si),
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                RecorridoMainActivity.super.onBackPressed();
-                            }
-                        })
-                .setNegativeButton(getResources().getString(R.string.mrecorrido_no), null)
-                .show();
+        if (mBarraNav.getCurrentTabId() == R.id.tab_datos_visita) {
+            mBarraNav.selectTabWithId(R.id.tab_recorrido_actual);
+        } else {
+            new AlertDialog.Builder(mContext)
+                    .setMessage(getResources().getString(R.string.mrecorrido_seguro_salir))
+                    .setPositiveButton(getResources().getString(R.string.mrecorrido_si),
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    RecorridoMainActivity.super.onBackPressed();
+                                }
+                            })
+                    .setNegativeButton(getResources().getString(R.string.mrecorrido_no), null)
+                    .show();
+        }
     }
 
     @Override
@@ -129,14 +133,14 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        publishThread.interrupt();
+//        publishThread.interrupt();
     }
 
     public void initComponents() {
         mBundle = new Bundle();
 
         mBarraNav = (BottomBar) findViewById(R.id.barra_navegacion);
-        btnSubir = (Button) findViewById(R.id.subida_test);
+//        btnSubir = (Button) findViewById(R.id.subida_test);
 
         mBarraNav.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
@@ -157,76 +161,76 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
             }
         });
 
-        btnSubir.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                publishMessage();
-            }
-        });
+//        btnSubir.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                publishMessage();
+//            }
+//        });
 
         mBarraNav.selectTabWithId(R.id.tab_recorrido_actual);
     }
 
-    //Agrega mensajes al queue local
-    void publishMessage() {
-        try {
-            String jsonCheckouts = getCheckoutsFromRealmToJson();
-            Log.d(TAG, jsonCheckouts);
-            queue.putLast(jsonCheckouts);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
+//    //Agrega mensajes al queue local
+//    void publishMessage() {
+//        try {
+//            String jsonCheckouts = getCheckoutsFromRealmToJson();
+//            Log.d(TAG, jsonCheckouts);
+//            queue.putLast(jsonCheckouts);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
-    private void setupConnectionFactory() {
-        String URI = "amqp://tjttatfr:q2yhgpI_sIXXlQFiZUSAizmjH9I2vASr@wasp.rmq.cloudamqp.com/tjttatfr";
-        try {
-            mFactory.setAutomaticRecoveryEnabled(false);
-            mFactory.setUri(URI);
-        } catch (KeyManagementException | NoSuchAlgorithmException | URISyntaxException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void publishToAMQP() {
-        publishThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (true) {
-                    try {
-                        Connection cn = mFactory.newConnection();
-                        Channel ch = cn.createChannel();
-                        ch.confirmSelect();
-
-                        while (true) {
-                            String message = queue.takeFirst();
-                            try {
-                                ch.basicPublish("", "checkouts", null, message.getBytes());
-                                Log.i(TAG, "Se mando el mensaje: " + message);
-                                ch.waitForConfirmsOrDie();
-                            } catch (Exception e) {
-                                queue.putFirst(message);
-                                Log.e(TAG, "No se pudo mandar el mensaje: " + message);
-                                throw e;
-                            }
-                        }
-                    } catch (InterruptedException e) {
-                        break;
-                    } catch (Exception e1) {
-                        Log.d(TAG, "Se rompio la conexion porque la UNI bloquea todo lo que se mueva y les vale queso");
-                        try {
-                            Thread.sleep(5000);
-                        } catch (InterruptedException e) {
-                            break;
-                        }
-                    }
-                }
-            }
-        });
-        publishThread.start();
-    }
-
-    public String getCheckoutsFromRealmToJson() {
-
-    }
+//    private void setupConnectionFactory() {
+//        String URI = "amqp://tjttatfr:q2yhgpI_sIXXlQFiZUSAizmjH9I2vASr@wasp.rmq.cloudamqp.com/tjttatfr";
+//        try {
+//            mFactory.setAutomaticRecoveryEnabled(false);
+//            mFactory.setUri(URI);
+//        } catch (KeyManagementException | NoSuchAlgorithmException | URISyntaxException e) {
+//            e.printStackTrace();
+//        }
+//    }
+//
+//    public void publishToAMQP() {
+//        publishThread = new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                while (true) {
+//                    try {
+//                        Connection cn = mFactory.newConnection();
+//                        Channel ch = cn.createChannel();
+//                        ch.confirmSelect();
+//
+//                        while (true) {
+//                            String message = queue.takeFirst();
+//                            try {
+//                                ch.basicPublish("", "checkouts", null, message.getBytes());
+//                                Log.i(TAG, "Se mando el mensaje: " + message);
+//                                ch.waitForConfirmsOrDie();
+//                            } catch (Exception e) {
+//                                queue.putFirst(message);
+//                                Log.e(TAG, "No se pudo mandar el mensaje: " + message);
+//                                throw e;
+//                            }
+//                        }
+//                    } catch (InterruptedException e) {
+//                        break;
+//                    } catch (Exception e1) {
+//                        Log.d(TAG, "Se rompio la conexion porque la UNI bloquea todo lo que se mueva y les vale queso");
+//                        try {
+//                            Thread.sleep(5000);
+//                        } catch (InterruptedException e) {
+//                            break;
+//                        }
+//                    }
+//                }
+//            }
+//        });
+//        publishThread.start();
+//    }
+//
+//    public String getCheckoutsFromRealmToJson() {
+//
+//    }
 }

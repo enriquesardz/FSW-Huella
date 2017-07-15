@@ -15,12 +15,6 @@
         >
     </FrameLayout>
 
-    <Button
-        android:id="@+id/subida_test"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="subida test"/>
-
     <com.roughike.bottombar.BottomBar
         android:id="@+id/barra_navegacion"
         android:layout_width="match_parent"
