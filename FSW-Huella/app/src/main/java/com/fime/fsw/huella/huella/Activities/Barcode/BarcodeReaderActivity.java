@@ -132,7 +132,8 @@ public class BarcodeReaderActivity extends AppCompatActivity {
 
                 if (!scannerConnected){
                     //TODO: No debe de ir en la version final.
-                    //App debug
+                    //Si el escanner no esta conectado entonces es la debug App
+                    //Solamente cambia los valores
                     setVisitAtCheckout(task);
                     startHuellaActivity(task.get_id(), task.getBarcode());
                 }
