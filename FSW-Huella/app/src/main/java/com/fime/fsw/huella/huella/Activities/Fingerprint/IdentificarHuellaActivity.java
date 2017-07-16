@@ -3,8 +3,8 @@ package com.fime.fsw.huella.huella.Activities.Fingerprint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,6 +36,8 @@ public class IdentificarHuellaActivity extends AppCompatActivity {
     private Button btnBuscarHuella;
     private Button btnNoEstaMaestro;
 
+    private boolean scannerConnected = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +50,7 @@ public class IdentificarHuellaActivity extends AppCompatActivity {
         try {
             mFingerprint = Fingerprint.getInstance();
         } catch (Exception e) {
-            Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show();
+            scannerConnected = false;
         }
 
         initComponentes();
@@ -86,13 +88,17 @@ public class IdentificarHuellaActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         //Inicia la huella cuando se inicia la actividad.
-        new InitTask().execute();
+        if (scannerConnected) {
+            new InitTask().execute();
+        } else {
+            Log.d(TAG, "Se inicio la actividad sin escanner");
+        }
     }
 
     private void initComponentes() {
 
         tvNombre = (TextView) findViewById(R.id.nombre_textview);
-        tvFullNombre = (TextView)findViewById(R.id.full_nombre_textview);
+        tvFullNombre = (TextView) findViewById(R.id.full_nombre_textview);
         btnBuscarHuella = (Button) findViewById(R.id.buscar_huella_button);
         btnNoEstaMaestro = (Button) findViewById(R.id.no_esta_maestro_button);
 
@@ -116,7 +122,13 @@ public class IdentificarHuellaActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //Este task utiliza las funciones proporcionadas por el SDK para identificar la huella
-                new HuellaIdentTask(mContext, mFingerprint, mRealm, mSesion, task).execute();
+                if (scannerConnected) {
+                    new HuellaIdentTask(mContext, mFingerprint, mRealm, mSesion, task).execute();
+                } else {
+                    //TODO: No debe de ir en la version final.
+                    //Debug app
+                    setAllCheckoutsAndTaskValues(task);
+                }
             }
         });
 
@@ -131,16 +143,16 @@ public class IdentificarHuellaActivity extends AppCompatActivity {
         });
     }
 
-    public Task getTaskConId(long id){
+    public Task getTaskConId(long id) {
         return mRealm.where(Task.class).equalTo(Task._ID_KEY, id).findFirst();
     }
 
-    public void cargarDatosTask(Task task){
+    public void cargarDatosTask(Task task) {
         tvNombre.setText(getResources().getString(R.string.ih_nombre, task.getOwner().getEmployeeName()));
         tvFullNombre.setText(getResources().getString(R.string.ih_apellido, task.getOwner().getEmployeeFullName()));
     }
 
-    public void actualizarDatosTask(final Task task){
+    public void actualizarDatosTask(final Task task) {
         mRealm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
@@ -151,7 +163,34 @@ public class IdentificarHuellaActivity extends AppCompatActivity {
                 Log.i(TAG, task.getCheckout().toString());
             }
         });
+    }
+
+    public void setAllCheckoutsAndTaskValues(final Task task) {
+        //Si hay resultado, entonces fue una Identificacion exitosa
+        Toast.makeText(mContext, "Se encontro usuario debug mode", Toast.LENGTH_SHORT).show();
+
+        mRealm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                task.setTaskState(Task.STATE_PASO_VINO_MAESTRO);
+                task.getCheckout().setSignedAt(String.valueOf(System.currentTimeMillis()));
+                task.getCheckout().setFinishedAt(String.valueOf(System.currentTimeMillis()));
+                task.getCheckout().setUpdatedAt(String.valueOf(System.currentTimeMillis()));
+
+                Log.i(TAG, "Signed and updated at (vino maestro) debug");
+                Log.d(TAG, task.getCheckout().toString());
+            }
+        });
+
+        long currentItem = mSesion.getCurrentItemLista();
+        long lastItem = mSesion.getLastItemLista();
+
+        if (currentItem == task.get_id()) {
+            mSesion.setCurrentItemLista(currentItem + 1);
         }
+
+        finish();
+    }
 
 
     /*

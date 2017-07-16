@@ -13,7 +13,6 @@ import com.fime.fsw.huella.huella.Utilidad.SesionAplicacion;
 import com.rscja.deviceapi.Fingerprint;
 
 import io.realm.Realm;
-import io.realm.RealmResults;
 
 import static com.fime.fsw.huella.huella.Activities.HuellaApplication.APP_TAG;
 
@@ -117,7 +116,29 @@ public class HuellaIdentTask extends AsyncTask<Integer, Integer, String> {
 
         //Si hay resultado, entonces fue una Identificacion exitosa
         Toast.makeText(mContext, "Se encontro usuario", Toast.LENGTH_SHORT).show();
+        //Se agregan los checkouts finales, se actualiza el estado del task, y se cierra la actividad.
+        setAllCheckoutsAndTaskValues();
+    }
 
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+        //Antes de poder hacer el match con la huella, necesitamos sacar
+        //el valor hexadecimal de la huella del maestro utilizando algun identificador
+        //como su ID.
+
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.show();
+
+    }
+
+    @Override
+    protected void onProgressUpdate(Integer... values) {
+        super.onProgressUpdate(values);
+    }
+
+    private void setAllCheckoutsAndTaskValues(){
         mRealm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
@@ -139,23 +160,4 @@ public class HuellaIdentTask extends AsyncTask<Integer, Integer, String> {
 
         ((Activity) mContext).finish();
     }
-
-    @Override
-    protected void onPreExecute() {
-        super.onPreExecute();
-        //Antes de poder hacer el match con la huella, necesitamos sacar
-        //el valor hexadecimal de la huella del maestro utilizando algun identificador
-        //como su ID.
-
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.show();
-
-    }
-
-    @Override
-    protected void onProgressUpdate(Integer... values) {
-        super.onProgressUpdate(values);
-    }
-
 }
