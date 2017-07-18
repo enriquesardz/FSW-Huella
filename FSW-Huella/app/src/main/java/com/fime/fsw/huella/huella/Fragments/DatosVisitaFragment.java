@@ -13,7 +13,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.fime.fsw.huella.huella.Activities.Barcode.BarcodeReaderActivity;
-import com.fime.fsw.huella.huella.Activities.Fingerprint.HuellaIdentTask;
 import com.fime.fsw.huella.huella.Data.Modelos.Task;
 import com.fime.fsw.huella.huella.R;
 import com.fime.fsw.huella.huella.Utilidad.SesionAplicacion;
@@ -33,6 +32,7 @@ public class DatosVisitaFragment extends Fragment {
 
     public static final String TAG = APP_TAG + DatosVisitaFragment.class.getSimpleName();
 
+    private boolean hayDatos = false;
 
     private OnFragmentInteractionListener mListener;
 
@@ -42,6 +42,7 @@ public class DatosVisitaFragment extends Fragment {
     private TextView tvSalonFime;
     private TextView tvMateria;
     private View infoContainer;
+    private View emptyState;
 
     private Bundle mBundle;
     private Context mContext;
@@ -107,13 +108,13 @@ public class DatosVisitaFragment extends Fragment {
 
     private void initComponentes(View view) {
         infoContainer = view.findViewById(R.id.informacion_container);
+        emptyState = view.findViewById(R.id.empty_state);
         tvMaestro = (TextView) view.findViewById(R.id.maestro_textview);
         tvHoraFime = (TextView) view.findViewById(R.id.hora_fime_textview);
         tvSalonFime = (TextView) view.findViewById(R.id.salon_fime_textview);
         tvMateria = (TextView) view.findViewById(R.id.materia_textview);
         btnEscanner = (ImageButton) view.findViewById(R.id.escaner_salon_button);
 
-        infoContainer.setVisibility(View.INVISIBLE);
 
         //Valor default del itemid, con intencion de que si el Bundle no regresa un id,
         //se pueda validar.
@@ -124,6 +125,15 @@ public class DatosVisitaFragment extends Fragment {
         //hace visible el contenedor.
         if (itemid != -1){
             cargarDatosTask(task);
+        }
+
+        if(hayDatos){
+            infoContainer.setVisibility(View.VISIBLE);
+            emptyState.setVisibility(View.GONE);
+        }
+        else{
+            infoContainer.setVisibility(View.GONE);
+            emptyState.setVisibility(View.VISIBLE);
         }
 
         if (itemid >= mSesion.getCurrentItemLista()) {
@@ -157,7 +167,7 @@ public class DatosVisitaFragment extends Fragment {
         tvHoraFime.setText(getResources().getString(R.string.cbarra_hora, task.getAcademyHour()));
         tvSalonFime.setText(getResources().getString(R.string.cbarra_salon, task.getRoom()));
         tvMateria.setText(getResources().getString(R.string.cbarra_materia, task.getAssignment()));
-        infoContainer.setVisibility(View.VISIBLE);
+        hayDatos = true;
     }
 
     public void setStartedAtTask(final Task task) {

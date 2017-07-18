@@ -5,6 +5,7 @@
     tools:context="com.fime.fsw.huella.huella.Fragments.DatosVisitaFragment">
 
     <LinearLayout
+        android:id="@+id/views_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -113,6 +114,18 @@
                 android:layout_gravity="center_horizontal"
                 android:background="@drawable/img_codigo_barras" />
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/empty_state"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+        <TextView
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="No hay datos por mostrar."/>
     </LinearLayout>
 
 </FrameLayout>
