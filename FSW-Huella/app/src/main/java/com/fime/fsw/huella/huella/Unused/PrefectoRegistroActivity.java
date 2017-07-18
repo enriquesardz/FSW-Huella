@@ -1,4 +1,4 @@
-package com.fime.fsw.huella.huella.Activities.InicioSesion;
+package com.fime.fsw.huella.huella.Unused;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.fime.fsw.huella.huella.Activities.InicioSesion.MenuInicioSesionActivity;
 import com.fime.fsw.huella.huella.R;
 
 public class PrefectoRegistroActivity extends AppCompatActivity {

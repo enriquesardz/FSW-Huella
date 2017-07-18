@@ -1,5 +1,6 @@
 package com.fime.fsw.huella.huella.Activities.RecorridoMain;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -14,7 +15,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
+import com.fime.fsw.huella.huella.API.APICodo;
+import com.fime.fsw.huella.huella.API.ServiciosAPI.DescargaRecorridoService;
+import com.fime.fsw.huella.huella.Activities.DescargaRutaActivity;
 import com.fime.fsw.huella.huella.Activities.HuellaApplication;
 import com.fime.fsw.huella.huella.Activities.InicioSesion.MenuInicioSesionActivity;
 import com.fime.fsw.huella.huella.Data.Modelos.Checkout;
@@ -44,6 +49,9 @@ import java.util.concurrent.LinkedBlockingDeque;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class RecorridoMainActivity extends AppCompatActivity implements RecorridoActualFragment.OnFragmentInteractionListener, DatosVisitaFragment.OnFragmentInteractionListener {
@@ -60,11 +68,6 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
 
     private Button btnSubir;
 
-//    //RabbitMQ
-//    private BlockingDeque<String> queue = new LinkedBlockingDeque<String>();
-//    private ConnectionFactory mFactory = new ConnectionFactory();
-//    Thread publishThread;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,8 +78,6 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
         mRealm = Realm.getDefaultInstance();
 
         String test = getCheckoutsFromRealmToJson();
-//        setupConnectionFactory();
-//        publishToAMQP();
 
         initComponents();
     }
@@ -141,6 +142,16 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
     public void initComponents() {
         mBundle = new Bundle();
 
+        setUpBarraNavegacion();
+        eliminarTasksDeRealm();
+
+        //TODO: Si falla a la primera, debe de haber un listener para que vuelva
+        //intentar descargar
+        descargarDeWebService();
+
+    }
+
+    public void setUpBarraNavegacion(){
         mBarraNav = (BottomBar) findViewById(R.id.barra_navegacion);
 //        btnSubir = (Button) findViewById(R.id.subida_test);
 
@@ -163,86 +174,98 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
             }
         });
 
-//        btnSubir.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                publishMessage();
-//            }
-//        });
-
         mBarraNav.selectTabWithId(R.id.tab_recorrido_actual);
     }
 
-//    //Agrega mensajes al queue local
-//    void publishMessage() {
-//        try {
-//            String jsonCheckouts = getCheckoutsFromRealmToJson();
-//            Log.d(TAG, jsonCheckouts);
-//            queue.putLast(jsonCheckouts);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//    }
-
-//    private void setupConnectionFactory() {
-//        String URI = "amqp://tjttatfr:q2yhgpI_sIXXlQFiZUSAizmjH9I2vASr@wasp.rmq.cloudamqp.com/tjttatfr";
-//        try {
-//            mFactory.setAutomaticRecoveryEnabled(false);
-//            mFactory.setUri(URI);
-//        } catch (KeyManagementException | NoSuchAlgorithmException | URISyntaxException e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    public void publishToAMQP() {
-//        publishThread = new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                while (true) {
-//                    try {
-//                        Connection cn = mFactory.newConnection();
-//                        Channel ch = cn.createChannel();
-//                        ch.confirmSelect();
-//
-//                        while (true) {
-//                            String message = queue.takeFirst();
-//                            try {
-//                                ch.basicPublish("", "checkouts", null, message.getBytes());
-//                                Log.i(TAG, "Se mando el mensaje: " + message);
-//                                ch.waitForConfirmsOrDie();
-//                            } catch (Exception e) {
-//                                queue.putFirst(message);
-//                                Log.e(TAG, "No se pudo mandar el mensaje: " + message);
-//                                throw e;
-//                            }
-//                        }
-//                    } catch (InterruptedException e) {
-//                        break;
-//                    } catch (Exception e1) {
-//                        Log.d(TAG, "Se rompio la conexion porque la UNI bloquea todo lo que se mueva y les vale queso");
-//                        try {
-//                            Thread.sleep(5000);
-//                        } catch (InterruptedException e) {
-//                            break;
-//                        }
-//                    }
-//                }
-//            }
-//        });
-//        publishThread.start();
-//    }
-//
     public String getCheckoutsFromRealmToJson() {
         RealmResults<Task> tasks = mRealm.where(Task.class).findAll();
         List<UploadCheckout> uploadCheckouts = new ArrayList<UploadCheckout>();
         for (Task task : tasks){
             uploadCheckouts.add(new UploadCheckout(String.valueOf(task.get_id()),mRealm.copyFromRealm(task.getCheckout())));
         }
-//
-//        Task task = mRealm.where(Task.class).findFirst();
-//        Task task2 = mRealm.copyFromRealm(task);
         Gson gson = new Gson();
         String json = gson.toJson(uploadCheckouts);
         return json;
+    }
+
+    private void descargarDeWebService() {
+
+        //El usuario esta logeado; aqui se descarga y ahora la aplicacion continuara a
+        //abrir el RecorridoMainActivity si la descarga es exitosa.
+
+        //Si la descarga regresa error, se queda en la pagina de descarga.
+
+        DescargaRecorridoService servicio = APICodo.getApi().create(DescargaRecorridoService.class);
+        Call<List<Task>> call = servicio.descargaRecorrido();
+
+        final ProgressDialog progressDialog = new ProgressDialog(mContext);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.show();
+
+        call.enqueue(new Callback<List<Task>>() {
+            @Override
+            public void onResponse(Call<List<Task>> call, Response<List<Task>> response) {
+
+                //Se ejecuta si el webservice regresa algo, la respuesta
+                //es una lista de Tasks, entonces la respuesta se guarda en una Lista de tipo Tasks
+
+                final List<Task> tasks = response.body();
+
+                //Se guardan los datos a nuestro Realm
+                guardarRespuestaARealm(tasks);
+                //Despues de guardar al Realm, se setea el primer item de la lista y el final.
+                setInitialAndFinalTask();
+
+                //Se inicia sesion de descarga
+                mSesionApp.crearSesionDescarga();
+
+                progressDialog.cancel();
+
+                //TODO: Pasar un booleano para saber si se va a cargar el empty state
+                startActivity(new Intent(mContext, RecorridoMainActivity.class));
+                finish();
+            }
+
+            @Override
+            public void onFailure(Call<List<Task>> call, Throwable t) {
+                //Si el web service no regresa nada entonces cae aqui
+                progressDialog.cancel();
+                Toast.makeText(mContext, getResources().getString(R.string.druta_error_descarga), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void guardarRespuestaARealm(final List<Task> tasks){
+
+        //Se recorre la lista y se guarda cada objeto Task a Realm
+        mRealm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                for(Task task : tasks){
+                    Task realmTask = realm.copyToRealmOrUpdate(task);
+                    Log.i(TAG, realmTask.toString());
+                }
+            }
+        });
+    }
+
+    public void eliminarTasksDeRealm(){
+        final RealmResults<Task> tasks = mRealm.where(Task.class).findAll();
+        mRealm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                for (Task task : tasks){
+                    task.getOwner().deleteFromRealm();
+                    task.getCheckout().deleteFromRealm();
+                }
+                tasks.deleteAllFromRealm();
+            }
+        });
+    }
+
+    public void setInitialAndFinalTask(){
+        mSesionApp.setCurrentItemLista(mRealm.where(Task.class).findFirst().get_id());
+        mSesionApp.setLastItemLista(mRealm.where(Task.class).max(Task._ID_KEY).longValue());
     }
 }
