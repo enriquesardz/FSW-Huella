@@ -1,14 +1,11 @@
 package com.fime.fsw.huella.huella.Utilidad;
 
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
 
 import com.fime.fsw.huella.huella.API.APICodo;
 import com.fime.fsw.huella.huella.API.ServiciosAPI.DescargaRecorridoService;
 import com.fime.fsw.huella.huella.Activities.HuellaApplication;
-import com.fime.fsw.huella.huella.Activities.RecorridoMain.RecorridoMainActivity;
 import com.fime.fsw.huella.huella.Data.Modelos.Task;
 
 import java.util.List;
@@ -30,13 +27,15 @@ public class APIDescarga {
     private Realm mRealm;
     private SesionAplicacion mSesionApp;
 
+    private boolean seDescargo;
+
     public APIDescarga(Context mContext, Realm mRealm, SesionAplicacion mSesionApp) {
         this.mContext = mContext;
         this.mRealm = mRealm;
         this.mSesionApp = mSesionApp;
     }
 
-    public void startDescarga(){
+    public boolean startDescarga() {
         DescargaRecorridoService service = APICodo.getApi().create(DescargaRecorridoService.class);
         Call<List<Task>> call = service.descargaRecorrido();
 
@@ -53,29 +52,28 @@ public class APIDescarga {
                 //Despues de guardar al Realm, se setea el primer item de la lista y el final.
                 setInitialAndFinalTask();
 
-                //Se inicia sesion de descarga
-                mSesionApp.crearSesionDescarga();
+//                //Se inicia sesion de descarga
+//                mSesionApp.crearSesionDescarga();
 
-
+                seDescargo = true;
             }
 
             @Override
             public void onFailure(Call<List<Task>> call, Throwable t) {
                 //No se descargo nada
+                seDescargo = false;
             }
         });
-
-
-
+        return seDescargo;
     }
 
-    public void guardarRespuestaARealm(final List<Task> tasks){
+    public void guardarRespuestaARealm(final List<Task> tasks) {
 
         //Se recorre la lista y se guarda cada objeto Task a Realm
         mRealm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                for(Task task : tasks){
+                for (Task task : tasks) {
                     Task realmTask = realm.copyToRealmOrUpdate(task);
                     Log.i(TAG, realmTask.toString());
                 }
@@ -83,7 +81,7 @@ public class APIDescarga {
         });
     }
 
-    public void setInitialAndFinalTask(){
+    public void setInitialAndFinalTask() {
         mSesionApp.setCurrentItemLista(mRealm.where(Task.class).findFirst().get_id());
         mSesionApp.setLastItemLista(mRealm.where(Task.class).max(Task._ID_KEY).longValue());
     }
