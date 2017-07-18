@@ -28,9 +28,9 @@
         </activity>
         <activity android:name=".Activities.InicioSesion.MenuInicioSesionActivity" />
         <activity android:name=".Activities.InicioSesion.PrefectoLoginActivity" />
-        <activity android:name=".Activities.InicioSesion.PrefectoRegistroActivity" />
+        <activity android:name=".Unused.PrefectoRegistroActivity" />
         <activity android:name=".Activities.DescargaRutaActivity" />
-        <activity android:name=".Activities.Fingerprint.Unused.NewHuellaActivity" />
+        <activity android:name=".Unused.NewHuellaActivity" />
         <activity android:name=".Activities.Barcode.BarcodeReaderActivity" />
         <activity android:name=".Activities.Fingerprint.IdentificarHuellaActivity" />
     </application>

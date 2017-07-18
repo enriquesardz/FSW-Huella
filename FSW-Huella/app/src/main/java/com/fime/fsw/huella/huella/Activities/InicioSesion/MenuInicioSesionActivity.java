@@ -7,14 +7,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import com.fime.fsw.huella.huella.Activities.Fingerprint.Unused.NewHuellaActivity;
+import com.fime.fsw.huella.huella.Unused.NewHuellaActivity;
 import com.fime.fsw.huella.huella.R;
+import com.fime.fsw.huella.huella.Unused.PrefectoRegistroActivity;
 
 public class MenuInicioSesionActivity extends AppCompatActivity {
 
     private Button btnIniciarSesion;
-    private Button btnRegistro;
-    private Button btnIniciarConHuella;
 
     private Context mContext;
 
@@ -36,29 +35,11 @@ public class MenuInicioSesionActivity extends AppCompatActivity {
         }
 
         btnIniciarSesion = (Button) findViewById(R.id.iniciar_sesion_button);
-        btnRegistro = (Button) findViewById(R.id.registrarse_button);
-        btnIniciarConHuella = (Button) findViewById(R.id.iniciar_huella_button);
 
         btnIniciarSesion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(mContext, PrefectoLoginActivity.class));
-                finish();
-            }
-        });
-
-        btnRegistro.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(mContext, PrefectoRegistroActivity.class));
-                finish();
-            }
-        });
-
-        btnIniciarConHuella.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(mContext, NewHuellaActivity.class));
                 finish();
             }
         });
