@@ -14,6 +14,7 @@ import com.fime.fsw.huella.huella.Data.Modelos.Task;
 import com.fime.fsw.huella.huella.R;
 import com.fime.fsw.huella.huella.UI.RecyclerView.RecorridoAdapter;
 import com.fime.fsw.huella.huella.UI.RecyclerView.RecyclerViewItemClickListener;
+import com.fime.fsw.huella.huella.Utilidad.APIDescarga;
 import com.fime.fsw.huella.huella.Utilidad.SesionAplicacion;
 
 import io.realm.OrderedRealmCollection;
@@ -33,7 +34,7 @@ public class RecorridoActualFragment extends Fragment {
 
     private Context mContext;
     private Realm mRealm;
-    private SesionAplicacion mSesion;
+    private SesionAplicacion mSesionApp;
 
     public RecorridoActualFragment() {
         // Required empty public constructor
@@ -46,7 +47,7 @@ public class RecorridoActualFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_recorrido_actual, container, false);
         mContext = getContext();
         mRealm = Realm.getDefaultInstance();
-        mSesion = new SesionAplicacion(mContext);
+        mSesionApp = new SesionAplicacion(mContext);
 
         initComponentes(view);
 
@@ -85,6 +86,14 @@ public class RecorridoActualFragment extends Fragment {
 
     private void initComponentes(View view) {
 
+        APIDescarga descarga = new APIDescarga(mContext,mRealm);
+        if(descarga.startDescarga()){
+            //Se descargo
+        }
+        else{
+            //No se descargo
+        }
+
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
@@ -94,7 +103,7 @@ public class RecorridoActualFragment extends Fragment {
         rvRecorrido.setHasFixedSize(true);
         rvRecorrido.setLayoutManager(linearLayoutManager);
 
-        long currentItem = mSesion.getCurrentItemLista();
+        long currentItem = mSesionApp.getCurrentItemLista();
 
         //Se obtiene la info de nuestro Realm
         final OrderedRealmCollection<Task> recorridoData = getAllRealmTasks();
@@ -121,5 +130,10 @@ public class RecorridoActualFragment extends Fragment {
         if (mListener != null) {
             mListener.onRecorridoActualItemSelected(task);
         }
+    }
+
+    public void setInitialAndFinalTask(){
+        mSesionApp.setCurrentItemLista(mRealm.where(Task.class).findFirst().get_id());
+        mSesionApp.setLastItemLista(mRealm.where(Task.class).max(Task._ID_KEY).longValue());
     }
 }

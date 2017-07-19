@@ -20,7 +20,6 @@ import com.fime.fsw.huella.huella.Data.Modelos.UploadCheckout;
 import com.fime.fsw.huella.huella.Fragments.DatosVisitaFragment;
 import com.fime.fsw.huella.huella.Fragments.RecorridoActualFragment;
 import com.fime.fsw.huella.huella.R;
-import com.fime.fsw.huella.huella.Utilidad.APIDescarga;
 import com.fime.fsw.huella.huella.Utilidad.SesionAplicacion;
 import com.google.gson.Gson;
 import com.roughike.bottombar.BottomBar;
@@ -123,11 +122,6 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
 
         setUpBarraNavegacion();
         eliminarTasksDeRealm();
-
-        //TODO: Si falla a la primera, debe de haber un listener para que vuelva
-        //intentar descargar
-        descargarDeWebService();
-
     }
 
     public void setUpBarraNavegacion(){
@@ -167,15 +161,7 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
         return json;
     }
 
-    private void descargarDeWebService() {
-        APIDescarga descarga = new APIDescarga(mContext, mRealm);
 
-        if(descarga.startDescarga()){
-            //Se descargo
-        }else{
-            //No se descargo
-        }
-    }
 
 
     public void eliminarTasksDeRealm(){
@@ -192,8 +178,4 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
         });
     }
 
-    public void setInitialAndFinalTask(){
-        mSesionApp.setCurrentItemLista(mRealm.where(Task.class).findFirst().get_id());
-        mSesionApp.setLastItemLista(mRealm.where(Task.class).max(Task._ID_KEY).longValue());
-    }
 }
