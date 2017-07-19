@@ -136,8 +136,6 @@ public class DescargaRutaActivity extends AppCompatActivity {
                 //Despues de guardar al Realm, se setea el primer item de la lista y el final.
                 setInitialAndFinalTask();
 
-                //Se inicia sesion de descarga
-                mSesionApp.crearSesionDescarga();
 
                 progressDialog.cancel();
 

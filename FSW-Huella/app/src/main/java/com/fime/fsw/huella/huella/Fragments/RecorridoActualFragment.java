@@ -9,7 +9,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.fime.fsw.huella.huella.API.APICodo;
+import com.fime.fsw.huella.huella.API.ServiciosAPI.DescargaRecorridoService;
 import com.fime.fsw.huella.huella.Data.Modelos.Task;
 import com.fime.fsw.huella.huella.R;
 import com.fime.fsw.huella.huella.UI.RecyclerView.RecorridoAdapter;
@@ -17,8 +20,13 @@ import com.fime.fsw.huella.huella.UI.RecyclerView.RecyclerViewItemClickListener;
 import com.fime.fsw.huella.huella.Utilidad.APIDescarga;
 import com.fime.fsw.huella.huella.Utilidad.SesionAplicacion;
 
+import java.util.List;
+
 import io.realm.OrderedRealmCollection;
 import io.realm.Realm;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static com.fime.fsw.huella.huella.Activities.HuellaApplication.APP_TAG;
 
@@ -86,13 +94,7 @@ public class RecorridoActualFragment extends Fragment {
 
     private void initComponentes(View view) {
 
-        APIDescarga descarga = new APIDescarga(mContext,mRealm);
-        if(descarga.startDescarga()){
-            //Se descargo
-        }
-        else{
-            //No se descargo
-        }
+        startDescarga();
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -103,20 +105,51 @@ public class RecorridoActualFragment extends Fragment {
         rvRecorrido.setHasFixedSize(true);
         rvRecorrido.setLayoutManager(linearLayoutManager);
 
-        long currentItem = mSesionApp.getCurrentItemLista();
 
-        //Se obtiene la info de nuestro Realm
-        final OrderedRealmCollection<Task> recorridoData = getAllRealmTasks();
+    }
 
-        //Creamos un adaptador nuevo, con un onItemClickListener
-        rvRecorridoAdapter = new RecorridoAdapter(mContext, recorridoData, currentItem, new RecyclerViewItemClickListener() {
+    private void startDescarga() {
+        DescargaRecorridoService service = APICodo.getApi().create(DescargaRecorridoService.class);
+        Call<List<Task>> call = service.descargaRecorrido();
+
+        call.enqueue(new Callback<List<Task>>() {
             @Override
-            public void onItemClick(View v, int position) {
-                Task item = rvRecorridoAdapter.getItem(position);
-                sendToDetailFragment(item);
+            public void onResponse(Call<List<Task>> call, Response<List<Task>> response) {
+                //Se ejecuta si el webservice regresa algo, la respuesta
+                //es una lista de Tasks, entonces la respuesta se guarda en una Lista de tipo Tasks
+
+                final List<Task> tasks = response.body();
+
+                if (tasks == null) {
+                    Log.e(TAG, "No hay respuesta de la API + " + response.body());
+                    return;
+                }
+                //Se guardan los datos a nuestro Realm
+                guardarRespuestaARealm(tasks);
+                setInitialAndFinalTask();
+
+                long currentItem = mSesionApp.getCurrentItemLista();
+                //Se obtiene la info de nuestro Realm
+                final OrderedRealmCollection<Task> recorridoData = getAllRealmTasks();
+
+                //Creamos un adaptador nuevo, con un onItemClickListener
+                rvRecorridoAdapter = new RecorridoAdapter(mContext, recorridoData, currentItem, new RecyclerViewItemClickListener() {
+                    @Override
+                    public void onItemClick(View v, int position) {
+                        Task item = rvRecorridoAdapter.getItem(position);
+                        sendToDetailFragment(item);
+                    }
+                });
+
+                rvRecorrido.setAdapter(rvRecorridoAdapter);
+            }
+
+            @Override
+            public void onFailure(Call<List<Task>> call, Throwable t) {
+                //No se descargo nada
+                Toast.makeText(mContext, "No se descargo.", Toast.LENGTH_SHORT).show();
             }
         });
-        rvRecorrido.setAdapter(rvRecorridoAdapter);
     }
 
     public OrderedRealmCollection<Task> getAllRealmTasks() {
@@ -132,8 +165,27 @@ public class RecorridoActualFragment extends Fragment {
         }
     }
 
-    public void setInitialAndFinalTask(){
+    public void setInitialAndFinalTask() {
         mSesionApp.setCurrentItemLista(mRealm.where(Task.class).findFirst().get_id());
         mSesionApp.setLastItemLista(mRealm.where(Task.class).max(Task._ID_KEY).longValue());
+    }
+
+    public void guardarRespuestaARealm(final List<Task> tasks) {
+
+        //Se recorre la lista y se guarda cada objeto Task a Realm
+        if (tasks == null) {
+            Log.e(TAG, "No hay tasks");
+            return;
+        }
+
+        mRealm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                for (Task task : tasks) {
+                    Task realmTask = realm.copyToRealmOrUpdate(task);
+                    Log.i(TAG, realmTask.toString());
+                }
+            }
+        });
     }
 }
