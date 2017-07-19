@@ -19,7 +19,6 @@ public class SesionAplicacion {
 
     public static final String PREF_NOMBRE = "com.fime.fsw.huella.AndroidFSWHuella";
     public static final String KEY_LOGIN = "login";
-    public static final String KEY_DESCARGA = "descarga";
     public static final String KEY_USUARIO = "usuario";
     public static final String KEY_CURRENT_ITEM_LISTA = "currentItem";
     public static final String KEY_LAST_ITEM_LISTA = "lastItem";
@@ -36,14 +35,6 @@ public class SesionAplicacion {
         editor.putString(KEY_USUARIO, usuario);
         editor.commit();
     }
-    //Sesion de descarga es decir, se llama despues que el usuario descarga los datos,
-    //por lo tanto, ya no pregunta si desea descargar la proxima vez que inicie
-    //la aplicacion.
-    public void crearSesionDescarga(){
-        editor.putBoolean(KEY_DESCARGA, true);
-        editor.commit();
-    }
-
     public void setCurrentItemLista(long itemLista){
         editor.putLong(KEY_CURRENT_ITEM_LISTA, itemLista);
         editor.commit();
@@ -76,9 +67,5 @@ public class SesionAplicacion {
 
     public boolean usuarioLogeado(){
         return preferences.getBoolean(KEY_LOGIN, false);
-    }
-
-    public boolean usuarioYaDescargo(){
-        return preferences.getBoolean(KEY_DESCARGA, false);
     }
 }

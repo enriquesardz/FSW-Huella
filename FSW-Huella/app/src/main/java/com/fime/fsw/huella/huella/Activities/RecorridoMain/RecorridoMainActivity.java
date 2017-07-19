@@ -1,6 +1,5 @@
 package com.fime.fsw.huella.huella.Activities.RecorridoMain;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,48 +9,28 @@ import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
-import com.fime.fsw.huella.huella.API.APICodo;
-import com.fime.fsw.huella.huella.API.ServiciosAPI.DescargaRecorridoService;
-import com.fime.fsw.huella.huella.Activities.DescargaRutaActivity;
 import com.fime.fsw.huella.huella.Activities.HuellaApplication;
 import com.fime.fsw.huella.huella.Activities.InicioSesion.MenuInicioSesionActivity;
-import com.fime.fsw.huella.huella.Data.Modelos.Checkout;
-import com.fime.fsw.huella.huella.Data.Modelos.Owner;
 import com.fime.fsw.huella.huella.Data.Modelos.Task;
 import com.fime.fsw.huella.huella.Data.Modelos.UploadCheckout;
 import com.fime.fsw.huella.huella.Fragments.DatosVisitaFragment;
 import com.fime.fsw.huella.huella.Fragments.RecorridoActualFragment;
 import com.fime.fsw.huella.huella.R;
+import com.fime.fsw.huella.huella.Utilidad.APIDescarga;
 import com.fime.fsw.huella.huella.Utilidad.SesionAplicacion;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.rabbitmq.client.Channel;
-import com.rabbitmq.client.Connection;
-import com.rabbitmq.client.ConnectionFactory;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
 
-import java.lang.reflect.Type;
-import java.net.URISyntaxException;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.BlockingDeque;
-import java.util.concurrent.LinkedBlockingDeque;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 
 public class RecorridoMainActivity extends AppCompatActivity implements RecorridoActualFragment.OnFragmentInteractionListener, DatosVisitaFragment.OnFragmentInteractionListener {
@@ -189,66 +168,15 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
     }
 
     private void descargarDeWebService() {
+        APIDescarga descarga = new APIDescarga(mContext, mRealm);
 
-        //El usuario esta logeado; aqui se descarga y ahora la aplicacion continuara a
-        //abrir el RecorridoMainActivity si la descarga es exitosa.
-
-        //Si la descarga regresa error, se queda en la pagina de descarga.
-
-        DescargaRecorridoService servicio = APICodo.getApi().create(DescargaRecorridoService.class);
-        Call<List<Task>> call = servicio.descargaRecorrido();
-
-        final ProgressDialog progressDialog = new ProgressDialog(mContext);
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.show();
-
-        call.enqueue(new Callback<List<Task>>() {
-            @Override
-            public void onResponse(Call<List<Task>> call, Response<List<Task>> response) {
-
-                //Se ejecuta si el webservice regresa algo, la respuesta
-                //es una lista de Tasks, entonces la respuesta se guarda en una Lista de tipo Tasks
-
-                final List<Task> tasks = response.body();
-
-                //Se guardan los datos a nuestro Realm
-                guardarRespuestaARealm(tasks);
-                //Despues de guardar al Realm, se setea el primer item de la lista y el final.
-                setInitialAndFinalTask();
-
-                //Se inicia sesion de descarga
-                mSesionApp.crearSesionDescarga();
-
-                progressDialog.cancel();
-
-                //TODO: Pasar un booleano para saber si se va a cargar el empty state
-                startActivity(new Intent(mContext, RecorridoMainActivity.class));
-                finish();
-            }
-
-            @Override
-            public void onFailure(Call<List<Task>> call, Throwable t) {
-                //Si el web service no regresa nada entonces cae aqui
-                progressDialog.cancel();
-                Toast.makeText(mContext, getResources().getString(R.string.druta_error_descarga), Toast.LENGTH_SHORT).show();
-            }
-        });
+        if(descarga.startDescarga()){
+            //Se descargo
+        }else{
+            //No se descargo
+        }
     }
 
-    public void guardarRespuestaARealm(final List<Task> tasks){
-
-        //Se recorre la lista y se guarda cada objeto Task a Realm
-        mRealm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                for(Task task : tasks){
-                    Task realmTask = realm.copyToRealmOrUpdate(task);
-                    Log.i(TAG, realmTask.toString());
-                }
-            }
-        });
-    }
 
     public void eliminarTasksDeRealm(){
         final RealmResults<Task> tasks = mRealm.where(Task.class).findAll();

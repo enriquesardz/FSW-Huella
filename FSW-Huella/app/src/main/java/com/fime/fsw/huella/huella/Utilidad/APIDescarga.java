@@ -25,14 +25,12 @@ public class APIDescarga {
 
     private Context mContext;
     private Realm mRealm;
-    private SesionAplicacion mSesionApp;
 
     private boolean seDescargo;
 
-    public APIDescarga(Context mContext, Realm mRealm, SesionAplicacion mSesionApp) {
+    public APIDescarga(Context mContext, Realm mRealm) {
         this.mContext = mContext;
         this.mRealm = mRealm;
-        this.mSesionApp = mSesionApp;
     }
 
     public boolean startDescarga() {
@@ -49,11 +47,6 @@ public class APIDescarga {
 
                 //Se guardan los datos a nuestro Realm
                 guardarRespuestaARealm(tasks);
-                //Despues de guardar al Realm, se setea el primer item de la lista y el final.
-                setInitialAndFinalTask();
-
-//                //Se inicia sesion de descarga
-//                mSesionApp.crearSesionDescarga();
 
                 seDescargo = true;
             }
@@ -81,8 +74,4 @@ public class APIDescarga {
         });
     }
 
-    public void setInitialAndFinalTask() {
-        mSesionApp.setCurrentItemLista(mRealm.where(Task.class).findFirst().get_id());
-        mSesionApp.setLastItemLista(mRealm.where(Task.class).max(Task._ID_KEY).longValue());
-    }
 }
