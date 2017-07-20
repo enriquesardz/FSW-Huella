@@ -8,72 +8,66 @@ import io.realm.RealmObject;
 
 public class Owner extends RealmObject{
 
-    private String employeeNumber;
-    private String employeeType;
-    private String employeeName;
-    private String employeeFullName;
+    private String rawName;
+    private String userType;
+    private String name;
+    private String title;
+    private String lastName;
     private String fingerPrint;
+    private String employeeNumber;
 
     public Owner(){}
 
-    public static Owner create(String employeeNumber, String employeeType, String employeeName, String employeeFullName, String fingerPrint) {
+    public static Owner create(String rawName, String userType, String name, String title, String lastName, String fingerPrint, String employeeNumber) {
         Owner owner = new Owner();
-        owner.employeeNumber = employeeNumber;
-        owner.employeeType = employeeType;
-        owner.employeeName = employeeName;
-        owner.employeeFullName = employeeFullName;
+        owner.rawName = rawName;
+        owner.userType = userType;
+        owner.name = name;
+        owner.title = title;
+        owner.lastName = lastName;
         owner.fingerPrint = fingerPrint;
+        owner.employeeNumber = employeeNumber;
         return owner;
     }
 
-    public String getEmployeeNumber() {
-        return employeeNumber;
+    public String getRawName() {
+        return rawName;
     }
 
-    public void setEmployeeNumber(String employeeNumber) {
-        this.employeeNumber = employeeNumber;
+    public String getUserType() {
+        return userType;
     }
 
-    public String getEmployeeType() {
-        return employeeType;
+    public String getName() {
+        return name;
     }
 
-    public void setEmployeeType(String employeeType) {
-        this.employeeType = employeeType;
+    public String getTitle() {
+        return title;
     }
 
-    public String getEmployeeName() {
-        return employeeName;
-    }
-
-    public void setEmployeeName(String employeeName) {
-        this.employeeName = employeeName;
-    }
-
-    public String getEmployeeFullName() {
-        return employeeFullName;
-    }
-
-    public void setEmployeeFullName(String employeeFullName) {
-        this.employeeFullName = employeeFullName;
+    public String getLastName() {
+        return lastName;
     }
 
     public String getFingerPrint() {
         return fingerPrint;
     }
 
-    public void setFingerPrint(String fingerPrint) {
-        this.fingerPrint = fingerPrint;
+    public String getEmployeeNumber() {
+        return employeeNumber;
     }
 
     @Override
     public String toString() {
         return "Owner{" +
-                "employeeNumber='" + employeeNumber + '\'' +
-                ", employeeType='" + employeeType + '\'' +
-                ", employeeName='" + employeeName + '\'' +
-                ", employeeFullName='" + employeeFullName + '\'' +
+                "rawName='" + rawName + '\'' +
+                ", userType='" + userType + '\'' +
+                ", name='" + name + '\'' +
+                ", title='" + title + '\'' +
+                ", lastName='" + lastName + '\'' +
                 ", fingerPrint='" + fingerPrint + '\'' +
+                ", employeeNumber='" + employeeNumber + '\'' +
                 '}';
     }
 }

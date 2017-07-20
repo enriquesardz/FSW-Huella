@@ -56,6 +56,7 @@ public class TaskDeserializer implements JsonDeserializer<List<Task>> {
 
             tasks.add(task);
         }
+
         return tasks;
     }
 }

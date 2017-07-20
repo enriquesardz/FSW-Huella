@@ -1,8 +1,5 @@
 package com.fime.fsw.huella.huella.Data.Modelos;
 
-import com.fime.fsw.huella.huella.Activities.HuellaApplication;
-import com.google.gson.annotations.SerializedName;
-
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
@@ -21,142 +18,74 @@ public class Task extends RealmObject {
     public static final int STATE_PASO_NO_VINO_MAESTRO = 2;
 
     @PrimaryKey
-    private long _id;
-    private String plan;
-    private String id;
-    private String room;
-    private String roomDescription;
-    private String assignmentCode;
-    private String assignment;
-    private String academyHour;
-    private String startClassAt;
-    private String finishClassAt;
-    private String barcode;
+    private String _id;
+    private int sequence;
+    private String period;
+    private String language;
+    private String group;
+    private Room room;
+    private Assignment assignment;
     private Owner owner;
+    private String modality;
     private Checkout checkout;
     private int taskState;
 
-    public Task(){
+    public Task(){}
 
-    }
-
-    public static Task create(String plan, String id, String room, String roomDescription, String assignmentCode, String assignment, String academyHour, String startClassAt, String finishClassAt, String barcode, Owner owner, Checkout checkout) {
+    public static Task create(String _id, int sequence, String period, String language, String group, Room room, Assignment assignment, Owner owner, String modality, Checkout checkout, int taskState) {
         Task task = new Task();
-        task._id = HuellaApplication.TaskID.incrementAndGet();
-        task.plan = plan;
-        task.id = id;
+        task._id = _id;
+        task.sequence = sequence;
+        task.period = period;
+        task.language = language;
+        task.group = group;
         task.room = room;
-        task.roomDescription = roomDescription;
-        task.assignmentCode = assignmentCode;
         task.assignment = assignment;
-        task.academyHour = academyHour;
-        task.startClassAt = startClassAt;
-        task.finishClassAt = finishClassAt;
-        task.barcode = barcode;
         task.owner = owner;
+        task.modality = modality;
         task.checkout = checkout;
-        task.taskState = 0;
+        task.taskState = taskState;
         return task;
     }
 
-    public long get_id() {
+    public String get_id() {
         return _id;
     }
 
-    public String getPlan() {
-        return plan;
+    public int getSequence() {
+        return sequence;
     }
 
-    public void setPlan(String plan) {
-        this.plan = plan;
+    public String getPeriod() {
+        return period;
     }
 
-    public String getId() {
-        return id;
+    public String getLanguage() {
+        return language;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public String getGroup() {
+        return group;
     }
 
-    public String getRoom() {
+    public Room getRoom() {
         return room;
     }
 
-    public void setRoom(String room) {
-        this.room = room;
-    }
-
-    public String getRoomDescription() {
-        return roomDescription;
-    }
-
-    public void setRoomDescription(String roomDescription) {
-        this.roomDescription = roomDescription;
-    }
-
-    public String getAssignmentCode() {
-        return assignmentCode;
-    }
-
-    public void setAssignmentCode(String assignmentCode) {
-        this.assignmentCode = assignmentCode;
-    }
-
-    public String getAssignment() {
+    public Assignment getAssignment() {
         return assignment;
-    }
-
-    public void setAssignment(String assignment) {
-        this.assignment = assignment;
-    }
-
-    public String getAcademyHour() {
-        return academyHour;
-    }
-
-    public void setAcademyHour(String academyHour) {
-        this.academyHour = academyHour;
-    }
-
-    public String getStartClassAt() {
-        return startClassAt;
-    }
-
-    public void setStartClassAt(String startClassAt) {
-        this.startClassAt = startClassAt;
-    }
-
-    public String getFinishClassAt() {
-        return finishClassAt;
-    }
-
-    public void setFinishClassAt(String finishClassAt) {
-        this.finishClassAt = finishClassAt;
-    }
-
-    public String getBarcode() {
-        return barcode;
-    }
-
-    public void setBarcode(String barcode) {
-        this.barcode = barcode;
     }
 
     public Owner getOwner() {
         return owner;
     }
 
-    public void setOwner(Owner owner) {
-        this.owner = owner;
+    public String getModality() {
+        return modality;
     }
 
     public Checkout getCheckout() {
         return checkout;
-    }
-
-    public void setCheckout(Checkout checkout) {
-        this.checkout = checkout;
     }
 
     public int getTaskState() {
@@ -170,18 +99,15 @@ public class Task extends RealmObject {
     @Override
     public String toString() {
         return "Task{" +
-                "_id=" + _id +
-                ", plan='" + plan + '\'' +
-                ", id='" + id + '\'' +
-                ", room='" + room + '\'' +
-                ", roomDescription='" + roomDescription + '\'' +
-                ", assignmentCode='" + assignmentCode + '\'' +
-                ", assignment='" + assignment + '\'' +
-                ", academyHour='" + academyHour + '\'' +
-                ", startClassAt='" + startClassAt + '\'' +
-                ", finishClassAt='" + finishClassAt + '\'' +
-                ", barcode='" + barcode + '\'' +
+                "_id='" + _id + '\'' +
+                ", sequence=" + sequence +
+                ", period='" + period + '\'' +
+                ", language='" + language + '\'' +
+                ", group='" + group + '\'' +
+                ", room=" + room +
+                ", assignment=" + assignment +
                 ", owner=" + owner +
+                ", modality='" + modality + '\'' +
                 ", checkout=" + checkout +
                 ", taskState=" + taskState +
                 '}';
