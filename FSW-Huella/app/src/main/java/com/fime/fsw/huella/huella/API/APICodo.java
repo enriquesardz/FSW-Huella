@@ -17,11 +17,15 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class APICodo {
 
+    //Daniel
     //https://young-escarpment-48238.herokuapp.com/routes
-    public static final String BASE_URL = "https://young-escarpment-48238.herokuapp.com/";
+    //Abraham
+    //https://api.myjson.com/bins/w20k7
+    public static final String BASE_URL = "https://api.myjson.com/bins/";
     private static Retrofit retrofit = null;
 
-    public static Retrofit getApi(){
+    //Esta ruta esta firmada por la API entonces puede hacer requests.
+    public static Retrofit signedRoute(){
         if(retrofit == null){
             Type listType = new TypeToken<List<Task>>(){}.getType();
 

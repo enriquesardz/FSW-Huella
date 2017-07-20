@@ -13,7 +13,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.fime.fsw.huella.huella.API.APICodo;
-import com.fime.fsw.huella.huella.API.ServiciosAPI.DescargaRecorridoService;
+import com.fime.fsw.huella.huella.API.ServiciosAPI.DescargaRecorridosService;
 import com.fime.fsw.huella.huella.Activities.HuellaApplication;
 import com.fime.fsw.huella.huella.Activities.InicioSesion.MenuInicioSesionActivity;
 import com.fime.fsw.huella.huella.Activities.RecorridoMain.RecorridoMainActivity;
@@ -114,7 +114,7 @@ public class DescargaRutaActivity extends AppCompatActivity {
 
         //Si la descarga regresa error, se queda en la pagina de descarga.
 
-        DescargaRecorridoService servicio = APICodo.getApi().create(DescargaRecorridoService.class);
+        DescargaRecorridosService servicio = APICodo.signedRoute().create(DescargaRecorridosService.class);
         Call<List<Task>> call = servicio.descargaRecorrido();
 
         final ProgressDialog progressDialog = new ProgressDialog(mContext);

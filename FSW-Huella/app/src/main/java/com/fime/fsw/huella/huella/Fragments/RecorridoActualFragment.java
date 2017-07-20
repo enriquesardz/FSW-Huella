@@ -12,12 +12,11 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.fime.fsw.huella.huella.API.APICodo;
-import com.fime.fsw.huella.huella.API.ServiciosAPI.DescargaRecorridoService;
+import com.fime.fsw.huella.huella.API.ServiciosAPI.DescargaRecorridosService;
 import com.fime.fsw.huella.huella.Data.Modelos.Task;
 import com.fime.fsw.huella.huella.R;
 import com.fime.fsw.huella.huella.UI.RecyclerView.RecorridoAdapter;
 import com.fime.fsw.huella.huella.UI.RecyclerView.RecyclerViewItemClickListener;
-import com.fime.fsw.huella.huella.Utilidad.APIDescarga;
 import com.fime.fsw.huella.huella.Utilidad.SesionAplicacion;
 
 import java.util.List;
@@ -109,7 +108,7 @@ public class RecorridoActualFragment extends Fragment {
     }
 
     private void startDescarga() {
-        DescargaRecorridoService service = APICodo.getApi().create(DescargaRecorridoService.class);
+        DescargaRecorridosService service = APICodo.signedRoute().create(DescargaRecorridosService.class);
         Call<List<Task>> call = service.descargaRecorrido();
 
         call.enqueue(new Callback<List<Task>>() {

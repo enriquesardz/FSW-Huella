@@ -21,25 +21,33 @@ import java.util.List;
 public class TaskDeserializer implements JsonDeserializer<List<Task>> {
     @Override
     public List<Task> deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-        JsonArray m = json.getAsJsonObject().getAsJsonArray("m");
+        JsonObject route = json.getAsJsonArray().get(0).getAsJsonObject();
+
+        JsonArray jsonTasks = route.get("tasks").getAsJsonArray();
+
         List<Task> tasks = new ArrayList<Task>();
-        for(JsonElement e : m){
 
-            JsonObject taskJsonObject = e.getAsJsonObject();
+        String academyHour = route.get("academyHour").getAsString();
 
-            String plan = taskJsonObject.get("plan").getAsString();
-            String id = taskJsonObject.get("id").getAsString();
-            String room = taskJsonObject.get("room").getAsString();
-            String roomDescription = taskJsonObject.get("roomDescription").getAsString();
-            String assignmentCode = taskJsonObject.get("assigmentCode").getAsString();
-            String assignment = taskJsonObject.get("assigment").getAsString();
-            String academyHour = taskJsonObject.get("academyHour").getAsString();
-            String startClassAt = taskJsonObject.get("startClassAt").getAsString();
-            String finishClassAt = taskJsonObject.get("finishClassAt").getAsString();
-            String barcode = taskJsonObject.get("barcode").getAsString();
+        for(JsonElement e : jsonTasks){
 
-            JsonElement ownerObject = taskJsonObject.get("owner").getAsJsonObject();
-            JsonElement checkoutObject = taskJsonObject.get("checkout").getAsJsonObject();
+            JsonObject jsonTaskDataObject = e.getAsJsonObject().get("data").getAsJsonObject();
+            String id = e.getAsJsonObject().get("_id").getAsString();
+
+            JsonObject taskRoom = jsonTaskDataObject.get("room").getAsJsonObject();
+            JsonObject taskAssigment = jsonTaskDataObject.get("assigment").getAsJsonObject();
+            JsonObject taskOwner = jsonTaskDataObject.get("owner").getAsJsonObject();
+
+            String plan = taskAssigment.get("plan").getAsString();
+            String room = taskRoom.get("room").getAsString();
+            String roomDescription = taskAssigment.get("name").getAsString();
+            String assignmentCode = taskAssigment.get("code").getAsString();
+            String assignment = taskAssigment.get("rawName").getAsString();
+            String startClassAt = "test1";
+            String finishClassAt = "test2";
+            String barcode = taskRoom.get("barcode").getAsString();
+
+            JsonElement ownerObject = taskOwner;
 
             Owner owner = new OwnerDeserializer().deserialize(ownerObject, typeOfT, context);
             Checkout checkout = new Checkout();

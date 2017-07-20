@@ -12,7 +12,7 @@ import retrofit2.http.GET;
  * Created by Quique on 28/06/2017.
  */
 
-public interface DescargaRecorridoService {
-    @GET("routes/")
+public interface DescargaRecorridosService {
+    @GET("w20k7/")
     Call<List<Task>> descargaRecorrido();
 }

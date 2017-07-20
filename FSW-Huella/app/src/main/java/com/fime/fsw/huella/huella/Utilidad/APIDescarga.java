@@ -4,7 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.fime.fsw.huella.huella.API.APICodo;
-import com.fime.fsw.huella.huella.API.ServiciosAPI.DescargaRecorridoService;
+import com.fime.fsw.huella.huella.API.ServiciosAPI.DescargaRecorridosService;
 import com.fime.fsw.huella.huella.Activities.HuellaApplication;
 import com.fime.fsw.huella.huella.Data.Modelos.Task;
 
@@ -34,7 +34,7 @@ public class APIDescarga {
     }
 
     public boolean startDescarga() {
-        DescargaRecorridoService service = APICodo.getApi().create(DescargaRecorridoService.class);
+        DescargaRecorridosService service = APICodo.signedRoute().create(DescargaRecorridosService.class);
         Call<List<Task>> call = service.descargaRecorrido();
 
         call.enqueue(new Callback<List<Task>>() {
