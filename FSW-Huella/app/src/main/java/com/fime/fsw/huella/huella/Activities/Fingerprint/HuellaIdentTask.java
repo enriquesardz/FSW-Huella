@@ -33,7 +33,8 @@ public class HuellaIdentTask extends AsyncTask<Integer, Integer, String> {
     private SesionAplicacion mSesion;
 
     private String usuarioHexData;
-    private long taskId;
+    private String taskId;
+    private int taskSequence;
 
     public HuellaIdentTask(Context context, Fingerprint fingerprint, Realm realm, SesionAplicacion sesionAplicacion, Task task) {
         mContext = context;
@@ -44,6 +45,7 @@ public class HuellaIdentTask extends AsyncTask<Integer, Integer, String> {
 
         usuarioHexData = task.getOwner().getFingerPrint();
         taskId = task.get_id();
+        taskSequence = task.getSequence();
 
         progressDialog = new ProgressDialog(mContext);
 
@@ -145,17 +147,16 @@ public class HuellaIdentTask extends AsyncTask<Integer, Integer, String> {
                 mTask.setTaskState(Task.STATE_PASO_VINO_MAESTRO);
                 mTask.getCheckout().setSignedAt(String.valueOf(System.currentTimeMillis()));
                 mTask.getCheckout().setFinishedAt(String.valueOf(System.currentTimeMillis()));
-                mTask.getCheckout().setUpdatedAt(String.valueOf(System.currentTimeMillis()));
 
                 Log.i(TAG, "Signed and updated at (vino maestro): " + mTask.getCheckout().toString());
             }
         });
 
-        long currentItem = mSesion.getCurrentItemLista();
-        long lastItem = mSesion.getLastItemLista();
+        long currentTaskPosition = mSesion.getCurrentTaskPosition();
+        long lastTaskPosition = mSesion.getLastTaskPosition();
 
-        if (currentItem == taskId) {
-            mSesion.setCurrentItemLista(currentItem + 1);
+        if (currentTaskPosition == taskSequence) {
+            mSesion.setCurrentTaskPosition(currentTaskPosition + 1);
         }
 
         ((Activity) mContext).finish();

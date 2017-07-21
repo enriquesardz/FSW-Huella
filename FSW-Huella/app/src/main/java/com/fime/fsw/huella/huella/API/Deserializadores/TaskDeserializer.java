@@ -1,7 +1,9 @@
 package com.fime.fsw.huella.huella.API.Deserializadores;
 
+import com.fime.fsw.huella.huella.Data.Modelos.Assignment;
 import com.fime.fsw.huella.huella.Data.Modelos.Checkout;
 import com.fime.fsw.huella.huella.Data.Modelos.Owner;
+import com.fime.fsw.huella.huella.Data.Modelos.Room;
 import com.fime.fsw.huella.huella.Data.Modelos.Task;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
@@ -18,45 +20,28 @@ import java.util.List;
  * Created by Quique on 29/06/2017.
  */
 
-public class TaskDeserializer implements JsonDeserializer<List<Task>> {
+public class TaskDeserializer implements JsonDeserializer<Task> {
     @Override
-    public List<Task> deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-        JsonObject route = json.getAsJsonArray().get(0).getAsJsonObject();
+    public Task deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
 
-        JsonArray jsonTasks = route.get("tasks").getAsJsonArray();
+        JsonObject taskObject = json.getAsJsonObject();
+        String _id = taskObject.get("_id").getAsString();
+        int sequence = taskObject.get("sequence").getAsInt();
+        Checkout checkout = new Checkout();
 
-        List<Task> tasks = new ArrayList<Task>();
+        //Stuff inside data object
+        JsonObject data = taskObject.get("data").getAsJsonObject();
+        String period = data.get("period").getAsString();
+        String language = data.get("language").getAsString();
+        String group = data.get("group").getAsString();
 
-        String academyHour = route.get("academyHour").getAsString();
+        Room room = new RoomDeserializer().deserialize(data.get("room").getAsJsonObject(), typeOfT, context);
+        Assignment assignment = new AssignmentDeserializer().deserialize(data.get("assigment").getAsJsonObject(), typeOfT, context);
+        Owner owner = new OwnerDeserializer().deserialize(data.get("owner").getAsJsonObject(), typeOfT, context);
 
-        for(JsonElement e : jsonTasks){
+        String modality = data.get("modality").getAsString();
 
-            JsonObject jsonTaskDataObject = e.getAsJsonObject().get("data").getAsJsonObject();
-            String id = e.getAsJsonObject().get("_id").getAsString();
 
-            JsonObject taskRoom = jsonTaskDataObject.get("room").getAsJsonObject();
-            JsonObject taskAssigment = jsonTaskDataObject.get("assigment").getAsJsonObject();
-            JsonObject taskOwner = jsonTaskDataObject.get("owner").getAsJsonObject();
-
-            String plan = taskAssigment.get("plan").getAsString();
-            String room = taskRoom.get("room").getAsString();
-            String roomDescription = taskAssigment.get("name").getAsString();
-            String assignmentCode = taskAssigment.get("code").getAsString();
-            String assignment = taskAssigment.get("rawName").getAsString();
-            String startClassAt = "test1";
-            String finishClassAt = "test2";
-            String barcode = taskRoom.get("barcode").getAsString();
-
-            JsonElement ownerObject = taskOwner;
-
-            Owner owner = new OwnerDeserializer().deserialize(ownerObject, typeOfT, context);
-            Checkout checkout = new Checkout();
-
-            Task task = Task.create(plan,id,room,roomDescription,assignmentCode,assignment,academyHour,startClassAt,finishClassAt,barcode,owner,checkout);
-
-            tasks.add(task);
-        }
-
-        return tasks;
+        return Task.create(_id,sequence,period,language,group,room,assignment,owner,modality,checkout);
     }
 }

@@ -32,7 +32,7 @@ public class Task extends RealmObject {
 
     public Task(){}
 
-    public static Task create(String _id, int sequence, String period, String language, String group, Room room, Assignment assignment, Owner owner, String modality, Checkout checkout, int taskState) {
+    public static Task create(String _id, int sequence, String period, String language, String group, Room room, Assignment assignment, Owner owner, String modality, Checkout checkout) {
         Task task = new Task();
         task._id = _id;
         task.sequence = sequence;
@@ -44,7 +44,7 @@ public class Task extends RealmObject {
         task.owner = owner;
         task.modality = modality;
         task.checkout = checkout;
-        task.taskState = taskState;
+        task.taskState = 0;
         return task;
     }
 

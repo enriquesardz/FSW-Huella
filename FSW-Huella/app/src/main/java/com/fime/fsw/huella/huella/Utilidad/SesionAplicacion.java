@@ -35,21 +35,21 @@ public class SesionAplicacion {
         editor.putString(KEY_USUARIO, usuario);
         editor.commit();
     }
-    public void setCurrentItemLista(long itemLista){
+    public void setCurrentTaskPosition(long itemLista){
         editor.putLong(KEY_CURRENT_ITEM_LISTA, itemLista);
         editor.commit();
     }
 
-    public long getCurrentItemLista(){
+    public long getCurrentTaskPosition(){
         return preferences.getLong(KEY_CURRENT_ITEM_LISTA, -1);
     }
 
-    public void setLastItemLista(long maxId){
+    public void setLastTaskPosition(long maxId){
         editor.putLong(KEY_LAST_ITEM_LISTA, maxId);
         editor.commit();
     }
 
-    public long getLastItemLista(){
+    public long getLastTaskPosition(){
         return preferences.getLong(KEY_LAST_ITEM_LISTA, -1);
     }
 

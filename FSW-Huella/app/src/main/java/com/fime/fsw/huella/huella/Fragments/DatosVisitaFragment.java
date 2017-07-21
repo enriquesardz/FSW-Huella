@@ -64,7 +64,7 @@ public class DatosVisitaFragment extends Fragment {
         mRealm = Realm.getDefaultInstance();
         mSesion = new SesionAplicacion(mContext);
 
-        initComponentes(view);
+//        initComponentes(view);
 
         return view;
     }
@@ -118,12 +118,13 @@ public class DatosVisitaFragment extends Fragment {
 
         //Valor default del itemid, con intencion de que si el Bundle no regresa un id,
         //se pueda validar.
-        final long itemid = mBundle.getLong(Task._ID_KEY, -1);
+        final String itemid = mBundle.getString(Task._ID_KEY, null);
         final Task task = getTaskConId(itemid);
+        final int taskSequence = task.getSequence();
 
         //Si el bundle regreso un id, entonces actualiza la UI con datos del Task, y
         //hace visible el contenedor.
-        if (itemid != -1){
+        if (itemid != null){
             cargarDatosTask(task);
         }
 
@@ -136,7 +137,7 @@ public class DatosVisitaFragment extends Fragment {
             emptyState.setVisibility(View.VISIBLE);
         }
 
-        if (itemid >= mSesion.getCurrentItemLista()) {
+        if (taskSequence >= mSesion.getCurrentTaskPosition()) {
             btnEscanner.setVisibility(View.VISIBLE);
         } else {
             btnEscanner.setVisibility(View.INVISIBLE);
@@ -146,7 +147,7 @@ public class DatosVisitaFragment extends Fragment {
         btnEscanner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (itemid != -1 && itemid >= mSesion.getCurrentItemLista()) {
+                if (itemid != null && taskSequence >= mSesion.getCurrentTaskPosition()) {
                     //Si mBundle regreso un id, entonces se puede iniciar la actividad del Scanner con un Task id,
                     //y si no, el boton no hace nada.
                     setStartedAtTask(task);
@@ -158,13 +159,14 @@ public class DatosVisitaFragment extends Fragment {
         });
     }
 
-    public Task getTaskConId(long id) {
+    public Task getTaskConId(String id) {
         return mRealm.where(Task.class).equalTo(Task._ID_KEY, id).findFirst();
     }
 
     public void cargarDatosTask(Task task) {
-        tvMaestro.setText(getResources().getString(R.string.cbarra_maestro, task.getOwner().getEmployeeName(), task.getOwner().getEmployeeFullName()));
-        tvHoraFime.setText(getResources().getString(R.string.cbarra_hora, task.getAcademyHour()));
+        tvMaestro.setText(getResources().getString(R.string.cbarra_maestro, task.getOwner().getName(), task.getOwner().getLastName()));
+        //TODO: CAMBIAR HORA
+        tvHoraFime.setText(getResources().getString(R.string.cbarra_hora, "Cambiar hora"));
         tvSalonFime.setText(getResources().getString(R.string.cbarra_salon, task.getRoom()));
         tvMateria.setText(getResources().getString(R.string.cbarra_materia, task.getAssignment()));
         hayDatos = true;

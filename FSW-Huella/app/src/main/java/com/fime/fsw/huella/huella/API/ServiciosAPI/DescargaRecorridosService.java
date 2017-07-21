@@ -1,6 +1,7 @@
 package com.fime.fsw.huella.huella.API.ServiciosAPI;
 
 
+import com.fime.fsw.huella.huella.Data.Modelos.Route;
 import com.fime.fsw.huella.huella.Data.Modelos.Task;
 
 import java.util.List;
@@ -14,5 +15,5 @@ import retrofit2.http.GET;
 
 public interface DescargaRecorridosService {
     @GET("w20k7/")
-    Call<List<Task>> descargaRecorrido();
+    Call<Route> descargaRecorrido();
 }

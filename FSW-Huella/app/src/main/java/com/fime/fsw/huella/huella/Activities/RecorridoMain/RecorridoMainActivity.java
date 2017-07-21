@@ -101,8 +101,8 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
 
     @Override
     public void onRecorridoActualItemSelected(Task task) {
-        long id = task.get_id();
-        mBundle.putLong(Task._ID_KEY, id);
+        String id = task.get_id();
+        mBundle.putString(Task._ID_KEY, id);
         mBarraNav.selectTabWithId(R.id.tab_datos_visita);
     }
 

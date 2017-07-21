@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.fime.fsw.huella.huella.API.APICodo;
 import com.fime.fsw.huella.huella.API.ServiciosAPI.DescargaRecorridosService;
+import com.fime.fsw.huella.huella.Data.Modelos.Route;
 import com.fime.fsw.huella.huella.Data.Modelos.Task;
 import com.fime.fsw.huella.huella.R;
 import com.fime.fsw.huella.huella.UI.RecyclerView.RecorridoAdapter;
@@ -109,42 +110,42 @@ public class RecorridoActualFragment extends Fragment {
 
     private void startDescarga() {
         DescargaRecorridosService service = APICodo.signedRoute().create(DescargaRecorridosService.class);
-        Call<List<Task>> call = service.descargaRecorrido();
+        Call<Route> call = service.descargaRecorrido();
 
-        call.enqueue(new Callback<List<Task>>() {
+        call.enqueue(new Callback<Route>() {
             @Override
-            public void onResponse(Call<List<Task>> call, Response<List<Task>> response) {
+            public void onResponse(Call<Route> call, Response<Route> response) {
                 //Se ejecuta si el webservice regresa algo, la respuesta
                 //es una lista de Tasks, entonces la respuesta se guarda en una Lista de tipo Tasks
 
-                final List<Task> tasks = response.body();
+                Route route = response.body();
 
-                if (tasks == null) {
-                    Log.e(TAG, "No hay respuesta de la API + " + response.body());
-                    return;
-                }
-                //Se guardan los datos a nuestro Realm
-                guardarRespuestaARealm(tasks);
-                setInitialAndFinalTask();
-
-                long currentItem = mSesionApp.getCurrentItemLista();
-                //Se obtiene la info de nuestro Realm
-                final OrderedRealmCollection<Task> recorridoData = getAllRealmTasks();
-
-                //Creamos un adaptador nuevo, con un onItemClickListener
-                rvRecorridoAdapter = new RecorridoAdapter(mContext, recorridoData, currentItem, new RecyclerViewItemClickListener() {
-                    @Override
-                    public void onItemClick(View v, int position) {
-                        Task item = rvRecorridoAdapter.getItem(position);
-                        sendToDetailFragment(item);
-                    }
-                });
-
-                rvRecorrido.setAdapter(rvRecorridoAdapter);
+//                if (tasks == null) {
+//                    Log.e(TAG, "No hay respuesta de la API + " + response.body());
+//                    return;
+//                }
+//                //Se guardan los datos a nuestro Realm
+//                guardarRespuestaARealm(tasks);
+//                setInitialAndFinalTask();
+//
+//                long currentItem = mSesionApp.getCurrentTaskPosition();
+//                //Se obtiene la info de nuestro Realm
+//                final OrderedRealmCollection<Task> recorridoData = getAllRealmTasks();
+//
+//                //Creamos un adaptador nuevo, con un onItemClickListener
+//                rvRecorridoAdapter = new RecorridoAdapter(mContext, recorridoData, currentItem, new RecyclerViewItemClickListener() {
+//                    @Override
+//                    public void onItemClick(View v, int position) {
+//                        Task item = rvRecorridoAdapter.getItem(position);
+//                        sendToDetailFragment(item);
+//                    }
+//                });
+//
+//                rvRecorrido.setAdapter(rvRecorridoAdapter);
             }
 
             @Override
-            public void onFailure(Call<List<Task>> call, Throwable t) {
+            public void onFailure(Call<Route> call, Throwable t) {
                 //No se descargo nada
                 Toast.makeText(mContext, "No se descargo.", Toast.LENGTH_SHORT).show();
             }
@@ -165,8 +166,8 @@ public class RecorridoActualFragment extends Fragment {
     }
 
     public void setInitialAndFinalTask() {
-        mSesionApp.setCurrentItemLista(mRealm.where(Task.class).findFirst().get_id());
-        mSesionApp.setLastItemLista(mRealm.where(Task.class).max(Task._ID_KEY).longValue());
+//        mSesionApp.setCurrentTaskPosition(mRealm.where(Task.class).findFirst().get_id());
+//        mSesionApp.setLastTaskPosition(mRealm.where(Task.class).max(Task._ID_KEY).longValue());
     }
 
     public void guardarRespuestaARealm(final List<Task> tasks) {

@@ -1,6 +1,8 @@
 package com.fime.fsw.huella.huella.API;
 
+import com.fime.fsw.huella.huella.API.Deserializadores.RouteDeserializer;
 import com.fime.fsw.huella.huella.API.Deserializadores.TaskDeserializer;
+import com.fime.fsw.huella.huella.Data.Modelos.Route;
 import com.fime.fsw.huella.huella.Data.Modelos.Task;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -27,10 +29,9 @@ public class APICodo {
     //Esta ruta esta firmada por la API entonces puede hacer requests.
     public static Retrofit signedRoute(){
         if(retrofit == null){
-            Type listType = new TypeToken<List<Task>>(){}.getType();
 
             GsonBuilder builder = new GsonBuilder();
-            builder.registerTypeAdapter(listType, new TaskDeserializer());
+            builder.registerTypeAdapter(Route.class, new RouteDeserializer());
 
             retrofit = new Retrofit.Builder()
                     .baseUrl(BASE_URL)

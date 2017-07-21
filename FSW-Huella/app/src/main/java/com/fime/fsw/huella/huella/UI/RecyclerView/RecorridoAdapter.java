@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import com.fime.fsw.huella.huella.Data.Modelos.Task;
 import com.fime.fsw.huella.huella.R;
-import com.fime.fsw.huella.huella.Utilidad.SesionAplicacion;
 
 import io.realm.OrderedRealmCollection;
 import io.realm.RealmRecyclerViewAdapter;
@@ -26,15 +25,15 @@ public class RecorridoAdapter extends RealmRecyclerViewAdapter<Task, RecorridoAd
     Context mContext;
     RecyclerViewItemClickListener mListener;
 
-    long currentId;
+    long currentTask;
 
-    public RecorridoAdapter(Context context, @Nullable OrderedRealmCollection<Task> data, long currentId, RecyclerViewItemClickListener listener) {
+    public RecorridoAdapter(Context context, @Nullable OrderedRealmCollection<Task> data, long currentTask, RecyclerViewItemClickListener listener) {
         super(data, true);
         setHasStableIds(true);
 
         this.mContext = context;
         this.mListener = listener;
-        this.currentId = currentId;
+        this.currentTask = currentTask;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
@@ -74,11 +73,12 @@ public class RecorridoAdapter extends RealmRecyclerViewAdapter<Task, RecorridoAd
 
         int taskState = task.getTaskState();
 
-        holder.tvHoraFime.setText(task.getAcademyHour());
-        holder.tvSalonFime.setText(task.getRoom());
+        //TODO: Cambiar hora hardcoded
+        holder.tvHoraFime.setText("Hard");
+        holder.tvSalonFime.setText(task.getRoom().getRoomNumber());
 
         //Si el task no ha pasado, entonces se desactiva
-        if(task.get_id() > currentId) {
+        if(task.getSequence() > currentTask) {
             holder.cardViewContainer.setClickable(false);
             holder.cardViewContainer.setActivated(false);
             holder.listItemContainer.setBackgroundColor(ContextCompat.getColor(mContext, R.color.gray_disabled));

@@ -108,6 +108,8 @@ public class BarcodeReaderActivity extends AppCompatActivity {
         btnNoSalon = (Button) findViewById(R.id.no_salon_button);
 
 
+
+
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -117,9 +119,11 @@ public class BarcodeReaderActivity extends AppCompatActivity {
         long id = getIntent().getLongExtra(Task._ID_KEY, -1);
 
         final Task task = getTaskConId(id);
+        final String roomBarcode = task.getRoom().getBarcode();
+        final String task_id = task.get_id();
 
         //Posiblemente se deba mostrar mas informacion, por ahora solo el codigo de barras.
-        tvCodigo.setText(task.getBarcode());
+        tvCodigo.setText(task.getRoom().getBarcode());
 
         //Inicia el escanner para leer codigos de barra
         btnEscanear.setOnClickListener(new View.OnClickListener() {
@@ -135,7 +139,7 @@ public class BarcodeReaderActivity extends AppCompatActivity {
                     //Si el escanner no esta conectado entonces es la debug App
                     //Solamente cambia los valores
                     setVisitAtCheckout(task);
-                    startHuellaActivity(task.get_id(), task.getBarcode());
+                    startHuellaActivity(task_id, roomBarcode);
                 }
             }
         });
@@ -144,7 +148,7 @@ public class BarcodeReaderActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 setAllCheckoutsAndValoresTask(task);
-                mSesion.setCurrentItemLista(mSesion.getCurrentItemLista() + 1);
+                mSesion.setCurrentTaskPosition(mSesion.getCurrentTaskPosition() + 1);
                 finish();
             }
         });
@@ -162,7 +166,6 @@ public class BarcodeReaderActivity extends AppCompatActivity {
                 task.getCheckout().setVisitAt(String.valueOf(System.currentTimeMillis()));
                 task.getCheckout().setSignedAt(String.valueOf(System.currentTimeMillis()));
                 task.getCheckout().setFinishedAt(String.valueOf(System.currentTimeMillis()));
-                task.getCheckout().setUpdatedAt(String.valueOf(System.currentTimeMillis()));
 
                 Log.i(TAG, "No se encontro salon visitAt signedAt: " + task.getCheckout().toString());
             }
@@ -182,7 +185,7 @@ public class BarcodeReaderActivity extends AppCompatActivity {
         Log.d(TAG, task.getCheckout().toString());
     }
 
-    public void startHuellaActivity(long taskId, String barcodeSalon){
+    public void startHuellaActivity(String taskId, String barcodeSalon){
         //Inicia el reconocimiento de huella porque se encontro el salon
         Intent intent = new Intent(mContext, IdentificarHuellaActivity.class);
 
@@ -234,13 +237,13 @@ public class BarcodeReaderActivity extends AppCompatActivity {
 
         ProgressDialog progressDialog;
         private String barcodeSalon;
-        private long taskId;
+        private String taskId;
         private Task task;
 
         public ScanTask (Task task){
             this.task = task;
             taskId = task.get_id();
-            barcodeSalon = task.getBarcode();
+            barcodeSalon = task.getRoom().getBarcode();
         }
 
         @Override

@@ -137,7 +137,7 @@ public class IdentificarHuellaActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 actualizarDatosTask(task);
-                mSesion.setCurrentItemLista(mSesion.getCurrentItemLista() + 1);
+                mSesion.setCurrentTaskPosition(mSesion.getCurrentTaskPosition() + 1);
                 finish();
             }
         });
@@ -148,8 +148,8 @@ public class IdentificarHuellaActivity extends AppCompatActivity {
     }
 
     public void cargarDatosTask(Task task) {
-        tvNombre.setText(getResources().getString(R.string.ih_nombre, task.getOwner().getEmployeeName()));
-        tvFullNombre.setText(getResources().getString(R.string.ih_apellido, task.getOwner().getEmployeeFullName()));
+        tvNombre.setText(getResources().getString(R.string.ih_nombre, task.getOwner().getName()));
+        tvFullNombre.setText(getResources().getString(R.string.ih_apellido, task.getOwner().getLastName()));
     }
 
     public void actualizarDatosTask(final Task task) {
@@ -158,7 +158,6 @@ public class IdentificarHuellaActivity extends AppCompatActivity {
             public void execute(Realm realm) {
                 task.setTaskState(Task.STATE_PASO_NO_VINO_MAESTRO);
                 task.getCheckout().setSignedAt(String.valueOf(System.currentTimeMillis()));
-                task.getCheckout().setUpdatedAt(String.valueOf(System.currentTimeMillis()));
                 task.getCheckout().setFinishedAt(String.valueOf(System.currentTimeMillis()));
                 Log.i(TAG, task.getCheckout().toString());
             }
@@ -175,18 +174,17 @@ public class IdentificarHuellaActivity extends AppCompatActivity {
                 task.setTaskState(Task.STATE_PASO_VINO_MAESTRO);
                 task.getCheckout().setSignedAt(String.valueOf(System.currentTimeMillis()));
                 task.getCheckout().setFinishedAt(String.valueOf(System.currentTimeMillis()));
-                task.getCheckout().setUpdatedAt(String.valueOf(System.currentTimeMillis()));
 
                 Log.i(TAG, "Signed and updated at (vino maestro) debug");
                 Log.d(TAG, task.getCheckout().toString());
             }
         });
 
-        long currentItem = mSesion.getCurrentItemLista();
-        long lastItem = mSesion.getLastItemLista();
+        long currentTask = mSesion.getCurrentTaskPosition();
+        long lastItem = mSesion.getLastTaskPosition();
 
-        if (currentItem == task.get_id()) {
-            mSesion.setCurrentItemLista(currentItem + 1);
+        if (currentTask == task.getSequence()) {
+            mSesion.setCurrentTaskPosition(currentTask + 1);
         }
 
         finish();
