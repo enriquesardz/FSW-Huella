@@ -10,10 +10,10 @@ import io.realm.RealmObject;
 
 public class Room extends RealmObject {
     //Keys para Room
-    public static String BUILDING_KEY = "building";
-    public static String BARCODE_KEY = "barcode";
+    public static String BUILDING_KEY = "roomBuilding";
+    public static String BARCODE_KEY = "roomBarcode";
     public static String ROOM_NUMBER_KEY = "roomNumber";
-    public static String AREA_KEY = "area";
+    public static String AREA_KEY = "roomArea";
 
     private String building;
     private String barcode;

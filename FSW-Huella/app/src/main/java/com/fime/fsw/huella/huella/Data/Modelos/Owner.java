@@ -9,13 +9,11 @@ import io.realm.RealmObject;
 public class Owner extends RealmObject{
 
     //Keys para Owner
-    public static final String RAW_NAME_KEY = "rawName";
-    public static final String USER_TYPE_KEY = "userType";
-    public static final String NAME_KEY = "name";
-    public static final String TITLE_KEY = "title";
-    public static final String LAST_NAME_KEY = "lastName";
-    public static final String FINGERPRINT_KEY = "fingerPrint";
-    public static final String EMPLOYEE_NUMBER_KEY = "employeeNumber";
+    public static final String RAW_NAME_KEY = "ownerRawName";
+    public static final String USER_TYPE_KEY = "ownerUserType";
+    public static final String NAME_KEY = "ownerName";
+    public static final String TITLE_KEY = "ownerTitle";
+    public static final String LAST_NAME_KEY = "ownerLastName";
 
     private String rawName;
     private String userType;

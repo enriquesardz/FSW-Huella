@@ -13,11 +13,16 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.fime.fsw.huella.huella.Activities.Barcode.BarcodeReaderActivity;
+import com.fime.fsw.huella.huella.Data.Modelos.Assignment;
+import com.fime.fsw.huella.huella.Data.Modelos.Owner;
+import com.fime.fsw.huella.huella.Data.Modelos.Room;
 import com.fime.fsw.huella.huella.Data.Modelos.Route;
 import com.fime.fsw.huella.huella.Data.Modelos.Task;
 import com.fime.fsw.huella.huella.Data.Provider.RealmProvider;
 import com.fime.fsw.huella.huella.R;
 import com.fime.fsw.huella.huella.Utilidad.SesionAplicacion;
+
+import java.util.HashMap;
 
 import io.realm.Realm;
 
@@ -128,8 +133,7 @@ public class DatosVisitaFragment extends Fragment {
         //hace visible el contenedor.
         if (itemid != null && task != null){
             taskSequence = task.getSequence();
-            Route route = RealmProvider.getRouteByTaskId(mRealm,task.get_id());
-            cargarDatosTask(route,task);
+            cargarDatosTask(task);
         }
 
         if(hayDatos){
@@ -167,12 +171,14 @@ public class DatosVisitaFragment extends Fragment {
         return mRealm.where(Task.class).equalTo(Task._ID_KEY, id).findFirst();
     }
 
-    public void cargarDatosTask(Route route, Task task) {
-        tvMaestro.setText(getResources().getString(R.string.cbarra_maestro, task.getOwner().getName(), task.getOwner().getLastName()));
-        //TODO: CAMBIAR HORA
-        tvHoraFime.setText(getResources().getString(R.string.cbarra_hora, route.getAcademyHour()));
-        tvSalonFime.setText(getResources().getString(R.string.cbarra_salon, task.getRoom().getRoomNumber()));
-        tvMateria.setText(getResources().getString(R.string.cbarra_materia, task.getAssignment().getName()));
+    public void cargarDatosTask(Task task) {
+        HashMap<String,String> data = RealmProvider.getAllDataAsStringByTask(mRealm,task);
+
+        tvMaestro.setText(getResources().getString(R.string.cbarra_maestro, data.get(Owner.NAME_KEY), data.get(Owner.LAST_NAME_KEY)));
+        tvHoraFime.setText(getResources().getString(R.string.cbarra_hora, data.get(Route.ACADEMY_HOUR_KEY)));
+        tvSalonFime.setText(getResources().getString(R.string.cbarra_salon, data.get(Room.ROOM_NUMBER_KEY)));
+        tvMateria.setText(getResources().getString(R.string.cbarra_materia, data.get(Assignment.RAW_NAME_KEY)));
+
         hayDatos = true;
     }
 

@@ -9,10 +9,10 @@ import io.realm.RealmObject;
 public class Assignment extends RealmObject {
 
     //Keys para Assignment
-    public static final String RAW_NAME_KEY = "rawName";
-    public static final String CODE_KEY = "code";
-    public static final String NAME_KEY = "name";
-    public static final String PLAN_KEY = "plan";
+    public static final String RAW_NAME_KEY = "assignmentRawName";
+    public static final String CODE_KEY = "assignmentCode";
+    public static final String NAME_KEY = "assignmentName";
+    public static final String PLAN_KEY = "assignmentPlan";
 
     private String rawName;
     private String code;
