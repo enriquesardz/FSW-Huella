@@ -9,12 +9,18 @@ import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 
 import com.fime.fsw.huella.huella.Activities.HuellaApplication;
 import com.fime.fsw.huella.huella.Activities.InicioSesion.MenuInicioSesionActivity;
+import com.fime.fsw.huella.huella.Data.Modelos.Assignment;
+import com.fime.fsw.huella.huella.Data.Modelos.Checkout;
+import com.fime.fsw.huella.huella.Data.Modelos.Owner;
+import com.fime.fsw.huella.huella.Data.Modelos.Room;
+import com.fime.fsw.huella.huella.Data.Modelos.Route;
 import com.fime.fsw.huella.huella.Data.Modelos.Task;
 import com.fime.fsw.huella.huella.Data.Modelos.UploadCheckout;
 import com.fime.fsw.huella.huella.Data.Provider.RealmProvider;
@@ -121,6 +127,7 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
         mBundle = new Bundle();
 
         setUpBarraNavegacion();
+        dataCount();
         RealmProvider.dropAllRealmTables(mRealm);
     }
 
@@ -159,6 +166,16 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
         Gson gson = new Gson();
         String json = gson.toJson(uploadCheckouts);
         return json;
+    }
+
+    public void dataCount(){
+        int tasknum = mRealm.where(Task.class).findAll().size();
+        int routenum = mRealm.where(Route.class).findAll().size();
+        int roomnum = mRealm.where(Room.class).findAll().size();
+        int ownernum = mRealm.where(Owner.class).findAll().size();
+        int checkoutnum = mRealm.where(Checkout.class).findAll().size();
+        int assignmentnum = mRealm.where(Assignment.class).findAll().size();
+        Log.d(TAG, "Task: " + String.valueOf(tasknum) + " Route: " + String.valueOf(routenum) + " Room: " + String.valueOf(roomnum) + " Owner: " + String.valueOf(ownernum) + " Checkouts: " + String.valueOf(checkoutnum) + " Assignment: " + String.valueOf(assignmentnum));
     }
 
 }

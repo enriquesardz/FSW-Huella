@@ -144,7 +144,7 @@ public class DatosVisitaFragment extends Fragment {
             emptyState.setVisibility(View.VISIBLE);
         }
 
-        if (taskSequence >= mSesion.getCurrentTaskPosition()) {
+        if (taskSequence >= mSesion.getCurrentTaskPosition() && taskSequence != -1) {
             btnEscanner.setVisibility(View.VISIBLE);
         } else {
             btnEscanner.setVisibility(View.INVISIBLE);

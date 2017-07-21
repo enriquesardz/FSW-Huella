@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.fime.fsw.huella.huella.API.APICodo;
@@ -38,6 +39,7 @@ public class RecorridoActualFragment extends Fragment {
 
     private RecyclerView rvRecorrido;
     private RecorridoAdapter rvRecorridoAdapter;
+    private LinearLayout loadingState, recyclerContainer, emptyState;
 
     private Context mContext;
     private Realm mRealm;
@@ -93,6 +95,13 @@ public class RecorridoActualFragment extends Fragment {
 
     private void initComponentes(View view) {
 
+        loadingState = (LinearLayout)view.findViewById(R.id.loading_state);
+        recyclerContainer = (LinearLayout)view.findViewById(R.id.recyclerview_container);
+        emptyState = (LinearLayout)view.findViewById(R.id.empty_state);
+
+        loadingState.setVisibility(View.VISIBLE);
+        recyclerContainer.setVisibility(View.GONE);
+
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
@@ -146,6 +155,9 @@ public class RecorridoActualFragment extends Fragment {
             public void onFailure(Call<Route> call, Throwable t) {
                 //No se descargo nada
                 Toast.makeText(mContext, "No se descargo.", Toast.LENGTH_SHORT).show();
+                loadingState.setVisibility(View.GONE);
+                recyclerContainer.setVisibility(View.GONE);
+                emptyState.setVisibility(View.VISIBLE);
             }
         });
     }
@@ -165,6 +177,10 @@ public class RecorridoActualFragment extends Fragment {
     }
 
     public void setRVRecorridoAdapter(){
+
+        loadingState.setVisibility(View.GONE);
+        emptyState.setVisibility(View.GONE);
+        recyclerContainer.setVisibility(View.VISIBLE);
 
         Route route = RealmProvider.getRoute(mRealm);
         long currentItem = mSesionApp.getCurrentTaskPosition();
