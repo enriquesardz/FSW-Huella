@@ -160,8 +160,8 @@ public class RecorridoActualFragment extends Fragment {
     }
 
     public void setInitialAndFinalTask() {
-        mSesionApp.setCurrentTaskPosition(mRealm.where(Task.class).min(Task.SEQUENCE_KEY).longValue());
-        mSesionApp.setLastTaskPosition(mRealm.where(Task.class).max(Task.SEQUENCE_KEY).longValue());
+        mSesionApp.setCurrentTaskPosition(mRealm.where(Task.class).min(Task.SEQUENCE_FIELD).longValue());
+        mSesionApp.setLastTaskPosition(mRealm.where(Task.class).max(Task.SEQUENCE_FIELD).longValue());
     }
 
     public void setRVRecorridoAdapter(){

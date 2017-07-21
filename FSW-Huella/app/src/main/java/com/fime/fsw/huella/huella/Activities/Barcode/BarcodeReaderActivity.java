@@ -114,7 +114,7 @@ public class BarcodeReaderActivity extends AppCompatActivity {
         }
 
         //Trae los datos que le paso el DatosVisitaFragment
-        String id = getIntent().getStringExtra(Task._ID_KEY);
+        String id = getIntent().getStringExtra(Task._ID_FIELD);
 
         final Task task = RealmProvider.getTaskById(mRealm, id);
 
@@ -160,7 +160,7 @@ public class BarcodeReaderActivity extends AppCompatActivity {
         Intent intent = new Intent(mContext, IdentificarHuellaActivity.class);
 
         //Le pasa el id a la nueva actividad de deteccion de huella.
-        intent.putExtra(Task._ID_KEY, taskId);
+        intent.putExtra(Task._ID_FIELD, taskId);
 
         Log.i(TAG, "Se encontro el codigo de barras");
         Log.d(TAG, "Barcode: " + barcodeSalon + " TaskId: " + taskId);
@@ -219,6 +219,7 @@ public class BarcodeReaderActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            progressDialog = new ProgressDialog(mContext);
             progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             progressDialog.setMessage("Escaneando");
             progressDialog.setCanceledOnTouchOutside(false);

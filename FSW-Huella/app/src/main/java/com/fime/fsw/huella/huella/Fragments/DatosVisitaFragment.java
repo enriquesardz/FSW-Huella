@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -126,7 +125,7 @@ public class DatosVisitaFragment extends Fragment {
 
         //Valor default del itemid, con intencion de que si el Bundle no regresa un id,
         //se pueda validar.
-        final String itemid = mBundle.getString(Task._ID_KEY, null);
+        final String itemid = mBundle.getString(Task._ID_FIELD, null);
         final Task task = RealmProvider.getTaskById(mRealm,itemid);
 
         //Si el bundle regreso un id, entonces actualiza la UI con datos del Task, y
@@ -160,7 +159,7 @@ public class DatosVisitaFragment extends Fragment {
                     //y si no, el boton no hace nada.
                     RealmProvider.setStartedAtCheckout(mRealm, task);
                     Intent intent = new Intent(mContext, BarcodeReaderActivity.class);
-                    intent.putExtra(Task._ID_KEY, itemid);
+                    intent.putExtra(Task._ID_FIELD, itemid);
                     startActivity(intent);
                 }
             }
@@ -168,7 +167,7 @@ public class DatosVisitaFragment extends Fragment {
     }
 
     public Task getTaskConId(String id) {
-        return mRealm.where(Task.class).equalTo(Task._ID_KEY, id).findFirst();
+        return mRealm.where(Task.class).equalTo(Task._ID_FIELD, id).findFirst();
     }
 
     public void cargarDatosTask(Task task) {
@@ -177,7 +176,7 @@ public class DatosVisitaFragment extends Fragment {
         tvMaestro.setText(getResources().getString(R.string.cbarra_maestro, data.get(Owner.NAME_KEY), data.get(Owner.LAST_NAME_KEY)));
         tvHoraFime.setText(getResources().getString(R.string.cbarra_hora, data.get(Route.ACADEMY_HOUR_KEY)));
         tvSalonFime.setText(getResources().getString(R.string.cbarra_salon, data.get(Room.ROOM_NUMBER_KEY)));
-        tvMateria.setText(getResources().getString(R.string.cbarra_materia, data.get(Assignment.RAW_NAME_KEY)));
+        tvMateria.setText(getResources().getString(R.string.cbarra_materia, data.get(Assignment.NAME_KEY)));
 
         hayDatos = true;
     }

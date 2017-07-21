@@ -60,11 +60,11 @@ public class RealmProvider{
     }
 
     public static OrderedRealmCollection<Task> getAllOrderedTasks(Realm mRealm){
-        return mRealm.where(Task.class).findAllSorted(Task.SEQUENCE_KEY);
+        return mRealm.where(Task.class).findAllSorted(Task.SEQUENCE_FIELD);
     }
 
     public static Task getTaskById(Realm mRealm, String _id){
-        return mRealm.where(Task.class).equalTo(Task._ID_KEY, _id).findFirst();
+        return mRealm.where(Task.class).equalTo(Task._ID_FIELD, _id).findFirst();
     }
 
     public static Route getRoute(Realm mRealm){
@@ -168,7 +168,7 @@ public class RealmProvider{
         mRealm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                task.setTaskState(Task.STATE_PASO_VINO_MAESTRO);
+                task.setTaskState(Task.STATE_PASO_NO_VINO_MAESTRO);
                 task.getCheckout().setSignedAt(String.valueOf(System.currentTimeMillis()));
                 task.getCheckout().setFinishedAt(String.valueOf(System.currentTimeMillis()));
 

@@ -9,9 +9,11 @@ import io.realm.annotations.PrimaryKey;
 
 public class Task extends RealmObject {
 
+    //Table fields de Task
+    public static final String _ID_FIELD = "_id";
+    public static final String SEQUENCE_FIELD = "sequence";
     //Keys para el objeto Task
-    public static final String _ID_KEY = "task_id";
-    public static final String SEQUENCE_KEY = "taskSequence";
+    public static final String SEQUENCE_KEsY = "taskSequence";
     public static final String PERIOD_KEY = "taskPeriod";
     public static final String LANGUAGE_KEY = "taskLanguage";
     public static final String GROUP_KEY = "taskGroup";

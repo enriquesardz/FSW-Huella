@@ -109,7 +109,7 @@ public class IdentificarHuellaActivity extends AppCompatActivity {
             getSupportActionBar().setTitle("Buscar Huella");
         }
 
-        String itemid = getIntent().getStringExtra(Task._ID_KEY);
+        String itemid = getIntent().getStringExtra(Task._ID_FIELD);
 
         final Task task = RealmProvider.getTaskById(mRealm, itemid);
 
