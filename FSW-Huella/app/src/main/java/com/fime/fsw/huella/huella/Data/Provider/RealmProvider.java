@@ -2,9 +2,14 @@ package com.fime.fsw.huella.huella.Data.Provider;
 
 import android.util.Log;
 
+import com.fime.fsw.huella.huella.Data.Modelos.Assignment;
+import com.fime.fsw.huella.huella.Data.Modelos.Checkout;
+import com.fime.fsw.huella.huella.Data.Modelos.Owner;
+import com.fime.fsw.huella.huella.Data.Modelos.Room;
 import com.fime.fsw.huella.huella.Data.Modelos.Route;
 import com.fime.fsw.huella.huella.Data.Modelos.Task;
 
+import java.util.HashMap;
 import java.util.List;
 
 import io.realm.OrderedRealmCollection;
@@ -68,6 +73,40 @@ public class RealmProvider{
 
     public static Route getRouteByTaskId(Realm mRealm, String _id){
         return mRealm.where(Route.class).equalTo("tasks._id", _id).findFirst();
+    }
+
+    //Regresa un HashMap Key Value pair con la informacion que se muestra en la UI.
+    public static HashMap<String, String> getAllDataAsStringByTask(Realm mRealm, Task task){
+        HashMap<String, String> data = new HashMap<>();
+        String task_id = task.get_id();
+        Route route = mRealm.where(Route.class).equalTo("tasks._id", task_id).findFirst();
+        Room room = task.getRoom();
+        Assignment assignment = task.getAssignment();
+        Owner owner = task.getOwner();
+        Checkout checkout = task.getCheckout();
+
+        data.put(Route.DAY_KEY, route.getDay());
+        data.put(Route.ACADEMY_HOUR_KEY, route.getAcademyHour());
+        data.put(Route.ASSIGNED_TO_KEY, route.getAssignedTo());
+        data.put(Task.PERIOD_KEY, task.getPeriod());
+        data.put(Task.LANGUAGE_KEY, task.getLanguage());
+        data.put(Task.GROUP_KEY, task.getGroup());
+        data.put(Task.MODALITY_KEY, task.getModality());
+        data.put(Room.BUILDING_KEY, room.getBuilding());
+        data.put(Room.BARCODE_KEY, room.getBarcode());
+        data.put(Room.ROOM_NUMBER_KEY, room.getRoomNumber());
+        data.put(Room.AREA_KEY, room.getArea());
+        data.put(Assignment.RAW_NAME_KEY, assignment.getRawName());
+        data.put(Assignment.CODE_KEY, assignment.getCode());
+        data.put(Assignment.NAME_KEY, assignment.getName());
+        data.put(Assignment.PLAN_KEY, assignment.getPlan());
+        data.put(Owner.RAW_NAME_KEY, owner.getRawName());
+        data.put(Owner.USER_TYPE_KEY, owner.getUserType());
+        data.put(Owner.NAME_KEY, owner.getName());
+        data.put(Owner.TITLE_KEY, owner.getTitle());
+        data.put(Owner.LAST_NAME_KEY, owner.getLastName());
+
+        return data;
     }
 
 
