@@ -8,6 +8,12 @@ import io.realm.RealmObject;
 
 public class Checkout extends RealmObject{
 
+    //Keys para Checkout
+    public static final String STARTED_AT_KEY = "startedAt";
+    public static final String VISIT_AT_KEY = "visitAt";
+    public static final String SIGNED_AT_KEY = "signedAt";
+    public static final String FINISHED_AT_KEY = "finishedAt";
+
     private String startedAt;
     private String visitAt;
     private String signedAt;

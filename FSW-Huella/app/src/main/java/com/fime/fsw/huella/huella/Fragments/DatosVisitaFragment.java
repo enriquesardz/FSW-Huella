@@ -154,7 +154,7 @@ public class DatosVisitaFragment extends Fragment {
                 if (itemid != null && taskSequence >= mSesion.getCurrentTaskPosition()) {
                     //Si mBundle regreso un id, entonces se puede iniciar la actividad del Scanner con un Task id,
                     //y si no, el boton no hace nada.
-                    setStartedAtTask(task);
+                    RealmProvider.setStartedAtCheckout(mRealm, task);
                     Intent intent = new Intent(mContext, BarcodeReaderActivity.class);
                     intent.putExtra(Task._ID_KEY, itemid);
                     startActivity(intent);
@@ -174,16 +174,6 @@ public class DatosVisitaFragment extends Fragment {
         tvSalonFime.setText(getResources().getString(R.string.cbarra_salon, task.getRoom().getRoomNumber()));
         tvMateria.setText(getResources().getString(R.string.cbarra_materia, task.getAssignment().getName()));
         hayDatos = true;
-    }
-
-    public void setStartedAtTask(final Task task) {
-        mRealm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                task.getCheckout().setStartedAt(String.valueOf(System.currentTimeMillis()));
-                Log.i(TAG, task.getCheckout().toString());
-            }
-        });
     }
 
 }

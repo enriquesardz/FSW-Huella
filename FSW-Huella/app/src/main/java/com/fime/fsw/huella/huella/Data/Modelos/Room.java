@@ -9,6 +9,12 @@ import io.realm.RealmObject;
  */
 
 public class Room extends RealmObject {
+    //Keys para Room
+    public static String BUILDING_KEY = "building";
+    public static String BARCODE_KEY = "barcode";
+    public static String ROOM_NUMBER_KEY = "roomNumber";
+    public static String AREA_KEY = "area";
+
     private String building;
     private String barcode;
     @SerializedName("room")

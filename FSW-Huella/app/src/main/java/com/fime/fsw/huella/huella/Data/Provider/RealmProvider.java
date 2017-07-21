@@ -85,6 +85,16 @@ public class RealmProvider{
         Log.d(TAG, task.getCheckout().toString());
     }
 
+    public static void setStartedAtCheckout(Realm mRealm, final Task task){
+        mRealm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                task.getCheckout().setStartedAt(String.valueOf(System.currentTimeMillis()));
+                Log.i(TAG, task.getCheckout().toString());
+            }
+        });
+    }
+
     //El codigo de barras no estaba, se le pone falta al maestro.
     public static void setCheckoutTaskValuesNoBarcode(Realm mRealm, final Task task){
         mRealm.executeTransaction(new Realm.Transaction() {

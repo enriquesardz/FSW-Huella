@@ -11,8 +11,18 @@ public class Task extends RealmObject {
 
     //Keys para el objeto Task
     public static final String _ID_KEY = "_id";
-    public static final String ROOM_KEY = "room";
     public static final String SEQUENCE_KEY = "sequence";
+    public static final String PERIOD_KEY = "period";
+    public static final String LANGUAGE_KEY = "language";
+    public static final String GROUP_KEY = "group";
+    public static final String ROOM_KEY = "room";
+    public static final String ASSIGNMENT_KEY = "assignment";
+    public static final String OWNER_KEY = "owner";
+    public static final String MODALITY_KEY = "modality";
+    public static final String CHECKOUT_KEY = "checkout";
+    public static final String TASK_STATE_KEY = "taskState";
+
+
     //Estados del Task
     public static final int STATE_NO_HA_PASADO = 0;
     public static final int STATE_PASO_VINO_MAESTRO = 1;
