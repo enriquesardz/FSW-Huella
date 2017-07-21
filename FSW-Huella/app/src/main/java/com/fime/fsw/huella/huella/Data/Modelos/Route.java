@@ -2,12 +2,14 @@ package com.fime.fsw.huella.huella.Data.Modelos;
 
 import io.realm.RealmList;
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by Quique on 19/07/2017.
  */
 
 public class Route extends RealmObject {
+    @PrimaryKey
     private String _id;
     private String day;
     private String academyHour;

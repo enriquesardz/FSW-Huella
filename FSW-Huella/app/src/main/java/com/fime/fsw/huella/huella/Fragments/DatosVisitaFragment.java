@@ -13,7 +13,9 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.fime.fsw.huella.huella.Activities.Barcode.BarcodeReaderActivity;
+import com.fime.fsw.huella.huella.Data.Modelos.Route;
 import com.fime.fsw.huella.huella.Data.Modelos.Task;
+import com.fime.fsw.huella.huella.Data.Provider.RealmProvider;
 import com.fime.fsw.huella.huella.R;
 import com.fime.fsw.huella.huella.Utilidad.SesionAplicacion;
 
@@ -33,6 +35,7 @@ public class DatosVisitaFragment extends Fragment {
     public static final String TAG = APP_TAG + DatosVisitaFragment.class.getSimpleName();
 
     private boolean hayDatos = false;
+    private long taskSequence = -1;
 
     private OnFragmentInteractionListener mListener;
 
@@ -64,7 +67,7 @@ public class DatosVisitaFragment extends Fragment {
         mRealm = Realm.getDefaultInstance();
         mSesion = new SesionAplicacion(mContext);
 
-//        initComponentes(view);
+        initComponentes(view);
 
         return view;
     }
@@ -119,13 +122,14 @@ public class DatosVisitaFragment extends Fragment {
         //Valor default del itemid, con intencion de que si el Bundle no regresa un id,
         //se pueda validar.
         final String itemid = mBundle.getString(Task._ID_KEY, null);
-        final Task task = getTaskConId(itemid);
-        final int taskSequence = task.getSequence();
+        final Task task = RealmProvider.getTaskById(mRealm,itemid);
 
         //Si el bundle regreso un id, entonces actualiza la UI con datos del Task, y
         //hace visible el contenedor.
-        if (itemid != null){
-            cargarDatosTask(task);
+        if (itemid != null && task != null){
+            taskSequence = task.getSequence();
+            Route route = RealmProvider.getRouteByTaskId(mRealm,task.get_id());
+            cargarDatosTask(route,task);
         }
 
         if(hayDatos){
@@ -163,12 +167,12 @@ public class DatosVisitaFragment extends Fragment {
         return mRealm.where(Task.class).equalTo(Task._ID_KEY, id).findFirst();
     }
 
-    public void cargarDatosTask(Task task) {
+    public void cargarDatosTask(Route route, Task task) {
         tvMaestro.setText(getResources().getString(R.string.cbarra_maestro, task.getOwner().getName(), task.getOwner().getLastName()));
         //TODO: CAMBIAR HORA
-        tvHoraFime.setText(getResources().getString(R.string.cbarra_hora, "Cambiar hora"));
-        tvSalonFime.setText(getResources().getString(R.string.cbarra_salon, task.getRoom()));
-        tvMateria.setText(getResources().getString(R.string.cbarra_materia, task.getAssignment()));
+        tvHoraFime.setText(getResources().getString(R.string.cbarra_hora, route.getAcademyHour()));
+        tvSalonFime.setText(getResources().getString(R.string.cbarra_salon, task.getRoom().getRoomNumber()));
+        tvMateria.setText(getResources().getString(R.string.cbarra_materia, task.getAssignment().getName()));
         hayDatos = true;
     }
 

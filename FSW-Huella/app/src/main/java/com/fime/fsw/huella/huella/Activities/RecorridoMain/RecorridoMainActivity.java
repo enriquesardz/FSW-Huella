@@ -17,6 +17,7 @@ import com.fime.fsw.huella.huella.Activities.HuellaApplication;
 import com.fime.fsw.huella.huella.Activities.InicioSesion.MenuInicioSesionActivity;
 import com.fime.fsw.huella.huella.Data.Modelos.Task;
 import com.fime.fsw.huella.huella.Data.Modelos.UploadCheckout;
+import com.fime.fsw.huella.huella.Data.Provider.RealmProvider;
 import com.fime.fsw.huella.huella.Fragments.DatosVisitaFragment;
 import com.fime.fsw.huella.huella.Fragments.RecorridoActualFragment;
 import com.fime.fsw.huella.huella.R;
@@ -114,14 +115,13 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
     @Override
     protected void onDestroy() {
         super.onDestroy();
-//        publishThread.interrupt();
     }
 
     public void initComponents() {
         mBundle = new Bundle();
 
         setUpBarraNavegacion();
-        eliminarTasksDeRealm();
+        RealmProvider.dropAllRealmTables(mRealm);
     }
 
     public void setUpBarraNavegacion(){
@@ -159,23 +159,6 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
         Gson gson = new Gson();
         String json = gson.toJson(uploadCheckouts);
         return json;
-    }
-
-
-
-
-    public void eliminarTasksDeRealm(){
-        final RealmResults<Task> tasks = mRealm.where(Task.class).findAll();
-        mRealm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                for (Task task : tasks){
-                    task.getOwner().deleteFromRealm();
-                    task.getCheckout().deleteFromRealm();
-                }
-                tasks.deleteAllFromRealm();
-            }
-        });
     }
 
 }

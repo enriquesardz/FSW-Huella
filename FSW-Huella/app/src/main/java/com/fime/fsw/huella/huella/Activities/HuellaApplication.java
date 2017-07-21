@@ -4,7 +4,6 @@ import android.app.Application;
 import android.content.Context;
 
 import com.facebook.stetho.Stetho;
-import com.fime.fsw.huella.huella.Data.Modelos.Task;
 import com.uphyca.stetho_realm.RealmInspectorModulesProvider;
 
 import java.util.concurrent.atomic.AtomicInteger;
@@ -12,8 +11,6 @@ import java.util.regex.Pattern;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
-import io.realm.RealmObject;
-import io.realm.RealmResults;
 
 
 public class HuellaApplication extends Application {
@@ -36,7 +33,7 @@ public class HuellaApplication extends Application {
                 .build();
         Realm.setDefaultConfiguration(config);
         Realm realm = Realm.getInstance(config);
-        TaskID = setAtomicId(realm, Task.class);
+//        TaskID = setAtomicId(realm, Task.class);
 
         Stetho.initialize(
                 Stetho.newInitializerBuilder(this)
@@ -56,9 +53,9 @@ public class HuellaApplication extends Application {
 
     }
 
-    private <T extends RealmObject> AtomicInteger setAtomicId(Realm realm, Class<T> anyClass) {
-        RealmResults<T> results = realm.where(anyClass).findAll();
-        return (results.size() > 0) ? new AtomicInteger(results.max("_id").intValue()) : new AtomicInteger();
-    }
+//    private <T extends RealmObject> AtomicInteger setAtomicId(Realm realm, Class<T> anyClass) {
+//        RealmResults<T> results = realm.where(anyClass).findAll();
+//        return (results.size() > 0) ? new AtomicInteger(results.max("_id").intValue()) : new AtomicInteger();
+//    }
 }
 

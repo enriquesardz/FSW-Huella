@@ -9,6 +9,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.fime.fsw.huella.huella.Data.Modelos.Task;
+import com.fime.fsw.huella.huella.Data.Provider.RealmProvider;
 import com.fime.fsw.huella.huella.Utilidad.SesionAplicacion;
 import com.rscja.deviceapi.Fingerprint;
 
@@ -119,7 +120,7 @@ public class HuellaIdentTask extends AsyncTask<Integer, Integer, String> {
         //Si hay resultado, entonces fue una Identificacion exitosa
         Toast.makeText(mContext, "Se encontro usuario", Toast.LENGTH_SHORT).show();
         //Se agregan los checkouts finales, se actualiza el estado del task, y se cierra la actividad.
-        setAllCheckoutsAndTaskValues();
+        finishFingerprintIdent();
     }
 
     @Override
@@ -140,17 +141,9 @@ public class HuellaIdentTask extends AsyncTask<Integer, Integer, String> {
         super.onProgressUpdate(values);
     }
 
-    private void setAllCheckoutsAndTaskValues(){
-        mRealm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                mTask.setTaskState(Task.STATE_PASO_VINO_MAESTRO);
-                mTask.getCheckout().setSignedAt(String.valueOf(System.currentTimeMillis()));
-                mTask.getCheckout().setFinishedAt(String.valueOf(System.currentTimeMillis()));
+    private void finishFingerprintIdent(){
 
-                Log.i(TAG, "Signed and updated at (vino maestro): " + mTask.getCheckout().toString());
-            }
-        });
+        RealmProvider.setCheckoutsTaskValuesVinoMaestro(mRealm, mTask);
 
         long currentTaskPosition = mSesion.getCurrentTaskPosition();
         long lastTaskPosition = mSesion.getLastTaskPosition();

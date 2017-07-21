@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fime.fsw.huella.huella.Data.Modelos.Task;
+import com.fime.fsw.huella.huella.Data.Provider.RealmProvider;
 import com.fime.fsw.huella.huella.R;
 import com.fime.fsw.huella.huella.Utilidad.SesionAplicacion;
 import com.rscja.deviceapi.Fingerprint;
@@ -108,9 +109,9 @@ public class IdentificarHuellaActivity extends AppCompatActivity {
             getSupportActionBar().setTitle("Buscar Huella");
         }
 
-        long itemid = getIntent().getLongExtra(Task._ID_KEY, -1);
+        String itemid = getIntent().getStringExtra(Task._ID_KEY);
 
-        final Task task = getTaskConId(itemid);
+        final Task task = RealmProvider.getTaskById(mRealm, itemid);
 
         cargarDatosTask(task);
 
@@ -127,7 +128,7 @@ public class IdentificarHuellaActivity extends AppCompatActivity {
                 } else {
                     //TODO: No debe de ir en la version final.
                     //Debug app
-                    setAllCheckoutsAndTaskValues(task);
+                    debugHuellaEncontrada(task);
                 }
             }
         });
@@ -136,15 +137,11 @@ public class IdentificarHuellaActivity extends AppCompatActivity {
         btnNoEstaMaestro.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                actualizarDatosTask(task);
+                RealmProvider.setCheckoutsTaskValuesNoVinoMaestro(mRealm, task);
                 mSesion.setCurrentTaskPosition(mSesion.getCurrentTaskPosition() + 1);
                 finish();
             }
         });
-    }
-
-    public Task getTaskConId(long id) {
-        return mRealm.where(Task.class).equalTo(Task._ID_KEY, id).findFirst();
     }
 
     public void cargarDatosTask(Task task) {
@@ -152,36 +149,14 @@ public class IdentificarHuellaActivity extends AppCompatActivity {
         tvFullNombre.setText(getResources().getString(R.string.ih_apellido, task.getOwner().getLastName()));
     }
 
-    public void actualizarDatosTask(final Task task) {
-        mRealm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                task.setTaskState(Task.STATE_PASO_NO_VINO_MAESTRO);
-                task.getCheckout().setSignedAt(String.valueOf(System.currentTimeMillis()));
-                task.getCheckout().setFinishedAt(String.valueOf(System.currentTimeMillis()));
-                Log.i(TAG, task.getCheckout().toString());
-            }
-        });
-    }
-
-    public void setAllCheckoutsAndTaskValues(final Task task) {
+    public void debugHuellaEncontrada(final Task task) {
         //Si hay resultado, entonces fue una Identificacion exitosa
         Toast.makeText(mContext, "Se encontro usuario debug mode", Toast.LENGTH_SHORT).show();
 
-        mRealm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                task.setTaskState(Task.STATE_PASO_VINO_MAESTRO);
-                task.getCheckout().setSignedAt(String.valueOf(System.currentTimeMillis()));
-                task.getCheckout().setFinishedAt(String.valueOf(System.currentTimeMillis()));
-
-                Log.i(TAG, "Signed and updated at (vino maestro) debug");
-                Log.d(TAG, task.getCheckout().toString());
-            }
-        });
+        RealmProvider.setCheckoutsTaskValuesVinoMaestro(mRealm, task);
 
         long currentTask = mSesion.getCurrentTaskPosition();
-        long lastItem = mSesion.getLastTaskPosition();
+        long lastPosition = mSesion.getLastTaskPosition();
 
         if (currentTask == task.getSequence()) {
             mSesion.setCurrentTaskPosition(currentTask + 1);

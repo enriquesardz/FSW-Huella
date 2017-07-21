@@ -15,12 +15,11 @@ import com.fime.fsw.huella.huella.API.APICodo;
 import com.fime.fsw.huella.huella.API.ServiciosAPI.DescargaRecorridosService;
 import com.fime.fsw.huella.huella.Data.Modelos.Route;
 import com.fime.fsw.huella.huella.Data.Modelos.Task;
+import com.fime.fsw.huella.huella.Data.Provider.RealmProvider;
 import com.fime.fsw.huella.huella.R;
 import com.fime.fsw.huella.huella.UI.RecyclerView.RecorridoAdapter;
 import com.fime.fsw.huella.huella.UI.RecyclerView.RecyclerViewItemClickListener;
 import com.fime.fsw.huella.huella.Utilidad.SesionAplicacion;
-
-import java.util.List;
 
 import io.realm.OrderedRealmCollection;
 import io.realm.Realm;
@@ -94,8 +93,6 @@ public class RecorridoActualFragment extends Fragment {
 
     private void initComponentes(View view) {
 
-        startDescarga();
-
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
@@ -105,6 +102,17 @@ public class RecorridoActualFragment extends Fragment {
         rvRecorrido.setHasFixedSize(true);
         rvRecorrido.setLayoutManager(linearLayoutManager);
 
+        Route route = RealmProvider.getRoute(mRealm);
+
+        //Si ya se descargaron los datos, getRoute deberia de regresar una ruta
+        //por lo tanto, no vuela a descargar y solamente muestra los datos en el RecyclerView
+
+        if (route == null){
+            startDescarga();
+        }
+        else{
+            setRVRecorridoAdapter();
+        }
 
     }
 
@@ -120,28 +128,18 @@ public class RecorridoActualFragment extends Fragment {
 
                 Route route = response.body();
 
-//                if (tasks == null) {
-//                    Log.e(TAG, "No hay respuesta de la API + " + response.body());
-//                    return;
-//                }
-//                //Se guardan los datos a nuestro Realm
-//                guardarRespuestaARealm(tasks);
-//                setInitialAndFinalTask();
-//
-//                long currentItem = mSesionApp.getCurrentTaskPosition();
-//                //Se obtiene la info de nuestro Realm
-//                final OrderedRealmCollection<Task> recorridoData = getAllRealmTasks();
-//
-//                //Creamos un adaptador nuevo, con un onItemClickListener
-//                rvRecorridoAdapter = new RecorridoAdapter(mContext, recorridoData, currentItem, new RecyclerViewItemClickListener() {
-//                    @Override
-//                    public void onItemClick(View v, int position) {
-//                        Task item = rvRecorridoAdapter.getItem(position);
-//                        sendToDetailFragment(item);
-//                    }
-//                });
-//
-//                rvRecorrido.setAdapter(rvRecorridoAdapter);
+                if (route == null) {
+                    Log.e(TAG, "No hay respuesta de la API + " + response.body());
+                    return;
+                }
+
+                //Se guardan los datos a nuestro Realm
+                RealmProvider.saveRouteToRealm(mRealm, route);
+
+                setInitialAndFinalTask();
+
+                setRVRecorridoAdapter();
+
             }
 
             @Override
@@ -150,10 +148,6 @@ public class RecorridoActualFragment extends Fragment {
                 Toast.makeText(mContext, "No se descargo.", Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-    public OrderedRealmCollection<Task> getAllRealmTasks() {
-        return mRealm.where(Task.class).findAllSorted(Task._ID_KEY);
     }
 
     public void sendToDetailFragment(Task task) {
@@ -166,26 +160,31 @@ public class RecorridoActualFragment extends Fragment {
     }
 
     public void setInitialAndFinalTask() {
-//        mSesionApp.setCurrentTaskPosition(mRealm.where(Task.class).findFirst().get_id());
-//        mSesionApp.setLastTaskPosition(mRealm.where(Task.class).max(Task._ID_KEY).longValue());
+        mSesionApp.setCurrentTaskPosition(mRealm.where(Task.class).min(Task.SEQUENCE_KEY).longValue());
+        mSesionApp.setLastTaskPosition(mRealm.where(Task.class).max(Task.SEQUENCE_KEY).longValue());
     }
 
-    public void guardarRespuestaARealm(final List<Task> tasks) {
+    public void setRVRecorridoAdapter(){
 
-        //Se recorre la lista y se guarda cada objeto Task a Realm
-        if (tasks == null) {
-            Log.e(TAG, "No hay tasks");
-            return;
-        }
+        Route route = RealmProvider.getRoute(mRealm);
+        long currentItem = mSesionApp.getCurrentTaskPosition();
 
-        mRealm.executeTransaction(new Realm.Transaction() {
+        //Se obtiene la info de nuestro Realm
+        String routeDay = route.getDay();
+        String routeHour = route.getAcademyHour();
+
+        final OrderedRealmCollection<Task> recorridoData = RealmProvider.getAllOrderedTasks(mRealm);
+
+        //Creamos un adaptador nuevo, con un onItemClickListener
+        rvRecorridoAdapter = new RecorridoAdapter(mContext, recorridoData, currentItem, routeHour, new RecyclerViewItemClickListener() {
             @Override
-            public void execute(Realm realm) {
-                for (Task task : tasks) {
-                    Task realmTask = realm.copyToRealmOrUpdate(task);
-                    Log.i(TAG, realmTask.toString());
-                }
+            public void onItemClick(View v, int position) {
+                Task item = rvRecorridoAdapter.getItem(position);
+                sendToDetailFragment(item);
             }
         });
+
+        rvRecorrido.setAdapter(rvRecorridoAdapter);
     }
+
 }

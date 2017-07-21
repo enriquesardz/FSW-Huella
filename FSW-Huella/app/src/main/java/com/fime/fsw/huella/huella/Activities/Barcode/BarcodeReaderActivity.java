@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.fime.fsw.huella.huella.Activities.Fingerprint.IdentificarHuellaActivity;
 import com.fime.fsw.huella.huella.Data.Modelos.Task;
+import com.fime.fsw.huella.huella.Data.Provider.RealmProvider;
 import com.fime.fsw.huella.huella.R;
 import com.fime.fsw.huella.huella.Utilidad.SesionAplicacion;
 import com.rscja.deviceapi.Barcode1D;
@@ -107,18 +108,16 @@ public class BarcodeReaderActivity extends AppCompatActivity {
         btnEscanear = (Button) findViewById(R.id.escanear_button);
         btnNoSalon = (Button) findViewById(R.id.no_salon_button);
 
-
-
-
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
 
         //Trae los datos que le paso el DatosVisitaFragment
-        long id = getIntent().getLongExtra(Task._ID_KEY, -1);
+        String id = getIntent().getStringExtra(Task._ID_KEY);
 
-        final Task task = getTaskConId(id);
+        final Task task = RealmProvider.getTaskById(mRealm, id);
+
         final String roomBarcode = task.getRoom().getBarcode();
         final String task_id = task.get_id();
 
@@ -138,7 +137,7 @@ public class BarcodeReaderActivity extends AppCompatActivity {
                     //TODO: No debe de ir en la version final.
                     //Si el escanner no esta conectado entonces es la debug App
                     //Solamente cambia los valores
-                    setVisitAtCheckout(task);
+                    RealmProvider.setVisitAtCheckout(mRealm, task);
                     startHuellaActivity(task_id, roomBarcode);
                 }
             }
@@ -147,43 +146,14 @@ public class BarcodeReaderActivity extends AppCompatActivity {
         btnNoSalon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setAllCheckoutsAndValoresTask(task);
+                RealmProvider.setCheckoutTaskValuesNoBarcode(mRealm,task);
                 mSesion.setCurrentTaskPosition(mSesion.getCurrentTaskPosition() + 1);
                 finish();
             }
         });
     }
 
-    public Task getTaskConId(long id){
-        return mRealm.where(Task.class).equalTo(Task._ID_KEY, id).findFirst();
-    }
 
-    public void setAllCheckoutsAndValoresTask(final Task task){
-        mRealm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                task.setTaskState(Task.STATE_PASO_NO_VINO_MAESTRO);
-                task.getCheckout().setVisitAt(String.valueOf(System.currentTimeMillis()));
-                task.getCheckout().setSignedAt(String.valueOf(System.currentTimeMillis()));
-                task.getCheckout().setFinishedAt(String.valueOf(System.currentTimeMillis()));
-
-                Log.i(TAG, "No se encontro salon visitAt signedAt: " + task.getCheckout().toString());
-            }
-        });
-    }
-
-    public void setVisitAtCheckout(final Task task){
-        final String timeInMillis = String.valueOf(System.currentTimeMillis());
-        //Se actualiza el visitAt del Checkout del Task
-        mRealm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                task.getCheckout().setVisitAt(timeInMillis);
-            }
-        });
-        Log.i(TAG, "Se agrego el visitAt al Checkout");
-        Log.d(TAG, task.getCheckout().toString());
-    }
 
     public void startHuellaActivity(String taskId, String barcodeSalon){
         //Inicia el reconocimiento de huella porque se encontro el salon
@@ -278,7 +248,7 @@ public class BarcodeReaderActivity extends AppCompatActivity {
                     //del Task entonces se ejecuta esta parte.
 
                     //Se agrega la hora a la que visito el salon
-                    setVisitAtCheckout(task);
+                    RealmProvider.setVisitAtCheckout(mRealm, task);
                     //Se inicia la actuvidad de la Huella
                     startHuellaActivity(taskId, barcodeSalon);
                 }

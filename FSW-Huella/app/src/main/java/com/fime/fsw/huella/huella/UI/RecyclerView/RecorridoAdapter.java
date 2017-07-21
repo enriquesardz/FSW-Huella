@@ -26,14 +26,16 @@ public class RecorridoAdapter extends RealmRecyclerViewAdapter<Task, RecorridoAd
     RecyclerViewItemClickListener mListener;
 
     long currentTask;
+    String routeAcademyHour;
 
-    public RecorridoAdapter(Context context, @Nullable OrderedRealmCollection<Task> data, long currentTask, RecyclerViewItemClickListener listener) {
+    public RecorridoAdapter(Context context, @Nullable OrderedRealmCollection<Task> data, long currentTask, String routeAcademyHour, RecyclerViewItemClickListener listener) {
         super(data, true);
         setHasStableIds(true);
 
         this.mContext = context;
         this.mListener = listener;
         this.currentTask = currentTask;
+        this.routeAcademyHour = routeAcademyHour;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
@@ -72,10 +74,10 @@ public class RecorridoAdapter extends RealmRecyclerViewAdapter<Task, RecorridoAd
         holder.task = task;
 
         int taskState = task.getTaskState();
+        String roomNumber = task.getRoom().getRoomNumber();
 
-        //TODO: Cambiar hora hardcoded
-        holder.tvHoraFime.setText("Hard");
-        holder.tvSalonFime.setText(task.getRoom().getRoomNumber());
+        holder.tvHoraFime.setText(routeAcademyHour);
+        holder.tvSalonFime.setText(roomNumber);
 
         //Si el task no ha pasado, entonces se desactiva
         if(task.getSequence() > currentTask) {
