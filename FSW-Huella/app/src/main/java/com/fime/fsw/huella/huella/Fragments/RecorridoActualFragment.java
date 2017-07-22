@@ -126,7 +126,7 @@ public class RecorridoActualFragment extends Fragment {
     }
 
     private void startDescarga() {
-        DescargaRecorridosService service = APICodo.signedRoute().create(DescargaRecorridosService.class);
+        DescargaRecorridosService service = APICodo.signedSingleRoute().create(DescargaRecorridosService.class);
         Call<Route> call = service.descargaRecorrido();
 
         call.enqueue(new Callback<Route>() {

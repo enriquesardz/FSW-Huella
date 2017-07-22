@@ -19,6 +19,7 @@
             android:layout_height="wrap_content">
 
             <EditText
+                android:id="@+id/user_edittext"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:imeOptions="actionNext"
@@ -30,6 +31,7 @@
             android:layout_height="wrap_content">
 
             <EditText
+                android:id="@+id/password_edittext"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/contrasena"

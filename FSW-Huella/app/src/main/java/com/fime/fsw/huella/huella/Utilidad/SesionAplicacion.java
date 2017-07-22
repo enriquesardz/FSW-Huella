@@ -20,6 +20,7 @@ public class SesionAplicacion {
     public static final String PREF_NOMBRE = "com.fime.fsw.huella.AndroidFSWHuella";
     public static final String KEY_LOGIN = "login";
     public static final String KEY_USUARIO = "usuario";
+    public static final String KEY_USER_TOKEN = "userToken";
     public static final String KEY_CURRENT_ITEM_LISTA = "currentItem";
     public static final String KEY_LAST_ITEM_LISTA = "lastItem";
 
@@ -30,9 +31,10 @@ public class SesionAplicacion {
     }
     //Crea sesion de Log In, se salta la pantalla de login
     //y lo manda a descargar
-    public void crearSesionLogin(String usuario){
+    public void crearSesionLogin(String usuario, String userToken){
         editor.putBoolean(KEY_LOGIN, true);
         editor.putString(KEY_USUARIO, usuario);
+        editor.putString(KEY_USER_TOKEN, userToken);
         editor.commit();
     }
     public void setCurrentTaskPosition(long currentTaskPosition){

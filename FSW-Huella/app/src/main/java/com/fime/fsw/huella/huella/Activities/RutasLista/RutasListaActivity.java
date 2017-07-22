@@ -12,11 +12,9 @@ import android.widget.TextView;
 
 import com.fime.fsw.huella.huella.API.APICodo;
 import com.fime.fsw.huella.huella.API.ServiciosAPI.DescargaRutaService;
-import com.fime.fsw.huella.huella.Activities.InicioSesion.MenuInicioSesionActivity;
 import com.fime.fsw.huella.huella.Activities.InicioSesion.PrefectoLoginActivity;
 import com.fime.fsw.huella.huella.Activities.RecorridoMain.RecorridoMainActivity;
 import com.fime.fsw.huella.huella.Data.Modelos.Route;
-import com.fime.fsw.huella.huella.Fragments.RecorridoActualFragment;
 import com.fime.fsw.huella.huella.R;
 
 import java.util.List;
@@ -71,7 +69,7 @@ public class RutasListaActivity extends AppCompatActivity {
         tvResponse = (TextView) findViewById(R.id.response);
         btnContinuar = (Button) findViewById(R.id.continuar);
 
-        DescargaRutaService service = APICodo.signedRoutes().create(DescargaRutaService.class);
+        DescargaRutaService service = APICodo.signedRouteList().create(DescargaRutaService.class);
         Call<List<Route>> call = service.descargaRutas("Prefecto1");
 
         call.enqueue(new Callback<List<Route>>() {
