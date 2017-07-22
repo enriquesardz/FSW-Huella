@@ -45,6 +45,17 @@ public class RealmProvider{
         });
     }
 
+    public static void saveRouteListToRealm(Realm mRealm, final List<Route> routes){
+        mRealm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                for (Route route : routes){
+                    realm.copyToRealmOrUpdate(route);
+                }
+            }
+        });
+    }
+
     public static void saveRouteToRealm(Realm mRealm, final Route route){
         mRealm.executeTransaction(new Realm.Transaction() {
             @Override
@@ -73,6 +84,10 @@ public class RealmProvider{
 
     public static Route getRouteByTaskId(Realm mRealm, String _id){
         return mRealm.where(Route.class).equalTo("tasks._id", _id).findFirst();
+    }
+
+    public static OrderedRealmCollection<Route> getAllOrderedRoutes(Realm mRealm){
+        return mRealm.where(Route.class).findAllSorted(Route._ID_FIELD);
     }
 
     //Regresa un HashMap Key Value pair con la informacion que se muestra en la UI.

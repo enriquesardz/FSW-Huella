@@ -43,7 +43,7 @@
     </string-array>
 
     <!-- Recorrido Main Activity -->
-    <string name="mrecorrido_seguro_salir">¿Seguro que quieres salir?</string>
+    <string name="mrecorrido_seguro_salir">¿Regresar a la lista de Rutas?</string>
     <string name="mrecorrido_si">Si</string>
     <string name="mrecorrido_no">No</string>
 

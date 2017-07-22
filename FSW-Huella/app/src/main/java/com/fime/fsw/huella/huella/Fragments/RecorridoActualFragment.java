@@ -22,6 +22,8 @@ import com.fime.fsw.huella.huella.UI.RecyclerView.RecorridoAdapter;
 import com.fime.fsw.huella.huella.UI.RecyclerView.RecyclerViewItemClickListener;
 import com.fime.fsw.huella.huella.Utilidad.SesionAplicacion;
 
+import java.util.HashMap;
+
 import io.realm.OrderedRealmCollection;
 import io.realm.Realm;
 import retrofit2.Call;
@@ -116,7 +118,7 @@ public class RecorridoActualFragment extends Fragment {
         //Si ya se descargaron los datos, getRoute deberia de regresar una ruta
         //por lo tanto, no vuela a descargar y solamente muestra los datos en el RecyclerView
 
-        if (route == null){
+        if (route.getTasks().size() == 0){
             startDescarga();
         }
         else{
@@ -126,8 +128,14 @@ public class RecorridoActualFragment extends Fragment {
     }
 
     private void startDescarga() {
+
+        HashMap<String,String> userData = mSesionApp.getDetalleUsuario();
+
+        String routeId = mSesionApp.getCurrentRutaId();
+        String token = "JWT " + userData.get(SesionAplicacion.KEY_USER_TOKEN);
+
         DescargaRecorridosService service = APICodo.signedSingleRoute().create(DescargaRecorridosService.class);
-        Call<Route> call = service.descargaRecorrido();
+        Call<Route> call = service.descargaRecorrido(routeId,token);
 
         call.enqueue(new Callback<Route>() {
             @Override

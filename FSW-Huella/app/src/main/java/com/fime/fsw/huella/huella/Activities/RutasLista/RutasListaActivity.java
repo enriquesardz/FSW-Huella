@@ -6,11 +6,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.fime.fsw.huella.huella.API.APICodo;
@@ -18,12 +19,17 @@ import com.fime.fsw.huella.huella.API.ServiciosAPI.DescargaRutaService;
 import com.fime.fsw.huella.huella.Activities.InicioSesion.MenuInicioSesionActivity;
 import com.fime.fsw.huella.huella.Activities.RecorridoMain.RecorridoMainActivity;
 import com.fime.fsw.huella.huella.Data.Modelos.Route;
+import com.fime.fsw.huella.huella.Data.Provider.RealmProvider;
 import com.fime.fsw.huella.huella.R;
+import com.fime.fsw.huella.huella.UI.RecyclerView.RecyclerViewItemClickListener;
+import com.fime.fsw.huella.huella.UI.RecyclerView.RutasRecyclerViewAdapter;
 import com.fime.fsw.huella.huella.Utilidad.SesionAplicacion;
 
 import java.util.HashMap;
 import java.util.List;
 
+import io.realm.OrderedRealmCollection;
+import io.realm.Realm;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -37,9 +43,12 @@ public class RutasListaActivity extends AppCompatActivity {
 
     Context mContext;
     SesionAplicacion mSesionApp;
+    Realm mRealm;
 
     TextView tvResponse;
-    Button btnContinuar;
+    RecyclerView rvRutas;
+
+    RutasRecyclerViewAdapter rvRutasAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +57,7 @@ public class RutasListaActivity extends AppCompatActivity {
 
         mContext = RutasListaActivity.this;
         mSesionApp = new SesionAplicacion(mContext);
+        mRealm = Realm.getDefaultInstance();
 
         initComponentes();
     }
@@ -63,6 +73,7 @@ public class RutasListaActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.cerrar_sesion:
                 mSesionApp.terminarSesionAplicacion();
+                RealmProvider.dropAllRealmTables(mRealm);
                 //TODO: Aqui se deben de regresar los checkouts al web service.
                 startActivity(new Intent(mContext, MenuInicioSesionActivity.class));
                 finish();
@@ -88,14 +99,33 @@ public class RutasListaActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mRealm.close();
+    }
+
     public void initComponentes() {
-        tvResponse = (TextView) findViewById(R.id.response);
-        btnContinuar = (Button) findViewById(R.id.continuar);
+        tvResponse = (TextView) findViewById(R.id.dia_textview);
+        rvRutas = (RecyclerView) findViewById(R.id.rutas_recyclerview);
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+
+        rvRutas.setHasFixedSize(true);
+        rvRutas.setLayoutManager(linearLayoutManager);
+
+        descargarRutas();
+    }
+
+    public void descargarRutas(){
         HashMap<String, String> datosUsuario = mSesionApp.getDetalleUsuario();
 
         //TODO: Hard coded?
         DescargaRutaService service = APICodo.signedRouteList().create(DescargaRutaService.class);
         Call<List<Route>> call = service.descargaRutas("JWT " + datosUsuario.get(SesionAplicacion.KEY_USER_TOKEN));
+
+
 
         call.enqueue(new Callback<List<Route>>() {
             @Override
@@ -106,7 +136,9 @@ public class RutasListaActivity extends AppCompatActivity {
                     return;
                 }
 
-                tvResponse.setText(response.body().toString());
+                //Guarda los datos al Realm
+                RealmProvider.saveRouteListToRealm(mRealm, response.body());
+                loadRecyclerView();
             }
 
             @Override
@@ -114,15 +146,27 @@ public class RutasListaActivity extends AppCompatActivity {
                 tvResponse.setText("No descargo");
             }
         });
+    }
 
-        btnContinuar.setOnClickListener(new View.OnClickListener() {
+    public void loadRecyclerView(){
+        OrderedRealmCollection<Route> orderedRoutes = RealmProvider.getAllOrderedRoutes(mRealm);
+        rvRutasAdapter = new RutasRecyclerViewAdapter(mContext, orderedRoutes, new RecyclerViewItemClickListener() {
             @Override
-            public void onClick(View view) {
-
-                startActivity(new Intent(mContext, RecorridoMainActivity.class));
-                finish();
+            public void onItemClick(View v, int position) {
+                Route route = rvRutasAdapter.getItem(position);
+                sendRouteToRecorridoActivity(route);
             }
         });
+        rvRutas.setAdapter(rvRutasAdapter);
+    }
 
+    public void sendRouteToRecorridoActivity(Route route){
+        Intent intent = new Intent(mContext, RecorridoMainActivity.class);
+        String routeId = route.get_id();
+
+        mSesionApp.crearSesionRutaSeleccionada(routeId);
+        startActivity(intent);
+
+        finish();
     }
 }

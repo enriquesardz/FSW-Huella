@@ -10,12 +10,10 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.Button;
 
 import com.fime.fsw.huella.huella.Activities.HuellaApplication;
-import com.fime.fsw.huella.huella.Activities.InicioSesion.MenuInicioSesionActivity;
+import com.fime.fsw.huella.huella.Activities.RutasLista.RutasListaActivity;
 import com.fime.fsw.huella.huella.Data.Modelos.Assignment;
 import com.fime.fsw.huella.huella.Data.Modelos.Checkout;
 import com.fime.fsw.huella.huella.Data.Modelos.Owner;
@@ -23,7 +21,6 @@ import com.fime.fsw.huella.huella.Data.Modelos.Room;
 import com.fime.fsw.huella.huella.Data.Modelos.Route;
 import com.fime.fsw.huella.huella.Data.Modelos.Task;
 import com.fime.fsw.huella.huella.Data.Modelos.UploadCheckout;
-import com.fime.fsw.huella.huella.Data.Provider.RealmProvider;
 import com.fime.fsw.huella.huella.Fragments.DatosVisitaFragment;
 import com.fime.fsw.huella.huella.Fragments.RecorridoActualFragment;
 import com.fime.fsw.huella.huella.R;
@@ -68,26 +65,6 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.settings_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.cerrar_sesion:
-                mSesionApp.terminarSesionAplicacion();
-                //TODO: Aqui se deben de regresar los checkouts al web service.
-                startActivity(new Intent(mContext, MenuInicioSesionActivity.class));
-                finish();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    @Override
     public void onBackPressed() {
         if (mBarraNav.getCurrentTabId() == R.id.tab_datos_visita) {
             mBarraNav.selectTabWithId(R.id.tab_recorrido_actual);
@@ -99,6 +76,10 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                     RecorridoMainActivity.super.onBackPressed();
+                                    mSesionApp.dropRutaSeleccionada();
+                                    //TODO: Aqui se deben de regresar los checkouts al web service.
+                                    startActivity(new Intent(mContext, RutasListaActivity.class));
+                                    finish();
                                 }
                             })
                     .setNegativeButton(getResources().getString(R.string.mrecorrido_no), null)
@@ -128,7 +109,6 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
 
         setUpBarraNavegacion();
         dataCount();
-        RealmProvider.dropAllRealmTables(mRealm);
     }
 
     public void setUpBarraNavegacion(){

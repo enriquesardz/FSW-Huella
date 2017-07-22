@@ -19,6 +19,8 @@ public class SesionAplicacion {
 
     public static final String PREF_NOMBRE = "com.fime.fsw.huella.AndroidFSWHuella";
     public static final String KEY_LOGIN = "login";
+    public static final String KEY_ROUTE_ID = "routeId";
+    public static final String KEY_ROUTE_IS_SELECTED = "routeIsSelected";
     public static final String KEY_USUARIO = "usuario";
     public static final String KEY_USER_TOKEN = "userToken";
     public static final String KEY_CURRENT_ITEM_LISTA = "currentItem";
@@ -29,14 +31,33 @@ public class SesionAplicacion {
         preferences = mContext.getSharedPreferences(PREF_NOMBRE, mContext.MODE_PRIVATE);
         editor = preferences.edit();
     }
-    //Crea sesion de Log In, se salta la pantalla de login
-    //y lo manda a descargar
+    //Crea sesion de Log In, se salta la pantalla de login y salta
+    //a la Lista de Rutas
     public void crearSesionLogin(String usuario, String userToken){
         editor.putBoolean(KEY_LOGIN, true);
         editor.putString(KEY_USUARIO, usuario);
         editor.putString(KEY_USER_TOKEN, userToken);
         editor.commit();
     }
+
+    //Inicia sesion de ruta seleccionada para que salte directo
+    //a RecorridoMain
+    public void crearSesionRutaSeleccionada(String routeID){
+        editor.putBoolean(KEY_ROUTE_IS_SELECTED, true);
+        editor.putString(KEY_ROUTE_ID, routeID);
+        editor.commit();
+    }
+
+    public String getCurrentRutaId(){
+        return preferences.getString(KEY_ROUTE_ID, null);
+    }
+
+    public void dropRutaSeleccionada(){
+        editor.putBoolean(KEY_ROUTE_IS_SELECTED, false);
+        editor.putString(KEY_ROUTE_ID, null);
+        editor.commit();
+    }
+
     public void setCurrentTaskPosition(long currentTaskPosition){
         editor.putLong(KEY_CURRENT_ITEM_LISTA, currentTaskPosition);
         editor.commit();
@@ -70,5 +91,9 @@ public class SesionAplicacion {
 
     public boolean usuarioLogeado(){
         return preferences.getBoolean(KEY_LOGIN, false);
+    }
+
+    public boolean routeIsSelected(){
+        return preferences.getBoolean(KEY_ROUTE_IS_SELECTED, false);
     }
 }
