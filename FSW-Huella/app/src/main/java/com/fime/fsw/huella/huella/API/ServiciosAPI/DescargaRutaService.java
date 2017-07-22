@@ -6,13 +6,13 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
-import retrofit2.http.Path;
+import retrofit2.http.Header;
 
 /**
  * Created by ensardz on 21/07/2017.
  */
 
 public interface DescargaRutaService {
-    @GET("routes/{prefecto_id}")
-    Call<List<Route>> descargaRutas(@Path("prefecto_id") String prefectoId);
+    @GET("routes/")
+    Call<List<Route>> descargaRutas(@Header("Authorization") String token);
 }

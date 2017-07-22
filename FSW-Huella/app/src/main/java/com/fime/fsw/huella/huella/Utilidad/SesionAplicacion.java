@@ -64,6 +64,7 @@ public class SesionAplicacion {
     public HashMap<String, String> getDetalleUsuario(){
         HashMap<String, String> usuario = new HashMap<String,String>();
         usuario.put(KEY_USUARIO, preferences.getString(KEY_USUARIO,null));
+        usuario.put(KEY_USER_TOKEN, preferences.getString(KEY_USER_TOKEN,null));
         return usuario;
     }
 

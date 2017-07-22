@@ -110,6 +110,7 @@ public class PrefectoLoginActivity extends AppCompatActivity {
             public void onResponse(Call<TokenResponse> call, Response<TokenResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     saveDataAndStartSession(loginUser.getUser(), response.body());
+                    Log.d(TAG, response.body().toString());
                 } else {
                     Toast.makeText(mContext, "Usuario no autorizado", Toast.LENGTH_SHORT).show();
                     Log.e(TAG, "Bad user");

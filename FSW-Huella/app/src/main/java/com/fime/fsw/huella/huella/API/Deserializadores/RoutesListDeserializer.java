@@ -19,7 +19,7 @@ import java.util.List;
 public class RoutesListDeserializer implements JsonDeserializer<List<Route>> {
     @Override
     public List<Route> deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-        JsonArray routeArray = json.getAsJsonArray();
+        JsonArray routeArray = json.getAsJsonObject().get("data").getAsJsonArray();
 
         List<Route> routes = new ArrayList<>();
 

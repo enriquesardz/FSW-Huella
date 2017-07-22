@@ -24,45 +24,40 @@ public class APICodo {
     //https://api.myjson.com/bins/w20k7
     public static final String BASE_URL = "https://nyx-codo.herokuapp.com/";
 
-    private static Retrofit retrofit = null;
 
     //Esta ruta esta firmada por la API entonces puede hacer requests.
     public static Retrofit signedSingleRoute() {
-        if (retrofit == null) {
 
-            GsonBuilder builder = new GsonBuilder();
-            builder.registerTypeAdapter(Route.class, new RouteDeserializer());
+        GsonBuilder builder = new GsonBuilder();
+        builder.registerTypeAdapter(Route.class, new RouteDeserializer());
 
-            retrofit = new Retrofit.Builder()
-                    .baseUrl(BASE_URL)
-                    .addConverterFactory(GsonConverterFactory.create(builder.create()))
-                    .build();
-        }
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create(builder.create()))
+                .build();
+
         return retrofit;
     }
 
     public static Retrofit signedRouteList() {
-        if (retrofit == null) {
-            GsonBuilder builder = new GsonBuilder();
-            Type listType = new TypeToken<List<Route>>() {
-            }.getType();
-            builder.registerTypeAdapter(listType, new RoutesListDeserializer());
+        GsonBuilder builder = new GsonBuilder();
+        Type listType = new TypeToken<List<Route>>() {
+        }.getType();
+        builder.registerTypeAdapter(listType, new RoutesListDeserializer());
 
-            retrofit = new Retrofit.Builder()
-                    .baseUrl(BASE_URL)
-                    .addConverterFactory(GsonConverterFactory.create(builder.create()))
-                    .build();
-        }
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create(builder.create()))
+                .build();
         return retrofit;
     }
 
     public static Retrofit requestToken() {
-        if (retrofit == null) {
-            retrofit = new Retrofit.Builder()
-                    .baseUrl(BASE_URL)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
-        }
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
         return retrofit;
     }
 }
