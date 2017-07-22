@@ -79,6 +79,7 @@ public class RutasListaActivity extends AppCompatActivity {
             public void onResponse(Call<List<Route>> call, Response<List<Route>> response) {
                 if (response.body() == null) {
                     Log.e(TAG, "Api retorno NULL: " + response.toString());
+                    tvResponse.setText(response.toString());
                     return;
                 }
 
