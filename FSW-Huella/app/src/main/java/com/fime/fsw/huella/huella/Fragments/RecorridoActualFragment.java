@@ -138,7 +138,10 @@ public class RecorridoActualFragment extends Fragment {
                 Route route = response.body();
 
                 if (route == null) {
-                    Log.e(TAG, "No hay respuesta de la API + " + response.body());
+                    Log.e(TAG, "No hay respuesta de la API + " + response.toString());
+                    loadingState.setVisibility(View.GONE);
+                    emptyState.setVisibility(View.VISIBLE);
+                    recyclerContainer.setVisibility(View.GONE);
                     return;
                 }
 
