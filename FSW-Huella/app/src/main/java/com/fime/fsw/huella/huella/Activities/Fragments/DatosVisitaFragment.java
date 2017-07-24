@@ -1,4 +1,4 @@
-package com.fime.fsw.huella.huella.Fragments;
+package com.fime.fsw.huella.huella.Activities.Fragments;
 
 import android.content.Context;
 import android.content.Intent;
