@@ -21,6 +21,7 @@ import com.fime.fsw.huella.huella.Data.Modelos.Room;
 import com.fime.fsw.huella.huella.Data.Modelos.Route;
 import com.fime.fsw.huella.huella.Data.Modelos.Task;
 import com.fime.fsw.huella.huella.Data.Modelos.UploadCheckout;
+import com.fime.fsw.huella.huella.Data.Provider.RealmProvider;
 import com.fime.fsw.huella.huella.Fragments.DatosVisitaFragment;
 import com.fime.fsw.huella.huella.Fragments.RecorridoActualFragment;
 import com.fime.fsw.huella.huella.R;
@@ -39,7 +40,6 @@ import io.realm.RealmResults;
 public class RecorridoMainActivity extends AppCompatActivity implements RecorridoActualFragment.OnFragmentInteractionListener, DatosVisitaFragment.OnFragmentInteractionListener {
 
     public static final String TAG = HuellaApplication.APP_TAG + RecorridoMainActivity.class.getSimpleName();
-    public static final String KEY_ID_TASK = "_id";
 
     private BottomBar mBarraNav;
     private Fragment mFragment;
@@ -47,8 +47,6 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
     private Bundle mBundle;
     private Realm mRealm;
     private SesionAplicacion mSesionApp;
-
-    private Button btnSubir;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +75,6 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                     RecorridoMainActivity.super.onBackPressed();
                                     mSesionApp.dropRutaSeleccionada();
-                                    //TODO: Aqui se deben de regresar los checkouts al web service.
                                     startActivity(new Intent(mContext, RutasListaActivity.class));
                                     finish();
                                 }
@@ -108,12 +105,11 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
         mBundle = new Bundle();
 
         setUpBarraNavegacion();
-        dataCount();
+        RealmProvider.dataCount(mRealm);
     }
 
     public void setUpBarraNavegacion(){
         mBarraNav = (BottomBar) findViewById(R.id.barra_navegacion);
-//        btnSubir = (Button) findViewById(R.id.subida_test);
 
         mBarraNav.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
@@ -138,7 +134,7 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
     }
 
     public String getCheckoutsFromRealmToJson() {
-        RealmResults<Task> tasks = mRealm.where(Task.class).findAll();
+        RealmResults<Task> tasks = RealmProvider.getAllTasks(mRealm);
         List<UploadCheckout> uploadCheckouts = new ArrayList<UploadCheckout>();
         for (Task task : tasks){
             uploadCheckouts.add(new UploadCheckout(String.valueOf(task.get_id()),mRealm.copyFromRealm(task.getCheckout())));
@@ -148,14 +144,6 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
         return json;
     }
 
-    public void dataCount(){
-        int tasknum = mRealm.where(Task.class).findAll().size();
-        int routenum = mRealm.where(Route.class).findAll().size();
-        int roomnum = mRealm.where(Room.class).findAll().size();
-        int ownernum = mRealm.where(Owner.class).findAll().size();
-        int checkoutnum = mRealm.where(Checkout.class).findAll().size();
-        int assignmentnum = mRealm.where(Assignment.class).findAll().size();
-        Log.d(TAG, "Task: " + String.valueOf(tasknum) + " Route: " + String.valueOf(routenum) + " Room: " + String.valueOf(roomnum) + " Owner: " + String.valueOf(ownernum) + " Checkouts: " + String.valueOf(checkoutnum) + " Assignment: " + String.valueOf(assignmentnum));
-    }
+
 
 }

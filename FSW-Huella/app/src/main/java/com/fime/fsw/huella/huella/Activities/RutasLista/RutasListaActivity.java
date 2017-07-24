@@ -13,9 +13,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.fime.fsw.huella.huella.API.APICodo;
-import com.fime.fsw.huella.huella.API.ServiciosAPI.DescargaRutaService;
+import com.fime.fsw.huella.huella.API.Endpoints.APIServices;
 import com.fime.fsw.huella.huella.Activities.InicioSesion.MenuInicioSesionActivity;
 import com.fime.fsw.huella.huella.Activities.RecorridoMain.RecorridoMainActivity;
 import com.fime.fsw.huella.huella.Data.Modelos.Route;
@@ -74,7 +75,6 @@ public class RutasListaActivity extends AppCompatActivity {
             case R.id.cerrar_sesion:
                 mSesionApp.terminarSesionAplicacion();
                 RealmProvider.dropAllRealmTables(mRealm);
-                //TODO: Aqui se deben de regresar los checkouts al web service.
                 startActivity(new Intent(mContext, MenuInicioSesionActivity.class));
                 finish();
                 return true;
@@ -86,7 +86,7 @@ public class RutasListaActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         new AlertDialog.Builder(mContext)
-                .setMessage(getResources().getString(R.string.mrecorrido_seguro_salir))
+                .setMessage(getResources().getString(R.string.rutl_salir_aplicacion))
                 .setPositiveButton(getResources().getString(R.string.mrecorrido_si),
                         new DialogInterface.OnClickListener() {
                             @Override
@@ -129,18 +129,16 @@ public class RutasListaActivity extends AppCompatActivity {
     public void descargarRutas(){
         HashMap<String, String> datosUsuario = mSesionApp.getDetalleUsuario();
 
-        //TODO: Hard coded?
-        DescargaRutaService service = APICodo.signedRouteList().create(DescargaRutaService.class);
+        APIServices service = APICodo.signedRouteList().create(APIServices.class);
         Call<List<Route>> call = service.descargaRutas(datosUsuario.get(SesionAplicacion.KEY_USER_TOKEN));
-
-
 
         call.enqueue(new Callback<List<Route>>() {
             @Override
             public void onResponse(Call<List<Route>> call, Response<List<Route>> response) {
+
+                //Si el web service no regresa nada
                 if (response.body() == null || !response.isSuccessful()) {
                     Log.e(TAG, "Api retorno NULL: " + response.toString());
-                    tvResponse.setText(response.toString());
                     return;
                 }
 
@@ -151,24 +149,27 @@ public class RutasListaActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<Route>> call, Throwable t) {
-                tvResponse.setText("No descargo");
+                Toast.makeText(mContext, "Fallo en la descarga", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     public void loadRecyclerView(){
+
         OrderedRealmCollection<Route> orderedRoutes = RealmProvider.getAllOrderedRoutes(mRealm);
+
         rvRutasAdapter = new RutasRecyclerViewAdapter(mContext, orderedRoutes, new RecyclerViewItemClickListener() {
             @Override
             public void onItemClick(View v, int position) {
                 Route route = rvRutasAdapter.getItem(position);
-                sendRouteToRecorridoActivity(route);
+                saveRouteIdStartRecorrido(route);
             }
         });
+
         rvRutas.setAdapter(rvRutasAdapter);
     }
 
-    public void sendRouteToRecorridoActivity(Route route){
+    public void saveRouteIdStartRecorrido(Route route){
         Intent intent = new Intent(mContext, RecorridoMainActivity.class);
         String routeId = route.get_id();
 

@@ -33,6 +33,7 @@ public class RealmProvider{
     public RealmProvider(Realm realm){
         mRealm = realm;
     }
+
     //CREATE
     public static void saveTasksToRealm(Realm mRealm, final List<Task> tasks){
         mRealm.executeTransaction(new Realm.Transaction() {
@@ -122,6 +123,16 @@ public class RealmProvider{
         data.put(Owner.LAST_NAME_KEY, owner.getLastName());
 
         return data;
+    }
+
+    public static void dataCount(Realm mRealm){
+        int tasknum = mRealm.where(Task.class).findAll().size();
+        int routenum = mRealm.where(Route.class).findAll().size();
+        int roomnum = mRealm.where(Room.class).findAll().size();
+        int ownernum = mRealm.where(Owner.class).findAll().size();
+        int checkoutnum = mRealm.where(Checkout.class).findAll().size();
+        int assignmentnum = mRealm.where(Assignment.class).findAll().size();
+        Log.d(TAG, "Task: " + String.valueOf(tasknum) + " Route: " + String.valueOf(routenum) + " Room: " + String.valueOf(roomnum) + " Owner: " + String.valueOf(ownernum) + " Checkouts: " + String.valueOf(checkoutnum) + " Assignment: " + String.valueOf(assignmentnum));
     }
 
 

@@ -13,7 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.fime.fsw.huella.huella.API.APICodo;
-import com.fime.fsw.huella.huella.API.ServiciosAPI.DescargaRecorridosService;
+import com.fime.fsw.huella.huella.API.Endpoints.APIServices;
 import com.fime.fsw.huella.huella.Data.Modelos.Route;
 import com.fime.fsw.huella.huella.Data.Modelos.Task;
 import com.fime.fsw.huella.huella.Data.Provider.RealmProvider;
@@ -101,8 +101,7 @@ public class RecorridoActualFragment extends Fragment {
         recyclerContainer = (LinearLayout)view.findViewById(R.id.recyclerview_container);
         emptyState = (LinearLayout)view.findViewById(R.id.empty_state);
 
-        loadingState.setVisibility(View.VISIBLE);
-        recyclerContainer.setVisibility(View.GONE);
+        showLoadingState();
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -134,7 +133,7 @@ public class RecorridoActualFragment extends Fragment {
         String routeId = mSesionApp.getCurrentRutaId();
         String token = userData.get(SesionAplicacion.KEY_USER_TOKEN);
 
-        DescargaRecorridosService service = APICodo.signedSingleRoute().create(DescargaRecorridosService.class);
+        APIServices service = APICodo.signedSingleRoute().create(APIServices.class);
         Call<Route> call = service.descargaRecorrido(routeId,token);
 
         call.enqueue(new Callback<Route>() {
@@ -147,15 +146,14 @@ public class RecorridoActualFragment extends Fragment {
 
                 if (route == null) {
                     Log.e(TAG, "No hay respuesta de la API + " + response.toString());
-                    loadingState.setVisibility(View.GONE);
-                    emptyState.setVisibility(View.VISIBLE);
-                    recyclerContainer.setVisibility(View.GONE);
+                    showEmptyState();
                     return;
                 }
 
                 //Se guardan los datos a nuestro Realm
                 RealmProvider.saveRouteToRealm(mRealm, route);
 
+                //TODO: Bind these values to the Route not the session
                 setInitialAndFinalTask();
 
                 setRVRecorridoAdapter();
@@ -166,9 +164,7 @@ public class RecorridoActualFragment extends Fragment {
             public void onFailure(Call<Route> call, Throwable t) {
                 //No se descargo nada
                 Toast.makeText(mContext, "No se descargo.", Toast.LENGTH_SHORT).show();
-                loadingState.setVisibility(View.GONE);
-                recyclerContainer.setVisibility(View.GONE);
-                emptyState.setVisibility(View.VISIBLE);
+                showEmptyState();
             }
         });
     }
@@ -189,9 +185,7 @@ public class RecorridoActualFragment extends Fragment {
 
     public void setRVRecorridoAdapter(){
 
-        loadingState.setVisibility(View.GONE);
-        emptyState.setVisibility(View.GONE);
-        recyclerContainer.setVisibility(View.VISIBLE);
+        showRecyclerView();
 
         Route route = RealmProvider.getRoute(mRealm);
         long currentItem = mSesionApp.getCurrentTaskPosition();
@@ -212,6 +206,24 @@ public class RecorridoActualFragment extends Fragment {
         });
 
         rvRecorrido.setAdapter(rvRecorridoAdapter);
+    }
+
+    public void showLoadingState(){
+        loadingState.setVisibility(View.VISIBLE);
+        recyclerContainer.setVisibility(View.GONE);
+        emptyState.setVisibility(View.GONE);
+    }
+
+    public void showRecyclerView(){
+        recyclerContainer.setVisibility(View.VISIBLE);
+        loadingState.setVisibility(View.GONE);
+        emptyState.setVisibility(View.GONE);
+    }
+
+    public void showEmptyState(){
+        emptyState.setVisibility(View.VISIBLE);
+        loadingState.setVisibility(View.GONE);
+        recyclerContainer.setVisibility(View.GONE);
     }
 
 }

@@ -58,6 +58,7 @@ public class SesionAplicacion {
         editor.commit();
     }
 
+    //TODO:These values should be bound to an individual Route and NOT to the session, as moving to another Route might produce undesired behaviour
     public void setCurrentTaskPosition(long currentTaskPosition){
         editor.putLong(KEY_CURRENT_ITEM_LISTA, currentTaskPosition);
         editor.commit();

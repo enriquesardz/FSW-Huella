@@ -42,6 +42,9 @@
         <item>Nocturno</item>
     </string-array>
 
+    <!-- Rutas Lista Activity -->
+    <string name="rutl_salir_aplicacion">Salir de la aplicación?</string>
+
     <!-- Recorrido Main Activity -->
     <string name="mrecorrido_seguro_salir">¿Regresar a la lista de Rutas?</string>
     <string name="mrecorrido_si">Si</string>

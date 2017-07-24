@@ -13,7 +13,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.fime.fsw.huella.huella.API.APICodo;
-import com.fime.fsw.huella.huella.API.ServiciosAPI.UserLoginAuthService;
+import com.fime.fsw.huella.huella.API.Endpoints.APIServices;
 import com.fime.fsw.huella.huella.Activities.RutasLista.RutasListaActivity;
 import com.fime.fsw.huella.huella.Data.Modelos.LoginUser;
 import com.fime.fsw.huella.huella.Data.Modelos.TokenResponse;
@@ -102,8 +102,8 @@ public class PrefectoLoginActivity extends AppCompatActivity {
 
         final LoginUser loginUser = new LoginUser(user, password);
 
-        UserLoginAuthService authService = APICodo.requestToken().create(UserLoginAuthService.class);
-        Call<TokenResponse> call = authService.authGetToken(loginUser);
+        APIServices service = APICodo.requestToken().create(APIServices.class);
+        Call<TokenResponse> call = service.authGetToken(loginUser);
 
         call.enqueue(new Callback<TokenResponse>() {
             @Override
