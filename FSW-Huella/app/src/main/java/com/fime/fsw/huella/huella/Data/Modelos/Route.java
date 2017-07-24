@@ -22,6 +22,8 @@ public class Route extends RealmObject {
     private String day;
     private String academyHour;
     private String assignedTo;
+    private String createdAt;
+    private int tasksCount;
     private RealmList<Task> tasks;
 
     public static Route create(String _id, String day, String academyHour, String assignedTo, RealmList<Task> tasks) {
@@ -30,6 +32,18 @@ public class Route extends RealmObject {
         route.day = day;
         route.academyHour = academyHour;
         route.assignedTo = assignedTo;
+        route.tasks = tasks;
+        return route;
+    }
+
+    public static Route create(String _id, String day, String academyHour, String assignedTo, String createdAt, int tasksCount, RealmList<Task> tasks) {
+        Route route = new Route();
+        route._id = _id;
+        route.day = day;
+        route.academyHour = academyHour;
+        route.assignedTo = assignedTo;
+        route.createdAt = createdAt;
+        route.tasksCount = tasksCount;
         route.tasks = tasks;
         return route;
     }
@@ -52,6 +66,14 @@ public class Route extends RealmObject {
 
     public RealmList<Task> getTasks() {
         return tasks;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public int getTasksCount() {
+        return tasksCount;
     }
 
     @Override

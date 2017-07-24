@@ -29,7 +29,9 @@ public class RoutesListDeserializer implements JsonDeserializer<List<Route>> {
             String day = route.get("day").getAsString();
             String academyHour = route.get("academyHour").getAsString();
             String assignedTo = route.get("assignedTo").getAsString();
-            routes.add(Route.create(_id,day,academyHour,assignedTo,null));
+            String createdAt = route.get("createdAt").getAsString();
+            int tasksCount = route.get("tasksCounts").getAsInt();
+            routes.add(Route.create(_id,day,academyHour,assignedTo,createdAt,tasksCount,null));
         }
 
         return routes;

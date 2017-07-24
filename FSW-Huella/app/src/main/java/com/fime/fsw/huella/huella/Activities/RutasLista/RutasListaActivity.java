@@ -115,7 +115,15 @@ public class RutasListaActivity extends AppCompatActivity {
         rvRutas.setHasFixedSize(true);
         rvRutas.setLayoutManager(linearLayoutManager);
 
-        descargarRutas();
+        Route route = RealmProvider.getRoute(mRealm);
+
+        if (route == null){
+            descargarRutas();
+        } else{
+            loadRecyclerView();
+        }
+
+
     }
 
     public void descargarRutas(){

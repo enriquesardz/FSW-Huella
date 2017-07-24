@@ -63,9 +63,10 @@ public class RutasRecyclerViewAdapter extends RealmRecyclerViewAdapter<Route, Ru
         final Route route = getItem(position);
         holder.route = route;
 
-        String routeNum = String.valueOf(position);
+        String routeNum = "Ruta " + String.valueOf(position + 1);
+        String taskCount = "Tareas " + String.valueOf(route.getTasksCount());
         holder.tvRutaNum.setText(routeNum);
-        holder.tvTaskCount.setText(routeNum);
+        holder.tvTaskCount.setText(taskCount);
 
     }
 

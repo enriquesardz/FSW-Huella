@@ -115,7 +115,7 @@ public class RecorridoActualFragment extends Fragment {
 
         Route route = RealmProvider.getRoute(mRealm);
 
-        //Si ya se descargaron los datos, getRoute deberia de regresar una ruta
+        //Si ya se descargaron los datos, getRoute deberia de regresar al menos una ruta
         //por lo tanto, no vuela a descargar y solamente muestra los datos en el RecyclerView
 
         if (route.getTasks().size() == 0){
