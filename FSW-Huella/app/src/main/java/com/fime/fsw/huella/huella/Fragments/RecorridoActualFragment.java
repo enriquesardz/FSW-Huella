@@ -132,7 +132,7 @@ public class RecorridoActualFragment extends Fragment {
         HashMap<String,String> userData = mSesionApp.getDetalleUsuario();
 
         String routeId = mSesionApp.getCurrentRutaId();
-        String token = "JWT " + userData.get(SesionAplicacion.KEY_USER_TOKEN);
+        String token = userData.get(SesionAplicacion.KEY_USER_TOKEN);
 
         DescargaRecorridosService service = APICodo.signedSingleRoute().create(DescargaRecorridosService.class);
         Call<Route> call = service.descargaRecorrido(routeId,token);

@@ -127,7 +127,7 @@ public class PrefectoLoginActivity extends AppCompatActivity {
     public void saveDataAndStartSession(String userName, TokenResponse tokenResponse) {
         //Guarda la sesion del usuario; el usuario ahora esta logeado.
         String user = userName;
-        String token = tokenResponse.getToken();
+        String token = "JWT " + tokenResponse.getToken();
 
         mSesionApp.crearSesionLogin(user, token);
 

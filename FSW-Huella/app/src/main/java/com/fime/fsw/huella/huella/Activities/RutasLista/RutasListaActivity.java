@@ -131,7 +131,7 @@ public class RutasListaActivity extends AppCompatActivity {
 
         //TODO: Hard coded?
         DescargaRutaService service = APICodo.signedRouteList().create(DescargaRutaService.class);
-        Call<List<Route>> call = service.descargaRutas("JWT " + datosUsuario.get(SesionAplicacion.KEY_USER_TOKEN));
+        Call<List<Route>> call = service.descargaRutas(datosUsuario.get(SesionAplicacion.KEY_USER_TOKEN));
 
 
 
