@@ -7,9 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import com.fime.fsw.huella.huella.Unused.NewHuellaActivity;
 import com.fime.fsw.huella.huella.R;
-import com.fime.fsw.huella.huella.Unused.PrefectoRegistroActivity;
 
 public class MenuInicioSesionActivity extends AppCompatActivity {
 

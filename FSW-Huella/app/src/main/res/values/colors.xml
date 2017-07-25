@@ -16,6 +16,7 @@
 
     <!-- Otros colores palette FIME -->
     <color name="fime_mint">#9DD09E</color>
+    <color name="fime_dark">#359352</color>
     
     <!-- Colores para views -->
     <color name="verde_obscuro">#3E9A49</color>

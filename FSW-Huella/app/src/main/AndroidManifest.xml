@@ -32,7 +32,8 @@
         <activity android:name=".Unused.NewHuellaActivity" />
         <activity android:name=".Activities.Barcode.BarcodeReaderActivity" />
         <activity android:name=".Activities.Fingerprint.IdentificarHuellaActivity" />
-        <activity android:name=".Activities.RutasLista.RutasListaActivity"></activity>
+        <activity android:name=".Activities.RutasLista.RutasListaActivity" />
+        <activity android:name=".Activities.AuthDownloadActivity"></activity>
     </application>
 
 </manifest>

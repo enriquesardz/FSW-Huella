@@ -17,7 +17,7 @@ import android.widget.Toast;
 
 import com.fime.fsw.huella.huella.API.APICodo;
 import com.fime.fsw.huella.huella.API.Endpoints.APIServices;
-import com.fime.fsw.huella.huella.Activities.InicioSesion.MenuInicioSesionActivity;
+import com.fime.fsw.huella.huella.Activities.InicioSesion.PrefectoLoginActivity;
 import com.fime.fsw.huella.huella.Activities.RecorridoMain.RecorridoMainActivity;
 import com.fime.fsw.huella.huella.Data.Modelos.Route;
 import com.fime.fsw.huella.huella.Data.Provider.RealmProvider;
@@ -75,7 +75,7 @@ public class RutasListaActivity extends AppCompatActivity {
             case R.id.cerrar_sesion:
                 mSesionApp.terminarSesionAplicacion();
                 RealmProvider.dropAllRealmTables(mRealm);
-                startActivity(new Intent(mContext, MenuInicioSesionActivity.class));
+                startActivity(new Intent(mContext, PrefectoLoginActivity.class));
                 finish();
                 return true;
             default:

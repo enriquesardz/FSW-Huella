@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import com.fime.fsw.huella.huella.Activities.InicioSesion.MenuInicioSesionActivity;
+import com.fime.fsw.huella.huella.Activities.InicioSesion.PrefectoLoginActivity;
 import com.fime.fsw.huella.huella.Activities.RecorridoMain.RecorridoMainActivity;
 import com.fime.fsw.huella.huella.Activities.RutasLista.RutasListaActivity;
 import com.fime.fsw.huella.huella.R;
@@ -21,7 +21,7 @@ public class SplashActivity extends AppCompatActivity {
 
         if(!sesionAplicacion.usuarioLogeado()){
             //El usuario no esta logeado
-            intent = new Intent(this, MenuInicioSesionActivity.class);
+            intent = new Intent(this, PrefectoLoginActivity.class);
         }
         else if (!sesionAplicacion.routeIsSelected()){
             intent = new Intent(this,RutasListaActivity.class);
