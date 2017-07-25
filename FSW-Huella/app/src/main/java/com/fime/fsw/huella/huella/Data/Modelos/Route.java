@@ -1,5 +1,8 @@
 package com.fime.fsw.huella.huella.Data.Modelos;
 
+import com.fime.fsw.huella.huella.Data.Provider.RealmProvider;
+
+import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
@@ -29,11 +32,16 @@ public class Route extends RealmObject {
     private int lastTask;
 
     public static Route create(String _id, String day, String academyHour, String assignedTo, RealmList<Task> tasks, int currentTask, int finalTask) {
+        //TODO: Buscar alternativa a esto
+        Realm mRealm = Realm.getDefaultInstance();
+        Route realmRoute = RealmProvider.getRouteByRouteId(mRealm, _id);
         Route route = new Route();
         route._id = _id;
         route.day = day;
         route.academyHour = academyHour;
         route.assignedTo = assignedTo;
+        route.createdAt = realmRoute.getCreatedAt();
+        route.tasksCount = realmRoute.getTasksCount();
         route.tasks = tasks;
         route.currentTask = currentTask;
         route.lastTask = finalTask;
@@ -95,6 +103,14 @@ public class Route extends RealmObject {
 
     public int getLastTask() {
         return lastTask;
+    }
+
+    public void setTasks(RealmList<Task> tasks) {
+        this.tasks = tasks;
+    }
+
+    public void setLastTask(int lastTask) {
+        this.lastTask = lastTask;
     }
 
     @Override

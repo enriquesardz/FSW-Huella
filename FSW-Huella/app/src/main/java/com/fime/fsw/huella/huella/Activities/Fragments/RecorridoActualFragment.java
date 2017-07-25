@@ -120,7 +120,7 @@ public class RecorridoActualFragment extends Fragment {
         //por lo tanto, no vuela a descargar y solamente muestra los datos en el RecyclerView
 
         if (route.getTasks().size() == 0){
-            startDescarga();
+            startDescarga(route);
         }
         else{
             setRVRecorridoAdapter(route);
@@ -128,11 +128,11 @@ public class RecorridoActualFragment extends Fragment {
 
     }
 
-    private void startDescarga() {
+    private void startDescarga(Route route) {
 
         HashMap<String,String> userData = mSesionApp.getDetalleUsuario();
 
-        String routeId = mSesionApp.getCurrentRutaId();
+        String routeId = route.get_id();
         String token = userData.get(SesionAplicacion.KEY_USER_TOKEN);
 
         APIServices service = APICodo.signedSingleRoute().create(APIServices.class);
@@ -144,9 +144,9 @@ public class RecorridoActualFragment extends Fragment {
                 //Se ejecuta si el webservice regresa algo, la respuesta
                 //es una lista de Tasks, entonces la respuesta se guarda en una Lista de tipo Tasks
 
-                Route route = response.body();
+                Route routeResponse = response.body();
 
-                if (route == null) {
+                if (routeResponse == null) {
                     Log.e(TAG, "No hay respuesta de la API + " + response.toString());
                     showEmptyState();
                     return;
@@ -158,9 +158,9 @@ public class RecorridoActualFragment extends Fragment {
                 Aqui se hace update a una Route ya existente, se le agregan varios valores pero
                 principalmente se le agrega una lista de Tasks
                 */
-                RealmProvider.saveRouteToRealm(mRealm, route);
+                RealmProvider.saveRouteToRealm(mRealm, routeResponse);
 
-                setRVRecorridoAdapter(route);
+                setRVRecorridoAdapter(routeResponse);
 
             }
 

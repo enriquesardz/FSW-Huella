@@ -56,12 +56,13 @@ public class RealmProvider{
             }
         });
     }
-
-    public static void saveRouteToRealm(Realm mRealm, final Route route){
+    //TODO: Este metodo esta sobre-escribiendo los datos del Route , por lo que si no se le pasan
+    //TODOS los datos con valores, los cambia a null o 0.
+    public static void saveRouteToRealm(Realm mRealm, final Route routeResponse){
         mRealm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                realm.copyToRealmOrUpdate(route);
+                realm.copyToRealmOrUpdate(routeResponse);
             }
         });
     }
