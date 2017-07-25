@@ -127,6 +127,15 @@ public class DatosVisitaFragment extends Fragment {
         //se pueda validar.
         final String itemid = mBundle.getString(Task._ID_FIELD, null);
         final Task task = RealmProvider.getTaskById(mRealm,itemid);
+        final Route route = RealmProvider.getRouteByTaskId(mRealm, itemid);
+
+        final int currentTask;
+
+        if(route != null){
+            currentTask = route.getCurrentTask();
+        } else{
+            currentTask = -1;
+        }
 
         //Si el bundle regreso un id, entonces actualiza la UI con datos del Task, y
         //hace visible el contenedor.
@@ -136,15 +145,13 @@ public class DatosVisitaFragment extends Fragment {
         }
 
         if(hayDatos){
-            infoContainer.setVisibility(View.VISIBLE);
-            emptyState.setVisibility(View.GONE);
+            showInfoContainer();
         }
         else{
-            infoContainer.setVisibility(View.GONE);
-            emptyState.setVisibility(View.VISIBLE);
+            showEmptyState();
         }
 
-        if (taskSequence >= mSesion.getCurrentTaskPosition() && taskSequence != -1) {
+        if (taskSequence > currentTask && taskSequence != -1) {
             btnEscanner.setVisibility(View.VISIBLE);
         } else {
             btnEscanner.setVisibility(View.INVISIBLE);
@@ -154,7 +161,7 @@ public class DatosVisitaFragment extends Fragment {
         btnEscanner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (itemid != null && taskSequence >= mSesion.getCurrentTaskPosition()) {
+                if (itemid != null && taskSequence > currentTask) {
                     //Si mBundle regreso un id, entonces se puede iniciar la actividad del Scanner con un Task id,
                     //y si no, el boton no hace nada.
                     RealmProvider.setStartedAtCheckout(mRealm, task);
@@ -166,10 +173,6 @@ public class DatosVisitaFragment extends Fragment {
         });
     }
 
-    public Task getTaskConId(String id) {
-        return mRealm.where(Task.class).equalTo(Task._ID_FIELD, id).findFirst();
-    }
-
     public void cargarDatosTask(Task task) {
         HashMap<String,String> data = RealmProvider.getAllDataAsStringByTask(mRealm,task);
 
@@ -179,6 +182,16 @@ public class DatosVisitaFragment extends Fragment {
         tvMateria.setText(getResources().getString(R.string.cbarra_materia, data.get(Assignment.NAME_KEY)));
 
         hayDatos = true;
+    }
+
+    public void showInfoContainer(){
+        infoContainer.setVisibility(View.VISIBLE);
+        emptyState.setVisibility(View.GONE);
+    }
+
+    public void showEmptyState(){
+        emptyState.setVisibility(View.VISIBLE);
+        infoContainer.setVisibility(View.GONE);
     }
 
 }

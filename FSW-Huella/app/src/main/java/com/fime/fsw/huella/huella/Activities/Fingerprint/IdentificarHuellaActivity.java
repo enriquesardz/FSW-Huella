@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fime.fsw.huella.huella.Data.Modelos.Route;
 import com.fime.fsw.huella.huella.Data.Modelos.Task;
 import com.fime.fsw.huella.huella.Data.Provider.RealmProvider;
 import com.fime.fsw.huella.huella.R;
@@ -137,8 +138,9 @@ public class IdentificarHuellaActivity extends AppCompatActivity {
         btnNoEstaMaestro.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String routeId = mSesion.getCurrentRutaId();
                 RealmProvider.setCheckoutsTaskValuesNoVinoMaestro(mRealm, task);
-                mSesion.setCurrentTaskPosition(mSesion.getCurrentTaskPosition() + 1);
+                RealmProvider.moveToNextTaskByRouteId(mRealm, routeId);
                 finish();
             }
         });
@@ -151,16 +153,11 @@ public class IdentificarHuellaActivity extends AppCompatActivity {
 
     public void debugHuellaEncontrada(final Task task) {
         //Si hay resultado, entonces fue una Identificacion exitosa
+        String routeId = mSesion.getCurrentRutaId();
         Toast.makeText(mContext, "Se encontro usuario debug mode", Toast.LENGTH_SHORT).show();
 
         RealmProvider.setCheckoutsTaskValuesVinoMaestro(mRealm, task);
-
-        long currentTask = mSesion.getCurrentTaskPosition();
-        long lastPosition = mSesion.getLastTaskPosition();
-
-        if (currentTask == task.getSequence()) {
-            mSesion.setCurrentTaskPosition(currentTask + 1);
-        }
+        RealmProvider.moveToNextTaskByRouteId(mRealm, routeId);
 
         finish();
     }

@@ -16,15 +16,12 @@ public class SesionAplicacion {
 
     Context mContext;
 
-
     public static final String PREF_NOMBRE = "com.fime.fsw.huella.AndroidFSWHuella";
     public static final String KEY_LOGIN = "login";
     public static final String KEY_ROUTE_ID = "routeId";
     public static final String KEY_ROUTE_IS_SELECTED = "routeIsSelected";
     public static final String KEY_USUARIO = "usuario";
     public static final String KEY_USER_TOKEN = "userToken";
-    public static final String KEY_CURRENT_ITEM_LISTA = "currentItem";
-    public static final String KEY_LAST_ITEM_LISTA = "lastItem";
 
     public SesionAplicacion(Context context){
         mContext = context;
@@ -56,25 +53,6 @@ public class SesionAplicacion {
         editor.putBoolean(KEY_ROUTE_IS_SELECTED, false);
         editor.putString(KEY_ROUTE_ID, null);
         editor.commit();
-    }
-
-    //TODO:These values should be bound to an individual Route and NOT to the session, as moving to another Route might produce undesired behaviour
-    public void setCurrentTaskPosition(long currentTaskPosition){
-        editor.putLong(KEY_CURRENT_ITEM_LISTA, currentTaskPosition);
-        editor.commit();
-    }
-
-    public long getCurrentTaskPosition(){
-        return preferences.getLong(KEY_CURRENT_ITEM_LISTA, -1);
-    }
-
-    public void setLastTaskPosition(long lastTaskPosition){
-        editor.putLong(KEY_LAST_ITEM_LISTA, lastTaskPosition);
-        editor.commit();
-    }
-
-    public long getLastTaskPosition(){
-        return preferences.getLong(KEY_LAST_ITEM_LISTA, -1);
     }
 
     //Borra todo, es decir, se termina la sesion de descarga y login

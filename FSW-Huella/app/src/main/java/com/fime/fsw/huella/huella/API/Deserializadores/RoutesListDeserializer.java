@@ -16,6 +16,13 @@ import java.util.List;
  * Created by ensardz on 21/07/2017.
  */
 
+/*
+*
+* This deserializer returns a list of Routes, which are then added to the Realm; this creates
+* a table with Routes, which have a null Task list, which is then updated and added later on
+* the application.
+*
+* */
 public class RoutesListDeserializer implements JsonDeserializer<List<Route>> {
     @Override
     public List<Route> deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
@@ -31,7 +38,7 @@ public class RoutesListDeserializer implements JsonDeserializer<List<Route>> {
             String assignedTo = route.get("assignedTo").getAsString();
             String createdAt = route.get("createdAt").getAsString();
             int tasksCount = route.get("tasksCounts").getAsInt();
-            routes.add(Route.create(_id,day,academyHour,assignedTo,createdAt,tasksCount,null));
+            routes.add(Route.create(_id,day,academyHour,assignedTo,createdAt,tasksCount));
         }
 
         return routes;

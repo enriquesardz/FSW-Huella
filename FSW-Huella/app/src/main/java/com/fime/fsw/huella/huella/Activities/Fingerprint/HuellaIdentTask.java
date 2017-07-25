@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.fime.fsw.huella.huella.Data.Modelos.Route;
 import com.fime.fsw.huella.huella.Data.Modelos.Task;
 import com.fime.fsw.huella.huella.Data.Provider.RealmProvider;
 import com.fime.fsw.huella.huella.Utilidad.SesionAplicacion;
@@ -143,14 +144,9 @@ public class HuellaIdentTask extends AsyncTask<Integer, Integer, String> {
 
     private void finishFingerprintIdent(){
 
+        String routeId = mSesion.getCurrentRutaId();
         RealmProvider.setCheckoutsTaskValuesVinoMaestro(mRealm, mTask);
-
-        long currentTaskPosition = mSesion.getCurrentTaskPosition();
-        long lastTaskPosition = mSesion.getLastTaskPosition();
-
-        if (currentTaskPosition == taskSequence) {
-            mSesion.setCurrentTaskPosition(currentTaskPosition + 1);
-        }
+        RealmProvider.moveToNextTaskByRouteId(mRealm, routeId);
 
         ((Activity) mContext).finish();
     }

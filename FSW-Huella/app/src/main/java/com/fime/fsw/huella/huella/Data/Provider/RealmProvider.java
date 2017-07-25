@@ -87,6 +87,10 @@ public class RealmProvider{
         return mRealm.where(Route.class).equalTo("tasks._id", _id).findFirst();
     }
 
+    public static Route getRouteByRouteId(Realm mRealm, String route_id){
+        return mRealm.where(Route.class).equalTo(Route._ID_FIELD,route_id).findFirst();
+    }
+
     public static OrderedRealmCollection<Route> getAllOrderedRoutes(Realm mRealm){
         return mRealm.where(Route.class).findAllSorted(Route._ID_FIELD);
     }
@@ -199,6 +203,16 @@ public class RealmProvider{
                 task.getCheckout().setFinishedAt(String.valueOf(System.currentTimeMillis()));
 
                 Log.i(TAG, "No vino maestro: " + task.getCheckout().toString());
+            }
+        });
+    }
+
+    public static void moveToNextTaskByRouteId(Realm mRealm, String routeId){
+        final Route route = getRouteByRouteId(mRealm, routeId);
+        mRealm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                route.moveToNextTask();
             }
         });
     }

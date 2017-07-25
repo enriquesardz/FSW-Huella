@@ -112,7 +112,9 @@ public class RecorridoActualFragment extends Fragment {
         rvRecorrido.setHasFixedSize(true);
         rvRecorrido.setLayoutManager(linearLayoutManager);
 
-        Route route = RealmProvider.getRoute(mRealm);
+        String routeId = mSesionApp.getCurrentRutaId();
+
+        Route route = RealmProvider.getRouteByRouteId(mRealm, routeId);
 
         //Si ya se descargaron los datos, getRoute deberia de regresar al menos una ruta
         //por lo tanto, no vuela a descargar y solamente muestra los datos en el RecyclerView
@@ -121,7 +123,7 @@ public class RecorridoActualFragment extends Fragment {
             startDescarga();
         }
         else{
-            setRVRecorridoAdapter();
+            setRVRecorridoAdapter(route);
         }
 
     }
@@ -151,12 +153,14 @@ public class RecorridoActualFragment extends Fragment {
                 }
 
                 //Se guardan los datos a nuestro Realm
+
+                /*
+                Aqui se hace update a una Route ya existente, se le agregan varios valores pero
+                principalmente se le agrega una lista de Tasks
+                */
                 RealmProvider.saveRouteToRealm(mRealm, route);
 
-                //TODO: Bind these values to the Route not the session
-                setInitialAndFinalTask();
-
-                setRVRecorridoAdapter();
+                setRVRecorridoAdapter(route);
 
             }
 
@@ -178,17 +182,11 @@ public class RecorridoActualFragment extends Fragment {
         }
     }
 
-    public void setInitialAndFinalTask() {
-        mSesionApp.setCurrentTaskPosition(mRealm.where(Task.class).min(Task.SEQUENCE_FIELD).longValue());
-        mSesionApp.setLastTaskPosition(mRealm.where(Task.class).max(Task.SEQUENCE_FIELD).longValue());
-    }
-
-    public void setRVRecorridoAdapter(){
+    public void setRVRecorridoAdapter(Route route){
 
         showRecyclerView();
 
-        Route route = RealmProvider.getRoute(mRealm);
-        long currentItem = mSesionApp.getCurrentTaskPosition();
+        long currentTask = route.getCurrentTask();
 
         //Se obtiene la info de nuestro Realm
         String routeDay = route.getDay();
@@ -197,7 +195,7 @@ public class RecorridoActualFragment extends Fragment {
         final OrderedRealmCollection<Task> recorridoData = RealmProvider.getAllOrderedTasks(mRealm);
 
         //Creamos un adaptador nuevo, con un onItemClickListener
-        rvRecorridoAdapter = new RecorridoAdapter(mContext, recorridoData, currentItem, routeHour, new RecyclerViewItemClickListener() {
+        rvRecorridoAdapter = new RecorridoAdapter(mContext, recorridoData, currentTask, routeHour, new RecyclerViewItemClickListener() {
             @Override
             public void onItemClick(View v, int position) {
                 Task item = rvRecorridoAdapter.getItem(position);

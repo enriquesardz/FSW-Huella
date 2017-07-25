@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.fime.fsw.huella.huella.Activities.Fingerprint.IdentificarHuellaActivity;
+import com.fime.fsw.huella.huella.Data.Modelos.Route;
 import com.fime.fsw.huella.huella.Data.Modelos.Task;
 import com.fime.fsw.huella.huella.Data.Provider.RealmProvider;
 import com.fime.fsw.huella.huella.R;
@@ -146,8 +147,9 @@ public class BarcodeReaderActivity extends AppCompatActivity {
         btnNoSalon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String routeId = mSesion.getCurrentRutaId();
                 RealmProvider.setCheckoutTaskValuesNoBarcode(mRealm,task);
-                mSesion.setCurrentTaskPosition(mSesion.getCurrentTaskPosition() + 1);
+                RealmProvider.moveToNextTaskByRouteId(mRealm, routeId);
                 finish();
             }
         });

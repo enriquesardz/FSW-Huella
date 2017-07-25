@@ -29,7 +29,6 @@ public class RouteDeserializer implements JsonDeserializer<Route> {
         String day = routeObject.get("day").getAsString();
         String academyHour = routeObject.get("academyHour").getAsString();
         String assignedTo = routeObject.get("assignedTo").getAsString();
-        int tasksCounts = routeObject.get("tasksCounts").getAsInt();
 
         JsonArray jsonTaskArray = routeObject.get("tasks").getAsJsonArray();
         List<Task> tasks = new ArrayList<>();
@@ -41,8 +40,11 @@ public class RouteDeserializer implements JsonDeserializer<Route> {
             }
         }
 
+        int currentTask = tasks.get(0).getSequence();
+        int finalTask = tasks.get(tasks.size()-1).getSequence();
+
         RealmList<Task> rTasks = new RealmList<Task>(tasks.toArray(new Task[tasks.size()]));
 
-        return Route.create(_id,day,academyHour,assignedTo,rTasks);
+        return Route.create(_id,day,academyHour,assignedTo,rTasks,currentTask,finalTask);
     }
 }

@@ -25,18 +25,22 @@ public class Route extends RealmObject {
     private String createdAt;
     private int tasksCount;
     private RealmList<Task> tasks;
+    private int currentTask;
+    private int lastTask;
 
-    public static Route create(String _id, String day, String academyHour, String assignedTo, RealmList<Task> tasks) {
+    public static Route create(String _id, String day, String academyHour, String assignedTo, RealmList<Task> tasks, int currentTask, int finalTask) {
         Route route = new Route();
         route._id = _id;
         route.day = day;
         route.academyHour = academyHour;
         route.assignedTo = assignedTo;
         route.tasks = tasks;
+        route.currentTask = currentTask;
+        route.lastTask = finalTask;
         return route;
     }
 
-    public static Route create(String _id, String day, String academyHour, String assignedTo, String createdAt, int tasksCount, RealmList<Task> tasks) {
+    public static Route create(String _id, String day, String academyHour, String assignedTo, String createdAt, int tasksCount) {
         Route route = new Route();
         route._id = _id;
         route.day = day;
@@ -44,7 +48,6 @@ public class Route extends RealmObject {
         route.assignedTo = assignedTo;
         route.createdAt = createdAt;
         route.tasksCount = tasksCount;
-        route.tasks = tasks;
         return route;
     }
 
@@ -74,6 +77,24 @@ public class Route extends RealmObject {
 
     public int getTasksCount() {
         return tasksCount;
+    }
+
+    public int getCurrentTask() {
+        return currentTask;
+    }
+
+    public void setCurrentTask(int currentTask) {
+        this.currentTask = currentTask;
+    }
+
+    public void moveToNextTask(){
+        if (getCurrentTask() < getLastTask()){
+            setCurrentTask(getCurrentTask() + 1);
+        }
+    }
+
+    public int getLastTask() {
+        return lastTask;
     }
 
     @Override
