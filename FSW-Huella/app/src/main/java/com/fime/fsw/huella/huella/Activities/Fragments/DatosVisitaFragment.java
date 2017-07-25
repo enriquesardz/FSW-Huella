@@ -76,7 +76,6 @@ public class DatosVisitaFragment extends Fragment {
         return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onCodigoBarrasFragmentInteraction(uri);
@@ -109,7 +108,6 @@ public class DatosVisitaFragment extends Fragment {
     //Este metodo permite la comunicacion entre este Fragment y la actividad host, y por ende,
     //otros Fragments tambien.
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onCodigoBarrasFragmentInteraction(Uri uri);
     }
 
@@ -151,17 +149,17 @@ public class DatosVisitaFragment extends Fragment {
             showEmptyState();
         }
 
-        if (taskSequence > currentTask && taskSequence != -1) {
+        if (taskSequence >= currentTask && taskSequence != -1) {
             btnEscanner.setVisibility(View.VISIBLE);
-        } else {
-            btnEscanner.setVisibility(View.INVISIBLE);
+        }else{
+            btnEscanner.setVisibility(View.GONE);
         }
 
         //Inicia la actividad de lector de codigo de barras
         btnEscanner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (itemid != null && taskSequence > currentTask) {
+                if ((itemid != null && taskSequence >= currentTask)) {
                     //Si mBundle regreso un id, entonces se puede iniciar la actividad del Scanner con un Task id,
                     //y si no, el boton no hace nada.
                     RealmProvider.setStartedAtCheckout(mRealm, task);

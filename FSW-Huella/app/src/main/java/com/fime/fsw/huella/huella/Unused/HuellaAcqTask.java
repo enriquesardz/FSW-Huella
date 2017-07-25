@@ -78,7 +78,6 @@ public class HuellaAcqTask extends AsyncTask<Integer, Integer, String> {
     @Override
     protected void onPostExecute(String result) {
         super.onPostExecute(result);
-        //TODO: Actualizar para que se guarden con las tablas que se van a usar en el producto final
         progressDialog.cancel();
 
         if (TextUtils.isEmpty(result)) {

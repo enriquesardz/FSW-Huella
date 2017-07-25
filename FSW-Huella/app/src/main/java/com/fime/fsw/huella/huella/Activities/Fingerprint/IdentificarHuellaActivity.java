@@ -118,7 +118,6 @@ public class IdentificarHuellaActivity extends AppCompatActivity {
 
         //Inicia el task para buscar la huella con el id que se le pasa,
         //ademas, toma la huella que se encuentre en el escanner para comparar.
-        //TODO: El id se debe de sacar de los datos que nos pasan los web service
 
         btnBuscarHuella.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -175,7 +174,6 @@ public class IdentificarHuellaActivity extends AppCompatActivity {
 
         @Override
         protected Boolean doInBackground(String... params) {
-            // TODO Auto-generated method stub
             return mFingerprint.init();
         }
 
@@ -193,7 +191,6 @@ public class IdentificarHuellaActivity extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
-            // TODO Auto-generated method stub
             super.onPreExecute();
 
             mypDialog = new ProgressDialog(IdentificarHuellaActivity.this);

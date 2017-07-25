@@ -181,7 +181,6 @@ public class BarcodeReaderActivity extends AppCompatActivity {
 
         @Override
         protected Boolean doInBackground(String... params) {
-            // TODO Auto-generated method stub
             return mBarcode.open();
         }
 

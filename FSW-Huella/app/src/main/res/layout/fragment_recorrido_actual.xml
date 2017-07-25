@@ -4,7 +4,6 @@
     android:layout_height="match_parent"
     tools:context=".Activities.Fragments.RecorridoActualFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <LinearLayout
         android:id="@+id/recyclerview_container"
         android:layout_width="match_parent"

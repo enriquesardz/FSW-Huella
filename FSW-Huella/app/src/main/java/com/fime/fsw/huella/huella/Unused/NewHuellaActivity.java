@@ -46,7 +46,6 @@ public class NewHuellaActivity extends AppCompatActivity {
         initComponentes();
 
         //Adquisicion de huella
-        //TODO: Esta almacenando en una DB temporal, cambiar por DB para producto final.
         btnAdquirirHuella.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -112,7 +111,6 @@ public class NewHuellaActivity extends AppCompatActivity {
         //Inicia la huella
         @Override
         protected Boolean doInBackground(String... params) {
-            // TODO Auto-generated method stub
             return mFingerprint.init();
         }
 
@@ -130,7 +128,6 @@ public class NewHuellaActivity extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
-            // TODO Auto-generated method stub
             super.onPreExecute();
 
             mypDialog = new ProgressDialog(NewHuellaActivity.this);

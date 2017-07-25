@@ -19,7 +19,6 @@ public class ValidacionLogin {
     }
 
     private void validarUsuario(String usuario){
-        //TODO: Pasos para validar y despues crea la sesion
 //        sesionAplicacion.crearSesionLogin(usuario);
     }
 }

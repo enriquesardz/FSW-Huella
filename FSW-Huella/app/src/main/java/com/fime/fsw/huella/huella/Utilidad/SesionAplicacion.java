@@ -55,7 +55,7 @@ public class SesionAplicacion {
         editor.commit();
     }
 
-    //Borra todo, es decir, se termina la sesion de descarga y login
+    //Borra all, es decir, se termina la sesion de descarga y login
     public void terminarSesionAplicacion(){
         editor.clear();
         editor.commit();
