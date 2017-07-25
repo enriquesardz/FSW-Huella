@@ -88,7 +88,7 @@ public class Route extends RealmObject {
     }
 
     public void moveToNextTask(){
-        if (getCurrentTask() < getLastTask()){
+        if (getCurrentTask() <= getLastTask()){
             setCurrentTask(getCurrentTask() + 1);
         }
     }

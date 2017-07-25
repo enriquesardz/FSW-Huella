@@ -159,14 +159,7 @@ public class DatosVisitaFragment extends Fragment {
         btnEscanner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if ((itemid != null && taskSequence >= currentTask)) {
-                    //Si mBundle regreso un id, entonces se puede iniciar la actividad del Scanner con un Task id,
-                    //y si no, el boton no hace nada.
-                    RealmProvider.setStartedAtCheckout(mRealm, task);
-                    Intent intent = new Intent(mContext, BarcodeReaderActivity.class);
-                    intent.putExtra(Task._ID_FIELD, itemid);
-                    startActivity(intent);
-                }
+                startBarcodeActivity(route,task,itemid);
             }
         });
     }
@@ -180,6 +173,18 @@ public class DatosVisitaFragment extends Fragment {
         tvMateria.setText(getResources().getString(R.string.cbarra_materia, data.get(Assignment.NAME_KEY)));
 
         hayDatos = true;
+    }
+
+    public void startBarcodeActivity(Route route, Task task, String itemid){
+        int currentTask = route.getCurrentTask();
+        if ((itemid != null && taskSequence >= currentTask)) {
+            //Si mBundle regreso un id, entonces se puede iniciar la actividad del Scanner con un Task id,
+            //y si no, el boton no hace nada.
+            RealmProvider.setStartedAtCheckout(mRealm, task);
+            Intent intent = new Intent(mContext, BarcodeReaderActivity.class);
+            intent.putExtra(Task._ID_FIELD, itemid);
+            startActivity(intent);
+        }
     }
 
     public void showInfoContainer(){
