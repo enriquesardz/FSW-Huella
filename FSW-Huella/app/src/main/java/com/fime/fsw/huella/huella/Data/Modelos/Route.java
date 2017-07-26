@@ -45,6 +45,7 @@ public class Route extends RealmObject {
         route.tasks = tasks;
         route.currentTask = currentTask;
         route.lastTask = finalTask;
+        mRealm.close();
         return route;
     }
 

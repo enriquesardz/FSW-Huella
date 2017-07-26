@@ -9,6 +9,7 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.List;
 
+import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -23,7 +24,7 @@ public class APICodo {
     //Abraham
     //https://api.myjson.com/bins/w20k7
     public static final String BASE_URL = "https://nyx-codo.herokuapp.com/";
-
+    public static OkHttpClient client = new OkHttpClient();
 
     //Esta ruta esta firmada por la API entonces puede hacer requests.
     public static Retrofit signedSingleRoute() {
@@ -33,6 +34,7 @@ public class APICodo {
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
+                .client(client)
                 .addConverterFactory(GsonConverterFactory.create(builder.create()))
                 .build();
 
@@ -47,6 +49,7 @@ public class APICodo {
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
+                .client(client)
                 .addConverterFactory(GsonConverterFactory.create(builder.create()))
                 .build();
         return retrofit;
@@ -55,6 +58,7 @@ public class APICodo {
     public static Retrofit requestToken() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
+                .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
