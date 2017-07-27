@@ -45,28 +45,28 @@
     </LinearLayout><!--Recycler View-->
 
     <!--<LinearLayout-->
-        <!--android:id="@+id/llEstadoVacio"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:layout_marginTop="60dp"-->
-        <!--android:orientation="vertical">-->
+    <!--android:id="@+id/llEstadoVacio"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_marginTop="60dp"-->
+    <!--android:orientation="vertical">-->
 
-        <!--<ImageView-->
-            <!--android:layout_width="100dp"-->
-            <!--android:layout_height="90dp"-->
-            <!--android:layout_gravity="center"-->
-            <!--android:layout_marginTop="200dp"-->
-            <!--android:src="@drawable/empty" />-->
+    <!--<ImageView-->
+    <!--android:layout_width="100dp"-->
+    <!--android:layout_height="90dp"-->
+    <!--android:layout_gravity="center"-->
+    <!--android:layout_marginTop="200dp"-->
+    <!--android:src="@drawable/empty" />-->
 
-        <!--<TextView-->
-            <!--android:layout_width="200dp"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_gravity="center"-->
-            <!--android:layout_marginTop="15dp"-->
-            <!--android:text="No routes available"-->
-            <!--android:textAlignment="center"-->
-            <!--android:textColor="#e0e0e0"-->
-            <!--android:textSize="20sp" />-->
+    <!--<TextView-->
+    <!--android:layout_width="200dp"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_gravity="center"-->
+    <!--android:layout_marginTop="15dp"-->
+    <!--android:text="No routes available"-->
+    <!--android:textAlignment="center"-->
+    <!--android:textColor="#e0e0e0"-->
+    <!--android:textSize="20sp" />-->
 
     <!--</LinearLayout>&lt;!&ndash;Empty Vacio&ndash;&gt;-->
 
@@ -77,29 +77,28 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_margin="16dp"
-        app:fab_addButtonColorNormal="@color/colorPrimaryDark"
+        app:fab_addButtonColorNormal="@color/colorPrimary"
         app:fab_addButtonSize="normal">
 
         <com.getbase.floatingactionbutton.FloatingActionButton
-            android:id="@+id/btnActualizar"
+            android:id="@+id/update_button"
             fab_title="Actualizar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:onClick="clicMe"
-            app:fabSize="mini"
-            app:fab_colorNormal="@color/colorgreen"
+            fabSize="mini"
+            app:fab_colorNormal="@color/colorPrimary"
             app:fab_colorPressed="@color/colorPrimaryDark"
-            app:fab_icon="@drawable/actualizar" />
+            app:fab_icon="@drawable/ic_refresh"/>
 
         <com.getbase.floatingactionbutton.FloatingActionButton
-            android:id="@+id/btnCerrarSesion"
+            android:id="@+id/close_session_button"
             fab_title="Welcome"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:fabSize="mini"
-            app:fab_colorNormal="@color/colorgreen"
+            fabSize="mini"
+            app:fab_colorNormal="@color/colorPrimary"
             app:fab_colorPressed="@color/colorPrimaryDark"
-            app:fab_icon="@drawable/close" />
+            app:fab_icon="@drawable/ic_exit_to_app" />
     </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
 </RelativeLayout>
