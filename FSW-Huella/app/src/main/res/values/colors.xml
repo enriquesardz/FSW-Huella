@@ -23,4 +23,11 @@
     <color name="rojo_error">#D51B1B</color>
     <color name="blanco">#FFFFFF</color>
     <color name="gray_disabled">#d3d3d3</color>
+
+    <!-- Palette Mario -->
+    <color name="green">#00e676</color>
+    <color name="colorgreen">#a5d6a7</color>
+    <color name="gasparin">#FFFFFF</color>
+    <color name="morenaso">#212121</color>
+
 </resources>

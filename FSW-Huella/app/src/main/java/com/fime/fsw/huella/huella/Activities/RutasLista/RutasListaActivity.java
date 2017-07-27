@@ -106,6 +106,9 @@ public class RutasListaActivity extends AppCompatActivity {
     }
 
     public void initComponentes() {
+
+        getSupportActionBar().hide();
+
         tvResponse = (TextView) findViewById(R.id.dia_textview);
         rvRutas = (RecyclerView) findViewById(R.id.rutas_recyclerview);
 
@@ -136,6 +139,7 @@ public class RutasListaActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<List<Route>> call, Response<List<Route>> response) {
 
+                tvResponse.setText(response.body().get(0).getDay());
                 //Si el web service no regresa nada
                 if (response.body() == null || !response.isSuccessful()) {
                     Log.e(TAG, "Api retorno NULL: " + response.toString());

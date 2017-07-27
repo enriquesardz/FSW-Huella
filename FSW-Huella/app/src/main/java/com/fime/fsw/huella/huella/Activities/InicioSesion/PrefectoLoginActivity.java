@@ -52,6 +52,7 @@ public class PrefectoLoginActivity extends AppCompatActivity {
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(getResources().getString(R.string.prefecto_login_titulo));
+            getSupportActionBar().hide();
         }
 
         btnIniciarSesion = (Button) findViewById(R.id.iniciar_sesion_button);
@@ -86,12 +87,18 @@ public class PrefectoLoginActivity extends AppCompatActivity {
         call.enqueue(new Callback<TokenResponse>() {
             @Override
             public void onResponse(Call<TokenResponse> call, Response<TokenResponse> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    saveDataAndStartSession(loginUser.getUser(), response.body());
-                    Log.d(TAG, response.body().toString());
+                TokenResponse tokenResponse = response.body();
+                if (response.isSuccessful() && tokenResponse != null) {
+                    if(TextUtils.equals(tokenResponse.getStatus(), "success")){
+                        saveDataAndStartSession(loginUser.getUser(), response.body());
+                        Log.d(TAG, response.body().toString());
+                    }
+                    else {
+                        Toast.makeText(mContext, "Usuario no autorizado", Toast.LENGTH_SHORT).show();
+                        Log.e(TAG, "Bad user");
+                    }
                 } else {
-                    Toast.makeText(mContext, "Usuario no autorizado", Toast.LENGTH_SHORT).show();
-                    Log.e(TAG, "Bad user");
+                    Log.e(TAG, "El api no regreso una respuesta valida");
                 }
             }
 
@@ -105,7 +112,7 @@ public class PrefectoLoginActivity extends AppCompatActivity {
     public void saveDataAndStartSession(String userName, TokenResponse tokenResponse) {
         //Guarda la sesion del usuario; el usuario ahora esta logeado.
         String user = userName;
-        String token = "JWT " + tokenResponse.getToken();
+        String token = tokenResponse.getToken();
 
         mSesionApp.crearSesionLogin(user, token);
 
