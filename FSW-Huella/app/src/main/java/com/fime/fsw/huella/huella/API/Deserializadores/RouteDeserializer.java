@@ -18,6 +18,8 @@ import io.realm.RealmResults;
 
 /**
  * Created by Quique on 20/07/2017.
+ *
+ * Returns a single Route object, with a list of Tasks appended to it.
  */
 
 public class RouteDeserializer implements JsonDeserializer<Route> {

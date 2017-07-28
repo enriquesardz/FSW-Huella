@@ -31,6 +31,20 @@ public class Route extends RealmObject {
     private int currentTask;
     private int lastTask;
 
+    public static Route createAll(String _id, String day, String academyHour, String assignedTo, int tasksCount, RealmList<Task> tasks, int currentTask, int lastTask) {
+        //Missing createdAt
+        Route route = new Route();
+        route._id = _id;
+        route.day = day;
+        route.academyHour = academyHour;
+        route.assignedTo = assignedTo;
+        route.tasksCount = tasksCount;
+        route.tasks = tasks;
+        route.currentTask = currentTask;
+        route.lastTask = lastTask;
+        return route;
+    }
+
     public static Route create(String _id, String day, String academyHour, String assignedTo, RealmList<Task> tasks, int currentTask, int finalTask) {
         //TODO: Buscar alternativa a esto
         Realm mRealm = Realm.getDefaultInstance();

@@ -2,6 +2,7 @@ package com.fime.fsw.huella.huella.API;
 
 import com.fime.fsw.huella.huella.API.Deserializadores.RouteDeserializer;
 import com.fime.fsw.huella.huella.API.Deserializadores.RoutesListDeserializer;
+import com.fime.fsw.huella.huella.API.Deserializadores.RoutesWithTasksDeserializer;
 import com.fime.fsw.huella.huella.Data.Modelos.Route;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -27,6 +28,21 @@ public class APICodo {
     public static OkHttpClient client = new OkHttpClient();
 
     //Esta ruta esta firmada por la API entonces puede hacer requests.
+    public static Retrofit signedAllRoutesAndTasks(){
+        GsonBuilder builder = new GsonBuilder();
+        Type listType = new TypeToken<List<Route>>(){}.getType();
+
+        builder.registerTypeAdapter(listType, new RoutesWithTasksDeserializer());
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .client(client)
+                .addConverterFactory(GsonConverterFactory.create(builder.create()))
+                .build();
+
+        return retrofit;
+
+    }
     public static Retrofit signedSingleRoute() {
 
         GsonBuilder builder = new GsonBuilder();

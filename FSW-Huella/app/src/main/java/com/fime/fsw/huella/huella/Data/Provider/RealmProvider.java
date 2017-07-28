@@ -67,6 +67,17 @@ public class RealmProvider{
         });
     }
 
+    public static void saveRouteListWTasksToRealm(Realm mRealm, final List<Route> routes){
+        mRealm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                for(Route route: routes){
+                    realm.copyToRealmOrUpdate(route);
+                }
+            }
+        });
+    }
+
     //READ
     public static RealmResults<Task> getAllTasks(Realm realm){
         return realm.where(Task.class).findAll();

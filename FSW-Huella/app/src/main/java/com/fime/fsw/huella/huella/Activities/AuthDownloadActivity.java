@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -82,9 +83,15 @@ public class AuthDownloadActivity extends AppCompatActivity {
             public void onResponse(Call<TokenResponse> call, Response<TokenResponse> response) {
                 TokenResponse tokenResponse = response.body();
                 if (response.isSuccessful() && tokenResponse != null) {
-                    String jwtToken = saveUserToken(user, tokenResponse);
-                    Log.i(TAG, "Login successful: " + tokenResponse.toString());
-                    startRouteAndTasksDownload(jwtToken);
+                    if(TextUtils.equals(tokenResponse.getStatus(), "success")){
+                        String jwtToken = saveUserToken(user, tokenResponse);
+                        Log.i(TAG, "Login successful: " + tokenResponse.toString());
+                        startRouteAndTasksDownload(jwtToken);
+                    }
+                    else {
+                        Toast.makeText(mContext, "Usuario no autorizado", Toast.LENGTH_SHORT).show();
+                        Log.e(TAG, "Bad user");
+                    }
                 } else {
                     Toast.makeText(mContext, "Usuario no autorizado", Toast.LENGTH_SHORT).show();
                     Log.e(TAG, "Unauthorized user");
@@ -103,28 +110,22 @@ public class AuthDownloadActivity extends AppCompatActivity {
 
     public void startRouteAndTasksDownload(final String jwtToken) {
 
-        APIServices service = APICodo.signedRouteList().create(APIServices.class);
-        Call<List<Route>> call = service.descargaRutas(jwtToken);
+        APIServices service = APICodo.signedAllRoutesAndTasks().create(APIServices.class);
+        Call<List<Route>> call = service.descargaAllRoutesWTasks(jwtToken);
 
         call.enqueue(new Callback<List<Route>>() {
             @Override
             public void onResponse(Call<List<Route>> call, Response<List<Route>> response) {
                 List<Route> routes = response.body();
-                int routeCount;
-                boolean isSuccess = false;
                 if (response.isSuccessful() && routes != null) {
-                    routeCount = routes.size();
-                    RealmProvider.saveRouteListToRealm(mRealm, routes);
-                    for(Route route : routes){
-                        String routeId = route.get_id();
-                        //TODO: Muchos requests, ver si hay una alternativa
-//                        isSuccess = downloadTasksByRouteId(routeId, jwtToken);
-                    }
+                    //Guarda los datos al Realm
+                    RealmProvider.saveRouteListWTasksToRealm(mRealm, routes);
                 } else {
+                    //No regreso nada y tampoco guardo a Realm, asi que se inicia
+                    //la siguiente actividad con un empty state
                     startRouteListActivity(false);
                 }
 
-                //Guarda los datos al Realm
             }
 
             @Override
@@ -134,38 +135,9 @@ public class AuthDownloadActivity extends AppCompatActivity {
         });
     }
 
-    public void downloadTasksByRouteId(String routeId, String jwtToken){
-
-        //Se actualizan los Routes con sus valores faltantes
-
-        APIServices service = APICodo.signedSingleRoute().create(APIServices.class);
-        Call<Route> call = service.descargaRecorrido(routeId,jwtToken);
-        OkHttpClient client = new OkHttpClient();
-        client.dispatcher().cancelAll();
-        call.enqueue(new Callback<Route>() {
-            @Override
-            public void onResponse(Call<Route> call, Response<Route> response) {
-                //Se ejecuta si el webservice regresa algo, la respuesta
-                //es una lista de Tasks, entonces la respuesta se guarda en una Lista de tipo Tasks
-
-                Route routeResponse = response.body();
-
-                if(response.isSuccessful() && routeResponse != null){
-                    RealmProvider.saveRouteToRealm(mRealm, routeResponse);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Route> call, Throwable t) {
-                //No se descargo nada
-                Toast.makeText(mContext, "No se descargo.", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
     public String saveUserToken(String userName, TokenResponse tokenResponse) {
         //Guarda la sesion del usuario; el usuario ahora esta logeado.
-        String token = "JWT " + tokenResponse.getToken();
+        String token = tokenResponse.getToken();
         mSesionApp.crearSesionLogin(userName, token);
         return token;
     }
