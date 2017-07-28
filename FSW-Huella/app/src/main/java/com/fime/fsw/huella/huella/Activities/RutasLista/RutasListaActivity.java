@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,7 +51,8 @@ public class RutasListaActivity extends AppCompatActivity {
 
     TextView tvResponse;
     RecyclerView rvRutas;
-    com.getbase.floatingactionbutton.FloatingActionButton btnCerrarSesion;
+    LinearLayout recyclerContainer, emptyStateContainer, loadingState;
+    com.getbase.floatingactionbutton.FloatingActionButton btnCerrarSesion, btnUpdate;
 
     RutasRecyclerViewAdapter rvRutasAdapter;
 
@@ -115,6 +117,12 @@ public class RutasListaActivity extends AppCompatActivity {
         tvResponse = (TextView) findViewById(R.id.dia_textview);
         rvRutas = (RecyclerView) findViewById(R.id.rutas_recyclerview);
         btnCerrarSesion = (com.getbase.floatingactionbutton.FloatingActionButton) findViewById(R.id.close_session_button);
+        btnUpdate = (com.getbase.floatingactionbutton.FloatingActionButton) findViewById(R.id.update_button);
+        recyclerContainer = (LinearLayout) findViewById(R.id.recyclerview_container);
+        emptyStateContainer = (LinearLayout) findViewById(R.id.empty_state);
+        loadingState = (LinearLayout) findViewById(R.id.loading_state);
+
+        boolean yaDescargo = getIntent().getBooleanExtra("yaDescargo", false);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -122,14 +130,10 @@ public class RutasListaActivity extends AppCompatActivity {
         rvRutas.setHasFixedSize(true);
         rvRutas.setLayoutManager(linearLayoutManager);
 
-        Route route = RealmProvider.getRoute(mRealm);
-
-
-
-        if (route == null) {
-            descargarRutas();
-        } else {
+        if (yaDescargo) {
             loadRecyclerView();
+        } else {
+            showEmptyState();
         }
 
         btnCerrarSesion.setOnClickListener(new View.OnClickListener() {
@@ -142,10 +146,20 @@ public class RutasListaActivity extends AppCompatActivity {
             }
         });
 
+        btnUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                descargarRutas();
+            }
+        });
+
 
     }
 
     public void descargarRutas() {
+
+        showLoadingState();
+
         HashMap<String, String> datosUsuario = mSesionApp.getDetalleUsuario();
 
         APIServices service = APICodo.signedRouteList().create(APIServices.class);
@@ -154,27 +168,30 @@ public class RutasListaActivity extends AppCompatActivity {
         call.enqueue(new Callback<List<Route>>() {
             @Override
             public void onResponse(Call<List<Route>> call, Response<List<Route>> response) {
+                List<Route> routes = response.body();
 
-                tvResponse.setText(response.body().get(0).getDay());
-                //Si el web service no regresa nada
-                if (response.body() == null || !response.isSuccessful()) {
-                    Log.e(TAG, "Api retorno NULL: " + response.toString());
-                    return;
+                if (response.isSuccessful() && routes != null && !routes.isEmpty()) {
+                    //Guarda los datos al Realm
+                    RealmProvider.saveRouteListToRealm(mRealm, response.body());
+                    loadRecyclerView();
                 }
-
-                //Guarda los datos al Realm
-                RealmProvider.saveRouteListToRealm(mRealm, response.body());
-                loadRecyclerView();
+                else{
+                    showEmptyState();
+                    Toast.makeText(mContext, "No logro descargar.", Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
             public void onFailure(Call<List<Route>> call, Throwable t) {
+                showEmptyState();
                 Toast.makeText(mContext, "Fallo en la descarga", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     public void loadRecyclerView() {
+
+        showRecyclerView();
 
         OrderedRealmCollection<Route> orderedRoutes = RealmProvider.getAllOrderedRoutes(mRealm);
 
@@ -199,5 +216,23 @@ public class RutasListaActivity extends AppCompatActivity {
         startActivity(intent);
 
         finish();
+    }
+
+    public void showEmptyState(){
+        emptyStateContainer.setVisibility(View.VISIBLE);
+        recyclerContainer.setVisibility(View.GONE);
+        loadingState.setVisibility(View.GONE);
+    }
+
+    public void showRecyclerView(){
+        recyclerContainer.setVisibility(View.VISIBLE);
+        emptyStateContainer.setVerticalGravity(View.GONE);
+        loadingState.setVisibility(View.GONE);
+    }
+
+    public void showLoadingState(){
+        loadingState.setVisibility(View.VISIBLE);
+        recyclerContainer.setVisibility(View.GONE);
+        emptyStateContainer.setVisibility(View.GONE);
     }
 }

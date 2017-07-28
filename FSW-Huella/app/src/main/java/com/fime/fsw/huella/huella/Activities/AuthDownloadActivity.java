@@ -123,7 +123,7 @@ public class AuthDownloadActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<List<Route>> call, Response<List<Route>> response) {
                 List<Route> routes = response.body();
-                if (response.isSuccessful() && routes != null) {
+                if (response.isSuccessful() && routes != null && !routes.isEmpty()) {
                     //Guarda los datos al Realm
                     RealmProvider.saveRouteListWTasksToRealm(mRealm, routes);
                     startRouteListActivity(true);
@@ -160,6 +160,7 @@ public class AuthDownloadActivity extends AppCompatActivity {
     public void startRouteListActivity(boolean downloadSuccessful) {
         Intent intent = new Intent(mContext, RutasListaActivity.class);
         //TODO: Put extra
+        intent.putExtra("yaDescargo", downloadSuccessful);
         startActivity(intent);
         finish();
     }
