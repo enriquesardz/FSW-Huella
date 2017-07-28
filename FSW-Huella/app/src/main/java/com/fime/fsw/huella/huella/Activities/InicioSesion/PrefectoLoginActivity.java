@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.fime.fsw.huella.huella.API.APICodo;
 import com.fime.fsw.huella.huella.API.Endpoints.APIServices;
+import com.fime.fsw.huella.huella.Activities.AuthDownloadActivity;
 import com.fime.fsw.huella.huella.Activities.RutasLista.RutasListaActivity;
 import com.fime.fsw.huella.huella.Data.Modelos.LoginUser;
 import com.fime.fsw.huella.huella.Data.Modelos.TokenResponse;
@@ -59,12 +60,15 @@ public class PrefectoLoginActivity extends AppCompatActivity {
         etUser = (EditText)findViewById(R.id.user_edittext);
         etPassword = (EditText)findViewById(R.id.password_edittext);
 
+        String user = getIntent().getStringExtra("user");
+        if (!TextUtils.isEmpty(user)){
+            etUser.setText(user);
+        }
+
         btnIniciarSesion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 loginRequest();
-
             }
         });
     }
@@ -78,35 +82,40 @@ public class PrefectoLoginActivity extends AppCompatActivity {
             Toast.makeText(mContext, "Llenar ambos campos", Toast.LENGTH_SHORT).show();
             return;
         }
-
-        final LoginUser loginUser = new LoginUser(user, password);
-
-        APIServices service = APICodo.requestToken().create(APIServices.class);
-        Call<TokenResponse> call = service.authGetToken(loginUser);
-
-        call.enqueue(new Callback<TokenResponse>() {
-            @Override
-            public void onResponse(Call<TokenResponse> call, Response<TokenResponse> response) {
-                TokenResponse tokenResponse = response.body();
-                if (response.isSuccessful() && tokenResponse != null) {
-                    if(TextUtils.equals(tokenResponse.getStatus(), "success")){
-                        saveDataAndStartSession(loginUser.getUser(), response.body());
-                        Log.d(TAG, response.body().toString());
-                    }
-                    else {
-                        Toast.makeText(mContext, "Usuario no autorizado", Toast.LENGTH_SHORT).show();
-                        Log.e(TAG, "Bad user");
-                    }
-                } else {
-                    Log.e(TAG, "El api no regreso una respuesta valida");
-                }
-            }
-
-            @Override
-            public void onFailure(Call<TokenResponse> call, Throwable t) {
-                Toast.makeText(mContext, "Error al validar", Toast.LENGTH_SHORT).show();
-            }
-        });
+//
+//        final LoginUser loginUser = new LoginUser(user, password);
+//
+//        APIServices service = APICodo.requestToken().create(APIServices.class);
+//        Call<TokenResponse> call = service.authGetToken(loginUser);
+//
+//        call.enqueue(new Callback<TokenResponse>() {
+//            @Override
+//            public void onResponse(Call<TokenResponse> call, Response<TokenResponse> response) {
+//                TokenResponse tokenResponse = response.body();
+//                if (response.isSuccessful() && tokenResponse != null) {
+//                    if(TextUtils.equals(tokenResponse.getStatus(), "success")){
+//                        saveDataAndStartSession(loginUser.getUser(), response.body());
+//                        Log.d(TAG, response.body().toString());
+//                    }
+//                    else {
+//                        Toast.makeText(mContext, "Usuario no autorizado", Toast.LENGTH_SHORT).show();
+//                        Log.e(TAG, "Bad user");
+//                    }
+//                } else {
+//                    Log.e(TAG, "El api no regreso una respuesta valida");
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<TokenResponse> call, Throwable t) {
+//                Toast.makeText(mContext, "Error al validar", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+        Intent intent = new Intent(mContext, AuthDownloadActivity.class);
+        intent.putExtra("user", user);
+        intent.putExtra("password", password);
+        startActivity(intent);
+        finish();
     }
 
     public void saveDataAndStartSession(String userName, TokenResponse tokenResponse) {

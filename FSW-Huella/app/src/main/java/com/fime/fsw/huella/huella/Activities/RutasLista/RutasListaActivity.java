@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -25,6 +26,7 @@ import com.fime.fsw.huella.huella.R;
 import com.fime.fsw.huella.huella.UI.RecyclerView.RecyclerViewItemClickListener;
 import com.fime.fsw.huella.huella.UI.RecyclerView.RutasRecyclerViewAdapter;
 import com.fime.fsw.huella.huella.Utilidad.SesionAplicacion;
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
 
 import java.util.HashMap;
 import java.util.List;
@@ -48,6 +50,7 @@ public class RutasListaActivity extends AppCompatActivity {
 
     TextView tvResponse;
     RecyclerView rvRutas;
+    com.getbase.floatingactionbutton.FloatingActionButton btnCerrarSesion;
 
     RutasRecyclerViewAdapter rvRutasAdapter;
 
@@ -111,6 +114,7 @@ public class RutasListaActivity extends AppCompatActivity {
 
         tvResponse = (TextView) findViewById(R.id.dia_textview);
         rvRutas = (RecyclerView) findViewById(R.id.rutas_recyclerview);
+        btnCerrarSesion = (com.getbase.floatingactionbutton.FloatingActionButton) findViewById(R.id.close_session_button);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -120,16 +124,28 @@ public class RutasListaActivity extends AppCompatActivity {
 
         Route route = RealmProvider.getRoute(mRealm);
 
-        if (route == null){
+
+
+        if (route == null) {
             descargarRutas();
-        } else{
+        } else {
             loadRecyclerView();
         }
+
+        btnCerrarSesion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mSesionApp.terminarSesionAplicacion();
+                RealmProvider.dropAllRealmTables(mRealm);
+                startActivity(new Intent(mContext, PrefectoLoginActivity.class));
+                finish();
+            }
+        });
 
 
     }
 
-    public void descargarRutas(){
+    public void descargarRutas() {
         HashMap<String, String> datosUsuario = mSesionApp.getDetalleUsuario();
 
         APIServices service = APICodo.signedRouteList().create(APIServices.class);
@@ -158,9 +174,11 @@ public class RutasListaActivity extends AppCompatActivity {
         });
     }
 
-    public void loadRecyclerView(){
+    public void loadRecyclerView() {
 
         OrderedRealmCollection<Route> orderedRoutes = RealmProvider.getAllOrderedRoutes(mRealm);
+
+        tvResponse.setText(orderedRoutes.get(0).getDay());
 
         rvRutasAdapter = new RutasRecyclerViewAdapter(mContext, orderedRoutes, new RecyclerViewItemClickListener() {
             @Override
@@ -173,7 +191,7 @@ public class RutasListaActivity extends AppCompatActivity {
         rvRutas.setAdapter(rvRutasAdapter);
     }
 
-    public void saveRouteIdStartRecorrido(Route route){
+    public void saveRouteIdStartRecorrido(Route route) {
         Intent intent = new Intent(mContext, RecorridoMainActivity.class);
         String routeId = route.get_id();
 

@@ -60,6 +60,11 @@ public class AuthDownloadActivity extends AppCompatActivity {
     }
 
     public void initComponentes() {
+
+        if (getSupportActionBar()!=null){
+            getSupportActionBar().hide();
+        }
+
         String user = getIntent().getStringExtra("user");
         String password = getIntent().getStringExtra("password");
 
@@ -90,6 +95,7 @@ public class AuthDownloadActivity extends AppCompatActivity {
                     }
                     else {
                         Toast.makeText(mContext, "Usuario no autorizado", Toast.LENGTH_SHORT).show();
+                        returnToLoginActivity(user);
                         Log.e(TAG, "Bad user");
                     }
                 } else {
@@ -120,6 +126,7 @@ public class AuthDownloadActivity extends AppCompatActivity {
                 if (response.isSuccessful() && routes != null) {
                     //Guarda los datos al Realm
                     RealmProvider.saveRouteListWTasksToRealm(mRealm, routes);
+                    startRouteListActivity(true);
                 } else {
                     //No regreso nada y tampoco guardo a Realm, asi que se inicia
                     //la siguiente actividad con un empty state
