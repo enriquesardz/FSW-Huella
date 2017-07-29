@@ -130,7 +130,9 @@ public class RutasListaActivity extends AppCompatActivity {
         rvRutas.setHasFixedSize(true);
         rvRutas.setLayoutManager(linearLayoutManager);
 
-        if (yaDescargo) {
+        Route route = RealmProvider.getRoute(mRealm);
+
+        if (yaDescargo || route != null) {
             loadRecyclerView();
         } else {
             showEmptyState();
@@ -226,8 +228,9 @@ public class RutasListaActivity extends AppCompatActivity {
 
     public void showRecyclerView(){
         recyclerContainer.setVisibility(View.VISIBLE);
-        emptyStateContainer.setVerticalGravity(View.GONE);
+        emptyStateContainer.setVisibility(View.GONE);
         loadingState.setVisibility(View.GONE);
+        btnUpdate.setVisibility(View.GONE);
     }
 
     public void showLoadingState(){

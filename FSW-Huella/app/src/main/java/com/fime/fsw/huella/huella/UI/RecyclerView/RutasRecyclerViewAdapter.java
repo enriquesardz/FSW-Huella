@@ -11,6 +11,8 @@ import android.widget.TextView;
 import com.fime.fsw.huella.huella.Data.Modelos.Route;
 import com.fime.fsw.huella.huella.R;
 
+import org.w3c.dom.Text;
+
 import io.realm.OrderedRealmCollection;
 import io.realm.RealmRecyclerViewAdapter;
 
@@ -35,6 +37,7 @@ public class RutasRecyclerViewAdapter extends RealmRecyclerViewAdapter<Route, Ru
     public static class ViewHolder extends RecyclerView.ViewHolder{
         public TextView tvRutaNum;
         public TextView tvTaskCount;
+        public TextView tvRutaHora;
 
         public Route route;
 
@@ -42,6 +45,7 @@ public class RutasRecyclerViewAdapter extends RealmRecyclerViewAdapter<Route, Ru
             super(v);
             tvRutaNum = (TextView) v.findViewById(R.id.ruta_num_textview);
             tvTaskCount = (TextView) v.findViewById(R.id.tasks_count_textview);
+            tvRutaHora = (TextView) v.findViewById(R.id.ruta_hora_textview);
         }
     }
 
@@ -63,10 +67,12 @@ public class RutasRecyclerViewAdapter extends RealmRecyclerViewAdapter<Route, Ru
         final Route route = getItem(position);
         holder.route = route;
 
-        String routeNum = "Ruta " + String.valueOf(position + 1);
-        String taskCount = "Tareas " + String.valueOf(route.getTasksCount());
+        String routeNum =  String.valueOf(position + 1);
+        String taskCount = String.valueOf(route.getTasksCount());
+        String routeHora = String.valueOf(route.getAcademyHour());
         holder.tvRutaNum.setText(routeNum);
         holder.tvTaskCount.setText(taskCount);
+        holder.tvRutaHora.setText(routeHora);
 
     }
 
