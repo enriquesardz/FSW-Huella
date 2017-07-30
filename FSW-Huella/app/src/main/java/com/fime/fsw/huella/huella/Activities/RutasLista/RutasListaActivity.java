@@ -151,45 +151,78 @@ public class RutasListaActivity extends AppCompatActivity {
         btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                descargarRutas();
+                startRouteAndTasksDownload();
             }
         });
 
 
     }
 
-    public void descargarRutas() {
+//    public void descargarRutas() {
+//
+//        showLoadingState();
+//
+//        HashMap<String, String> datosUsuario = mSesionApp.getDetalleUsuario();
+//
+//        APIServices service = APICodo.signedRouteList().create(APIServices.class);
+//        Call<List<Route>> call = service.descargaRutas(datosUsuario.get(SesionAplicacion.KEY_USER_TOKEN));
+//
+//        call.enqueue(new Callback<List<Route>>() {
+//            @Override
+//            public void onResponse(Call<List<Route>> call, Response<List<Route>> response) {
+//                List<Route> routes = response.body();
+//
+//                if (response.isSuccessful() && routes != null && !routes.isEmpty()) {
+//                    //Guarda los datos al Realm
+//                    RealmProvider.saveRouteListToRealm(mRealm, response.body());
+//                    loadRecyclerView();
+//                }
+//                else{
+//                    showEmptyState();
+//                    Toast.makeText(mContext, "No logro descargar.", Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<List<Route>> call, Throwable t) {
+//                showEmptyState();
+//                Toast.makeText(mContext, "Fallo en la descarga", Toast.LENGTH_SHORT).show();
+//            }
+//        });
 
-        showLoadingState();
+        public void startRouteAndTasksDownload() {
 
-        HashMap<String, String> datosUsuario = mSesionApp.getDetalleUsuario();
+            showLoadingState();
 
-        APIServices service = APICodo.signedRouteList().create(APIServices.class);
-        Call<List<Route>> call = service.descargaRutas(datosUsuario.get(SesionAplicacion.KEY_USER_TOKEN));
+            HashMap<String, String> userData = mSesionApp.getDetalleUsuario();
+            String jwtToken = userData.get(SesionAplicacion.KEY_USER_TOKEN);
 
-        call.enqueue(new Callback<List<Route>>() {
-            @Override
-            public void onResponse(Call<List<Route>> call, Response<List<Route>> response) {
-                List<Route> routes = response.body();
+            APIServices service = APICodo.signedAllRoutesAndTasks().create(APIServices.class);
+            Call<List<Route>> call = service.descargaAllRoutesWTasks(jwtToken);
 
-                if (response.isSuccessful() && routes != null && !routes.isEmpty()) {
-                    //Guarda los datos al Realm
-                    RealmProvider.saveRouteListToRealm(mRealm, response.body());
-                    loadRecyclerView();
+            call.enqueue(new Callback<List<Route>>() {
+                @Override
+                public void onResponse(Call<List<Route>> call, Response<List<Route>> response) {
+                    List<Route> routes = response.body();
+                    if (response.isSuccessful() && routes != null && !routes.isEmpty()) {
+                        //Guarda los datos al Realm
+                        RealmProvider.saveRouteListWTasksToRealm(mRealm, routes);
+                        loadRecyclerView();
+                    } else {
+                        //No regreso nada y tampoco guardo a Realm, asi que se inicia
+                        //la siguiente actividad con un empty state
+                        showEmptyState();
+                    }
+
                 }
-                else{
+
+                @Override
+                public void onFailure(Call<List<Route>> call, Throwable t) {
+                    Toast.makeText(mContext, "Fallo en la descarga", Toast.LENGTH_SHORT).show();
                     showEmptyState();
-                    Toast.makeText(mContext, "No logro descargar.", Toast.LENGTH_SHORT).show();
                 }
-            }
-
-            @Override
-            public void onFailure(Call<List<Route>> call, Throwable t) {
-                showEmptyState();
-                Toast.makeText(mContext, "Fallo en la descarga", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
+            });
+        }
 
     public void loadRecyclerView() {
 
@@ -222,6 +255,7 @@ public class RutasListaActivity extends AppCompatActivity {
 
     public void showEmptyState(){
         emptyStateContainer.setVisibility(View.VISIBLE);
+        btnUpdate.setVisibility(View.VISIBLE);
         recyclerContainer.setVisibility(View.GONE);
         loadingState.setVisibility(View.GONE);
     }
@@ -235,6 +269,7 @@ public class RutasListaActivity extends AppCompatActivity {
 
     public void showLoadingState(){
         loadingState.setVisibility(View.VISIBLE);
+        btnUpdate.setVisibility(View.GONE);
         recyclerContainer.setVisibility(View.GONE);
         emptyStateContainer.setVisibility(View.GONE);
     }
