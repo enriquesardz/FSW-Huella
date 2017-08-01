@@ -130,7 +130,7 @@ public class DatosVisitaFragment extends Fragment {
         routeCurrentTaskSequence = route.getCurrentTask();
         Log.d(TAG,"Current task sequence " + routeCurrentTaskSequence);
 
-        final Task task = RealmProvider.getTaskBySequence(mRealm, routeCurrentTaskSequence);
+        final Task task = route.getTasks().where().equalTo(Task.SEQUENCE_FIELD, routeCurrentTaskSequence).findFirst();
         final String itemid = task.get_id();
 
         //Si el bundle regreso un id, entonces actualiza la UI con datos del Task, y
