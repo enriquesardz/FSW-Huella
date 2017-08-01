@@ -2,6 +2,7 @@ package com.fime.fsw.huella.huella.Activities.Fingerprint;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +13,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fime.fsw.huella.huella.Activities.Barcode.BarcodeReaderActivity;
+import com.fime.fsw.huella.huella.Activities.RecorridoMain.RecorridoMainActivity;
 import com.fime.fsw.huella.huella.Data.Modelos.Route;
 import com.fime.fsw.huella.huella.Data.Modelos.Task;
 import com.fime.fsw.huella.huella.Data.Provider.RealmProvider;
@@ -69,6 +72,7 @@ public class IdentificarHuellaActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
+                startActivity(new Intent(mContext, BarcodeReaderActivity.class));
                 finish();
                 return true;
 
@@ -140,6 +144,7 @@ public class IdentificarHuellaActivity extends AppCompatActivity {
                 String routeId = mSesion.getCurrentRutaId();
                 RealmProvider.setCheckoutsTaskValuesNoVinoMaestro(mRealm, task);
                 RealmProvider.moveToNextTaskByRouteId(mRealm, routeId);
+                startActivity(new Intent(mContext, RecorridoMainActivity.class));
                 finish();
             }
         });
@@ -158,6 +163,7 @@ public class IdentificarHuellaActivity extends AppCompatActivity {
         RealmProvider.setCheckoutsTaskValuesVinoMaestro(mRealm, task);
         RealmProvider.moveToNextTaskByRouteId(mRealm, routeId);
 
+        startActivity(new Intent (mContext, RecorridoMainActivity.class));
         finish();
     }
 

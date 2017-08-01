@@ -198,8 +198,9 @@ public class RecorridoActualFragment extends Fragment {
         rvRecorridoAdapter = new RecorridoAdapter(mContext, recorridoData, currentTask, routeHour, new RecyclerViewItemClickListener() {
             @Override
             public void onItemClick(View v, int position) {
-                Task item = rvRecorridoAdapter.getItem(position);
-                sendToDetailFragment(item);
+//                Task item = rvRecorridoAdapter.getItem(position);
+//                sendToDetailFragment(item);
+                Log.d(TAG, rvRecorridoAdapter.getItem(position).toString());
             }
         });
 

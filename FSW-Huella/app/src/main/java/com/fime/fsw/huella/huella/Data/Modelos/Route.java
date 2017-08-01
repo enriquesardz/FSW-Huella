@@ -135,7 +135,11 @@ public class Route extends RealmObject {
                 ", day='" + day + '\'' +
                 ", academyHour='" + academyHour + '\'' +
                 ", assignedTo='" + assignedTo + '\'' +
+                ", createdAt='" + createdAt + '\'' +
+                ", tasksCount=" + tasksCount +
                 ", tasks=" + tasks +
+                ", currentTask=" + currentTask +
+                ", lastTask=" + lastTask +
                 '}';
     }
 }

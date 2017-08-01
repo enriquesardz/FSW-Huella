@@ -3,11 +3,13 @@ package com.fime.fsw.huella.huella.Activities.Fingerprint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.fime.fsw.huella.huella.Activities.RecorridoMain.RecorridoMainActivity;
 import com.fime.fsw.huella.huella.Data.Modelos.Route;
 import com.fime.fsw.huella.huella.Data.Modelos.Task;
 import com.fime.fsw.huella.huella.Data.Provider.RealmProvider;
@@ -148,6 +150,7 @@ public class HuellaIdentTask extends AsyncTask<Integer, Integer, String> {
         RealmProvider.setCheckoutsTaskValuesVinoMaestro(mRealm, mTask);
         RealmProvider.moveToNextTaskByRouteId(mRealm, routeId);
 
+        mContext.startActivity(new Intent(mContext, RecorridoMainActivity.class));
         ((Activity) mContext).finish();
     }
 }

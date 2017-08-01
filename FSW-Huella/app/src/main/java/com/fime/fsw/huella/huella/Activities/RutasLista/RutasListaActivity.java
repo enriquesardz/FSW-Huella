@@ -237,6 +237,7 @@ public class RutasListaActivity extends AppCompatActivity {
             public void onItemClick(View v, int position) {
                 Route route = rvRutasAdapter.getItem(position);
                 saveRouteIdStartRecorrido(route);
+                Log.d(TAG, route.toString());
             }
         });
 

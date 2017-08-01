@@ -91,6 +91,10 @@ public class RealmProvider{
         return mRealm.where(Task.class).equalTo(Task._ID_FIELD, _id).findFirst();
     }
 
+    public static Task getTaskBySequence(Realm mRealm, long taskSequence){
+        return mRealm.where(Task.class).equalTo(Task.SEQUENCE_FIELD, taskSequence).findFirst();
+    }
+
     public static Route getRoute(Realm mRealm){
         return mRealm.where(Route.class).findFirst();
     }
@@ -102,6 +106,8 @@ public class RealmProvider{
     public static Route getRouteByRouteId(Realm mRealm, String route_id){
         return mRealm.where(Route.class).equalTo(Route._ID_FIELD,route_id).findFirst();
     }
+
+
 
     public static OrderedRealmCollection<Route> getAllOrderedRoutes(Realm mRealm){
         return mRealm.where(Route.class).findAllSorted(Route._ID_FIELD);

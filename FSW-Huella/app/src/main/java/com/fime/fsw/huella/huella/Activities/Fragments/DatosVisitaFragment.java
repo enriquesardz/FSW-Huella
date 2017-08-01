@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,7 +40,7 @@ public class DatosVisitaFragment extends Fragment {
     public static final String TAG = APP_TAG + DatosVisitaFragment.class.getSimpleName();
 
     private boolean hayDatos = false;
-    private long taskSequence = -1;
+    private long routeCurrentTaskSequence = -1;
 
     private OnFragmentInteractionListener mListener;
 
@@ -54,7 +55,7 @@ public class DatosVisitaFragment extends Fragment {
     private Bundle mBundle;
     private Context mContext;
     private Realm mRealm;
-    private SesionAplicacion mSesion;
+    private SesionAplicacion mSesionApp;
 
     public DatosVisitaFragment() {
         // Required empty public constructor
@@ -69,7 +70,7 @@ public class DatosVisitaFragment extends Fragment {
         mContext = getContext();
         mBundle = this.getArguments();
         mRealm = Realm.getDefaultInstance();
-        mSesion = new SesionAplicacion(mContext);
+        mSesionApp = new SesionAplicacion(mContext);
 
         initComponentes(view);
 
@@ -123,33 +124,21 @@ public class DatosVisitaFragment extends Fragment {
 
         //Valor default del itemid, con intencion de que si el Bundle no regresa un id,
         //se pueda validar.
-        final String itemid = mBundle.getString(Task._ID_FIELD, null);
-        final Task task = RealmProvider.getTaskById(mRealm,itemid);
-        final Route route = RealmProvider.getRouteByTaskId(mRealm, itemid);
 
-        final int currentTask;
+        String routeId = mSesionApp.getCurrentRutaId();
+        final Route route = RealmProvider.getRouteByRouteId(mRealm, routeId);
+        routeCurrentTaskSequence = route.getCurrentTask();
+        Log.d(TAG,"Current task sequence " + routeCurrentTaskSequence);
 
-        if(route != null){
-            currentTask = route.getCurrentTask();
-        } else{
-            currentTask = -1;
-        }
+        final Task task = RealmProvider.getTaskBySequence(mRealm, routeCurrentTaskSequence);
+        final String itemid = task.get_id();
 
         //Si el bundle regreso un id, entonces actualiza la UI con datos del Task, y
         //hace visible el contenedor.
-        if (itemid != null && task != null){
-            taskSequence = task.getSequence();
-            cargarDatosTask(task);
-        }
+        cargarDatosTask(task);
 
-        if(hayDatos){
-            showInfoContainer();
-        }
-        else{
-            showEmptyState();
-        }
-
-        if (taskSequence >= currentTask && taskSequence != -1) {
+        //TODO: Falta validacion para que cuando se le de click a una tarea de la lista de tareas, este muestre su detalle sin el boton de scanner.
+        if (routeCurrentTaskSequence == task.getSequence() && route.getTasksCount() != routeCurrentTaskSequence) {
             btnEscanner.setVisibility(View.VISIBLE);
         }else{
             btnEscanner.setVisibility(View.GONE);
@@ -172,18 +161,18 @@ public class DatosVisitaFragment extends Fragment {
         tvSalonFime.setText(getResources().getString(R.string.cbarra_salon, data.get(Room.ROOM_NUMBER_KEY)));
         tvMateria.setText(getResources().getString(R.string.cbarra_materia, data.get(Assignment.NAME_KEY)));
 
-        hayDatos = true;
     }
 
     public void startBarcodeActivity(Route route, Task task, String itemid){
         int currentTask = route.getCurrentTask();
-        if ((itemid != null && taskSequence >= currentTask)) {
+        if ((itemid != null && routeCurrentTaskSequence >= currentTask)) {
             //Si mBundle regreso un id, entonces se puede iniciar la actividad del Scanner con un Task id,
             //y si no, el boton no hace nada.
             RealmProvider.setStartedAtCheckout(mRealm, task);
             Intent intent = new Intent(mContext, BarcodeReaderActivity.class);
             intent.putExtra(Task._ID_FIELD, itemid);
             startActivity(intent);
+            getActivity().finish();
         }
     }
 

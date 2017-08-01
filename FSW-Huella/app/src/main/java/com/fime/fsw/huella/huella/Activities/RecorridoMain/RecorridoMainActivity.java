@@ -99,6 +99,8 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
 
         setUpBarraNavegacion();
         RealmProvider.dataCount(mRealm);
+
+        mBarraNav.selectTabWithId(R.id.tab_datos_visita);
     }
 
     public void setUpBarraNavegacion(){
@@ -123,7 +125,6 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
             }
         });
 
-        mBarraNav.selectTabWithId(R.id.tab_recorrido_actual);
     }
 
     public String getCheckoutsFromRealmToJson() {
