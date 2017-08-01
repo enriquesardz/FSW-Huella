@@ -19,6 +19,8 @@ public class Route extends RealmObject {
     public static final String DAY_KEY = "routeDay";
     public static final String ACADEMY_HOUR_KEY = "routeAcademyHour";
     public static final String ASSIGNED_TO_KEY = "routeAssignedTo";
+    public static final String CURRENT_TASK_KEY = "routeCurrentTask";
+    public static final String LAST_TASK_KEY = "routeLastTask";
 
     @PrimaryKey
     private String _id;

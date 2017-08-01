@@ -112,8 +112,6 @@ public class RutasListaActivity extends AppCompatActivity {
 
     public void initComponentes() {
 
-        getSupportActionBar().hide();
-
         tvResponse = (TextView) findViewById(R.id.dia_textview);
         rvRutas = (RecyclerView) findViewById(R.id.rutas_recyclerview);
         btnCerrarSesion = (com.getbase.floatingactionbutton.FloatingActionButton) findViewById(R.id.close_session_button);

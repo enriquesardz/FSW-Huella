@@ -41,14 +41,12 @@ public class DatosVisitaFragment extends Fragment {
 
     private boolean hayDatos = false;
     private long routeCurrentTaskSequence = -1;
+    private String itemid;
 
     private OnFragmentInteractionListener mListener;
 
     private ImageButton btnEscanner;
-    private TextView tvMaestro;
-    private TextView tvHoraFime;
-    private TextView tvSalonFime;
-    private TextView tvMateria;
+    private TextView tvMaestro, tvHoraFime, tvSalonFime, tvMateria, tvPlan, tvCodigoBarra, tvProgreso, tvPorcentaje;
     private View infoContainer;
     private View emptyState;
 
@@ -119,6 +117,10 @@ public class DatosVisitaFragment extends Fragment {
         tvHoraFime = (TextView) view.findViewById(R.id.hora_fime_textview);
         tvSalonFime = (TextView) view.findViewById(R.id.salon_fime_textview);
         tvMateria = (TextView) view.findViewById(R.id.materia_textview);
+        tvPlan = (TextView) view.findViewById(R.id.plan_textview);
+        tvCodigoBarra = (TextView) view.findViewById(R.id.codigo_barra_textview);
+        tvProgreso = (TextView) view.findViewById(R.id.progreso_task_textview);
+        tvPorcentaje = (TextView) view.findViewById(R.id.porcentaje_tasks_textview);
         btnEscanner = (ImageButton) view.findViewById(R.id.escaner_salon_button);
 
 
@@ -128,42 +130,51 @@ public class DatosVisitaFragment extends Fragment {
         String routeId = mSesionApp.getCurrentRutaId();
         final Route route = RealmProvider.getRouteByRouteId(mRealm, routeId);
         routeCurrentTaskSequence = route.getCurrentTask();
-        Log.d(TAG,"Current task sequence " + routeCurrentTaskSequence);
+        Log.d(TAG, "Current task sequence " + routeCurrentTaskSequence);
 
         final Task task = route.getTasks().where().equalTo(Task.SEQUENCE_FIELD, routeCurrentTaskSequence).findFirst();
-        final String itemid = task.get_id();
-
         //Si el bundle regreso un id, entonces actualiza la UI con datos del Task, y
         //hace visible el contenedor.
-        cargarDatosTask(task);
+
+        if (task != null) {
+            cargarDatosTask(task);
+            itemid = task.get_id();
+        }
 
         //TODO: Falta validacion para que cuando se le de click a una tarea de la lista de tareas, este muestre su detalle sin el boton de scanner.
-        if (routeCurrentTaskSequence == task.getSequence() && route.getTasksCount() != routeCurrentTaskSequence) {
-            btnEscanner.setVisibility(View.VISIBLE);
-        }else{
+        if (routeCurrentTaskSequence == route.getLastTask()) {
             btnEscanner.setVisibility(View.GONE);
+            showEmptyState();
         }
 
         //Inicia la actividad de lector de codigo de barras
         btnEscanner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startBarcodeActivity(route,task,itemid);
+                startBarcodeActivity(route, task, itemid);
             }
         });
     }
 
     public void cargarDatosTask(Task task) {
-        HashMap<String,String> data = RealmProvider.getAllDataAsStringByTask(mRealm,task);
+        HashMap<String, String> data = RealmProvider.getAllDataAsStringByTask(mRealm, task);
 
         tvMaestro.setText(getResources().getString(R.string.cbarra_maestro, data.get(Owner.NAME_KEY), data.get(Owner.LAST_NAME_KEY)));
         tvHoraFime.setText(getResources().getString(R.string.cbarra_hora, data.get(Route.ACADEMY_HOUR_KEY)));
         tvSalonFime.setText(getResources().getString(R.string.cbarra_salon, data.get(Room.ROOM_NUMBER_KEY)));
         tvMateria.setText(getResources().getString(R.string.cbarra_materia, data.get(Assignment.NAME_KEY)));
+        tvPlan.setText(getResources().getString(R.string.cbarra_plan, data.get(Assignment.PLAN_KEY)));
+        tvCodigoBarra.setText(getResources().getString(R.string.cbarra_codigo_barra, data.get(Room.BARCODE_KEY)));
 
+        int currentTask = Integer.valueOf(data.get(Route.CURRENT_TASK_KEY));
+        int lastTask = Integer.valueOf(data.get(Route.LAST_TASK_KEY));
+
+        float porcentajeTasks = ((float) currentTask / lastTask) * 100;
+        tvPorcentaje.setText(getResources().getString(R.string.cbarra_porcentaje_tasks, porcentajeTasks));
+        tvProgreso.setText(getResources().getString(R.string.cbarra_progreso_tasks, currentTask, lastTask));
     }
 
-    public void startBarcodeActivity(Route route, Task task, String itemid){
+    public void startBarcodeActivity(Route route, Task task, String itemid) {
         int currentTask = route.getCurrentTask();
         if ((itemid != null && routeCurrentTaskSequence >= currentTask)) {
             //Si mBundle regreso un id, entonces se puede iniciar la actividad del Scanner con un Task id,
@@ -176,12 +187,12 @@ public class DatosVisitaFragment extends Fragment {
         }
     }
 
-    public void showInfoContainer(){
+    public void showInfoContainer() {
         infoContainer.setVisibility(View.VISIBLE);
         emptyState.setVisibility(View.GONE);
     }
 
-    public void showEmptyState(){
+    public void showEmptyState() {
         emptyState.setVisibility(View.VISIBLE);
         infoContainer.setVisibility(View.GONE);
     }

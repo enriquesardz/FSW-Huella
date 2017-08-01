@@ -52,11 +52,21 @@
 
     <!-- Fragment Codigo Barras -->
     <string name="cbarra_datos_generales">Datos Generales</string>
-    <string name="cbarra_maestro">Maestro: %1$s %2$s</string>
-    <string name="cbarra_hora">Hora: %1$s</string>
-    <string name="cbarra_salon">Salon: %1$s</string>
-    <string name="cbarra_materia">Materia: %1$s</string>
+    <string name="cbarra_lbl_salon">Salón:</string>
+    <string name="cbarra_lbl_maestro">Maestro:</string>
+    <string name="cbarra_lbl_materia">Materia:</string>
+    <string name="cbarra_lbl_plan">Plan:</string>
+    <string name="cbarra_lbl_modalidad">Modalidad:</string>
+    <string name="cbarar_lbl_codigo">Código de Barras:</string>
+    <string name="cbarra_maestro">%1$s %2$s</string>
+    <string name="cbarra_hora">%1$s</string>
+    <string name="cbarra_salon">%1$s</string>
+    <string name="cbarra_materia">%1$s</string>
+    <string name="cbarra_plan">%1$s</string>
+    <string name="cbarra_codigo_barra">%1$s</string>
     <string name="cbarra_escanear_salon">Escanear salón</string>
+    <string name="cbarra_progreso_tasks">%1$d/%2$d</string>
+    <string name="cbarra_porcentaje_tasks">%1$.2f%%</string>
 
     <!-- Identificar Huella Activity -->
     <string name="ih_nombre">Nombre: %1$s</string>

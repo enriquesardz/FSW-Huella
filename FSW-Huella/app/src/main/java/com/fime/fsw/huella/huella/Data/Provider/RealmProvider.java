@@ -126,6 +126,8 @@ public class RealmProvider{
         data.put(Route.DAY_KEY, route.getDay());
         data.put(Route.ACADEMY_HOUR_KEY, route.getAcademyHour());
         data.put(Route.ASSIGNED_TO_KEY, route.getAssignedTo());
+        data.put(Route.CURRENT_TASK_KEY, String.valueOf(route.getCurrentTask()));
+        data.put(Route.LAST_TASK_KEY, String.valueOf(route.getLastTask()));
         data.put(Task.PERIOD_KEY, task.getPeriod());
         data.put(Task.LANGUAGE_KEY, task.getLanguage());
         data.put(Task.GROUP_KEY, task.getGroup());

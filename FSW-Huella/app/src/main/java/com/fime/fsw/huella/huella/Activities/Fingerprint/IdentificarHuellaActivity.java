@@ -65,6 +65,7 @@ public class IdentificarHuellaActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        startActivity(new Intent(mContext, BarcodeReaderActivity.class));
         finish();
     }
 

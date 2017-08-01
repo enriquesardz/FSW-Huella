@@ -4,18 +4,107 @@
     android:layout_height="match_parent"
     tools:context=".Activities.Fragments.DatosVisitaFragment">
 
+
     <LinearLayout
-        android:id="@+id/views_container"
+        android:id="@+id/informacion_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:background="@color/colorPrimaryDark"
+            android:orientation="horizontal"
+            android:padding="8dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/hora_fime_textview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/gasparin"
+                    android:textSize="30sp"
+                    android:textStyle="bold" /><!--Nomenclatura-->
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Avance"
+                        android:textColor="@color/gasparin"
+                        android:textSize="18sp"
+                        android:textStyle="bold" /><!--txt Avance-->
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/porcentaje_tasks_textview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/gasparin"
+                        android:textSize="30sp" /><!--procentaje recorrido-->
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Actual/Total"
+                    android:textColor="@color/gasparin"
+                    android:textSize="18sp"
+                    android:textStyle="bold" /><!--txt actual/total-->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/progreso_task_textview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/gasparin"
+                        android:textSize="30sp" /><!--recorrido actual-->
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+        <!--Contendedor de indicadores-->
+
         <ScrollView
-            android:id="@+id/informacion_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="4"
-            android:background="@drawable/bordes_views"
             android:fillViewport="true">
 
             <LinearLayout
@@ -32,45 +121,124 @@
                     android:orientation="vertical">
 
                     <TextView
-                        style="@style/TextTitulo"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="@string/cbarra_datos_generales" />
-
-                    <TextView
-                        android:id="@+id/maestro_textview"
                         style="@style/TextSubTitulo"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingBottom="10dp"
-                        android:paddingTop="20dp"
-                        android:text="" />
-
-                    <TextView
-                        android:id="@+id/hora_fime_textview"
-                        style="@style/TextSubTitulo"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingBottom="10dp"
-                        android:text="" />
+                        android:text="@string/cbarra_lbl_salon"
+                        android:textStyle="bold" /><!--texto Salon-->
 
                     <TextView
                         android:id="@+id/salon_fime_textview"
                         style="@style/TextSubTitulo"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingBottom="10dp"
-                        android:text="" />
+                        android:textColor="#2979ff"
+                        android:textStyle="bold" /><!--id Salon-->
 
+                    <TextView
+                        style="@style/TextSubTitulo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="17dp"
+                        android:text="@string/cbarra_lbl_maestro"
+                        android:textStyle="bold" /><!--texto Maestro-->
+
+                    <TextView
+                        android:id="@+id/maestro_textview"
+                        style="@style/TextSubTitulo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#2979ff"
+                        android:textStyle="bold" /><!--id Maestro-->
+
+                    <TextView
+                        style="@style/TextSubTitulo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="17dp"
+                        android:text="@string/cbarra_lbl_materia"
+                        android:textStyle="bold" /><!--texto Materia-->
 
                     <TextView
                         android:id="@+id/materia_textview"
                         style="@style/TextSubTitulo"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingBottom="10dp"
-                        android:text="" />
+                        android:textColor="#2979ff"
+                        android:textStyle="bold" /><!--id Materia-->
+
+                    <TextView
+                        style="@style/TextSubTitulo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="17dp"
+                        android:text="@string/cbarra_lbl_plan"
+                        android:textStyle="bold" /><!--texto Tipo Clase-->
+
+                    <TextView
+                        android:id="@+id/plan_textview"
+                        style="@style/TextSubTitulo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#2979ff"
+                        android:textStyle="bold" /><!--id Tipo Clase-->
+
+                    <TextView
+                        style="@style/TextSubTitulo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="17dp"
+                        android:text="@string/cbarar_lbl_codigo"
+                        android:textStyle="bold" /><!--texto Modalidad-->
+
+                    <TextView
+                        android:id="@+id/codigo_barra_textview"
+                        style="@style/TextSubTitulo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#2979ff"
+                        android:textStyle="bold" /><!--id Modalidad-->
+
+                    <!--<TextView-->
+                    <!--style="@style/TextTitulo"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_gravity="center"-->
+                    <!--android:text="@string/cbarra_datos_generales" />-->
+
+                    <!--<TextView-->
+                    <!--android:id="@+id/maestro_textview"-->
+                    <!--style="@style/TextSubTitulo"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:paddingBottom="10dp"-->
+                    <!--android:paddingTop="20dp"-->
+                    <!--android:text="" />-->
+
+                    <!--<TextView-->
+                    <!--android:id="@+id/hora_fime_textview"-->
+                    <!--style="@style/TextSubTitulo"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:paddingBottom="10dp"-->
+                    <!--android:text="" />-->
+
+                    <!--<TextView-->
+                    <!--android:id="@+id/salon_fime_textview"-->
+                    <!--style="@style/TextSubTitulo"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:paddingBottom="10dp"-->
+                    <!--android:text="" />-->
+
+
+                    <!--<TextView-->
+                    <!--android:id="@+id/materia_textview"-->
+                    <!--style="@style/TextSubTitulo"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:paddingBottom="10dp"-->
+                    <!--android:text="" />-->
 
                 </LinearLayout>
 
@@ -107,12 +275,13 @@
 
         </ScrollView>
 
-            <ImageButton
-                android:id="@+id/escaner_salon_button"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_gravity="center_horizontal"
-                android:background="@drawable/img_codigo_barras" />
+        <ImageButton
+            android:id="@+id/escaner_salon_button"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/scanner" />
 
     </LinearLayout>
 
@@ -121,11 +290,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone">
+
         <TextView
-            android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="No hay datos por mostrar."/>
-    </LinearLayout>
+            android:gravity="center"
+            android:text="Ha terminado esta Ruta." />
+
+    </LinearLayout> <!-- Empty State -->
 
 </FrameLayout>

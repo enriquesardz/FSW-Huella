@@ -79,6 +79,13 @@ public class BarcodeReaderActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(mContext, RecorridoMainActivity.class));
+        finish();
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         //Inicia el codigo de barras cuando la actividad se abre
