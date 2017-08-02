@@ -281,7 +281,7 @@
             android:layout_height="50dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="20dp"
-            android:background="@drawable/scanner" />
+            android:background="@drawable/ic_scanner" />
 
     </LinearLayout>
 

@@ -13,21 +13,15 @@ import android.support.v7.app.AppCompatActivity;
 import com.fime.fsw.huella.huella.Activities.HuellaApplication;
 import com.fime.fsw.huella.huella.Activities.RutasLista.RutasListaActivity;
 import com.fime.fsw.huella.huella.Data.Modelos.Task;
-import com.fime.fsw.huella.huella.Data.Modelos.UploadCheckout;
 import com.fime.fsw.huella.huella.Data.Provider.RealmProvider;
 import com.fime.fsw.huella.huella.Activities.Fragments.DatosVisitaFragment;
 import com.fime.fsw.huella.huella.Activities.Fragments.RecorridoActualFragment;
 import com.fime.fsw.huella.huella.R;
 import com.fime.fsw.huella.huella.Utilidad.SesionAplicacion;
-import com.google.gson.Gson;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import io.realm.Realm;
-import io.realm.RealmResults;
 
 
 public class RecorridoMainActivity extends AppCompatActivity implements RecorridoActualFragment.OnFragmentInteractionListener, DatosVisitaFragment.OnFragmentInteractionListener {
@@ -49,8 +43,6 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
         mContext = RecorridoMainActivity.this;
         mSesionApp = new SesionAplicacion(mContext);
         mRealm = Realm.getDefaultInstance();
-
-        String test = getCheckoutsFromRealmToJson();
 
         initComponents();
     }
@@ -126,18 +118,4 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
         });
 
     }
-
-    public String getCheckoutsFromRealmToJson() {
-        RealmResults<Task> tasks = RealmProvider.getAllTasks(mRealm);
-        List<UploadCheckout> uploadCheckouts = new ArrayList<UploadCheckout>();
-        for (Task task : tasks){
-            uploadCheckouts.add(new UploadCheckout(String.valueOf(task.get_id()),mRealm.copyFromRealm(task.getCheckout())));
-        }
-        Gson gson = new Gson();
-        String json = gson.toJson(uploadCheckouts);
-        return json;
-    }
-
-
-
 }

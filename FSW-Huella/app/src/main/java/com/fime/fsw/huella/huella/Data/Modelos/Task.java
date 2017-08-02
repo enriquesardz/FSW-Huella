@@ -12,6 +12,8 @@ public class Task extends RealmObject {
     //Table fields de Task
     public static final String _ID_FIELD = "_id";
     public static final String SEQUENCE_FIELD = "sequence";
+    public static final String TASK_STATE_FIELD = "taskState";
+    public static final String WAS_UPLOADED_FIELD = "wasUploaded";
     //Keys para el objeto Task
     public static final String SEQUENCE_KEsY = "taskSequence";
     public static final String PERIOD_KEY = "taskPeriod";
@@ -37,6 +39,7 @@ public class Task extends RealmObject {
     private String modality;
     private Checkout checkout;
     private int taskState;
+    private boolean wasUploaded;
 
     public Task(){}
 
@@ -53,6 +56,7 @@ public class Task extends RealmObject {
         task.modality = modality;
         task.checkout = checkout;
         task.taskState = 0;
+        task.wasUploaded = false;
         return task;
     }
 

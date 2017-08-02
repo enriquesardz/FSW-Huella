@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -27,7 +26,6 @@ import com.fime.fsw.huella.huella.R;
 import com.fime.fsw.huella.huella.UI.RecyclerView.RecyclerViewItemClickListener;
 import com.fime.fsw.huella.huella.UI.RecyclerView.RutasRecyclerViewAdapter;
 import com.fime.fsw.huella.huella.Utilidad.SesionAplicacion;
-import com.getbase.floatingactionbutton.FloatingActionsMenu;
 
 import java.util.HashMap;
 import java.util.List;
@@ -155,38 +153,6 @@ public class RutasListaActivity extends AppCompatActivity {
 
 
     }
-
-//    public void descargarRutas() {
-//
-//        showLoadingState();
-//
-//        HashMap<String, String> datosUsuario = mSesionApp.getDetalleUsuario();
-//
-//        APIServices service = APICodo.signedRouteList().create(APIServices.class);
-//        Call<List<Route>> call = service.descargaRutas(datosUsuario.get(SesionAplicacion.KEY_USER_TOKEN));
-//
-//        call.enqueue(new Callback<List<Route>>() {
-//            @Override
-//            public void onResponse(Call<List<Route>> call, Response<List<Route>> response) {
-//                List<Route> routes = response.body();
-//
-//                if (response.isSuccessful() && routes != null && !routes.isEmpty()) {
-//                    //Guarda los datos al Realm
-//                    RealmProvider.saveRouteListToRealm(mRealm, response.body());
-//                    loadRecyclerView();
-//                }
-//                else{
-//                    showEmptyState();
-//                    Toast.makeText(mContext, "No logro descargar.", Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<List<Route>> call, Throwable t) {
-//                showEmptyState();
-//                Toast.makeText(mContext, "Fallo en la descarga", Toast.LENGTH_SHORT).show();
-//            }
-//        });
 
         public void startRouteAndTasksDownload() {
 

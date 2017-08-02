@@ -16,16 +16,21 @@ import com.fime.fsw.huella.huella.API.APICodo;
 import com.fime.fsw.huella.huella.API.Endpoints.APIServices;
 import com.fime.fsw.huella.huella.Data.Modelos.Route;
 import com.fime.fsw.huella.huella.Data.Modelos.Task;
+import com.fime.fsw.huella.huella.Data.Modelos.UploadCheckouts;
 import com.fime.fsw.huella.huella.Data.Provider.RealmProvider;
 import com.fime.fsw.huella.huella.R;
 import com.fime.fsw.huella.huella.UI.RecyclerView.RecorridoAdapter;
 import com.fime.fsw.huella.huella.UI.RecyclerView.RecyclerViewItemClickListener;
 import com.fime.fsw.huella.huella.Utilidad.SesionAplicacion;
+import com.google.gson.Gson;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import io.realm.OrderedRealmCollection;
 import io.realm.Realm;
+import io.realm.RealmResults;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -61,6 +66,8 @@ public class RecorridoActualFragment extends Fragment {
         mSesionApp = new SesionAplicacion(mContext);
 
         initComponentes(view);
+
+//        String json  = getCheckoutsFromRealmToJson();
 
         return view;
     }
@@ -224,5 +231,21 @@ public class RecorridoActualFragment extends Fragment {
         loadingState.setVisibility(View.GONE);
         recyclerContainer.setVisibility(View.GONE);
     }
+
+
+//    public String getCheckoutsFromRealmToJson() {
+//
+//        String currentRouteId = mSesionApp.getCurrentRutaId();
+//        RealmResults<Task> tasks = RealmProvider.getUploadTasks(mRealm);
+//
+//        List<UpCheckout> uploadCheckouts = new ArrayList<UpCheckout>();
+//        for (Task task : tasks){
+//            uploadCheckouts.add(new UpCheckout(String.valueOf(task.get_id()),mRealm.copyFromRealm(task.getCheckout())));
+//        }
+//        UpCheckoutContent upCheckoutList = new UpCheckoutContent(uploadCheckouts);
+//        Gson gson = new Gson();
+//        String json = gson.toJson(upCheckoutList);
+//        return json;
+//    }
 
 }

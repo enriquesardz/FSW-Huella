@@ -83,6 +83,10 @@ public class RealmProvider{
         return realm.where(Task.class).findAll();
     }
 
+    public static RealmResults<Task> getUploadTasks(Realm realm){
+        return realm.where(Task.class).notEqualTo(Task.WAS_UPLOADED_FIELD, true).notEqualTo(Task.TASK_STATE_FIELD, Task.STATE_NO_HA_PASADO).findAll();
+    }
+
     public static OrderedRealmCollection<Task> getAllOrderedTasks(Realm mRealm){
         return mRealm.where(Task.class).findAllSorted(Task.SEQUENCE_FIELD);
     }
