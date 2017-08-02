@@ -15,22 +15,18 @@ public class UploadCheckouts {
 
     private Data data;
 
-//    public static UploadCheckouts getRealmCheckoutsAsJson(RealmResults<Task> tasks){
-//        List<UpCheckout> chckouts = new ArrayList<UpCheckout>();
-//        for (Task task : tasks){
-//            chckouts.add(new UpCheckout(String.valueOf(task.get_id()), mRealm.copyFromRealm(task.getCheckout())));
-//        }
-//    }
-//
-//    public static String getCheckoutsFromRealmToJson() {
-//        String routeId = "";
-//        List<UpCheckout> uploadCheckouts = new ArrayList<UpCheckout>();
-//        Data data = new Data(routeId,uploadCheckouts);
-//        Gson gson = new Gson();
-//        String json = gson.toJson(data);
-//        return json;
-//    }
+    public UploadCheckouts(Data data) {
+        this.data = data;
+    }
 
+    public static UploadCheckouts create(String routeId, List<Task> tasks){
+        List<UpCheckout> upCheckouts = new ArrayList<UpCheckout>();
+        for (Task task : tasks){
+            upCheckouts.add(new UpCheckout(task.get_id(),task.getCheckout()));
+        }
+        Data data = new Data(routeId,upCheckouts);
+        return new UploadCheckouts(data);
+    }
 }
 
 
@@ -48,7 +44,6 @@ class UpCheckout {
 }
 
 class Data {
-
     //Route id
     private String id;
     private List<UpCheckout> checkouts;
