@@ -26,7 +26,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activities.InicioSesion.MenuInicioSesionActivity" />
         <activity android:name=".Activities.InicioSesion.PrefectoLoginActivity" />
         <activity android:name=".Unused.PrefectoRegistroActivity" />
         <activity android:name=".Unused.NewHuellaActivity" />

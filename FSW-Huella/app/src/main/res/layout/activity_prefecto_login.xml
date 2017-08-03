@@ -11,8 +11,7 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#2e7d32">
+        android:layout_height="match_parent">
 
         <ImageView
             android:layout_width="130dp"
@@ -28,18 +27,15 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="60dp"
             android:layout_marginRight="60dp"
-            android:layout_marginTop="110dp"
-            android:textColorHint="@color/gasparin">
+            android:layout_marginTop="100dp">
 
             <android.support.design.widget.TextInputEditText
                 android:id="@+id/user_edittext"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/usuario"
-                android:textColorHint="@color/gasparin"
                 android:inputType="text"
-                android:maxLines="1"
-                android:textColor="@color/gasparin"/>
+                android:maxLines="1"/>
 
         </android.support.design.widget.TextInputLayout>
         <!--PRUEBAS MATERIAL DESIGN-->
@@ -51,18 +47,15 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="60dp"
             android:layout_marginRight="60dp"
-            android:layout_marginTop="5dp"
-            android:textColorHint="@color/gasparin">
+            android:layout_marginTop="5dp">
 
             <android.support.design.widget.TextInputEditText
                 android:id="@+id/password_edittext"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/contrasena"
-                android:textColorHint="@color/gasparin"
                 android:inputType="textPassword"
-                android:maxLines="1"
-                android:textColor="@color/gasparin"/>
+                android:maxLines="1"/>
 
         </android.support.design.widget.TextInputLayout>
         <!--PRUEBAS MATERIAL DESIGN-->
@@ -73,9 +66,10 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="60dp"
             android:layout_marginRight="60dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="40dp"
             android:background="@drawable/botonredondo"
-            android:text="Iniciar Sesion" />
+            android:text="LOGIN"
+            android:textColor="@color/blanco"/>
 
     </LinearLayout>
 

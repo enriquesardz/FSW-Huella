@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -22,7 +23,6 @@
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
             android:text="LUNES"
-            android:textColor="@color/gasparin"
             android:textSize="30sp"
             android:textStyle="bold" />
 
@@ -73,8 +73,8 @@
         android:id="@+id/loading_state"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        >
+        android:gravity="center">
+
         <ProgressBar
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
@@ -87,28 +87,22 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_margin="16dp"
-        app:fab_addButtonColorNormal="@color/colorPrimary"
+        app:fab_addButtonColorNormal="@color/colorAccent"
         app:fab_addButtonSize="normal">
 
         <com.getbase.floatingactionbutton.FloatingActionButton
             android:id="@+id/update_button"
-            fabSize="mini"
-            fab_title="Actualizar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:fab_colorNormal="@color/colorPrimary"
-            app:fab_colorPressed="@color/colorPrimaryDark"
-            app:fab_icon="@drawable/ic_refresh" />
+            app:fab_icon="@drawable/ic_refresh"
+            fab:fab_size="mini" />
 
         <com.getbase.floatingactionbutton.FloatingActionButton
             android:id="@+id/close_session_button"
-            fabSize="mini"
-            fab_title="Welcome"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:fab_colorNormal="@color/colorPrimary"
-            app:fab_colorPressed="@color/colorPrimaryDark"
-            app:fab_icon="@drawable/ic_exit_to_app" />
+            app:fab_icon="@drawable/ic_exit_to_app"
+            fab:fab_size="mini" />
     </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
 </RelativeLayout>
