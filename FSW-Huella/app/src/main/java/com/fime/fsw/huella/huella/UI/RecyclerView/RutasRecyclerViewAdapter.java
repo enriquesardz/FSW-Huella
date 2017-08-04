@@ -2,6 +2,7 @@ package com.fime.fsw.huella.huella.UI.RecyclerView;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,6 +60,14 @@ public class RutasRecyclerViewAdapter extends RealmRecyclerViewAdapter<Route, Ru
                 mListener.onItemClick(v, viewHolder.getAdapterPosition());
             }
         });
+
+        view.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                mListener.onItemLongClick(v, viewHolder.getAdapterPosition());
+                return true;
+            }
+        });
         return viewHolder;
     }
 
@@ -73,6 +82,10 @@ public class RutasRecyclerViewAdapter extends RealmRecyclerViewAdapter<Route, Ru
         holder.tvRutaNum.setText(routeNum);
         holder.tvTaskCount.setText(taskCount);
         holder.tvRutaHora.setText(routeHora);
+
+        if (route.isWasUploaded()){
+            holder.tvTaskCount.setTextColor(ContextCompat.getColor(mContext, R.color.green));
+        }
 
     }
 

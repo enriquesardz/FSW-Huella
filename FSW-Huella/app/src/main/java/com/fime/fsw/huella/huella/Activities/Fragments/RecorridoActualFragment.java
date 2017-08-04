@@ -67,8 +67,6 @@ public class RecorridoActualFragment extends Fragment {
 
         initComponentes(view);
 
-        String json  = getCheckoutsFromRealmToJson();
-
         return view;
     }
 
@@ -209,6 +207,11 @@ public class RecorridoActualFragment extends Fragment {
 //                sendToDetailFragment(item);
                 Log.d(TAG, rvRecorridoAdapter.getItem(position).toString());
             }
+
+            @Override
+            public void onItemLongClick(View v, int position) {
+                //Unused
+            }
         });
 
         rvRecorrido.setAdapter(rvRecorridoAdapter);
@@ -232,16 +235,5 @@ public class RecorridoActualFragment extends Fragment {
         recyclerContainer.setVisibility(View.GONE);
     }
 
-
-    public String getCheckoutsFromRealmToJson() {
-
-        String currentRouteId = mSesionApp.getCurrentRutaId();
-        RealmResults<Task> tasks = RealmProvider.getUploadTasks(mRealm);
-        List<Task> pojoTasks = mRealm.copyFromRealm(tasks);
-        UploadCheckouts uploadCheckouts = UploadCheckouts.create(currentRouteId,pojoTasks);
-        Gson gson = new Gson();
-        String json = gson.toJson(uploadCheckouts);
-        return json;
-    }
 
 }

@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.fime.fsw.huella.huella.Activities.HuellaApplication;
 import com.fime.fsw.huella.huella.Activities.RutasLista.RutasListaActivity;
+import com.fime.fsw.huella.huella.Data.Modelos.Route;
 import com.fime.fsw.huella.huella.Data.Modelos.Task;
 import com.fime.fsw.huella.huella.Data.Provider.RealmProvider;
 import com.fime.fsw.huella.huella.Activities.Fragments.DatosVisitaFragment;
@@ -91,6 +92,7 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
 
         setUpBarraNavegacion();
         RealmProvider.dataCount(mRealm);
+        checkAndSetRouteCompleted();
 
         mBarraNav.selectTabWithId(R.id.tab_datos_visita);
     }
@@ -117,5 +119,14 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
             }
         });
 
+    }
+
+    public void checkAndSetRouteCompleted(){
+        String routeId = mSesionApp.getCurrentRutaId();
+        Route route = RealmProvider.getRouteByRouteId(mRealm,routeId);
+
+        if(route.getCurrentTask() == route.getLastTask()){
+            RealmProvider.setRouteIsCompletedByRoute(mRealm, route);
+        }
     }
 }

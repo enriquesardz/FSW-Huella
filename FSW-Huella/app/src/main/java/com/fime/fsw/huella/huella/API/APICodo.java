@@ -11,6 +11,7 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 import okhttp3.OkHttpClient;
+import okhttp3.ResponseBody;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -79,5 +80,17 @@ public class APICodo {
                 .build();
 
         return retrofit;
+    }
+
+    public static Retrofit uploadCheckouts(){
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .client(client)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        return retrofit;
+
     }
 }

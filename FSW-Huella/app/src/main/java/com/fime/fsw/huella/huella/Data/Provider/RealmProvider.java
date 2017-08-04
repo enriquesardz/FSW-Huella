@@ -14,6 +14,7 @@ import java.util.List;
 
 import io.realm.OrderedRealmCollection;
 import io.realm.Realm;
+import io.realm.RealmCollection;
 import io.realm.RealmResults;
 
 import static com.fime.fsw.huella.huella.Activities.HuellaApplication.APP_TAG;
@@ -83,10 +84,6 @@ public class RealmProvider{
         return realm.where(Task.class).findAll();
     }
 
-    public static RealmResults<Task> getUploadTasks(Realm realm){
-        return realm.where(Task.class).notEqualTo(Task.WAS_UPLOADED_FIELD, true).notEqualTo(Task.TASK_STATE_FIELD, Task.STATE_NO_HA_PASADO).findAll();
-    }
-
     public static OrderedRealmCollection<Task> getAllOrderedTasks(Realm mRealm){
         return mRealm.where(Task.class).findAllSorted(Task.SEQUENCE_FIELD);
     }
@@ -111,7 +108,10 @@ public class RealmProvider{
         return mRealm.where(Route.class).equalTo(Route._ID_FIELD,route_id).findFirst();
     }
 
-
+    public static List<Task> getRouteCheckoutsFromRealm(Realm mRealm, Route route){
+        RealmCollection<Task> tasks = route.getTasks().where().notEqualTo(Task.TASK_STATE_FIELD, Task.STATE_NO_HA_PASADO).findAll();
+        return mRealm.copyFromRealm(tasks);
+    }
 
     public static OrderedRealmCollection<Route> getAllOrderedRoutes(Realm mRealm){
         return mRealm.where(Route.class).findAllSorted(Route._ID_FIELD);
@@ -237,6 +237,24 @@ public class RealmProvider{
             @Override
             public void execute(Realm realm) {
                 route.moveToNextTask();
+            }
+        });
+    }
+
+    public static void setRouteIsCompletedByRoute(Realm mRealm, final Route route){
+        mRealm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                route.setCompleted(true);
+            }
+        });
+    }
+
+    public static void setRouteWasUploaded(Realm mRealm, final Route route){
+        mRealm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                route.setWasUploaded(true);
             }
         });
     }

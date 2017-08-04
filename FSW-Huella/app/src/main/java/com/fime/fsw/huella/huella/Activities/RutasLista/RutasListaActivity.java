@@ -8,6 +8,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,11 +22,15 @@ import com.fime.fsw.huella.huella.API.Endpoints.APIServices;
 import com.fime.fsw.huella.huella.Activities.InicioSesion.PrefectoLoginActivity;
 import com.fime.fsw.huella.huella.Activities.RecorridoMain.RecorridoMainActivity;
 import com.fime.fsw.huella.huella.Data.Modelos.Route;
+import com.fime.fsw.huella.huella.Data.Modelos.Task;
+import com.fime.fsw.huella.huella.Data.Modelos.UploadCheckouts;
+import com.fime.fsw.huella.huella.Data.Modelos.UploadResponse;
 import com.fime.fsw.huella.huella.Data.Provider.RealmProvider;
 import com.fime.fsw.huella.huella.R;
 import com.fime.fsw.huella.huella.UI.RecyclerView.RecyclerViewItemClickListener;
 import com.fime.fsw.huella.huella.UI.RecyclerView.RutasRecyclerViewAdapter;
 import com.fime.fsw.huella.huella.Utilidad.SesionAplicacion;
+import com.google.gson.Gson;
 
 import java.util.HashMap;
 import java.util.List;
@@ -203,6 +208,12 @@ public class RutasListaActivity extends AppCompatActivity {
                 saveRouteIdStartRecorrido(route);
                 Log.d(TAG, route.toString());
             }
+
+            @Override
+            public void onItemLongClick(View v, int position) {
+                Route route = rvRutasAdapter.getItem(position);
+                showUploadRouteMessage(route);
+            }
         });
 
         rvRutas.setAdapter(rvRutasAdapter);
@@ -216,6 +227,64 @@ public class RutasListaActivity extends AppCompatActivity {
         startActivity(intent);
 
         finish();
+    }
+
+    public void showUploadRouteMessage(final Route route){
+        new AlertDialog.Builder(mContext)
+                .setMessage("¿Subir ruta?")
+                .setPositiveButton("Si" ,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                tryToUploadRoute(route);
+                            }
+                        })
+                .setNegativeButton("No", null)
+                .show();
+    }
+
+    public void tryToUploadRoute(final Route route){
+
+        HashMap<String, String> userData = mSesionApp.getDetalleUsuario();
+        String jwtToken = userData.get(SesionAplicacion.KEY_USER_TOKEN);
+
+        if(!route.isCompleted()){
+            Toast.makeText(mContext, "No ha terminado esta ruta.", Toast.LENGTH_SHORT).show();
+            return;
+        } else if (route.isWasUploaded()){
+            Toast.makeText(mContext, "Esta ruta ya fue subida.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        UploadCheckouts uploadCheckouts = getCheckoutsFromRealm(route);
+
+        APIServices service = APICodo.uploadCheckouts().create(APIServices.class);
+        Call<UploadResponse> call = service.subirCheckoutsRuta(jwtToken, uploadCheckouts);
+
+        call.enqueue(new Callback<UploadResponse>() {
+            @Override
+            public void onResponse(Call<UploadResponse> call, Response<UploadResponse> response) {
+                UploadResponse uploadResponse = response.body();
+                if (response.isSuccessful() && uploadResponse != null) {
+                    if(TextUtils.equals(uploadResponse.getStatus().toLowerCase().trim(),"success")){
+                        RealmProvider.setRouteWasUploaded(mRealm,route);
+                    }
+                    else{
+                        Toast.makeText(mContext, uploadResponse.getMessages(), Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    //No regreso nada y tampoco guardo a Realm, asi que se inicia
+                    //la siguiente actividad con un empty state
+                    Toast.makeText(mContext, "Error: " + response.message(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UploadResponse> call, Throwable t) {
+                Toast.makeText(mContext, "Error: Error de red.", Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
     public void showEmptyState(){
@@ -237,5 +306,17 @@ public class RutasListaActivity extends AppCompatActivity {
         btnUpdate.setVisibility(View.GONE);
         recyclerContainer.setVisibility(View.GONE);
         emptyStateContainer.setVisibility(View.GONE);
+    }
+
+
+    public UploadCheckouts getCheckoutsFromRealm(Route route) {
+
+        UploadCheckouts uploadCheckouts;
+
+        List<Task> tasks = RealmProvider.getRouteCheckoutsFromRealm(mRealm,route);
+
+        uploadCheckouts = UploadCheckouts.create(route.get_id(), tasks);
+
+        return uploadCheckouts;
     }
 }

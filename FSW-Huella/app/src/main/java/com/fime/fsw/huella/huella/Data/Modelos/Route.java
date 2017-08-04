@@ -14,6 +14,8 @@ import io.realm.annotations.PrimaryKey;
 public class Route extends RealmObject {
 
     public static final String _ID_FIELD = "_id";
+    public static final String WAS_UPLOADED_FIELD = "wasUploaded";
+    public static final String IS_COMPLETED = "isCompleted";
 
     //Keys que identifican cada campo de Route
     public static final String DAY_KEY = "routeDay";
@@ -32,7 +34,10 @@ public class Route extends RealmObject {
     private RealmList<Task> tasks;
     private int currentTask;
     private int lastTask;
+    private boolean wasUploaded;
+    private boolean isCompleted;
 
+    //Este metodo se utiliza para crear una Ruta ya con las listas de Tasks
     public static Route createAll(String _id, String day, String academyHour, String assignedTo, int tasksCount, RealmList<Task> tasks, int currentTask, int lastTask) {
         //Missing createdAt
         Route route = new Route();
@@ -44,6 +49,8 @@ public class Route extends RealmObject {
         route.tasks = tasks;
         route.currentTask = currentTask;
         route.lastTask = lastTask;
+        route.wasUploaded = false;
+        route.isCompleted = false;
         return route;
     }
 
@@ -108,8 +115,24 @@ public class Route extends RealmObject {
         return currentTask;
     }
 
+    public boolean isCompleted() {
+        return isCompleted;
+    }
+
+    public boolean isWasUploaded() {
+        return wasUploaded;
+    }
+
     public void setCurrentTask(int currentTask) {
         this.currentTask = currentTask;
+    }
+
+    public void setWasUploaded(boolean wasUploaded) {
+        this.wasUploaded = wasUploaded;
+    }
+
+    public void setCompleted(boolean completed) {
+        isCompleted = completed;
     }
 
     public void moveToNextTask(){
@@ -120,14 +143,6 @@ public class Route extends RealmObject {
 
     public int getLastTask() {
         return lastTask;
-    }
-
-    public void setTasks(RealmList<Task> tasks) {
-        this.tasks = tasks;
-    }
-
-    public void setLastTask(int lastTask) {
-        this.lastTask = lastTask;
     }
 
     @Override

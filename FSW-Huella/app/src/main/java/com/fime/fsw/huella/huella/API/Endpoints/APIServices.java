@@ -4,9 +4,12 @@ package com.fime.fsw.huella.huella.API.Endpoints;
 import com.fime.fsw.huella.huella.Data.Modelos.LoginUser;
 import com.fime.fsw.huella.huella.Data.Modelos.Route;
 import com.fime.fsw.huella.huella.Data.Modelos.TokenResponse;
+import com.fime.fsw.huella.huella.Data.Modelos.UploadCheckouts;
+import com.fime.fsw.huella.huella.Data.Modelos.UploadResponse;
 
 import java.util.List;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -35,5 +38,8 @@ public interface APIServices {
 
     @GET("test/routes")
     Call<List<Route>> descargaAllRoutesWTasks(@Header("Authorization") String token);
+
+    @POST("upload/checkouts")
+    Call<UploadResponse> subirCheckoutsRuta(@Header("Authorization") String token, @Body UploadCheckouts uploadCheckouts);
 
 }
