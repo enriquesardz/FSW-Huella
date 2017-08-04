@@ -18,8 +18,6 @@ public class HuellaApplication extends Application {
     public static final String REALM_NAME = "Huella.realm";
     public static final String APP_TAG = "CODO: ";
 
-    public static AtomicInteger TaskID = new AtomicInteger();
-
     @Override
     public void onCreate() {
         super.onCreate();
@@ -31,9 +29,10 @@ public class HuellaApplication extends Application {
                 .name(REALM_NAME)
                 .deleteRealmIfMigrationNeeded()
                 .build();
+
         Realm.setDefaultConfiguration(config);
+
         Realm realm = Realm.getInstance(config);
-//        TaskID = setAtomicId(realm, Task.class);
 
         Stetho.initialize(
                 Stetho.newInitializerBuilder(this)
@@ -46,16 +45,11 @@ public class HuellaApplication extends Application {
                 .withMetaTables()
                 .withDescendingOrder()
                 .withLimit(1000)
-                .databaseNamePattern(Pattern.compile(REALM_NAME))
+                .databaseNamePattern(Pattern.compile(".+.realm"))
                 .build();
 
         realm.close();
 
     }
-
-//    private <T extends RealmObject> AtomicInteger setAtomicId(Realm realm, Class<T> anyClass) {
-//        RealmResults<T> results = realm.where(anyClass).findAll();
-//        return (results.size() > 0) ? new AtomicInteger(results.max("_id").intValue()) : new AtomicInteger();
-//    }
 }
 
