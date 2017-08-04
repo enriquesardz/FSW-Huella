@@ -2,10 +2,12 @@ package com.fime.fsw.huella.huella.Activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fime.fsw.huella.huella.API.APICodo;
@@ -46,6 +48,7 @@ public class AuthDownloadActivity extends AppCompatActivity {
     private Context mContext;
     private SesionAplicacion mSesionApp;
     private Realm mRealm;
+    private TextView txtSaludo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +70,7 @@ public class AuthDownloadActivity extends AppCompatActivity {
 
         String user = getIntent().getStringExtra("user");
         String password = getIntent().getStringExtra("password");
+        txtSaludo = (TextView) findViewById(R.id.txtSaludo);
 
         loginRequest(user, password);
     }
@@ -89,6 +93,8 @@ public class AuthDownloadActivity extends AppCompatActivity {
                 TokenResponse tokenResponse = response.body();
                 if (response.isSuccessful() && tokenResponse != null) {
                     if(TextUtils.equals(tokenResponse.getStatus(), "success")){
+                        txtSaludo.setText(getResources().getString(R.string.auth_saludo, user));
+                        txtSaludo.setTypeface(null, Typeface.BOLD);
                         String jwtToken = saveUserToken(user, tokenResponse);
                         Log.i(TAG, "Login successful: " + tokenResponse.toString());
                         startRouteAndTasksDownload(jwtToken);

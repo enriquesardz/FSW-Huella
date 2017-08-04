@@ -1,8 +1,10 @@
 package com.fime.fsw.huella.huella.Activities.RutasLista;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
@@ -10,10 +12,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,17 +50,17 @@ public class RutasListaActivity extends AppCompatActivity {
 
     private static final String TAG = APP_TAG + RutasListaActivity.class.getSimpleName();
 
-
     Context mContext;
     SesionAplicacion mSesionApp;
     Realm mRealm;
-
     TextView tvResponse;
     RecyclerView rvRutas;
     LinearLayout recyclerContainer, emptyStateContainer, loadingState;
     com.getbase.floatingactionbutton.FloatingActionButton btnCerrarSesion, btnUpdate;
-
     RutasRecyclerViewAdapter rvRutasAdapter;
+
+    private RelativeLayout fondoOpaco;
+    private FloatingActionsMenu floatingActionsMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +72,24 @@ public class RutasListaActivity extends AppCompatActivity {
         mRealm = Realm.getDefaultInstance();
 
         initComponentes();
+
+        setFloatingButtonControls();
+    }
+
+    private void setFloatingButtonControls(){
+        fondoOpaco = (RelativeLayout) findViewById(R.id.fondoOpaco);
+        floatingActionsMenu = (FloatingActionsMenu) findViewById(R.id.floatingActionsMenu);
+        floatingActionsMenu.setOnFloatingActionsMenuUpdateListener(new FloatingActionsMenu.OnFloatingActionsMenuUpdateListener() {
+            @Override
+            public void onMenuExpanded() {
+                fondoOpaco.setVisibility(RelativeLayout.VISIBLE);
+            }
+
+            @Override
+            public void onMenuCollapsed() {
+                fondoOpaco.setVisibility(RelativeLayout.GONE);
+            }
+        });
     }
 
     @Override
@@ -157,39 +181,6 @@ public class RutasListaActivity extends AppCompatActivity {
 
 
     }
-
-//    public void descargarRutas() {
-//
-//        showLoadingState();
-//
-//        HashMap<String, String> datosUsuario = mSesionApp.getDetalleUsuario();
-//
-//        APIServices service = APICodo.signedRouteList().create(APIServices.class);
-//        Call<List<Route>> call = service.descargaRutas(datosUsuario.get(SesionAplicacion.KEY_USER_TOKEN));
-//
-//        call.enqueue(new Callback<List<Route>>() {
-//            @Override
-//            public void onResponse(Call<List<Route>> call, Response<List<Route>> response) {
-//                List<Route> routes = response.body();
-//
-//                if (response.isSuccessful() && routes != null && !routes.isEmpty()) {
-//                    //Guarda los datos al Realm
-//                    RealmProvider.saveRouteListToRealm(mRealm, response.body());
-//                    loadRecyclerView();
-//                }
-//                else{
-//                    showEmptyState();
-//                    Toast.makeText(mContext, "No logro descargar.", Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<List<Route>> call, Throwable t) {
-//                showEmptyState();
-//                Toast.makeText(mContext, "Fallo en la descarga", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-
         public void startRouteAndTasksDownload() {
 
             showLoadingState();
