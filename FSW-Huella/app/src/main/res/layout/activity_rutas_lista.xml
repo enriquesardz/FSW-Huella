@@ -82,7 +82,7 @@
     <RelativeLayout
         android:id="@+id/fondoOpaco"
         android:visibility="gone"
-        android:background="#55000000"
+        android:background="#B2000000"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/><!--Vista de fondo opaca-->
 
@@ -94,22 +94,27 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_margin="16dp"
-        app:fab_addButtonColorNormal="@color/colorAccent"
-        app:fab_addButtonSize="normal">
+        fab:fab_addButtonColorNormal="@color/colorAccent"
+        fab:fab_addButtonSize="normal"
+        fab:fab_labelStyle="@style/Etiquetas"
+        fab:fab_labelsPosition="left">
 
         <com.getbase.floatingactionbutton.FloatingActionButton
             android:id="@+id/update_button"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:fab_icon="@drawable/ic_refresh"
-            fab:fab_size="mini"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_colorNormal="@color/colorSecondaryText"
+            fab:fab_icon="@drawable/ic_refresh"
+            fab:fab_size="mini"
+            fab:fab_title="Acualizar" />
 
         <com.getbase.floatingactionbutton.FloatingActionButton
             android:id="@+id/close_session_button"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:fab_icon="@drawable/ic_exit_to_app"
-            fab:fab_size="mini" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_colorNormal="@color/colorSecondaryText"
+            fab:fab_icon="@drawable/ic_exit_to_app"
+            fab:fab_size="mini"
+            fab:fab_title="Cerrar sesion"/>
     </com.getbase.floatingactionbutton.FloatingActionsMenu>
-
 </RelativeLayout>

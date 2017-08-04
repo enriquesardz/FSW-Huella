@@ -83,11 +83,12 @@ public class RutasListaActivity extends AppCompatActivity {
             @Override
             public void onMenuExpanded() {
                 fondoOpaco.setVisibility(RelativeLayout.VISIBLE);
+                fondoOpaco.setClickable(true);
             }
 
             @Override
             public void onMenuCollapsed() {
-                fondoOpaco.setVisibility(RelativeLayout.GONE);
+                fondoOpaco.setVisibility(View.GONE);
             }
         });
     }
