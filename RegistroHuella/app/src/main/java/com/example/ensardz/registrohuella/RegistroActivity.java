@@ -19,8 +19,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.ensardz.registrohuella.Datos.HuellaContract;
-import com.example.ensardz.registrohuella.Datos.HuellaDBHelper;
 import com.facebook.stetho.Stetho;
 import com.rscja.deviceapi.Fingerprint;
 
@@ -36,14 +34,11 @@ public class RegistroActivity extends AppCompatActivity {
     private EditText edNombre;
     private Button btnAgregar;
     private Button btnMostrar;
-    private Button btnCrearArchivo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registro);
-
-        Stetho.initializeWithDefaults(this);
 
         try {
             mFingerprint = Fingerprint.getInstance();
@@ -56,7 +51,6 @@ public class RegistroActivity extends AppCompatActivity {
         edNombre = (EditText) findViewById(R.id.nombre);
         btnAgregar = (Button) findViewById(R.id.agregar);
         btnMostrar = (Button) findViewById(R.id.mostrar);
-        btnCrearArchivo = (Button) findViewById(R.id.crear);
 
 
         btnAgregar.setOnClickListener(new View.OnClickListener() {
@@ -93,36 +87,6 @@ public class RegistroActivity extends AppCompatActivity {
             }
         });
 
-        btnCrearArchivo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                btnCrearArchivo_onClick(view);
-            }
-        });
-
-    }
-
-    public void btnCrearArchivo_onClick(View v) {
-        DialogInterface.OnClickListener dialog = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogint, int which) {
-                switch (which) {
-                    case DialogInterface.BUTTON_POSITIVE:
-                        guardarDBaFile();
-                        break;
-
-                    case DialogInterface.BUTTON_NEGATIVE:
-                        break;
-                }
-            }
-        };
-        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-        builder.setMessage("Estas seguro?").setPositiveButton("Si", dialog)
-                .setNegativeButton("No", dialog).show();
-    }
-
-    public void guardarDBaFile() {
-        Log.i(TAG, mContext.getDatabasePath(HuellaDBHelper.NOMBRE_BASEDATOS).toString());
     }
 
     @Override
@@ -186,7 +150,6 @@ public class RegistroActivity extends AppCompatActivity {
         private String numEmpleado;
         private String usuarioNombre;
 
-        private HuellaDBHelper mDBHelper;
         private ProgressDialog progressDialog;
 
 
@@ -196,7 +159,6 @@ public class RegistroActivity extends AppCompatActivity {
             mFingerprint = fingerprint;
             usuarioNombre = nombre;
             numEmpleado = empleado;
-            mDBHelper = new HuellaDBHelper(mContext);
             progressDialog = new ProgressDialog(mContext);
         }
 
@@ -256,95 +218,14 @@ public class RegistroActivity extends AppCompatActivity {
                 return;
             }
 
-            //Si el if anterior no atrapa nada, entonces la adquisicion fue exitosa y los datos pueden ser guardados
-            //en esta funcion.
-            SQLiteDatabase db = null;
-            try {
-                db = mDBHelper.getWritableDatabase();
-                ContentValues values = new ContentValues();
+            //Adquisicion exitosa
 
-                values.put(HuellaContract.HuellaEntry.COLUMNA_NUMERO_EMPLEADO, numEmpleado);
-                values.put(HuellaContract.HuellaEntry.COLUMNA_NOMBRE, usuarioNombre);
-                values.put(HuellaContract.HuellaEntry.COLUMNA_HUELLA, usuarioHexData);
-                long rowID = db.insert(HuellaContract.HuellaEntry.TABLA_USUARIO_NOMBRE, null, values);
-
-                if (rowID != -1) {
-                    Toast.makeText(mContext, "El usuario " + usuarioNombre + " fue agregado exitosamente.", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(mContext, "Error al agregar usuario.", Toast.LENGTH_SHORT).show();
-                }
-
-                Log.i(TAG, usuarioNombre);
-                Log.i(TAG, usuarioHexData);
-                Log.i(TAG, Long.toString(rowID) + " agregado.");
-
-            } catch (SQLiteException e) {
-                Log.e(TAG, e.toString());
-            } finally {
-                if (mDBHelper != null) {
-                    mDBHelper.close();
-                }
-                if (db != null) {
-                    db.close();
-                }
-            }
 
         }
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            HuellaDBHelper helper = null;
-            SQLiteDatabase db = null;
-            Cursor cursor = null;
-            try {
-                helper = new HuellaDBHelper(mContext);
-                db = helper.getReadableDatabase();
-
-                String[] projection = {
-                        HuellaContract.HuellaEntry._ID
-                };
-
-                String selection = HuellaContract.HuellaEntry.COLUMNA_NUMERO_EMPLEADO + " = ?";
-                String[] selectionArgs = {numEmpleado};
-
-                cursor = db.query(
-                        HuellaContract.HuellaEntry.TABLA_USUARIO_NOMBRE,
-                        projection,
-                        selection,
-                        selectionArgs,
-                        null,
-                        null,
-                        null
-                );
-
-                if (cursor.getCount() > 0) {
-                    cancel(true);
-                    Log.e(TAG, "Ese numero de empleado ya existe");
-                    Toast.makeText(mContext, "Ya existe num empleado", Toast.LENGTH_SHORT).show();
-                }
-
-            } catch (Exception e) {
-                Log.e(TAG, e.toString());
-            } finally {
-                if (helper != null) {
-                    helper.close();
-                }
-                if (db != null) {
-                    db.close();
-                }
-                if (cursor != null) {
-                    db.close();
-                }
-            }
-
-            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            progressDialog.setCanceledOnTouchOutside(false);
-            progressDialog.show();
-
-            if(isCancelled()){
-                progressDialog.cancel();
-            }
         }
 
         @Override
