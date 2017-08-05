@@ -1,6 +1,7 @@
 package com.fime.fsw.huella.huella.Data.Modelos;
 
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by Quique on 08/07/2017.
@@ -15,6 +16,7 @@ public class Owner extends RealmObject{
     public static final String TITLE_KEY = "ownerTitle";
     public static final String LAST_NAME_KEY = "ownerLastName";
 
+    @PrimaryKey
     private String rawName;
     private String userType;
     private String name;

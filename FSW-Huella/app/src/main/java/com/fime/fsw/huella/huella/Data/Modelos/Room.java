@@ -3,6 +3,7 @@ package com.fime.fsw.huella.huella.Data.Modelos;
 import com.google.gson.annotations.SerializedName;
 
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by Quique on 19/07/2017.
@@ -18,6 +19,7 @@ public class Room extends RealmObject {
     private String building;
     private String barcode;
     @SerializedName("room")
+    @PrimaryKey
     private String roomNumber;
     private String area;
 

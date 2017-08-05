@@ -1,6 +1,7 @@
 package com.fime.fsw.huella.huella.Data.Modelos;
 
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by Quique on 19/07/2017.
@@ -15,6 +16,7 @@ public class Assignment extends RealmObject {
     public static final String PLAN_KEY = "assignmentPlan";
 
     private String rawName;
+    @PrimaryKey
     private String code;
     private String name;
     private String plan;
