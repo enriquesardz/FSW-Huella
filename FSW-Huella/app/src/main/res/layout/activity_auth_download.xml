@@ -9,7 +9,16 @@
     tools:context="com.fime.fsw.huella.huella.Activities.AuthDownloadActivity">
 
     <ProgressBar
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
+        android:layout_height="100dp" />
+
+    <TextView
+        android:id="@+id/txtSaludo"
+        android:layout_width="340dp"
         android:layout_height="wrap_content"
-        />
+        android:layout_marginTop="40dp"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textSize="20dp"
+        android:text="¡Buen día Enrique estamos descargando tus rutas del dia de hoy!"/>
 </LinearLayout>

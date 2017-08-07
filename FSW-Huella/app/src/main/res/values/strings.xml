@@ -79,4 +79,6 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
 
+    <string name="auth_saludo">¡Buen día %1$s estamos descargando tus rutas del dia de hoy!</string>
+
 </resources>

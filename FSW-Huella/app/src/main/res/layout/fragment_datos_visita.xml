@@ -29,7 +29,7 @@
                     android:id="@+id/hora_fime_textview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/gasparin"
+                    android:textColor="@color/blanco"
                     android:textSize="30sp"
                     android:textStyle="bold" /><!--Nomenclatura-->
             </LinearLayout>
@@ -50,7 +50,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:text="Avance"
-                        android:textColor="@color/gasparin"
+                        android:textColor="@color/blanco"
                         android:textSize="18sp"
                         android:textStyle="bold" /><!--txt Avance-->
                 </LinearLayout>
@@ -63,7 +63,7 @@
                         android:id="@+id/porcentaje_tasks_textview"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/gasparin"
+                        android:textColor="@color/blanco"
                         android:textSize="30sp" /><!--procentaje recorrido-->
 
                 </LinearLayout>
@@ -81,7 +81,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Actual/Total"
-                    android:textColor="@color/gasparin"
+                    android:textColor="@color/blanco"
                     android:textSize="18sp"
                     android:textStyle="bold" /><!--txt actual/total-->
                 <LinearLayout
@@ -93,7 +93,7 @@
                         android:id="@+id/progreso_task_textview"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/gasparin"
+                        android:textColor="@color/blanco"
                         android:textSize="30sp" /><!--recorrido actual-->
                 </LinearLayout>
 

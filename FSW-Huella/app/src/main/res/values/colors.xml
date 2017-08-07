@@ -1,18 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">@color/green</color>
-    <color name="colorPrimaryDark">@color/fime_real</color>
-    <color name="colorAccent">#FF4081</color>
-
-    <!-- Colores Material Design FIME -->
-    <color name="primary">#009688</color>
-    <color name="primary_dark">#00796B</color>
-    <color name="primary_light">#B2DFDB</color>
-    <color name="accent">#4CAF50</color>
-    <color name="primary_text">#212121</color>
-    <color name="secondary_text">#757575</color>
-    <color name="icons">#FFFFFF</color>
-    <color name="divider">#BDBDBD</color>
+    <color name="colorPrimary">#4CAF50</color>
+    <color name="colorPrimaryDark">#388E3C</color>
+    <color name="colorPrimaryLight">#C8E6C9</color>
+    <color name="colorAccent">#8BC34A</color>
+    <color name="colorPrimaryText">#212121</color>
+    <color name="colorSecondaryText">#757575</color>
+    <color name="colorIcons">#FFFFFF</color>
+    <color name="colorDivider">#BDBDBD</color>
 
     <!-- Otros colores palette FIME -->
     <color name="fime_mint">#9DD09E</color>
@@ -23,13 +18,6 @@
     <color name="rojo_error">#D51B1B</color>
     <color name="blanco">#FFFFFF</color>
     <color name="gray_disabled">#d3d3d3</color>
-
-    <!-- Palette Mario -->
-    <color name="fime_real">#2e7d32</color>
-    <color name="green">#00e676</color>
-    <color name="colorgreen">#a5d6a7</color>
-    <color name="gasparin">#FFFFFF</color>
-    <color name="morenaso">#212121</color>
-    <color name="mablue">#2979ff</color>
+    <color name="dark_blue">#2979ff</color>
 
 </resources>

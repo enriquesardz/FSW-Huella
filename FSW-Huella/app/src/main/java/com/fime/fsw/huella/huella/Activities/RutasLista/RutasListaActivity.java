@@ -1,8 +1,10 @@
 package com.fime.fsw.huella.huella.Activities.RutasLista;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -10,10 +12,14 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +36,7 @@ import com.fime.fsw.huella.huella.R;
 import com.fime.fsw.huella.huella.UI.RecyclerView.RecyclerViewItemClickListener;
 import com.fime.fsw.huella.huella.UI.RecyclerView.RutasRecyclerViewAdapter;
 import com.fime.fsw.huella.huella.Utilidad.SesionAplicacion;
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.google.gson.Gson;
 
 import java.util.HashMap;
@@ -47,7 +54,6 @@ public class RutasListaActivity extends AppCompatActivity {
 
     private static final String TAG = APP_TAG + RutasListaActivity.class.getSimpleName();
 
-
     Context mContext;
     SesionAplicacion mSesionApp;
     Realm mRealm;
@@ -56,8 +62,10 @@ public class RutasListaActivity extends AppCompatActivity {
     RecyclerView rvRutas;
     LinearLayout recyclerContainer, emptyStateContainer, loadingState;
     com.getbase.floatingactionbutton.FloatingActionButton btnCerrarSesion, btnUpdate;
-
     RutasRecyclerViewAdapter rvRutasAdapter;
+
+    private RelativeLayout fondoOpaco;
+    private FloatingActionsMenu floatingActionsMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +77,25 @@ public class RutasListaActivity extends AppCompatActivity {
         mRealm = Realm.getDefaultInstance();
 
         initComponentes();
+
+        setFloatingButtonControls();
+    }
+
+    private void setFloatingButtonControls(){
+        fondoOpaco = (RelativeLayout) findViewById(R.id.fondoOpaco);
+        floatingActionsMenu = (FloatingActionsMenu) findViewById(R.id.floatingActionsMenu);
+        floatingActionsMenu.setOnFloatingActionsMenuUpdateListener(new FloatingActionsMenu.OnFloatingActionsMenuUpdateListener() {
+            @Override
+            public void onMenuExpanded() {
+                fondoOpaco.setVisibility(RelativeLayout.VISIBLE);
+                fondoOpaco.setClickable(true);
+            }
+
+            @Override
+            public void onMenuCollapsed() {
+                fondoOpaco.setVisibility(View.GONE);
+            }
+        });
     }
 
     @Override

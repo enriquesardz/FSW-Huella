@@ -84,9 +84,9 @@ public class RutasRecyclerViewAdapter extends RealmRecyclerViewAdapter<Route, Ru
         holder.tvRutaHora.setText(routeHora);
 
         if (route.isWasUploaded()){
-            holder.tvTaskCount.setTextColor(ContextCompat.getColor(mContext, R.color.green));
+            holder.tvTaskCount.setTextColor(ContextCompat.getColor(mContext, R.color.verde_obscuro));
         } else{
-            holder.tvTaskCount.setTextColor(ContextCompat.getColor(mContext, R.color.mablue));
+            holder.tvTaskCount.setTextColor(ContextCompat.getColor(mContext, R.color.dark_blue));
         }
 
     }

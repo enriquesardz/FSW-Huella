@@ -92,8 +92,8 @@ public class RecorridoAdapter extends RealmRecyclerViewAdapter<Task, RecorridoAd
 
         switch (taskState){
             case Task.STATE_NO_HA_PASADO:
-                holder.tvHoraFime.setTextColor(ContextCompat.getColor(mContext, R.color.primary_text));
-                holder.tvSalonFime.setTextColor(ContextCompat.getColor(mContext, R.color.primary_text));
+                holder.tvHoraFime.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimaryText));
+                holder.tvSalonFime.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimaryText));
                 break;
             case Task.STATE_PASO_VINO_MAESTRO:
                 holder.listItemContainer.setBackgroundColor(ContextCompat.getColor(mContext, R.color.verde_obscuro));
