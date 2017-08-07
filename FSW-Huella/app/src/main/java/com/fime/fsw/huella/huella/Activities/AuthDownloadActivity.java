@@ -71,6 +71,7 @@ public class AuthDownloadActivity extends AppCompatActivity {
         String user = getIntent().getStringExtra("user");
         String password = getIntent().getStringExtra("password");
         txtSaludo = (TextView) findViewById(R.id.txtSaludo);
+        txtSaludo.setText("");
 
         loginRequest(user, password);
     }
@@ -93,7 +94,7 @@ public class AuthDownloadActivity extends AppCompatActivity {
                 TokenResponse tokenResponse = response.body();
                 if (response.isSuccessful() && tokenResponse != null) {
                     if(TextUtils.equals(tokenResponse.getStatus(), "success")){
-                        txtSaludo.setText(getResources().getString(R.string.auth_saludo, user));
+                        txtSaludo.setText(getResources().getString(R.string.auth_saludo, user));   //Acomodar el texto para que no se quede guaradado el nombre con el que se hizo login anteriormente
                         txtSaludo.setTypeface(null, Typeface.BOLD);
                         String jwtToken = saveUserToken(user, tokenResponse);
                         Log.i(TAG, "Login successful: " + tokenResponse.toString());
