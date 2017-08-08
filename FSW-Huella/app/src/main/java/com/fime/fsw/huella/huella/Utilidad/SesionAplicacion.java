@@ -22,6 +22,7 @@ public class SesionAplicacion {
     public static final String KEY_ROUTE_IS_SELECTED = "routeIsSelected";
     public static final String KEY_USUARIO = "usuario";
     public static final String KEY_USER_TOKEN = "userToken";
+    public static final String KEY_REFRESH_TOKEN = "refreshToken";
 
     public SesionAplicacion(Context context){
         mContext = context;
@@ -30,10 +31,11 @@ public class SesionAplicacion {
     }
     //Crea sesion de Log In, se salta la pantalla de login y salta
     //a la Lista de Rutas
-    public void crearSesionLogin(String usuario, String userToken){
+    public void crearSesionLogin(String usuario, String userToken, String refreshToken){
         editor.putBoolean(KEY_LOGIN, true);
         editor.putString(KEY_USUARIO, usuario);
         editor.putString(KEY_USER_TOKEN, userToken);
+        editor.putString(KEY_REFRESH_TOKEN, refreshToken);
         editor.commit();
     }
 
@@ -63,8 +65,11 @@ public class SesionAplicacion {
 
     public HashMap<String, String> getDetalleUsuario(){
         HashMap<String, String> usuario = new HashMap<String,String>();
+
         usuario.put(KEY_USUARIO, preferences.getString(KEY_USUARIO,null));
         usuario.put(KEY_USER_TOKEN, preferences.getString(KEY_USER_TOKEN,null));
+        usuario.put(KEY_REFRESH_TOKEN, preferences.getString(KEY_REFRESH_TOKEN, null));
+
         return usuario;
     }
 

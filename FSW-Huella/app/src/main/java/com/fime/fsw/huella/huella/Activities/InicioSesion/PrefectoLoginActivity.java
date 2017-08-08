@@ -82,35 +82,7 @@ public class PrefectoLoginActivity extends AppCompatActivity {
             Toast.makeText(mContext, "Llenar ambos campos", Toast.LENGTH_SHORT).show();
             return;
         }
-//
-//        final LoginUser loginUser = new LoginUser(user, password);
-//
-//        APIServices service = APICodo.requestToken().create(APIServices.class);
-//        Call<TokenResponse> call = service.authGetToken(loginUser);
-//
-//        call.enqueue(new Callback<TokenResponse>() {
-//            @Override
-//            public void onResponse(Call<TokenResponse> call, Response<TokenResponse> response) {
-//                TokenResponse tokenResponse = response.body();
-//                if (response.isSuccessful() && tokenResponse != null) {
-//                    if(TextUtils.equals(tokenResponse.getStatus(), "success")){
-//                        saveDataAndStartSession(loginUser.getUser(), response.body());
-//                        Log.d(TAG, response.body().toString());
-//                    }
-//                    else {
-//                        Toast.makeText(mContext, "Usuario no autorizado", Toast.LENGTH_SHORT).show();
-//                        Log.e(TAG, "Bad user");
-//                    }
-//                } else {
-//                    Log.e(TAG, "El api no regreso una respuesta valida");
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<TokenResponse> call, Throwable t) {
-//                Toast.makeText(mContext, "Error al validar", Toast.LENGTH_SHORT).show();
-//            }
-//        });
+
         Intent intent = new Intent(mContext, AuthDownloadActivity.class);
         intent.putExtra("user", user);
         intent.putExtra("password", password);
@@ -118,14 +90,4 @@ public class PrefectoLoginActivity extends AppCompatActivity {
         finish();
     }
 
-    public void saveDataAndStartSession(String userName, TokenResponse tokenResponse) {
-        //Guarda la sesion del usuario; el usuario ahora esta logeado.
-        String user = userName;
-        String token = tokenResponse.getToken();
-
-        mSesionApp.crearSesionLogin(user, token);
-
-        startActivity(new Intent(mContext, RutasListaActivity.class));
-        finish();
-    }
 }

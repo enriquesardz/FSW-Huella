@@ -7,26 +7,24 @@ package com.fime.fsw.huella.huella.Data.Modelos;
 public class TokenResponse {
     private String status;
     private String token;
+    private String refreshToken;
 
-    public TokenResponse(String status, String token) {
+    public TokenResponse(String status, String token, String refreshToken) {
         this.status = status;
         this.token = token;
+        this.refreshToken = refreshToken;
     }
 
     public String getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
     public String getToken() {
         return token;
     }
 
-    public void setToken(String token) {
-        this.token = token;
+    public String getRefreshToken() {
+        return refreshToken;
     }
 
     @Override
@@ -34,6 +32,7 @@ public class TokenResponse {
         return "TokenResponse{" +
                 "status='" + status + '\'' +
                 ", token='" + token + '\'' +
+                ", refreshToken='" + refreshToken + '\'' +
                 '}';
     }
 }

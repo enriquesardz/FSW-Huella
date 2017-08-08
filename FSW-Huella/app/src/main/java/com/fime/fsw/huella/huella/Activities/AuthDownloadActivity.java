@@ -136,7 +136,8 @@ public class AuthDownloadActivity extends AppCompatActivity {
     public String saveUserToken(String userName, TokenResponse tokenResponse) {
         //Guarda la sesion del usuario; el usuario ahora esta logeado.
         String token = tokenResponse.getToken();
-        mSesionApp.crearSesionLogin(userName, token);
+        String refreshToken = tokenResponse.getRefreshToken();
+        mSesionApp.crearSesionLogin(userName, token, refreshToken);
         return token;
     }
 
