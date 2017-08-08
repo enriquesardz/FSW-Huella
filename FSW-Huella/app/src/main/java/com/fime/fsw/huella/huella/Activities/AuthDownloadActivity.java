@@ -10,7 +10,9 @@ import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fime.fsw.huella.huella.API.APICallbackListener;
 import com.fime.fsw.huella.huella.API.APICodo;
+import com.fime.fsw.huella.huella.API.APIManager;
 import com.fime.fsw.huella.huella.API.Endpoints.APIServices;
 import com.fime.fsw.huella.huella.Activities.InicioSesion.PrefectoLoginActivity;
 import com.fime.fsw.huella.huella.Activities.RutasLista.RutasListaActivity;
@@ -64,7 +66,7 @@ public class AuthDownloadActivity extends AppCompatActivity {
 
     public void initComponentes() {
 
-        if (getSupportActionBar()!=null){
+        if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
 
@@ -77,60 +79,42 @@ public class AuthDownloadActivity extends AppCompatActivity {
     }
 
     public void loginRequest(final String user, String password) {
-        /*
-        * Tries to get a token that grants access to the rest of the API, it returns
-        * to the login Activity onFailure
-        * Proceeds to the download of Routes and Tasks onSuccess.
-        * */
 
-        final LoginUser loginUser = new LoginUser(user, password);
-
-        APIServices service = APICodo.requestToken().create(APIServices.class);
-        Call<TokenResponse> call = service.authGetToken(loginUser);
-
-        call.enqueue(new Callback<TokenResponse>() {
+        APIManager.getInstance().loginRequest(user, password, new APICallbackListener<TokenResponse>() {
             @Override
-            public void onResponse(Call<TokenResponse> call, Response<TokenResponse> response) {
-                TokenResponse tokenResponse = response.body();
-                if (response.isSuccessful() && tokenResponse != null) {
-                    if(TextUtils.equals(tokenResponse.getStatus(), "success")){
-                        txtSaludo.setText(getResources().getString(R.string.auth_saludo, user));   //Acomodar el texto para que no se quede guaradado el nombre con el que se hizo login anteriormente
-                        txtSaludo.setTypeface(null, Typeface.BOLD);
-                        String jwtToken = saveUserToken(user, tokenResponse);
-                        Log.i(TAG, "Login successful: " + tokenResponse.toString());
-                        startRouteAndTasksDownload(jwtToken);
-                    }
-                    else {
-                        Toast.makeText(mContext, "Usuario no autorizado", Toast.LENGTH_SHORT).show();
-                        returnToLoginActivity(user);
-                        Log.e(TAG, "Bad user");
-                    }
+            public void response(TokenResponse tokenResponse) {
+
+                if (TextUtils.equals(tokenResponse.getStatus(), "success")) {
+
+                    txtSaludo.setText(getResources().getString(R.string.auth_saludo, user));
+                    txtSaludo.setTypeface(null, Typeface.BOLD);
+                    String jwtToken = saveUserToken(user, tokenResponse);
+
+                    Log.i(TAG, "Login successful: " + tokenResponse.toString());
+                    startRouteAndTasksDownload(jwtToken);
+
                 } else {
                     Toast.makeText(mContext, "Usuario no autorizado", Toast.LENGTH_SHORT).show();
-                    Log.e(TAG, "Unauthorized user");
                     returnToLoginActivity(user);
+                    Log.e(TAG, "Bad user");
                 }
+
             }
 
             @Override
-            public void onFailure(Call<TokenResponse> call, Throwable t) {
-                Toast.makeText(mContext, "Error de conexion", Toast.LENGTH_SHORT).show();
-                Log.e(TAG, "Error con requestToken service");
+            public void failure() {
                 returnToLoginActivity(user);
             }
         });
+
     }
 
     public void startRouteAndTasksDownload(final String jwtToken) {
 
-        APIServices service = APICodo.signedAllRoutesAndTasks().create(APIServices.class);
-        Call<List<Route>> call = service.descargaAllRoutesWTasks(jwtToken);
-
-        call.enqueue(new Callback<List<Route>>() {
+        APIManager.getInstance().startRouteAndTasksDownload(jwtToken, new APICallbackListener<List<Route>>() {
             @Override
-            public void onResponse(Call<List<Route>> call, Response<List<Route>> response) {
-                List<Route> routes = response.body();
-                if (response.isSuccessful() && routes != null && !routes.isEmpty()) {
+            public void response(List<Route> routes) {
+                if (!routes.isEmpty()) {
                     //Guarda los datos al Realm
                     RealmProvider.saveRouteListWTasksToRealm(mRealm, routes);
                     startRouteListActivity(true);
@@ -139,11 +123,10 @@ public class AuthDownloadActivity extends AppCompatActivity {
                     //la siguiente actividad con un empty state
                     startRouteListActivity(false);
                 }
-
             }
 
             @Override
-            public void onFailure(Call<List<Route>> call, Throwable t) {
+            public void failure() {
                 Toast.makeText(mContext, "Fallo en la descarga", Toast.LENGTH_SHORT).show();
                 startRouteListActivity(false);
             }
