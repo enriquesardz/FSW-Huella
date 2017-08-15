@@ -9,6 +9,8 @@ import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.View;
 
 import com.fime.fsw.huella.huella.Activities.HuellaApplication;
 import com.fime.fsw.huella.huella.Activities.RutasLista.RutasListaActivity;
@@ -28,6 +30,8 @@ import io.realm.Realm;
 public class RecorridoMainActivity extends AppCompatActivity implements RecorridoActualFragment.OnFragmentInteractionListener, DatosVisitaFragment.OnFragmentInteractionListener {
 
     public static final String TAG = HuellaApplication.APP_TAG + RecorridoMainActivity.class.getSimpleName();
+    public static final String IS_TASK_NULL_KEY = "isTaskNull";
+    public static final String IS_LAST_TASK_KEY = "isLastTask";
 
     private BottomBar mBarraNav;
     private Fragment mFragment;
@@ -35,6 +39,11 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
     private Bundle mBundle;
     private Realm mRealm;
     private SesionAplicacion mSesionApp;
+
+    private Task mTask;
+    private Route mRoute;
+
+    private int routeCurrentTaskSequence;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,9 +81,9 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
 
     @Override
     public void onRecorridoActualItemSelected(Task task) {
-        String id = task.get_id();
-        mBundle.putString(Task._ID_FIELD, id);
-        mBarraNav.selectTabWithId(R.id.tab_datos_visita);
+//        String id = task.get_id();
+//        mBundle.putString(Task._ID_FIELD, id);
+//        mBarraNav.selectTabWithId(R.id.tab_datos_visita);
     }
 
     @Override
@@ -90,9 +99,32 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
     public void initComponents() {
         mBundle = new Bundle();
 
-        setUpBarraNavegacion();
         RealmProvider.dataCount(mRealm);
+
+        setUpBarraNavegacion();
+
+        String routeId = mSesionApp.getCurrentRutaId();
+        mRoute = RealmProvider.getRouteByRouteId(mRealm, routeId);
+
+        routeCurrentTaskSequence = mRoute.getCurrentTask();
+        Log.d(TAG, "Current task sequence " + routeCurrentTaskSequence);
+
+        mTask = mRoute.getTasks().where().equalTo(Task.SEQUENCE_FIELD, routeCurrentTaskSequence).findFirst();
+
+
         checkAndSetRouteCompleted();
+
+        if (mTask != null) {
+            mBundle.putBoolean(IS_TASK_NULL_KEY, false);
+        }
+        else{
+            mBundle.putBoolean(IS_TASK_NULL_KEY, true);
+        }
+
+        if (routeCurrentTaskSequence == mRoute.getLastTask()) {
+            mBundle.putBoolean(IS_LAST_TASK_KEY, true);
+        }
+
 
         mBarraNav.selectTabWithId(R.id.tab_datos_visita);
     }
@@ -122,11 +154,8 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
     }
 
     public void checkAndSetRouteCompleted(){
-        String routeId = mSesionApp.getCurrentRutaId();
-        Route route = RealmProvider.getRouteByRouteId(mRealm,routeId);
-
-        if(route.getCurrentTask() == route.getLastTask()){
-            RealmProvider.setRouteIsCompletedByRoute(mRealm, route);
+        if(mRoute.getCurrentTask() == mRoute.getLastTask()){
+            RealmProvider.setRouteIsCompletedByRoute(mRealm, mRoute);
         }
     }
 }

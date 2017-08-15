@@ -13,6 +13,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.fime.fsw.huella.huella.Activities.Barcode.BarcodeReaderActivity;
+import com.fime.fsw.huella.huella.Activities.RecorridoMain.RecorridoMainActivity;
 import com.fime.fsw.huella.huella.Data.Modelos.Assignment;
 import com.fime.fsw.huella.huella.Data.Modelos.Owner;
 import com.fime.fsw.huella.huella.Data.Modelos.Room;
@@ -54,6 +55,9 @@ public class DatosVisitaFragment extends Fragment {
     private Context mContext;
     private Realm mRealm;
     private SesionAplicacion mSesionApp;
+
+    private Task mTask;
+    private Route mRoute;
 
     public DatosVisitaFragment() {
         // Required empty public constructor
@@ -111,6 +115,7 @@ public class DatosVisitaFragment extends Fragment {
     }
 
     private void initComponentes(View view) {
+
         infoContainer = view.findViewById(R.id.informacion_container);
         emptyState = view.findViewById(R.id.empty_state);
         tvMaestro = (TextView) view.findViewById(R.id.maestro_textview);
@@ -127,22 +132,25 @@ public class DatosVisitaFragment extends Fragment {
         //Valor default del itemid, con intencion de que si el Bundle no regresa un id,
         //se pueda validar.
 
-        String routeId = mSesionApp.getCurrentRutaId();
-        final Route route = RealmProvider.getRouteByRouteId(mRealm, routeId);
-        routeCurrentTaskSequence = route.getCurrentTask();
+        boolean isTaskNull = mBundle.getBoolean(RecorridoMainActivity.IS_TASK_NULL_KEY);
+        boolean isLastTask = mBundle.getBoolean(RecorridoMainActivity.IS_LAST_TASK_KEY);
+
+        mRoute = RealmProvider.getRouteByRouteId(mRealm, mSesionApp.getCurrentRutaId());
+
+        routeCurrentTaskSequence = mRoute.getCurrentTask();
         Log.d(TAG, "Current task sequence " + routeCurrentTaskSequence);
 
-        final Task task = route.getTasks().where().equalTo(Task.SEQUENCE_FIELD, routeCurrentTaskSequence).findFirst();
+        mTask = mRoute.getTasks().where().equalTo(Task.SEQUENCE_FIELD, routeCurrentTaskSequence).findFirst();
         //Si el bundle regreso un id, entonces actualiza la UI con datos del Task, y
         //hace visible el contenedor.
 
-        if (task != null) {
-            cargarDatosTask(task);
-            itemid = task.get_id();
+        if (mTask != null) {
+            cargarDatosTask(mTask);
+            itemid = mTask.get_id();
         }
 
         //TODO: Falta validacion para que cuando se le de click a una tarea de la lista de tareas, este muestre su detalle sin el boton de scanner.
-        if (routeCurrentTaskSequence == route.getLastTask()) {
+        if (routeCurrentTaskSequence == mRoute.getLastTask()) {
             btnEscanner.setVisibility(View.GONE);
             showEmptyState();
         }
@@ -151,7 +159,7 @@ public class DatosVisitaFragment extends Fragment {
         btnEscanner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startBarcodeActivity(route, task, itemid);
+                startBarcodeActivity(mRoute, mTask, itemid);
             }
         });
     }
@@ -179,7 +187,6 @@ public class DatosVisitaFragment extends Fragment {
         if ((itemid != null && routeCurrentTaskSequence >= currentTask)) {
             //Si mBundle regreso un id, entonces se puede iniciar la actividad del Scanner con un Task id,
             //y si no, el boton no hace nada.
-            RealmProvider.setStartedAtCheckout(mRealm, task);
             Intent intent = new Intent(mContext, BarcodeReaderActivity.class);
             intent.putExtra(Task._ID_FIELD, itemid);
             startActivity(intent);
