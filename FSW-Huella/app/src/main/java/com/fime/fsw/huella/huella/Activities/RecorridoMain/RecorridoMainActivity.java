@@ -11,6 +11,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import com.fime.fsw.huella.huella.Activities.HuellaApplication;
 import com.fime.fsw.huella.huella.Activities.RutasLista.RutasListaActivity;
@@ -23,6 +24,8 @@ import com.fime.fsw.huella.huella.R;
 import com.fime.fsw.huella.huella.Utilidad.SesionAplicacion;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
+
+import java.util.HashMap;
 
 import io.realm.Realm;
 
@@ -42,6 +45,8 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
 
     private Task mTask;
     private Route mRoute;
+
+    private TextView tvHoraFime, tvPorcentaje, tvProgreso;
 
     private int routeCurrentTaskSequence;
 
@@ -97,11 +102,15 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
     }
 
     public void initComponents() {
-        mBundle = new Bundle();
 
-        RealmProvider.dataCount(mRealm);
+        tvHoraFime = (TextView) findViewById(R.id.hora_fime_textview);
+        tvPorcentaje = (TextView) findViewById(R.id.porcentaje_tasks_textview);
+        tvProgreso = (TextView) findViewById(R.id.progreso_task_textview);
 
         setUpBarraNavegacion();
+        mBundle = new Bundle();
+        RealmProvider.dataCount(mRealm);
+
 
         String routeId = mSesionApp.getCurrentRutaId();
         mRoute = RealmProvider.getRouteByRouteId(mRealm, routeId);
@@ -111,20 +120,17 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
 
         mTask = mRoute.getTasks().where().equalTo(Task.SEQUENCE_FIELD, routeCurrentTaskSequence).findFirst();
 
-
         checkAndSetRouteCompleted();
 
         if (mTask != null) {
-            mBundle.putBoolean(IS_TASK_NULL_KEY, false);
-        }
-        else{
-            mBundle.putBoolean(IS_TASK_NULL_KEY, true);
+            //Hacer algo por si alguna razon no hay tareas
         }
 
         if (routeCurrentTaskSequence == mRoute.getLastTask()) {
-            mBundle.putBoolean(IS_LAST_TASK_KEY, true);
+            //Se completaron todas las tareas de la ruta
         }
 
+        actualizarBarraIndicador();
 
         mBarraNav.selectTabWithId(R.id.tab_datos_visita);
     }
@@ -157,5 +163,19 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
         if(mRoute.getCurrentTask() == mRoute.getLastTask()){
             RealmProvider.setRouteIsCompletedByRoute(mRealm, mRoute);
         }
+    }
+
+    public void actualizarBarraIndicador(){
+
+        HashMap<String, String> data = RealmProvider.getAllDataAsStringByTask(mRealm, mTask);
+
+        tvHoraFime.setText(getResources().getString(R.string.cbarra_hora, data.get(Route.ACADEMY_HOUR_KEY)));
+
+        int currentTask = Integer.valueOf(data.get(Route.CURRENT_TASK_KEY));
+        int lastTask = Integer.valueOf(data.get(Route.LAST_TASK_KEY));
+
+        float porcentajeTasks = ((float) currentTask / lastTask) * 100;
+        tvPorcentaje.setText(getResources().getString(R.string.cbarra_porcentaje_tasks, porcentajeTasks));
+        tvProgreso.setText(getResources().getString(R.string.cbarra_progreso_tasks, currentTask, lastTask));
     }
 }

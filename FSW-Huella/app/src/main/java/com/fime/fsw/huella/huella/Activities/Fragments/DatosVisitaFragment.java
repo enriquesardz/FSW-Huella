@@ -47,7 +47,7 @@ public class DatosVisitaFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
 
     private ImageButton btnEscanner;
-    private TextView tvMaestro, tvHoraFime, tvSalonFime, tvMateria, tvPlan, tvCodigoBarra, tvProgreso, tvPorcentaje;
+    private TextView tvMaestro, tvSalonFime, tvMateria, tvPlan, tvCodigoBarra;
     private View infoContainer;
     private View emptyState;
 
@@ -119,21 +119,15 @@ public class DatosVisitaFragment extends Fragment {
         infoContainer = view.findViewById(R.id.informacion_container);
         emptyState = view.findViewById(R.id.empty_state);
         tvMaestro = (TextView) view.findViewById(R.id.maestro_textview);
-        tvHoraFime = (TextView) view.findViewById(R.id.hora_fime_textview);
         tvSalonFime = (TextView) view.findViewById(R.id.salon_fime_textview);
         tvMateria = (TextView) view.findViewById(R.id.materia_textview);
         tvPlan = (TextView) view.findViewById(R.id.plan_textview);
         tvCodigoBarra = (TextView) view.findViewById(R.id.codigo_barra_textview);
-        tvProgreso = (TextView) view.findViewById(R.id.progreso_task_textview);
-        tvPorcentaje = (TextView) view.findViewById(R.id.porcentaje_tasks_textview);
         btnEscanner = (ImageButton) view.findViewById(R.id.escaner_salon_button);
 
 
         //Valor default del itemid, con intencion de que si el Bundle no regresa un id,
         //se pueda validar.
-
-        boolean isTaskNull = mBundle.getBoolean(RecorridoMainActivity.IS_TASK_NULL_KEY);
-        boolean isLastTask = mBundle.getBoolean(RecorridoMainActivity.IS_LAST_TASK_KEY);
 
         mRoute = RealmProvider.getRouteByRouteId(mRealm, mSesionApp.getCurrentRutaId());
 
@@ -168,18 +162,11 @@ public class DatosVisitaFragment extends Fragment {
         HashMap<String, String> data = RealmProvider.getAllDataAsStringByTask(mRealm, task);
 
         tvMaestro.setText(getResources().getString(R.string.cbarra_maestro, data.get(Owner.NAME_KEY), data.get(Owner.LAST_NAME_KEY)));
-        tvHoraFime.setText(getResources().getString(R.string.cbarra_hora, data.get(Route.ACADEMY_HOUR_KEY)));
         tvSalonFime.setText(getResources().getString(R.string.cbarra_salon, data.get(Room.ROOM_NUMBER_KEY)));
         tvMateria.setText(getResources().getString(R.string.cbarra_materia, data.get(Assignment.NAME_KEY)));
         tvPlan.setText(getResources().getString(R.string.cbarra_plan, data.get(Assignment.PLAN_KEY)));
         tvCodigoBarra.setText(getResources().getString(R.string.cbarra_codigo_barra, data.get(Room.BARCODE_KEY)));
 
-        int currentTask = Integer.valueOf(data.get(Route.CURRENT_TASK_KEY));
-        int lastTask = Integer.valueOf(data.get(Route.LAST_TASK_KEY));
-
-        float porcentajeTasks = ((float) currentTask / lastTask) * 100;
-        tvPorcentaje.setText(getResources().getString(R.string.cbarra_porcentaje_tasks, porcentajeTasks));
-        tvProgreso.setText(getResources().getString(R.string.cbarra_progreso_tasks, currentTask, lastTask));
     }
 
     public void startBarcodeActivity(Route route, Task task, String itemid) {
