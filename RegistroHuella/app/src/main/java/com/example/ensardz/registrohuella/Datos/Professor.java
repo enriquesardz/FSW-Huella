@@ -1,6 +1,7 @@
 package com.example.ensardz.registrohuella.Datos;
 
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by ensardz on 04/08/2017.
@@ -8,6 +9,9 @@ import io.realm.RealmObject;
 
 public class Professor extends RealmObject {
 
+    public static final String RAW_NAME_FIELD = "rawName";
+
+    @PrimaryKey
     private String rawName;
     private String employeeNumber;
     private String fingerPrint;
