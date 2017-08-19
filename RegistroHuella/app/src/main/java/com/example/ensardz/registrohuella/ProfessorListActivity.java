@@ -8,10 +8,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.ensardz.registrohuella.API.APICallbackListener;
+import com.example.ensardz.registrohuella.API.APIManager;
 import com.example.ensardz.registrohuella.Datos.Professor;
 import com.example.ensardz.registrohuella.Datos.RealmProvider;
 import com.example.ensardz.registrohuella.UI.ProfessorRecyclerViewAdapter;
 import com.example.ensardz.registrohuella.UI.RecyclerViewItemClickListener;
+
+import java.util.List;
 
 import io.realm.OrderedRealmCollection;
 import io.realm.Realm;
@@ -42,7 +46,18 @@ public class ProfessorListActivity extends AppCompatActivity {
             setRVProfessors();
         } else {
             //No data for Professor in the Realm table.... download ? ....
+            APIManager.getInstance().downloadProfessors(new APICallbackListener<List<Professor>>() {
+                @Override
+                public void response(List<Professor> professors) {
+                    RealmProvider.saveProfessorsToRealm(mRealm, professors);
+                    setRVProfessors();
+                }
 
+                @Override
+                public void failure() {
+
+                }
+            });
         }
     }
 
@@ -62,5 +77,7 @@ public class ProfessorListActivity extends AppCompatActivity {
                 Toast.makeText(mContext, "Test", Toast.LENGTH_SHORT).show();
             }
         });
+
+        rvProfessors.setAdapter(rvProfessorsAdapter);
     }
 }

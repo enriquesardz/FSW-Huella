@@ -4,7 +4,6 @@ import com.example.ensardz.registrohuella.API.Deserializadores.ProfessorDeserial
 import com.example.ensardz.registrohuella.Datos.Professor;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import com.squareup.okhttp.OkHttpClient;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -25,7 +24,6 @@ public class APICodo {
     //https://api.myjson.com/bins/w20k7
 
     public static final String BASE_URL = "https://nyx-codo.herokuapp.com/";
-    public static OkHttpClient client = new OkHttpClient();
 
     //Esta ruta esta firmada por la API entonces puede hacer requests.
     public static Retrofit signedAllProfessors() {
