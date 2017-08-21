@@ -2,6 +2,7 @@ package com.example.ensardz.registrohuella.Datos;
 
 import java.util.List;
 
+import io.realm.Case;
 import io.realm.OrderedRealmCollection;
 import io.realm.Realm;
 
@@ -14,6 +15,12 @@ public class RealmProvider {
     public static OrderedRealmCollection<Professor> getOrderedProfessors(Realm mRealm){
         return mRealm.where(Professor.class)
                 .isEmpty(Professor.FINGER_PRINT_FIELD)
+                .findAllSorted(Professor.RAW_NAME_FIELD);
+    }
+
+    public static OrderedRealmCollection<Professor> getProfessorsByQuery(Realm mRealm, String query){
+        return mRealm.where(Professor.class)
+                .contains(Professor.RAW_NAME_FIELD, query, Case.INSENSITIVE)
                 .findAllSorted(Professor.RAW_NAME_FIELD);
     }
 

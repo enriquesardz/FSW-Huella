@@ -1,6 +1,7 @@
 package com.example.ensardz.registrohuella;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -56,14 +57,14 @@ public class ProfessorListActivity extends AppCompatActivity {
         tvSearch = (TextView) findViewById(R.id.search_textview);
 
         if (RealmProvider.getProfessorsCount(mRealm) > 0) {
-            setRVProfessors();
+            setRVProfessors(null);
         } else {
             //No data for Professor in the Realm table.... download ? ....
             APIManager.getInstance().downloadProfessors(new APICallbackListener<List<Professor>>() {
                 @Override
                 public void response(List<Professor> professors) {
                     RealmProvider.saveProfessorsToRealm(mRealm, professors);
-                    setRVProfessors();
+                    setRVProfessors(null);
                 }
 
                 @Override
@@ -75,14 +76,22 @@ public class ProfessorListActivity extends AppCompatActivity {
     }
 
 
-    public void setRVProfessors() {
+    public void setRVProfessors(OrderedRealmCollection<Professor> profData) {
+
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
         rvProfessors.setHasFixedSize(true);
         rvProfessors.setLayoutManager(linearLayoutManager);
 
-        OrderedRealmCollection<Professor> professorsData = RealmProvider.getOrderedProfessors(mRealm);
+        OrderedRealmCollection<Professor> professorsData;
+
+        if (profData == null) {
+            professorsData = RealmProvider.getOrderedProfessors(mRealm);
+        } else {
+            professorsData = profData;
+        }
+
         rvProfessorsAdapter = new ProfessorRecyclerViewAdapter(mContext, professorsData, new RecyclerViewItemClickListener() {
             @Override
             public void onItemClick(View v, int position) {
@@ -105,21 +114,9 @@ public class ProfessorListActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                charSequence = charSequence.toString().toLowerCase();
 
-                List<Professor> professorsList = rvProfessorsAdapter.getData();
-                final List<Professor> filteredList = new ArrayList<>();
-
-                if (professorsList != null) {
-                    for (Professor professor : professorsList) {
-                        final String nombre = professor.getRawName().toLowerCase();
-                        if (nombre.contains(charSequence)) {
-                            filteredList.add(professor);
-                        }
-                    }
-                    setRVProfessors();
-                    rvProfessorsAdapter.notifyDataSetChanged();
-                }
+                setRVProfessors(RealmProvider.getProfessorsByQuery(mRealm, charSequence.toString().toLowerCase()));
+                rvProfessorsAdapter.notifyDataSetChanged();
             }
 
             @Override
