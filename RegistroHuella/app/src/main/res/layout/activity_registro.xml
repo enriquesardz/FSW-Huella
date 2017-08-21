@@ -14,29 +14,16 @@
         android:inputType="number"
         android:hint="Numero empleado" />
 
-    <EditText
-        android:id="@+id/nombre"
+    <TextView
+        android:id="@+id/huella"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Nombre" />
+        android:text="Huella" />
 
     <View
         android:layout_weight="1"
         android:layout_width="match_parent"
         android:layout_height="0dp"/>
-
-    <Button
-        android:id="@+id/crear"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="GENERAR ARchivo"
-        />
-    <Button
-        android:id="@+id/mostrar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Mostrar"
-        />
 
     <Button
         android:id="@+id/agregar"

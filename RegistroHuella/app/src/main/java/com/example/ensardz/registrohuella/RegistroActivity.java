@@ -1,25 +1,16 @@
 package com.example.ensardz.registrohuella;
 
 import android.app.ProgressDialog;
-import android.content.ContentValues;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
 import android.os.AsyncTask;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.facebook.stetho.Stetho;
 import com.rscja.deviceapi.Fingerprint;
 
 
@@ -33,7 +24,6 @@ public class RegistroActivity extends AppCompatActivity {
     private EditText edNumero;
     private EditText edNombre;
     private Button btnAgregar;
-    private Button btnMostrar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,9 +38,8 @@ public class RegistroActivity extends AppCompatActivity {
 
         mContext = RegistroActivity.this;
         edNumero = (EditText) findViewById(R.id.numero_empleado);
-        edNombre = (EditText) findViewById(R.id.nombre);
+        edNombre = (EditText) findViewById(R.id.huella);
         btnAgregar = (Button) findViewById(R.id.agregar);
-        btnMostrar = (Button) findViewById(R.id.mostrar);
 
 
         btnAgregar.setOnClickListener(new View.OnClickListener() {
@@ -77,13 +66,6 @@ public class RegistroActivity extends AppCompatActivity {
                 new HuellaAcqTask(mContext, mFingerprint, nombre, empleadoId).execute();
                 edNombre.setText("");
                 edNumero.setText("");
-            }
-        });
-
-        btnMostrar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(mContext, ShowActivity.class));
             }
         });
 

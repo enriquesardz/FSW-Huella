@@ -12,7 +12,9 @@ import io.realm.Realm;
 public class RealmProvider {
 
     public static OrderedRealmCollection<Professor> getOrderedProfessors(Realm mRealm){
-        return mRealm.where(Professor.class).findAllSorted(Professor.RAW_NAME_FIELD);
+        return mRealm.where(Professor.class)
+                .isEmpty(Professor.FINGER_PRINT_FIELD)
+                .findAllSorted(Professor.RAW_NAME_FIELD);
     }
 
     public static int getProfessorsCount(Realm mRealm){

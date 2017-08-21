@@ -1,11 +1,18 @@
 package com.example.ensardz.registrohuella;
 
 import android.content.Context;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ensardz.registrohuella.API.APICallbackListener;
@@ -15,10 +22,14 @@ import com.example.ensardz.registrohuella.Datos.RealmProvider;
 import com.example.ensardz.registrohuella.UI.ProfessorRecyclerViewAdapter;
 import com.example.ensardz.registrohuella.UI.RecyclerViewItemClickListener;
 
+import org.w3c.dom.Text;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.OrderedRealmCollection;
 import io.realm.Realm;
+import io.realm.RealmResults;
 
 public class ProfessorListActivity extends AppCompatActivity {
 
@@ -27,6 +38,7 @@ public class ProfessorListActivity extends AppCompatActivity {
 
     private RecyclerView rvProfessors;
     private ProfessorRecyclerViewAdapter rvProfessorsAdapter;
+    private TextView tvSearch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,10 +51,11 @@ public class ProfessorListActivity extends AppCompatActivity {
         initComponentes();
     }
 
-    public void initComponentes(){
+    public void initComponentes() {
         rvProfessors = (RecyclerView) findViewById(R.id.professor_recyclerview);
+        tvSearch = (TextView) findViewById(R.id.search_textview);
 
-        if (RealmProvider.getProfessorsCount(mRealm) > 0){
+        if (RealmProvider.getProfessorsCount(mRealm) > 0) {
             setRVProfessors();
         } else {
             //No data for Professor in the Realm table.... download ? ....
@@ -61,7 +74,8 @@ public class ProfessorListActivity extends AppCompatActivity {
         }
     }
 
-    public void setRVProfessors(){
+
+    public void setRVProfessors() {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
@@ -69,7 +83,6 @@ public class ProfessorListActivity extends AppCompatActivity {
         rvProfessors.setLayoutManager(linearLayoutManager);
 
         OrderedRealmCollection<Professor> professorsData = RealmProvider.getOrderedProfessors(mRealm);
-
         rvProfessorsAdapter = new ProfessorRecyclerViewAdapter(mContext, professorsData, new RecyclerViewItemClickListener() {
             @Override
             public void onItemClick(View v, int position) {
@@ -79,5 +92,40 @@ public class ProfessorListActivity extends AppCompatActivity {
         });
 
         rvProfessors.setAdapter(rvProfessorsAdapter);
+
+        setSearchListener();
+    }
+
+    public void setSearchListener() {
+        tvSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                charSequence = charSequence.toString().toLowerCase();
+
+                List<Professor> professorsList = rvProfessorsAdapter.getData();
+                final List<Professor> filteredList = new ArrayList<>();
+
+                if (professorsList != null) {
+                    for (Professor professor : professorsList) {
+                        final String nombre = professor.getRawName().toLowerCase();
+                        if (nombre.contains(charSequence)) {
+                            filteredList.add(professor);
+                        }
+                    }
+                    setRVProfessors();
+                    rvProfessorsAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
     }
 }

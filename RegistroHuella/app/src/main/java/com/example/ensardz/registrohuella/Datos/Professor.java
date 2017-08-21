@@ -10,6 +10,7 @@ import io.realm.annotations.PrimaryKey;
 public class Professor extends RealmObject {
 
     public static final String RAW_NAME_FIELD = "rawName";
+    public static final String FINGER_PRINT_FIELD = "fingerPrint";
 
     @PrimaryKey
     private String rawName;
