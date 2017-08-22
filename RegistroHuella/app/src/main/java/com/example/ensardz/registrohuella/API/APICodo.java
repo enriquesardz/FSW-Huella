@@ -42,6 +42,16 @@ public class APICodo {
         return retrofit;
     }
 
+    public static Retrofit uploadProfessors(){
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        return retrofit;
+    }
+
     public static Retrofit requestToken() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)

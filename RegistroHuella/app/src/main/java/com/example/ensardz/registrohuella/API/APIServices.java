@@ -25,4 +25,6 @@ public interface APIServices {
     @GET("professor")
     Call<List<Professor>> downloadProfessors(@Header("Authorization") String token);
 
+    @POST("upload/professor")
+    Call<List<Professor>> uploadProfessors(@Header("Authorization") String token, @Body Professor uploadProfessors);
 }

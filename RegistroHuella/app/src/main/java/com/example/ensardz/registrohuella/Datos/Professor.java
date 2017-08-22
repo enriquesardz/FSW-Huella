@@ -12,6 +12,8 @@ public class Professor extends RealmObject {
     public static final String RAW_NAME_FIELD = "rawName";
     public static final String FINGER_PRINT_FIELD = "fingerPrint";
 
+    public static final String RAW_NAME_KEY =  "professorRawName";
+
     @PrimaryKey
     private String rawName;
     private String employeeNumber;

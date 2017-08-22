@@ -9,9 +9,14 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.ensardz.registrohuella.Datos.Professor;
+import com.example.ensardz.registrohuella.Datos.RealmProvider;
 import com.rscja.deviceapi.Fingerprint;
+
+import io.realm.Realm;
 
 
 public class RegistroActivity extends AppCompatActivity {
@@ -20,52 +25,65 @@ public class RegistroActivity extends AppCompatActivity {
 
     public Fingerprint mFingerprint;
     public Context mContext;
+    public Realm mRealm;
+    public Professor mProfessor;
 
-    private EditText edNumero;
-    private EditText edNombre;
+    private TextView tvHuella;
+    private Button btnCapturar;
     private Button btnAgregar;
+
+    private String huellaData;
+    private boolean scannerConnected = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registro);
 
+        String professorRawName = getIntent().getStringExtra(Professor.RAW_NAME_KEY);
+
+        if(getSupportActionBar() != null){
+            getSupportActionBar().setTitle(professorRawName);
+        }
+
         try {
             mFingerprint = Fingerprint.getInstance();
         } catch (Exception e) {
-            Toast.makeText(mContext, "No se inicio huella", Toast.LENGTH_SHORT).show();
+            scannerConnected = false;
         }
 
         mContext = RegistroActivity.this;
-        edNumero = (EditText) findViewById(R.id.numero_empleado);
-        edNombre = (EditText) findViewById(R.id.huella);
-        btnAgregar = (Button) findViewById(R.id.agregar);
+        mRealm = Realm.getDefaultInstance();
 
+        btnAgregar = (Button) findViewById(R.id.agregar_button);
+        btnCapturar = (Button) findViewById(R.id.capturar_button);
+
+        mProfessor = RealmProvider.getProfessorByRawName(mRealm, professorRawName);
+
+        huellaData = null;
+
+        btnCapturar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (scannerConnected) {
+                    new HuellaAcqTask(mContext, mFingerprint).execute();
+                } else {
+                    Toast.makeText(mContext, "No hay escanner", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
         btnAgregar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                String nombre = edNombre.getText().toString().trim();
-                String empleadoId = edNumero.getText().toString().trim();
-                long empId;
-
-                if (TextUtils.isEmpty(nombre) && TextUtils.isEmpty(empleadoId)) {
-                    Toast.makeText(mContext, "Los campos no pueden ir vacios.", Toast.LENGTH_SHORT).show();
-
+                if (TextUtils.isEmpty(huellaData)) {
+                    Toast.makeText(mContext, "No hay escanner " + mProfessor.getRawName(), Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                empId = Long.parseLong(empleadoId);
-
-                if (!(empId >= 1000 && empId <= 1030)) {
-                    Toast.makeText(mContext, "Rangos entre 1000 y 1030 solamente", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                new HuellaAcqTask(mContext, mFingerprint, nombre, empleadoId).execute();
-                edNombre.setText("");
-                edNumero.setText("");
+                //Se agrega a la base de datos
+                Toast.makeText(mContext, "Se agrego la huella.", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -82,7 +100,11 @@ public class RegistroActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        new InitTask().execute();
+        if (scannerConnected) {
+            new InitTask().execute();
+        } else {
+            Toast.makeText(mContext, "No hay escanner", Toast.LENGTH_SHORT).show();
+        }
     }
 
     //Este task inicia se encarga de iniciar el lector de la huella.
@@ -135,12 +157,10 @@ public class RegistroActivity extends AppCompatActivity {
         private ProgressDialog progressDialog;
 
 
-        public HuellaAcqTask(Context context, Fingerprint fingerprint, String nombre, String empleado) {
+        public HuellaAcqTask(Context context, Fingerprint fingerprint) {
 
             mContext = context;
             mFingerprint = fingerprint;
-            usuarioNombre = nombre;
-            numEmpleado = empleado;
             progressDialog = new ProgressDialog(mContext);
         }
 
@@ -201,7 +221,7 @@ public class RegistroActivity extends AppCompatActivity {
             }
 
             //Adquisicion exitosa
-
+            huellaData = result;
 
         }
 

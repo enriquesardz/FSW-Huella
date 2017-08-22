@@ -88,7 +88,9 @@ public class APIManager {
                 //Couldn't connect to auth
             }
         });
+    }
 
+    public void uploadProfessor(final APICallbackListener<List<Professor>> listener){
 
     }
 }

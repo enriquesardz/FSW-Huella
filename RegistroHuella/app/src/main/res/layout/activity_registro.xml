@@ -7,28 +7,40 @@
     android:orientation="vertical"
     tools:context="com.example.ensardz.registrohuella.RegistroActivity">
 
-    <EditText
-        android:id="@+id/numero_empleado"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        android:hint="Numero empleado" />
-
     <TextView
         android:id="@+id/huella"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Huella" />
+        android:layout_gravity="center"
+        android:text="Huella"
+        android:textSize="30sp" />
 
     <View
-        android:layout_weight="1"
         android:layout_width="match_parent"
-        android:layout_height="0dp"/>
+        android:layout_height="0dp"
+        android:layout_weight="1" />
 
-    <Button
-        android:id="@+id/agregar"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Agregar"
-        />
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <Button
+            android:id="@+id/agregar_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/colorAccent"
+            android:text="Agregar" />
+
+        <Button
+            android:id="@+id/capturar_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/colorPrimary"
+            android:text="Capturar" />
+    </LinearLayout>
+
 </LinearLayout>

@@ -1,6 +1,7 @@
 package com.example.ensardz.registrohuella;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +14,7 @@ import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,6 +43,8 @@ public class ProfessorListActivity extends AppCompatActivity {
     private ProfessorRecyclerViewAdapter rvProfessorsAdapter;
     private TextView tvSearch;
 
+    private Button btnSubir;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,8 +57,12 @@ public class ProfessorListActivity extends AppCompatActivity {
     }
 
     public void initComponentes() {
+
         rvProfessors = (RecyclerView) findViewById(R.id.professor_recyclerview);
         tvSearch = (TextView) findViewById(R.id.search_textview);
+        btnSubir = (Button) findViewById(R.id.subir_button);
+
+        setSearchListener();
 
         if (RealmProvider.getProfessorsCount(mRealm) > 0) {
             setRVProfessors(null);
@@ -73,6 +81,13 @@ public class ProfessorListActivity extends AppCompatActivity {
                 }
             });
         }
+
+        btnSubir.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(mContext, "Se esta subiendo.", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 
@@ -96,13 +111,14 @@ public class ProfessorListActivity extends AppCompatActivity {
             @Override
             public void onItemClick(View v, int position) {
                 //Iniciar actividad de recoleccion
-                Toast.makeText(mContext, "Test", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(mContext, RegistroActivity.class);
+                intent.putExtra(Professor.RAW_NAME_KEY, rvProfessorsAdapter.getItem(position).getRawName());
+                startActivity(intent);
             }
         });
 
         rvProfessors.setAdapter(rvProfessorsAdapter);
 
-        setSearchListener();
     }
 
     public void setSearchListener() {
