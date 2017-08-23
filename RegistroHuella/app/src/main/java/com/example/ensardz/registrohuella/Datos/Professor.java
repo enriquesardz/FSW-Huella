@@ -18,12 +18,14 @@ public class Professor extends RealmObject {
     private String rawName;
     private String employeeNumber;
     private String fingerPrint;
+    private boolean wasUploaded;
 
     public static Professor create(String rawName, String employeeNumber, String fingerPrint) {
         Professor professor = new Professor();
         professor.rawName = rawName;
         professor.employeeNumber = employeeNumber;
         professor.fingerPrint = fingerPrint;
+        professor.wasUploaded = false;
         return professor;
     }
 
@@ -45,5 +47,12 @@ public class Professor extends RealmObject {
 
     public void setEmployeeNumber(String employeeNumber) {
         this.employeeNumber = employeeNumber;
+    }
+
+    @Override
+    public String toString() {
+        return "Professor{" +
+                "rawName='" + rawName + '\'' +
+                '}';
     }
 }

@@ -2,10 +2,12 @@ package com.example.ensardz.registrohuella;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -55,10 +57,15 @@ public class RegistroActivity extends AppCompatActivity {
         mContext = RegistroActivity.this;
         mRealm = Realm.getDefaultInstance();
 
+        tvHuella = (TextView) findViewById(R.id.huella);
         btnAgregar = (Button) findViewById(R.id.agregar_button);
         btnCapturar = (Button) findViewById(R.id.capturar_button);
 
         mProfessor = RealmProvider.getProfessorByRawName(mRealm, professorRawName);
+
+        if (!TextUtils.isEmpty(mProfessor.getFingerPrint())){
+            tvHuella.setText("Ya tiene huella.");
+        }
 
         huellaData = null;
 
@@ -82,8 +89,12 @@ public class RegistroActivity extends AppCompatActivity {
                     return;
                 }
 
+                RealmProvider.saveProfessorFingerprint(mRealm, mProfessor, huellaData);
+
                 //Se agrega a la base de datos
                 Toast.makeText(mContext, "Se agrego la huella.", Toast.LENGTH_SHORT).show();
+
+                finish();
             }
         });
 
@@ -221,13 +232,19 @@ public class RegistroActivity extends AppCompatActivity {
             }
 
             //Adquisicion exitosa
-            huellaData = result;
+            huellaData = usuarioHexData;
+            tvHuella.setTextColor(Color.GREEN);
 
         }
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            progressDialog = new ProgressDialog(mContext);
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progressDialog.setMessage("Escaneando...");
+            progressDialog.setCanceledOnTouchOutside(false);
+            progressDialog.show();
         }
 
         @Override

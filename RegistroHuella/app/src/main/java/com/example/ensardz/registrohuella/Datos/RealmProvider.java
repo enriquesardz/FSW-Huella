@@ -1,5 +1,9 @@
 package com.example.ensardz.registrohuella.Datos;
 
+import android.util.Log;
+
+import com.example.ensardz.registrohuella.RegistroActivity;
+
 import java.util.List;
 
 import io.realm.Case;
@@ -12,9 +16,11 @@ import io.realm.Realm;
 
 public class RealmProvider {
 
+    public static final String TAG = RealmProvider.class.getSimpleName();
+
+
     public static OrderedRealmCollection<Professor> getOrderedProfessors(Realm mRealm) {
         return mRealm.where(Professor.class)
-                .isEmpty(Professor.FINGER_PRINT_FIELD)
                 .findAllSorted(Professor.RAW_NAME_FIELD);
     }
 
@@ -39,8 +45,19 @@ public class RealmProvider {
             @Override
             public void execute(Realm realm) {
                 for (Professor professor : professors) {
-                    realm.copyToRealmOrUpdate(professor);
+                    Professor prof = realm.copyToRealmOrUpdate(professor);
+
+                    Log.d(TAG, prof.toString());
                 }
+            }
+        });
+    }
+
+    public static void saveProfessorFingerprint(Realm mRealm, final Professor professor, final String fingerPrint){
+        mRealm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                professor.setFingerPrint(fingerPrint);
             }
         });
     }
