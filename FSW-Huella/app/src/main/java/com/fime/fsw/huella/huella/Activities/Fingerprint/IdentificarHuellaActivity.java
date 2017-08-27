@@ -15,10 +15,10 @@ import android.widget.Toast;
 
 import com.fime.fsw.huella.huella.Activities.Barcode.BarcodeReaderActivity;
 import com.fime.fsw.huella.huella.Activities.RecorridoMain.RecorridoMainActivity;
-import com.fime.fsw.huella.huella.Data.Modelos.Route;
 import com.fime.fsw.huella.huella.Data.Modelos.Task;
 import com.fime.fsw.huella.huella.Data.Provider.RealmProvider;
 import com.fime.fsw.huella.huella.R;
+import com.fime.fsw.huella.huella.Utilidad.AsyncTaskResponseListener;
 import com.fime.fsw.huella.huella.Utilidad.SesionAplicacion;
 import com.rscja.deviceapi.Fingerprint;
 
@@ -31,8 +31,8 @@ public class IdentificarHuellaActivity extends AppCompatActivity {
     public static final String TAG = APP_TAG + IdentificarHuellaActivity.class.getSimpleName();
 
 
-    public Fingerprint mFingerprint;
-    public Context mContext;
+    private Fingerprint mFingerprint;
+    private Context mContext;
     private Realm mRealm;
     private SesionAplicacion mSesion;
 
@@ -42,6 +42,7 @@ public class IdentificarHuellaActivity extends AppCompatActivity {
     private Button btnNoEstaMaestro;
 
     private boolean scannerConnected = true;
+    private Task mTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,24 +118,18 @@ public class IdentificarHuellaActivity extends AppCompatActivity {
 
         String itemid = getIntent().getStringExtra(Task._ID_FIELD);
 
-        final Task task = RealmProvider.getTaskById(mRealm, itemid);
+        mTask = RealmProvider.getTaskById(mRealm, itemid);
 
-        cargarDatosTask(task);
+        cargarDatosTask(mTask);
 
         //Inicia el task para buscar la huella con el id que se le pasa,
         //ademas, toma la huella que se encuentre en el escanner para comparar.
+        final String fingerPrintData = mTask.getOwner().getFingerPrint();
 
         btnBuscarHuella.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Este task utiliza las funciones proporcionadas por el SDK para identificar la huella
-                if (scannerConnected) {
-                    new HuellaIdentTask(mContext, mFingerprint, mRealm, mSesion, task).execute();
-                } else {
-                    //TODO: No debe de ir en la version final.
-                    //Debug app
-                    debugHuellaEncontrada(task);
-                }
+                buscarHuella(fingerPrintData);
             }
         });
 
@@ -142,13 +137,59 @@ public class IdentificarHuellaActivity extends AppCompatActivity {
         btnNoEstaMaestro.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String routeId = mSesion.getCurrentRutaId();
-                RealmProvider.setCheckoutsTaskValuesNoVinoMaestro(mRealm, task);
-                RealmProvider.moveToNextTaskByRouteId(mRealm, routeId);
-                startActivity(new Intent(mContext, RecorridoMainActivity.class));
-                finish();
+                noEstaMaestro();
             }
         });
+    }
+
+    public void buscarHuella(String fingerPrintData) {
+        //Este task utiliza las funciones proporcionadas por el SDK para identificar la huella
+        if (scannerConnected) {
+
+            new HuellaIdentTask(mContext, mFingerprint, fingerPrintData, new AsyncTaskResponseListener() {
+                @Override
+                public void onSuccess() {
+                    //Si encontro la huella.
+                    Toast.makeText(mContext, "Se encontro usuario", Toast.LENGTH_SHORT).show();
+                    //Se agregan los checkouts finales, se actualiza el estado del task, y se cierra la actividad.
+                    seEncontroHuella();
+                }
+
+                @Override
+                public void onFailure() {
+                    //No encontro la huella.
+                    Toast.makeText(mContext, "No se encontro el usuario", Toast.LENGTH_SHORT).show();
+                }
+            }).execute();
+
+        } else {
+            //TODO: No debe de ir en la version final.
+            //Debug app
+            debugHuellaEncontrada(mTask);
+        }
+    }
+
+
+    private void seEncontroHuella(){
+
+        //Update los campos del Task y Route si la huella se encontro
+        String routeId = mSesion.getCurrentRutaId();
+        RealmProvider.setCheckoutsTaskValuesVinoMaestro(mRealm, mTask);
+        RealmProvider.moveToNextTaskByRouteId(mRealm, routeId);
+
+        mContext.startActivity(new Intent(mContext, RecorridoMainActivity.class));
+        finish();
+
+    }
+
+    public void noEstaMaestro() {
+
+        String routeId = mSesion.getCurrentRutaId();
+        RealmProvider.setCheckoutsTaskValuesNoVinoMaestro(mRealm, mTask);
+        RealmProvider.moveToNextTaskByRouteId(mRealm, routeId);
+        startActivity(new Intent(mContext, RecorridoMainActivity.class));
+        finish();
+
     }
 
     public void cargarDatosTask(Task task) {
@@ -164,7 +205,7 @@ public class IdentificarHuellaActivity extends AppCompatActivity {
         RealmProvider.setCheckoutsTaskValuesVinoMaestro(mRealm, task);
         RealmProvider.moveToNextTaskByRouteId(mRealm, routeId);
 
-        startActivity(new Intent (mContext, RecorridoMainActivity.class));
+        startActivity(new Intent(mContext, RecorridoMainActivity.class));
         finish();
     }
 

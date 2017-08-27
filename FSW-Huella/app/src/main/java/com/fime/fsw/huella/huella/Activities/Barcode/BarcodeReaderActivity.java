@@ -15,10 +15,10 @@ import android.widget.TextView;
 
 import com.fime.fsw.huella.huella.Activities.Fingerprint.IdentificarHuellaActivity;
 import com.fime.fsw.huella.huella.Activities.RecorridoMain.RecorridoMainActivity;
-import com.fime.fsw.huella.huella.Data.Modelos.Route;
 import com.fime.fsw.huella.huella.Data.Modelos.Task;
 import com.fime.fsw.huella.huella.Data.Provider.RealmProvider;
 import com.fime.fsw.huella.huella.R;
+import com.fime.fsw.huella.huella.Utilidad.AsyncTaskResponseListener;
 import com.fime.fsw.huella.huella.Utilidad.SesionAplicacion;
 import com.rscja.deviceapi.Barcode1D;
 import com.rscja.deviceapi.exception.ConfigurationException;
@@ -137,16 +137,56 @@ public class BarcodeReaderActivity extends AppCompatActivity {
         //Inicia el escanner para leer codigos de barra
         btnEscanear.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {iniciarEscaner(taskId, roomBarcode);
+            public void onClick(View view) {
+                escanearHuella(taskId, roomBarcode);
             }
         });
 
         btnNoSalon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //TODO: Que abra el escaner de huella dactilar como quiera.
                 checkoutTaskAndFinish();
             }
         });
+    }
+
+
+    public void escanearHuella(final String taskId, final String roomBarcode){
+        //Si el codigo de barras esta activo entonces puede escanear
+        if (estaActivo) {
+            new ScanTask(roomBarcode, new AsyncTaskResponseListener() {
+                @Override
+                public void onSuccess() {
+                    //Se agrega la hora a la que visito el salon
+                    RealmProvider.setVisitAtCheckout(mRealm, mTask);
+                    //Se inicia la actuvidad de la Huella
+                    startHuellaActivity(taskId, roomBarcode );
+                }
+
+                @Override
+                public void onFailure() {
+                    //No se leeyo el codigo
+                }
+
+            }).execute();
+        }
+
+        if (!scannerConnected){
+            //TODO: No debe de ir en la version final.
+            //Si el escanner no esta conectado entonces es la debug App
+            //Solamente cambia los valores
+            RealmProvider.setVisitAtCheckout(mRealm, mTask);
+            startHuellaActivity(taskId, roomBarcode);
+        }
+    }
+
+    public void checkoutTaskAndFinish(){
+        String routeId = mSesion.getCurrentRutaId();
+        RealmProvider.setCheckoutTaskValuesNoBarcode(mRealm,mTask);
+        RealmProvider.moveToNextTaskByRouteId(mRealm, routeId);
+        startActivity(new Intent(mContext,RecorridoMainActivity.class));
+        finish();
     }
 
     public void startHuellaActivity(String taskId, String barcodeSalon){
@@ -167,29 +207,6 @@ public class BarcodeReaderActivity extends AppCompatActivity {
 
         //Posiblemente se deba mostrar mas informacion, por ahora solo el codigo de barras.
         tvCodigo.setText(roomBarcode);
-    }
-
-    public void iniciarEscaner(String taskId, String roomBarcode){
-        //Si el codigo de barras esta activo entonces puede escanear
-        if (estaActivo) {
-            new ScanTask().execute();
-        }
-
-        if (!scannerConnected){
-            //TODO: No debe de ir en la version final.
-            //Si el escanner no esta conectado entonces es la debug App
-            //Solamente cambia los valores
-            RealmProvider.setVisitAtCheckout(mRealm, mTask);
-            startHuellaActivity(taskId, roomBarcode);
-        }
-    }
-
-    public void checkoutTaskAndFinish(){
-        String routeId = mSesion.getCurrentRutaId();
-        RealmProvider.setCheckoutTaskValuesNoBarcode(mRealm,mTask);
-        RealmProvider.moveToNextTaskByRouteId(mRealm, routeId);
-        startActivity(new Intent(mContext,RecorridoMainActivity.class));
-        finish();
     }
 
     /*
@@ -231,11 +248,12 @@ public class BarcodeReaderActivity extends AppCompatActivity {
         ProgressDialog progressDialog;
 
         private String barcodeSalon;
-        private String taskId;
 
-        public ScanTask (){
-            taskId = mTask.get_id();
-            barcodeSalon = mTask.getRoom().getBarcode();
+        private AsyncTaskResponseListener mListener;
+
+        public ScanTask (String barcodeSalon, AsyncTaskResponseListener listener){
+            this.barcodeSalon = barcodeSalon;
+            mListener = listener;
         }
 
         @Override
@@ -269,14 +287,11 @@ public class BarcodeReaderActivity extends AppCompatActivity {
                 if (TextUtils.equals(barcodeSalon, result)) {
                     //Si el codigo de barras no es nulo, y el valor coincide con el codigo de barras
                     //del Task entonces se ejecuta esta parte.
-
-                    //Se agrega la hora a la que visito el salon
-                    RealmProvider.setVisitAtCheckout(mRealm, mTask);
-                    //Se inicia la actuvidad de la Huella
-                    startHuellaActivity(taskId, barcodeSalon);
+                    mListener.onSuccess();
                 }
                 else{
                     Log.e(TAG, "No coinciden los codigos: " + barcodeSalon + " != " + result);
+                    mListener.onFailure();
                 }
             } else {
                 Log.e(TAG, "No se detecto un codigo");

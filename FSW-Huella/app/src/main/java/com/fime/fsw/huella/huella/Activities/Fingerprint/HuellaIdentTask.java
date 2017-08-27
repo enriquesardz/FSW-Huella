@@ -13,6 +13,7 @@ import com.fime.fsw.huella.huella.Activities.RecorridoMain.RecorridoMainActivity
 import com.fime.fsw.huella.huella.Data.Modelos.Route;
 import com.fime.fsw.huella.huella.Data.Modelos.Task;
 import com.fime.fsw.huella.huella.Data.Provider.RealmProvider;
+import com.fime.fsw.huella.huella.Utilidad.AsyncTaskResponseListener;
 import com.fime.fsw.huella.huella.Utilidad.SesionAplicacion;
 import com.rscja.deviceapi.Fingerprint;
 
@@ -32,24 +33,16 @@ public class HuellaIdentTask extends AsyncTask<Integer, Integer, String> {
 
     private Context mContext;
     private Fingerprint mFingerprint;
-    private Realm mRealm;
-    private Task mTask;
-    private SesionAplicacion mSesion;
+    private AsyncTaskResponseListener mListener;
 
     private String usuarioHexData;
-    private String taskId;
-    private int taskSequence;
 
-    public HuellaIdentTask(Context context, Fingerprint fingerprint, Realm realm, SesionAplicacion sesionAplicacion, Task task) {
+    public HuellaIdentTask(Context context, Fingerprint fingerprint, String fingerPrintData, AsyncTaskResponseListener listener) {
         mContext = context;
         mFingerprint = fingerprint;
-        mRealm = realm;
-        mTask = task;
-        mSesion = sesionAplicacion;
+        mListener = listener;
 
-        usuarioHexData = task.getOwner().getFingerPrint();
-        taskId = task.get_id();
-        taskSequence = task.getSequence();
+        usuarioHexData = fingerPrintData;
 
         progressDialog = new ProgressDialog(mContext);
 
@@ -116,14 +109,12 @@ public class HuellaIdentTask extends AsyncTask<Integer, Integer, String> {
 
         if (TextUtils.isEmpty(result)) {
             //Fallo la identificacion
-            Toast.makeText(mContext, "No se encontro el usuario", Toast.LENGTH_SHORT).show();
+            mListener.onFailure();
             return;
         }
 
         //Si hay resultado, entonces fue una Identificacion exitosa
-        Toast.makeText(mContext, "Se encontro usuario", Toast.LENGTH_SHORT).show();
-        //Se agregan los checkouts finales, se actualiza el estado del task, y se cierra la actividad.
-        finishFingerprintIdent();
+        mListener.onSuccess();
     }
 
     @Override
@@ -144,13 +135,4 @@ public class HuellaIdentTask extends AsyncTask<Integer, Integer, String> {
         super.onProgressUpdate(values);
     }
 
-    private void finishFingerprintIdent(){
-
-        String routeId = mSesion.getCurrentRutaId();
-        RealmProvider.setCheckoutsTaskValuesVinoMaestro(mRealm, mTask);
-        RealmProvider.moveToNextTaskByRouteId(mRealm, routeId);
-
-        mContext.startActivity(new Intent(mContext, RecorridoMainActivity.class));
-        ((Activity) mContext).finish();
-    }
 }
