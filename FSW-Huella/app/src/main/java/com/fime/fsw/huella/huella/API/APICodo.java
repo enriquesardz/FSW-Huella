@@ -3,7 +3,9 @@ package com.fime.fsw.huella.huella.API;
 import com.fime.fsw.huella.huella.API.Deserializadores.RouteDeserializer;
 import com.fime.fsw.huella.huella.API.Deserializadores.RoutesListDeserializer;
 import com.fime.fsw.huella.huella.API.Deserializadores.RoutesWithTasksDeserializer;
+import com.fime.fsw.huella.huella.API.Deserializadores.TokenResponseDeserializer;
 import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Route;
+import com.fime.fsw.huella.huella.Data.Modelos.TokenResponse;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
@@ -72,10 +74,14 @@ public class APICodo {
     }
 
     public static Retrofit requestToken() {
+
+        GsonBuilder builder = new GsonBuilder();
+        builder.registerTypeAdapter(TokenResponse.class, new TokenResponseDeserializer());
+
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .client(client)
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(builder.create()))
                 .build();
 
         return retrofit;

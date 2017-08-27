@@ -24,10 +24,11 @@ import io.realm.RealmList;
 public class RoutesWithTasksDeserializer implements JsonDeserializer<List<Route>> {
     @Override
     public List<Route> deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-        JsonArray routeArray = json.getAsJsonArray();
+        JsonArray routeArray = json.getAsJsonObject().get("data").getAsJsonArray();
 
         List<Route> routes = new ArrayList<>();
 
+        int position = 0;
         for (JsonElement e : routeArray){
             JsonObject route = e.getAsJsonObject();
             String _id = route.get("_id").getAsString();
@@ -42,13 +43,19 @@ public class RoutesWithTasksDeserializer implements JsonDeserializer<List<Route>
             //Utiliza el deserializador de Tasks para regresar una lista de Tasks
             if(jsonTaskArray != null){
                 for (JsonElement taskObject : jsonTaskArray){
-                    Task task = new TaskDeserializer().deserialize(taskObject,typeOfT,context);
+                    Task task = new TaskDeserializer(position).deserialize(taskObject,typeOfT,context);
                     tasks.add(task);
+                    position++;
                 }
             }
 
-            int currentTask = tasks.get(0).getSequence();
-            int lastTask = tasks.get(tasks.size()-1).getSequence() + 1;
+            // Sequence if API returns sequence
+//            int currentTask = tasks.get(0).getSequence();
+//            int lastTask = tasks.get(tasks.size()-1).getSequence() + 1;
+
+            //Sequence if API doesnt return sequence
+            int currentTask = 0;
+            int lastTask = tasks.size() - 1;
 
             RealmList<Task> rTasks = new RealmList<Task>(tasks.toArray(new Task[tasks.size()]));
 

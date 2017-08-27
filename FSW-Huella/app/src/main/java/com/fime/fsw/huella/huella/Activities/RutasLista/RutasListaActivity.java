@@ -18,7 +18,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fime.fsw.huella.huella.API.APICallbackListener;
 import com.fime.fsw.huella.huella.API.APICodo;
+import com.fime.fsw.huella.huella.API.APIManager;
 import com.fime.fsw.huella.huella.API.Endpoints.APIServices;
 import com.fime.fsw.huella.huella.Activities.InicioSesion.PrefectoLoginActivity;
 import com.fime.fsw.huella.huella.Activities.RecorridoMain.RecorridoMainActivity;
@@ -187,14 +189,10 @@ public class RutasListaActivity extends AppCompatActivity {
             HashMap<String, String> userData = mSesionApp.getDetalleUsuario();
             String jwtToken = userData.get(SesionAplicacion.KEY_USER_TOKEN);
 
-            APIServices service = APICodo.signedAllRoutesAndTasks().create(APIServices.class);
-            Call<List<Route>> call = service.descargaAllRoutesWTasks(jwtToken);
-
-            call.enqueue(new Callback<List<Route>>() {
+            APIManager.getInstance().startRouteAndTasksDownload(jwtToken, new APICallbackListener<List<Route>>() {
                 @Override
-                public void onResponse(Call<List<Route>> call, Response<List<Route>> response) {
-                    List<Route> routes = response.body();
-                    if (response.isSuccessful() && routes != null && !routes.isEmpty()) {
+                public void response(List<Route> routes) {
+                    if (!routes.isEmpty()) {
                         //Guarda los datos al Realm
                         RealmProvider.saveRouteListWTasksToRealm(mRealm, routes);
                         loadRecyclerView();
@@ -203,11 +201,10 @@ public class RutasListaActivity extends AppCompatActivity {
                         //la siguiente actividad con un empty state
                         showEmptyState();
                     }
-
                 }
 
                 @Override
-                public void onFailure(Call<List<Route>> call, Throwable t) {
+                public void failure() {
                     Toast.makeText(mContext, "Fallo en la descarga", Toast.LENGTH_SHORT).show();
                     showEmptyState();
                 }

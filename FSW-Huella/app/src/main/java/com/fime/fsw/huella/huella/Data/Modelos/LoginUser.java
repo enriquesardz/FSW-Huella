@@ -5,20 +5,20 @@ package com.fime.fsw.huella.huella.Data.Modelos;
  */
 
 public class LoginUser {
-    private String user;
+    private String username;
     private String password;
 
-    public LoginUser(String user, String password) {
-        this.user = user;
+    public LoginUser(String username, String password) {
+        this.username = username;
         this.password = password;
     }
 
-    public String getUser() {
-        return user;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUser(String user) {
-        this.user = user;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {

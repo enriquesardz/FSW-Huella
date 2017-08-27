@@ -18,12 +18,23 @@ import java.lang.reflect.Type;
  */
 
 public class TaskDeserializer implements JsonDeserializer<Task> {
+
+    private int position;
+
+    public  TaskDeserializer(int position) {
+        this.position = position;
+    }
+
     @Override
     public Task deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
 
         JsonObject taskObject = json.getAsJsonObject();
         String _id = taskObject.get("_id").getAsString();
-        int sequence = taskObject.get("sequence").getAsInt();
+        // if API returns sequence
+//        int sequence = taskObject.get("sequence").getAsInt();
+
+        //if API doesnt returns sequence
+        int sequence = position;
         Checkout checkout = new Checkout();
 
         //Stuff inside data object

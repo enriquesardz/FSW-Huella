@@ -1,6 +1,7 @@
 package com.fime.fsw.huella.huella.API.Endpoints;
 
 
+import com.fime.fsw.huella.huella.Data.Modelos.APICodoResponse;
 import com.fime.fsw.huella.huella.Data.Modelos.LoginUser;
 import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Route;
 import com.fime.fsw.huella.huella.Data.Modelos.TokenResponse;
@@ -34,7 +35,7 @@ public interface APIServices {
     @GET("routes/{routeId}")
     Call<Route> descargaRecorrido(@Path("routeId") String routeId, @Header("Authorization") String token);
 
-    @GET("test/routes")
+    @GET("routes/")
     Call<List<Route>> descargaAllRoutesWTasks(@Header("Authorization") String token);
 
     @POST("upload/checkouts")

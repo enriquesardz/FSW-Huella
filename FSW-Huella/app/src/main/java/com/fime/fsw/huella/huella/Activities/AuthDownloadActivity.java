@@ -76,26 +76,20 @@ public class AuthDownloadActivity extends AppCompatActivity {
             @Override
             public void response(TokenResponse tokenResponse) {
 
-                if (TextUtils.equals(tokenResponse.getStatus(), "success")) {
+                txtSaludo.setText(getResources().getString(R.string.auth_saludo, user));
+                txtSaludo.setTypeface(null, Typeface.BOLD);
+                String jwtToken = saveUserToken(user, tokenResponse);
 
-                    txtSaludo.setText(getResources().getString(R.string.auth_saludo, user));
-                    txtSaludo.setTypeface(null, Typeface.BOLD);
-                    String jwtToken = saveUserToken(user, tokenResponse);
-
-                    Log.i(TAG, "Login successful: " + tokenResponse.toString());
-                    startRouteAndTasksDownload(jwtToken);
-
-                } else {
-                    Toast.makeText(mContext, "Usuario no autorizado", Toast.LENGTH_SHORT).show();
-                    returnToLoginActivity(user);
-                    Log.e(TAG, "Bad user");
-                }
+                Log.i(TAG, "Login successful: " + tokenResponse.toString());
+                startRouteAndTasksDownload(jwtToken);
 
             }
 
             @Override
             public void failure() {
+                Toast.makeText(mContext, "Usuario no autorizado", Toast.LENGTH_SHORT).show();
                 returnToLoginActivity(user);
+                Log.e(TAG, "Bad user");
             }
         });
 
@@ -128,7 +122,7 @@ public class AuthDownloadActivity extends AppCompatActivity {
     public String saveUserToken(String userName, TokenResponse tokenResponse) {
         //Guarda la sesion del usuario; el usuario ahora esta logeado.
         String token = tokenResponse.getToken();
-        String refreshToken = tokenResponse.getRefreshToken();
+        String refreshToken = tokenResponse.getRenew();
         mSesionApp.crearSesionLogin(userName, token, refreshToken);
         return token;
     }

@@ -19,6 +19,11 @@ import io.realm.RealmList;
  * Created by Quique on 20/07/2017.
  *
  * Returns a single Route object, with a list of Tasks appended to it.
+ *
+ *
+ *  ################### U N U S E D ##################
+ *
+ *
  */
 
 public class RouteDeserializer implements JsonDeserializer<Route> {
@@ -36,7 +41,7 @@ public class RouteDeserializer implements JsonDeserializer<Route> {
 
         if (jsonTaskArray != null) {
             for (JsonElement taskObject : jsonTaskArray) {
-                Task task = new TaskDeserializer().deserialize(taskObject, typeOfT, context);
+                Task task = new TaskDeserializer(0).deserialize(taskObject, typeOfT, context);
                 tasks.add(task);
             }
         }

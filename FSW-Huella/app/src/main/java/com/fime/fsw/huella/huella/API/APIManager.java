@@ -4,6 +4,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.fime.fsw.huella.huella.API.Endpoints.APIServices;
+import com.fime.fsw.huella.huella.Data.Modelos.APICodoResponse;
 import com.fime.fsw.huella.huella.Data.Modelos.LoginUser;
 import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Route;
 import com.fime.fsw.huella.huella.Data.Modelos.TokenResponse;
@@ -23,6 +24,7 @@ import static com.fime.fsw.huella.huella.Activities.HuellaApplication.APP_TAG;
 public class APIManager {
 
     private static final String TAG = APP_TAG + APIManager.class.getSimpleName();
+    private static final String STATUS_SUCESS = "success";
 
 
     public static APIManager getInstance() {
@@ -45,13 +47,16 @@ public class APIManager {
         call.enqueue(new Callback<TokenResponse>() {
             @Override
             public void onResponse(Call<TokenResponse> call, Response<TokenResponse> response) {
+
                 TokenResponse tokenResponse = response.body();
-                if (response.isSuccessful() && tokenResponse != null) {
+
+                if (response.isSuccessful() && TextUtils.equals(tokenResponse.getStatus().toLowerCase(), STATUS_SUCESS) && tokenResponse != null) {
                     listener.response(tokenResponse);
                 } else {
                     //Unauthorized user
                     //TODO: Agregar excepcion.
                     Log.e(TAG, "Error: " + response.body().toString());
+                    listener.failure();
                 }
             }
 
@@ -78,7 +83,8 @@ public class APIManager {
 
                 if (TextUtils.equals(response.message().toLowerCase(), "unauthorized")){
                     Log.d(TAG, response.message().toLowerCase());
-                    //Si expira el token.
+                    //TODO: Si expira el token.
+                    listener.failure();
                 }
             }
 
