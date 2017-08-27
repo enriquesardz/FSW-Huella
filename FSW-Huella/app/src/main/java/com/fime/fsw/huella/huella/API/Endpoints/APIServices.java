@@ -1,9 +1,10 @@
 package com.fime.fsw.huella.huella.API.Endpoints;
 
 
-import com.fime.fsw.huella.huella.Data.Modelos.APICodoResponse;
 import com.fime.fsw.huella.huella.Data.Modelos.LoginUser;
+import com.fime.fsw.huella.huella.Data.Modelos.UploadRefreshToken;
 import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Route;
+import com.fime.fsw.huella.huella.Data.Modelos.RefreshTokenResponse;
 import com.fime.fsw.huella.huella.Data.Modelos.TokenResponse;
 import com.fime.fsw.huella.huella.Data.Modelos.UploadCheckouts;
 import com.fime.fsw.huella.huella.Data.Modelos.UploadResponse;
@@ -26,6 +27,9 @@ public interface APIServices {
     //Gets token from server
     @POST("auth/loginById")
     Call<TokenResponse> authGetToken(@Body LoginUser loginUser);
+
+    @POST("auth/renew")
+    Call<RefreshTokenResponse> authRefreshToken(@Body UploadRefreshToken refreshToken);
 
     //Downloads Route list
     @GET("routes/")

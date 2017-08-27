@@ -45,33 +45,6 @@ public class APICodo {
         return retrofit;
 
     }
-    public static Retrofit signedSingleRoute() {
-
-        GsonBuilder builder = new GsonBuilder();
-        builder.registerTypeAdapter(Route.class, new RouteDeserializer());
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .client(client)
-                .addConverterFactory(GsonConverterFactory.create(builder.create()))
-                .build();
-
-        return retrofit;
-    }
-
-    public static Retrofit signedRouteList() {
-        GsonBuilder builder = new GsonBuilder();
-        Type listType = new TypeToken<List<Route>>() {
-        }.getType();
-        builder.registerTypeAdapter(listType, new RoutesListDeserializer());
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .client(client)
-                .addConverterFactory(GsonConverterFactory.create(builder.create()))
-                .build();
-        return retrofit;
-    }
 
     public static Retrofit requestToken() {
 
@@ -82,6 +55,20 @@ public class APICodo {
                 .baseUrl(BASE_URL)
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create(builder.create()))
+                .build();
+
+        return retrofit;
+    }
+
+    public static Retrofit refreshToken(){
+
+//        GsonBuilder builder = new GsonBuilder();
+//        builder.registerTypeAdapter(TokenResponse.class, new TokenResponseDeserializer());
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .client(client)
+                .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
         return retrofit;

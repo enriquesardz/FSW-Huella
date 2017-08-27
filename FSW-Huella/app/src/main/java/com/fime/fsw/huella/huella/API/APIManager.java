@@ -7,7 +7,9 @@ import com.fime.fsw.huella.huella.API.Endpoints.APIServices;
 import com.fime.fsw.huella.huella.Data.Modelos.APICodoResponse;
 import com.fime.fsw.huella.huella.Data.Modelos.LoginUser;
 import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Route;
+import com.fime.fsw.huella.huella.Data.Modelos.RefreshTokenResponse;
 import com.fime.fsw.huella.huella.Data.Modelos.TokenResponse;
+import com.fime.fsw.huella.huella.Data.Modelos.UploadRefreshToken;
 
 import java.util.List;
 
@@ -84,6 +86,17 @@ public class APIManager {
                 if (TextUtils.equals(response.message().toLowerCase(), "unauthorized")){
                     Log.d(TAG, response.message().toLowerCase());
                     //TODO: Si expira el token.
+                    refreshToken(new APICallbackListener<RefreshTokenResponse>() {
+                        @Override
+                        public void response(RefreshTokenResponse response) {
+                            
+                        }
+
+                        @Override
+                        public void failure() {
+
+                        }
+                    });
                     listener.failure();
                 }
             }
@@ -94,5 +107,38 @@ public class APIManager {
             }
         });
     }
+
+    public void refreshToken(final APICallbackListener<RefreshTokenResponse> listener){
+
+        String refreshToken = ""; //get refreshToken
+
+        APIServices service = APICodo.refreshToken().create(APIServices.class);
+        Call<RefreshTokenResponse> call = service.authRefreshToken(new UploadRefreshToken(refreshToken));
+
+        call.enqueue(new Callback<RefreshTokenResponse>() {
+            @Override
+            public void onResponse(Call<RefreshTokenResponse> call, Response<RefreshTokenResponse> response) {
+
+                RefreshTokenResponse rtResponse = response.body();
+
+                if(response.isSuccessful() && response.body() != null){
+                    if (TextUtils.equals(rtResponse.getStatus().toLowerCase(), STATUS_SUCESS)){
+                        listener.response(rtResponse);
+                    } else {
+                        listener.failure();
+                    }
+                } else {
+                    listener.failure();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RefreshTokenResponse> call, Throwable t) {
+                listener.failure();
+            }
+        });
+    }
+
+
 
 }
