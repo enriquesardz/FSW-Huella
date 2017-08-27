@@ -3,7 +3,7 @@ package com.fime.fsw.huella.huella.API;
 import com.fime.fsw.huella.huella.API.Deserializadores.RouteDeserializer;
 import com.fime.fsw.huella.huella.API.Deserializadores.RoutesListDeserializer;
 import com.fime.fsw.huella.huella.API.Deserializadores.RoutesWithTasksDeserializer;
-import com.fime.fsw.huella.huella.Data.Modelos.Route;
+import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Route;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
@@ -11,7 +11,6 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 import okhttp3.OkHttpClient;
-import okhttp3.ResponseBody;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 

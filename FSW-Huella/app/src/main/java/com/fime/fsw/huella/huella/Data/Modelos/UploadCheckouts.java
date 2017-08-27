@@ -1,11 +1,10 @@
 package com.fime.fsw.huella.huella.Data.Modelos;
 
-import com.google.gson.Gson;
+import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Checkout;
+import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Task;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import io.realm.RealmResults;
 
 /**
  * Created by ensardz on 01/08/2017.

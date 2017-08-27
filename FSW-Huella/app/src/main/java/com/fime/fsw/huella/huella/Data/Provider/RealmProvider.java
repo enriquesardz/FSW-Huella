@@ -2,12 +2,12 @@ package com.fime.fsw.huella.huella.Data.Provider;
 
 import android.util.Log;
 
-import com.fime.fsw.huella.huella.Data.Modelos.Assignment;
-import com.fime.fsw.huella.huella.Data.Modelos.Checkout;
-import com.fime.fsw.huella.huella.Data.Modelos.Owner;
-import com.fime.fsw.huella.huella.Data.Modelos.Room;
-import com.fime.fsw.huella.huella.Data.Modelos.Route;
-import com.fime.fsw.huella.huella.Data.Modelos.Task;
+import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Assignment;
+import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Checkout;
+import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Owner;
+import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Room;
+import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Route;
+import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Task;
 
 import java.util.HashMap;
 import java.util.List;

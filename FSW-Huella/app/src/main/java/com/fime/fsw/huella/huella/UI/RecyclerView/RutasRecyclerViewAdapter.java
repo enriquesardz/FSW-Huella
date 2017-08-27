@@ -9,10 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.fime.fsw.huella.huella.Data.Modelos.Route;
+import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Route;
 import com.fime.fsw.huella.huella.R;
-
-import org.w3c.dom.Text;
 
 import io.realm.OrderedRealmCollection;
 import io.realm.RealmRecyclerViewAdapter;

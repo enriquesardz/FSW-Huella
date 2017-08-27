@@ -2,18 +2,16 @@ package com.fime.fsw.huella.huella.API.Endpoints;
 
 
 import com.fime.fsw.huella.huella.Data.Modelos.LoginUser;
-import com.fime.fsw.huella.huella.Data.Modelos.Route;
+import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Route;
 import com.fime.fsw.huella.huella.Data.Modelos.TokenResponse;
 import com.fime.fsw.huella.huella.Data.Modelos.UploadCheckouts;
 import com.fime.fsw.huella.huella.Data.Modelos.UploadResponse;
 
 import java.util.List;
 
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
-import retrofit2.http.HEAD;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Path;

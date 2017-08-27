@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.fime.fsw.huella.huella.Data.Modelos.Task;
+import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Task;
 import com.fime.fsw.huella.huella.R;
 
 import io.realm.OrderedRealmCollection;

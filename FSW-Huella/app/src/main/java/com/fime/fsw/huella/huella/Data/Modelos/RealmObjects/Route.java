@@ -1,4 +1,4 @@
-package com.fime.fsw.huella.huella.Data.Modelos;
+package com.fime.fsw.huella.huella.Data.Modelos.RealmObjects;
 
 import com.fime.fsw.huella.huella.Data.Provider.RealmProvider;
 

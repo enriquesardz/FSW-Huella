@@ -11,26 +11,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fime.fsw.huella.huella.API.APICallbackListener;
-import com.fime.fsw.huella.huella.API.APICodo;
 import com.fime.fsw.huella.huella.API.APIManager;
-import com.fime.fsw.huella.huella.API.Endpoints.APIServices;
 import com.fime.fsw.huella.huella.Activities.InicioSesion.PrefectoLoginActivity;
 import com.fime.fsw.huella.huella.Activities.RutasLista.RutasListaActivity;
-import com.fime.fsw.huella.huella.Data.Modelos.LoginUser;
-import com.fime.fsw.huella.huella.Data.Modelos.Route;
+import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Route;
 import com.fime.fsw.huella.huella.Data.Modelos.TokenResponse;
 import com.fime.fsw.huella.huella.Data.Provider.RealmProvider;
 import com.fime.fsw.huella.huella.R;
 import com.fime.fsw.huella.huella.Utilidad.SesionAplicacion;
 
-import java.util.HashMap;
 import java.util.List;
 
 import io.realm.Realm;
-import okhttp3.OkHttpClient;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 import static com.fime.fsw.huella.huella.Activities.HuellaApplication.APP_TAG;
 

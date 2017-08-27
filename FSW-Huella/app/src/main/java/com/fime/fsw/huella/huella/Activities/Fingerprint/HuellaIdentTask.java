@@ -1,23 +1,13 @@
 package com.fime.fsw.huella.huella.Activities.Fingerprint;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.text.TextUtils;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.fime.fsw.huella.huella.Activities.RecorridoMain.RecorridoMainActivity;
-import com.fime.fsw.huella.huella.Data.Modelos.Route;
-import com.fime.fsw.huella.huella.Data.Modelos.Task;
-import com.fime.fsw.huella.huella.Data.Provider.RealmProvider;
 import com.fime.fsw.huella.huella.Utilidad.AsyncTaskResponseListener;
-import com.fime.fsw.huella.huella.Utilidad.SesionAplicacion;
 import com.rscja.deviceapi.Fingerprint;
-
-import io.realm.Realm;
 
 import static com.fime.fsw.huella.huella.Activities.HuellaApplication.APP_TAG;
 

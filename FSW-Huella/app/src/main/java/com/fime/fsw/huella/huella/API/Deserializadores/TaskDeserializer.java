@@ -1,11 +1,10 @@
 package com.fime.fsw.huella.huella.API.Deserializadores;
 
-import com.fime.fsw.huella.huella.Data.Modelos.Assignment;
-import com.fime.fsw.huella.huella.Data.Modelos.Checkout;
-import com.fime.fsw.huella.huella.Data.Modelos.Owner;
-import com.fime.fsw.huella.huella.Data.Modelos.Room;
-import com.fime.fsw.huella.huella.Data.Modelos.Task;
-import com.google.gson.JsonArray;
+import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Assignment;
+import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Checkout;
+import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Owner;
+import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Room;
+import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Task;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
@@ -13,8 +12,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Quique on 29/06/2017.

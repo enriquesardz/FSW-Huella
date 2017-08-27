@@ -10,30 +10,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
-import com.fime.fsw.huella.huella.API.APICodo;
-import com.fime.fsw.huella.huella.API.Endpoints.APIServices;
-import com.fime.fsw.huella.huella.Data.Modelos.Route;
-import com.fime.fsw.huella.huella.Data.Modelos.Task;
-import com.fime.fsw.huella.huella.Data.Modelos.UploadCheckouts;
+import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Route;
+import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Task;
 import com.fime.fsw.huella.huella.Data.Provider.RealmProvider;
 import com.fime.fsw.huella.huella.R;
 import com.fime.fsw.huella.huella.UI.RecyclerView.RecorridoAdapter;
 import com.fime.fsw.huella.huella.UI.RecyclerView.RecyclerViewItemClickListener;
 import com.fime.fsw.huella.huella.Utilidad.SesionAplicacion;
-import com.google.gson.Gson;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 import io.realm.OrderedRealmCollection;
 import io.realm.Realm;
-import io.realm.RealmResults;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 import static com.fime.fsw.huella.huella.Activities.HuellaApplication.APP_TAG;
 
@@ -105,17 +92,9 @@ public class RecorridoActualFragment extends Fragment {
         loadingState = (LinearLayout)view.findViewById(R.id.loading_state);
         recyclerContainer = (LinearLayout)view.findViewById(R.id.recyclerview_container);
         emptyState = (LinearLayout)view.findViewById(R.id.empty_state);
-
-        showLoadingState();
-
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
-        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-
-        //Se inicia el Recycler View Recorrido
         rvRecorrido = (RecyclerView) view.findViewById(R.id.recorrido_actual_recyclerview);
 
-        rvRecorrido.setHasFixedSize(true);
-        rvRecorrido.setLayoutManager(linearLayoutManager);
+        showLoadingState();
 
         String routeId = mSesionApp.getCurrentRutaId();
 
@@ -125,7 +104,8 @@ public class RecorridoActualFragment extends Fragment {
         //por lo tanto, no vuela a descargar y solamente muestra los datos en el RecyclerView
 
         if (route.getTasks().size() == 0){
-            startDescarga(route);
+            //No hay tareas en esta ruta por alguna razon
+            showEmptyState();
         }
         else{
             setRVRecorridoAdapter(route);
@@ -133,68 +113,28 @@ public class RecorridoActualFragment extends Fragment {
 
     }
 
-    private void startDescarga(Route route) {
-
-        HashMap<String,String> userData = mSesionApp.getDetalleUsuario();
-
-        String routeId = route.get_id();
-        String token = userData.get(SesionAplicacion.KEY_USER_TOKEN);
-
-        APIServices service = APICodo.signedSingleRoute().create(APIServices.class);
-        Call<Route> call = service.descargaRecorrido(routeId,token);
-
-        call.enqueue(new Callback<Route>() {
-            @Override
-            public void onResponse(Call<Route> call, Response<Route> response) {
-                //Se ejecuta si el webservice regresa algo, la respuesta
-                //es una lista de Tasks, entonces la respuesta se guarda en una Lista de tipo Tasks
-
-                Route routeResponse = response.body();
-
-                if (routeResponse == null) {
-                    Log.e(TAG, "No hay respuesta de la API + " + response.toString());
-                    showEmptyState();
-                    return;
-                }
-
-                //Se guardan los datos a nuestro Realm
-
-                /*
-                Aqui se hace update a una Route ya existente, se le agregan varios valores pero
-                principalmente se le agrega una lista de Tasks
-                */
-                RealmProvider.saveRouteToRealm(mRealm, routeResponse);
-
-                setRVRecorridoAdapter(routeResponse);
-
-            }
-
-            @Override
-            public void onFailure(Call<Route> call, Throwable t) {
-                //No se descargo nada
-                Toast.makeText(mContext, "No se descargo.", Toast.LENGTH_SHORT).show();
-                showEmptyState();
-            }
-        });
-    }
-
-    public void sendToDetailFragment(Task task) {
-        Log.i(TAG, task.toString());
-        //Trigger de onRecorridoActualItemSelected en RecorridoMainActivity para comunicar con
-        //DatosVisitaFragment
-        if (mListener != null) {
-            mListener.onRecorridoActualItemSelected(task);
-        }
-    }
+//    public void sendToDetailFragment(Task task) {
+//        Log.i(TAG, task.toString());
+//        //Trigger de onRecorridoActualItemSelected en RecorridoMainActivity para comunicar con
+//        //DatosVisitaFragment
+//        if (mListener != null) {
+//            mListener.onRecorridoActualItemSelected(task);
+//        }
+//    }
 
     public void setRVRecorridoAdapter(Route route){
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+
+        rvRecorrido.setHasFixedSize(true);
+        rvRecorrido.setLayoutManager(linearLayoutManager);
 
         showRecyclerView();
 
         long currentTask = route.getCurrentTask();
 
         //Se obtiene la info de nuestro Realm
-        String routeDay = route.getDay();
         String routeHour = route.getAcademyHour();
 
         final OrderedRealmCollection<Task> recorridoData = route.getTasks().sort(Task.SEQUENCE_FIELD);

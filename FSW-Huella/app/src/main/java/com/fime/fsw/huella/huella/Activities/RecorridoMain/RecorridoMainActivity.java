@@ -10,13 +10,12 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
 import android.widget.TextView;
 
 import com.fime.fsw.huella.huella.Activities.HuellaApplication;
 import com.fime.fsw.huella.huella.Activities.RutasLista.RutasListaActivity;
-import com.fime.fsw.huella.huella.Data.Modelos.Route;
-import com.fime.fsw.huella.huella.Data.Modelos.Task;
+import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Route;
+import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Task;
 import com.fime.fsw.huella.huella.Data.Provider.RealmProvider;
 import com.fime.fsw.huella.huella.Activities.Fragments.DatosVisitaFragment;
 import com.fime.fsw.huella.huella.Activities.Fragments.RecorridoActualFragment;
@@ -64,8 +63,8 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
 
     @Override
     public void onBackPressed() {
-        if (mBarraNav.getCurrentTabId() == R.id.tab_datos_visita) {
-            mBarraNav.selectTabWithId(R.id.tab_recorrido_actual);
+        if (mBarraNav.getCurrentTabId() == R.id.tab_recorrido_actual) {
+            mBarraNav.selectTabWithId(R.id.tab_datos_visita);
         } else {
             new AlertDialog.Builder(mContext)
                     .setMessage(getResources().getString(R.string.mrecorrido_seguro_salir))
@@ -108,9 +107,9 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
         tvProgreso = (TextView) findViewById(R.id.progreso_task_textview);
 
         setUpBarraNavegacion();
+
         mBundle = new Bundle();
         RealmProvider.dataCount(mRealm);
-
 
         String routeId = mSesionApp.getCurrentRutaId();
         mRoute = RealmProvider.getRouteByRouteId(mRealm, routeId);

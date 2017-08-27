@@ -51,7 +51,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="No hay conexion a internet." />
+                    android:text="No hay tareas asignadas a esta ruta." />
             </LinearLayout>
         </FrameLayout>
     </android.support.v4.widget.NestedScrollView>

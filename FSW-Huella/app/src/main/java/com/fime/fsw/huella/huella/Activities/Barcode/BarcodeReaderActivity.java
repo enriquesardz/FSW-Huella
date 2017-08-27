@@ -15,7 +15,7 @@ import android.widget.TextView;
 
 import com.fime.fsw.huella.huella.Activities.Fingerprint.IdentificarHuellaActivity;
 import com.fime.fsw.huella.huella.Activities.RecorridoMain.RecorridoMainActivity;
-import com.fime.fsw.huella.huella.Data.Modelos.Task;
+import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Task;
 import com.fime.fsw.huella.huella.Data.Provider.RealmProvider;
 import com.fime.fsw.huella.huella.R;
 import com.fime.fsw.huella.huella.Utilidad.AsyncTaskResponseListener;

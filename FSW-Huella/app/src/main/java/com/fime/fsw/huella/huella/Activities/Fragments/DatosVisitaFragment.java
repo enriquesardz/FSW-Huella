@@ -13,12 +13,11 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.fime.fsw.huella.huella.Activities.Barcode.BarcodeReaderActivity;
-import com.fime.fsw.huella.huella.Activities.RecorridoMain.RecorridoMainActivity;
-import com.fime.fsw.huella.huella.Data.Modelos.Assignment;
-import com.fime.fsw.huella.huella.Data.Modelos.Owner;
-import com.fime.fsw.huella.huella.Data.Modelos.Room;
-import com.fime.fsw.huella.huella.Data.Modelos.Route;
-import com.fime.fsw.huella.huella.Data.Modelos.Task;
+import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Assignment;
+import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Owner;
+import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Room;
+import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Route;
+import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Task;
 import com.fime.fsw.huella.huella.Data.Provider.RealmProvider;
 import com.fime.fsw.huella.huella.R;
 import com.fime.fsw.huella.huella.Utilidad.SesionAplicacion;
@@ -30,12 +29,6 @@ import io.realm.Realm;
 import static com.fime.fsw.huella.huella.Activities.HuellaApplication.APP_TAG;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link DatosVisitaFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- */
 public class DatosVisitaFragment extends Fragment {
 
     public static final String TAG = APP_TAG + DatosVisitaFragment.class.getSimpleName();
@@ -77,12 +70,6 @@ public class DatosVisitaFragment extends Fragment {
         initComponentes(view);
 
         return view;
-    }
-
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onCodigoBarrasFragmentInteraction(uri);
-        }
     }
 
     @Override

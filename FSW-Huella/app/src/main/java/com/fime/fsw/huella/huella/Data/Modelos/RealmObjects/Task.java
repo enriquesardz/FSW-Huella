@@ -1,4 +1,4 @@
-package com.fime.fsw.huella.huella.Data.Modelos;
+package com.fime.fsw.huella.huella.Data.Modelos.RealmObjects;
 
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
@@ -15,7 +15,7 @@ public class Task extends RealmObject {
     public static final String TASK_STATE_FIELD = "taskState";
 
     //Keys para el objeto Task
-    public static final String SEQUENCE_KEsY = "taskSequence";
+    public static final String SEQUENCE_KEY = "taskSequence";
     public static final String PERIOD_KEY = "taskPeriod";
     public static final String LANGUAGE_KEY = "taskLanguage";
     public static final String GROUP_KEY = "taskGroup";

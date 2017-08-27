@@ -1,17 +1,12 @@
 package com.fime.fsw.huella.huella.API;
 
-import android.graphics.Typeface;
 import android.text.TextUtils;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.fime.fsw.huella.huella.API.Endpoints.APIServices;
-import com.fime.fsw.huella.huella.Activities.AuthDownloadActivity;
 import com.fime.fsw.huella.huella.Data.Modelos.LoginUser;
-import com.fime.fsw.huella.huella.Data.Modelos.Route;
+import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Route;
 import com.fime.fsw.huella.huella.Data.Modelos.TokenResponse;
-import com.fime.fsw.huella.huella.Data.Provider.RealmProvider;
-import com.fime.fsw.huella.huella.R;
 
 import java.util.List;
 

@@ -1,6 +1,6 @@
 package com.fime.fsw.huella.huella.API.Deserializadores;
 
-import com.fime.fsw.huella.huella.Data.Modelos.Room;
+import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Room;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
