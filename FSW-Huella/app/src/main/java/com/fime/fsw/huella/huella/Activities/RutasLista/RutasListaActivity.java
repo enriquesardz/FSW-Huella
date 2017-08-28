@@ -166,7 +166,8 @@ public class RutasListaActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 mSesionApp.terminarSesionAplicacion();
-                RealmProvider.dropAllRealmTables(mRealm);
+                //TODO: Quitar como comentario
+                //                RealmProvider.dropAllRealmTables(mRealm);
                 startActivity(new Intent(mContext, PrefectoLoginActivity.class));
                 finish();
             }

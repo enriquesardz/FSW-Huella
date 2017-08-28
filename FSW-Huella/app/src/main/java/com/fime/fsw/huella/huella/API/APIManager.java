@@ -89,12 +89,12 @@ public class APIManager {
                     refreshToken(new APICallbackListener<RefreshTokenResponse>() {
                         @Override
                         public void response(RefreshTokenResponse response) {
-                            
+                            //Regreso token nuevo
                         }
 
                         @Override
                         public void failure() {
-
+                            //Pedir credenciales otra ves
                         }
                     });
                     listener.failure();

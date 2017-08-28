@@ -113,7 +113,7 @@ public class AuthDownloadActivity extends AppCompatActivity {
 
             @Override
             public void failure() {
-                Toast.makeText(mContext, "Fallo en la descarga", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(mContext, "Fallo en la descarga", Toast.LENGTH_SHORT).show();
                 startRouteListActivity(false);
             }
         });

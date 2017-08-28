@@ -1,8 +1,8 @@
 <tabs>
     <tab
         id="@+id/tab_datos_visita"
-        title="Datos visita" />
+        title="Recorrido actual" />
     <tab
         id="@+id/tab_recorrido_actual"
-        title="Recorrido actual" />
+        title="Tareas completadas" />
 </tabs>
