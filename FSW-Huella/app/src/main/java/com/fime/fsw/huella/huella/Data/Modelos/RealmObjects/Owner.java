@@ -67,6 +67,10 @@ public class Owner extends RealmObject{
         return employeeNumber;
     }
 
+    public void setFingerPrint(String fingerPrint) {
+        this.fingerPrint = fingerPrint;
+    }
+
     @Override
     public String toString() {
         return "Owner{" +

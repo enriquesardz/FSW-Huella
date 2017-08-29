@@ -146,7 +146,8 @@ public class BarcodeReaderActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //TODO: Que abra el escaner de huella dactilar como quiera.
-                checkoutTaskAndFinish();
+                //checkoutTaskAndFinish();
+                startHuellaActivity(taskId, roomBarcode);
             }
         });
     }

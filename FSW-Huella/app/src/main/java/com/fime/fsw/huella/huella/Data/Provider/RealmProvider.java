@@ -119,6 +119,7 @@ public class RealmProvider{
 
     //Regresa un HashMap Key Value pair con la informacion que se muestra en la UI.
     public static HashMap<String, String> getAllDataAsStringByTask(Realm mRealm, Task task){
+
         HashMap<String, String> data = new HashMap<>();
         String task_id = task.get_id();
         Route route = mRealm.where(Route.class).equalTo("tasks._id", task_id).findFirst();

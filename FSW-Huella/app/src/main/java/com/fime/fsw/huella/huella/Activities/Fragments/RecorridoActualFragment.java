@@ -137,7 +137,7 @@ public class RecorridoActualFragment extends Fragment {
         //Se obtiene la info de nuestro Realm
         String routeHour = route.getAcademyHour();
 
-        final OrderedRealmCollection<Task> recorridoData = route.getTasks().sort(Task.SEQUENCE_FIELD);
+        final OrderedRealmCollection<Task> recorridoData = route.getTasks().where().notEqualTo(Task.TASK_STATE_FIELD, Task.STATE_NO_HA_PASADO).findAll().sort(Task.SEQUENCE_FIELD);
 
         //Creamos un adaptador nuevo, con un onItemClickListener
         rvRecorridoAdapter = new RecorridoAdapter(mContext, recorridoData, currentTask, routeHour, new RecyclerViewItemClickListener() {

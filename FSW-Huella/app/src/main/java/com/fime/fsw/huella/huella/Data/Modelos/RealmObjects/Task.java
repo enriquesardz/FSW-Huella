@@ -106,6 +106,14 @@ public class Task extends RealmObject {
         this.taskState = taskState;
     }
 
+    public void setSequence(int sequence) {
+        this.sequence = sequence;
+    }
+
+    public void setCheckout(Checkout checkout) {
+        this.checkout = checkout;
+    }
+
     @Override
     public String toString() {
         return "Task{" +

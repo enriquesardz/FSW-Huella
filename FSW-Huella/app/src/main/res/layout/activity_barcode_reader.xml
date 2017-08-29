@@ -13,8 +13,8 @@
         android:layout_weight="1" />
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_gravity="center"
         android:layout_marginBottom="8dp"
         android:background="@drawable/img_codigo_barras" />
@@ -25,28 +25,37 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:background="@color/bb_tabletRightBorderDark"
         android:padding="8dp"
-        android:text="Codigo" />
+        android:text="" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" />
 
-    <Button
-        android:id="@+id/escanear_button"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:text="Escanear" />
+        android:orientation="horizontal"
+        android:weightSum="2">
 
-    <Button
-        android:id="@+id/no_salon_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="No se encontro salon"
-        />
+        <Button
+            android:id="@+id/escanear_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:background="@color/ok_green"
+            android:text="Escanear" />
+
+        <Button
+            android:id="@+id/no_salon_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/no_red"
+            android:text="No se encontro salon" />
+    </LinearLayout>
 
 
 </LinearLayout>

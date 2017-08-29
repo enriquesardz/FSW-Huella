@@ -135,6 +135,10 @@ public class Route extends RealmObject {
         isCompleted = completed;
     }
 
+    public void setLastTask(int lastTask) {
+        this.lastTask = lastTask;
+    }
+
     public void moveToNextTask(){
         if (getCurrentTask() <= getLastTask()){
             setCurrentTask(getCurrentTask() + 1);

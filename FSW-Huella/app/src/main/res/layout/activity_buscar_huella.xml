@@ -8,15 +8,16 @@
     tools:context=".Activities.Fingerprint.IdentificarHuellaActivity">
 
     <!--<EditText-->
-        <!--android:id="@+id/id_usuario_edittext"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content" />-->
+    <!--android:id="@+id/id_usuario_edittext"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content" />-->
     <TextView
         android:id="@+id/nombre_textview"
         style="@style/TextSubTitulo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Nombre"/>
+        android:text="Nombre" />
+
     <TextView
         android:id="@+id/full_nombre_textview"
         style="@style/TextSubTitulo"
@@ -24,19 +25,36 @@
         android:layout_height="wrap_content" />
 
     <View
-        android:layout_weight="1"
         android:layout_width="match_parent"
-        android:layout_height="0dp"/>
-    <Button
-        android:id="@+id/buscar_huella_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Buscar Huella"/>
-    
-    <Button
-        android:id="@+id/no_esta_maestro_button"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="No esta maestro"/>
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <Button
+            android:id="@+id/buscar_huella_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:layout_weight="1"
+            android:background="@color/colorPrimary"
+            android:text="Buscar Huella"
+            android:textColor="@color/blanco" />
+
+        <Button
+            android:id="@+id/no_esta_maestro_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:layout_weight="1"
+            android:background="@color/no_red"
+            android:text="No esta maestro"
+            android:textColor="@color/blanco" />
+    </LinearLayout>
+
 
 </LinearLayout>

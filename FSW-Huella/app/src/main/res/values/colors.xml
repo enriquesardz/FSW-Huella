@@ -19,5 +19,7 @@
     <color name="blanco">#FFFFFF</color>
     <color name="gray_disabled">#d3d3d3</color>
     <color name="dark_blue">#2979ff</color>
+    <color name="ok_green">#00e676</color>
+    <color name="no_red">#ef5350</color>
 
 </resources>
