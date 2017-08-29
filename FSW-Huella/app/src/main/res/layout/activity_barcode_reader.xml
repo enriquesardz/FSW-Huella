@@ -44,6 +44,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
+            android:layout_margin="8dp"
             android:layout_weight="1"
             android:background="@color/ok_green"
             android:text="Escanear" />
@@ -52,6 +53,7 @@
             android:id="@+id/no_salon_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_margin="8dp"
             android:layout_weight="1"
             android:background="@color/no_red"
             android:text="No se encontro salon" />

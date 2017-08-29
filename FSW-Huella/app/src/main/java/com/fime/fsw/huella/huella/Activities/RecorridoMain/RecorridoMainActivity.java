@@ -131,10 +131,12 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
 
         actualizarBarraIndicador();
 
+        setStartedAtTask();
+
         mBarraNav.selectTabWithId(R.id.tab_datos_visita);
     }
 
-    public void setUpBarraNavegacion(){
+    public void setUpBarraNavegacion() {
         mBarraNav = (BottomBar) findViewById(R.id.barra_navegacion);
 
         mBarraNav.setOnTabSelectListener(new OnTabSelectListener() {
@@ -158,13 +160,13 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
 
     }
 
-    public void checkAndSetRouteCompleted(){
-        if(mRoute.getCurrentTask() == mRoute.getLastTask()){
+    public void checkAndSetRouteCompleted() {
+        if (mRoute.getCurrentTask() == mRoute.getLastTask()) {
             RealmProvider.setRouteIsCompletedByRoute(mRealm, mRoute);
         }
     }
 
-    public void actualizarBarraIndicador(){
+    public void actualizarBarraIndicador() {
 
         HashMap<String, String> data = RealmProvider.getAllDataAsStringByTask(mRealm, mTask);
 
@@ -176,5 +178,13 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
         float porcentajeTasks = ((float) currentTask / lastTask) * 100;
         tvPorcentaje.setText(getResources().getString(R.string.cbarra_porcentaje_tasks, porcentajeTasks));
         tvProgreso.setText(getResources().getString(R.string.cbarra_progreso_tasks, currentTask, lastTask));
+    }
+
+    public void setStartedAtTask() {
+
+        if (mTask.getCheckout().getStartedAt() == null) {
+            RealmProvider.setStartedAtCheckout(mRealm, mTask);
+        }
+
     }
 }

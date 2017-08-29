@@ -14,8 +14,9 @@ import io.realm.annotations.PrimaryKey;
 public class Route extends RealmObject {
 
     public static final String _ID_FIELD = "_id";
+    public static final String ACADEMY_HOUR_FIELD = "academyHour";
     public static final String WAS_UPLOADED_FIELD = "wasUploaded";
-    public static final String IS_COMPLETED = "isCompleted";
+    public static final String IS_COMPLETED_FIELD = "isCompleted";
 
     //Keys que identifican cada campo de Route
     public static final String DAY_KEY = "routeDay";

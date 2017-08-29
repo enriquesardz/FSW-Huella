@@ -59,13 +59,13 @@ public class RutasARealizarFragment extends Fragment {
         return view;
     }
 
-    public void initComponentes(View v){
+    public void initComponentes(View v) {
         rvRutasTodo = (RecyclerView) v.findViewById(R.id.rutas_recyclerview);
 
         loadRecyclerView();
     }
 
-    public void loadRecyclerView(){
+    public void loadRecyclerView() {
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -91,7 +91,7 @@ public class RutasARealizarFragment extends Fragment {
         rvRutasTodo.setAdapter(rvRutasTodoAdapter);
     }
 
-    public void startRecorridoActivity(Route route){
+    public void startRecorridoActivity(Route route) {
         Intent intent = new Intent(mContext, RecorridoMainActivity.class);
         String routeId = route.get_id();
 

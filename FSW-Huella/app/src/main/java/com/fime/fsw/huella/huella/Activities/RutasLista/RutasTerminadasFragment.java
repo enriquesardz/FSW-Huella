@@ -38,6 +38,7 @@ public class RutasTerminadasFragment extends Fragment {
 
     private RecyclerView rvRutasDone;
     private RutasRecyclerViewAdapter rvRutasDoneAdapter;
+    private View recyclerContainer, emptyContainer;
 
     public RutasTerminadasFragment() {
         // Required empty public constructor
@@ -58,13 +59,15 @@ public class RutasTerminadasFragment extends Fragment {
         return view;
     }
 
-    public void initComponentes(View v){
+    public void initComponentes(View v) {
         rvRutasDone = (RecyclerView) v.findViewById(R.id.rutas_recyclerview);
+        recyclerContainer = v.findViewById(R.id.recyclerview_container);
+        emptyContainer = v.findViewById(R.id.empty_state);
 
         loadRecyclerView();
     }
 
-    public void loadRecyclerView(){
+    public void loadRecyclerView() {
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -87,6 +90,22 @@ public class RutasTerminadasFragment extends Fragment {
         });
 
         rvRutasDone.setAdapter(rvRutasDoneAdapter);
+
+        if (orderedRoutes.isEmpty()){
+            showEmptyState();
+        } else {
+            showRecycler();
+        }
+    }
+
+    public void showRecycler() {
+        recyclerContainer.setVisibility(View.VISIBLE);
+        emptyContainer.setVisibility(View.GONE);
+    }
+
+    public void showEmptyState(){
+        emptyContainer.setVisibility(View.VISIBLE);
+        recyclerContainer.setVisibility(View.GONE);
     }
 
 }

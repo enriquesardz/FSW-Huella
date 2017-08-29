@@ -117,7 +117,7 @@ public class RutasListaActivity extends AppCompatActivity {
         frameLayoutContainer = (LinearLayout) findViewById(R.id.framelayout_container);
         emptyStateContainer = (LinearLayout) findViewById(R.id.empty_state);
         loadingState = (LinearLayout) findViewById(R.id.loading_state);
-
+        
         setFloatingButtonControls();
 
         boolean yaDescargo = getIntent().getBooleanExtra("yaDescargo", false);

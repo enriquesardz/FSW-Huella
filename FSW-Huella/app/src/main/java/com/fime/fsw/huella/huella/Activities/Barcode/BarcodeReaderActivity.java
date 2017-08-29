@@ -90,10 +90,9 @@ public class BarcodeReaderActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         //Inicia el codigo de barras cuando la actividad se abre
-        if(scannerConnected){
+        if (scannerConnected) {
             new BarcodeInitTask().execute();
-        }
-        else{
+        } else {
             Log.d(TAG, "Se inicio la actividad sin escanner");
         }
     }
@@ -147,13 +146,14 @@ public class BarcodeReaderActivity extends AppCompatActivity {
             public void onClick(View view) {
                 //TODO: Que abra el escaner de huella dactilar como quiera.
                 //checkoutTaskAndFinish();
+                RealmProvider.setVisitAtCheckout(mRealm, mTask);
                 startHuellaActivity(taskId, roomBarcode);
             }
         });
     }
 
 
-    public void escanearHuella(final String taskId, final String roomBarcode){
+    public void escanearHuella(final String taskId, final String roomBarcode) {
         //Si el codigo de barras esta activo entonces puede escanear
         if (estaActivo) {
             new ScanTask(roomBarcode, new AsyncTaskResponseListener() {
@@ -162,7 +162,7 @@ public class BarcodeReaderActivity extends AppCompatActivity {
                     //Se agrega la hora a la que visito el salon
                     RealmProvider.setVisitAtCheckout(mRealm, mTask);
                     //Se inicia la actuvidad de la Huella
-                    startHuellaActivity(taskId, roomBarcode );
+                    startHuellaActivity(taskId, roomBarcode);
                 }
 
                 @Override
@@ -173,7 +173,7 @@ public class BarcodeReaderActivity extends AppCompatActivity {
             }).execute();
         }
 
-        if (!scannerConnected){
+        if (!scannerConnected) {
             //TODO: No debe de ir en la version final.
             //Si el escanner no esta conectado entonces es la debug App
             //Solamente cambia los valores
@@ -182,15 +182,15 @@ public class BarcodeReaderActivity extends AppCompatActivity {
         }
     }
 
-    public void checkoutTaskAndFinish(){
+    public void checkoutTaskAndFinish() {
         String routeId = mSesion.getCurrentRutaId();
-        RealmProvider.setCheckoutTaskValuesNoBarcode(mRealm,mTask);
+        RealmProvider.setCheckoutTaskValuesNoBarcode(mRealm, mTask);
         RealmProvider.moveToNextTaskByRouteId(mRealm, routeId);
-        startActivity(new Intent(mContext,RecorridoMainActivity.class));
+        startActivity(new Intent(mContext, RecorridoMainActivity.class));
         finish();
     }
 
-    public void startHuellaActivity(String taskId, String barcodeSalon){
+    public void startHuellaActivity(String taskId, String barcodeSalon) {
         //Inicia el reconocimiento de huella porque se encontro el salon
         Intent intent = new Intent(mContext, IdentificarHuellaActivity.class);
 
@@ -204,7 +204,7 @@ public class BarcodeReaderActivity extends AppCompatActivity {
         finish();
     }
 
-    public void cargarInformacion(String roomBarcode){
+    public void cargarInformacion(String roomBarcode) {
 
         //Posiblemente se deba mostrar mas informacion, por ahora solo el codigo de barras.
         tvCodigo.setText(roomBarcode);
@@ -252,7 +252,7 @@ public class BarcodeReaderActivity extends AppCompatActivity {
 
         private AsyncTaskResponseListener mListener;
 
-        public ScanTask (String barcodeSalon, AsyncTaskResponseListener listener){
+        public ScanTask(String barcodeSalon, AsyncTaskResponseListener listener) {
             this.barcodeSalon = barcodeSalon;
             mListener = listener;
         }
@@ -289,8 +289,7 @@ public class BarcodeReaderActivity extends AppCompatActivity {
                     //Si el codigo de barras no es nulo, y el valor coincide con el codigo de barras
                     //del Task entonces se ejecuta esta parte.
                     mListener.onSuccess();
-                }
-                else{
+                } else {
                     Log.e(TAG, "No coinciden los codigos: " + barcodeSalon + " != " + result);
                     mListener.onFailure();
                 }
@@ -299,7 +298,6 @@ public class BarcodeReaderActivity extends AppCompatActivity {
             }
 
         }
-
 
 
     }

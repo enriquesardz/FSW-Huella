@@ -170,7 +170,7 @@ public class IdentificarHuellaActivity extends AppCompatActivity {
     }
 
 
-    private void seEncontroHuella(){
+    private void seEncontroHuella() {
 
         //Update los campos del Task y Route si la huella se encontro
         String routeId = mSesion.getCurrentRutaId();

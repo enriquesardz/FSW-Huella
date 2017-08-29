@@ -40,11 +40,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
-        <com.roughike.bottombar.BottomBar
-            android:id="@+id/barra_navegacion"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            app:bb_tabXmlResource="@xml/route_list_bottom_nav_tabs" />
 
     </LinearLayout><!--Frame Layout and Nav Bar-->
 
@@ -120,5 +115,12 @@
             fab:fab_icon="@drawable/ic_exit_to_app"
             fab:fab_title="Cerrar sesion" />
     </com.getbase.floatingactionbutton.FloatingActionsMenu>
+
+    <com.roughike.bottombar.BottomBar
+        android:id="@+id/barra_navegacion"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        app:bb_tabXmlResource="@xml/route_list_bottom_nav_tabs" />
 
 </RelativeLayout>
