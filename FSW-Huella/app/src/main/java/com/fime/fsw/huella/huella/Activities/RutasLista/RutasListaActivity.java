@@ -4,12 +4,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.IdRes;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,32 +17,23 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fime.fsw.huella.huella.API.APICallbackListener;
-import com.fime.fsw.huella.huella.API.APICodo;
 import com.fime.fsw.huella.huella.API.APIManager;
-import com.fime.fsw.huella.huella.API.Endpoints.APIServices;
 import com.fime.fsw.huella.huella.Activities.InicioSesion.PrefectoLoginActivity;
-import com.fime.fsw.huella.huella.Activities.RecorridoMain.RecorridoMainActivity;
 import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Checkout;
 import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Owner;
 import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Route;
 import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Task;
-import com.fime.fsw.huella.huella.Data.Modelos.UploadCheckouts;
-import com.fime.fsw.huella.huella.Data.Modelos.UploadResponse;
 import com.fime.fsw.huella.huella.Data.Provider.RealmProvider;
 import com.fime.fsw.huella.huella.R;
-import com.fime.fsw.huella.huella.UI.RecyclerView.RecyclerViewItemClickListener;
-import com.fime.fsw.huella.huella.UI.RecyclerView.RutasRecyclerViewAdapter;
 import com.fime.fsw.huella.huella.Utilidad.SesionAplicacion;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
+import com.roughike.bottombar.BottomBar;
+import com.roughike.bottombar.OnTabSelectListener;
 
 import java.util.HashMap;
 import java.util.List;
 
-import io.realm.OrderedRealmCollection;
 import io.realm.Realm;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 import static com.fime.fsw.huella.huella.Activities.HuellaApplication.APP_TAG;
 
@@ -58,10 +47,9 @@ public class RutasListaActivity extends AppCompatActivity {
     Realm mRealm;
 
     TextView tvResponse;
-    RecyclerView rvRutas;
-    LinearLayout recyclerContainer, emptyStateContainer, loadingState;
+    BottomBar mBarraNav;
+    LinearLayout frameLayoutContainer, emptyStateContainer, loadingState;
     com.getbase.floatingactionbutton.FloatingActionButton btnCerrarSesion, btnUpdate;
-    RutasRecyclerViewAdapter rvRutasAdapter;
 
     private RelativeLayout fondoOpaco;
     private FloatingActionsMenu floatingActionsMenu;
@@ -77,24 +65,6 @@ public class RutasListaActivity extends AppCompatActivity {
 
         initComponentes();
 
-        setFloatingButtonControls();
-    }
-
-    private void setFloatingButtonControls() {
-        fondoOpaco = (RelativeLayout) findViewById(R.id.fondoOpaco);
-        floatingActionsMenu = (FloatingActionsMenu) findViewById(R.id.floatingActionsMenu);
-        floatingActionsMenu.setOnFloatingActionsMenuUpdateListener(new FloatingActionsMenu.OnFloatingActionsMenuUpdateListener() {
-            @Override
-            public void onMenuExpanded() {
-                fondoOpaco.setVisibility(RelativeLayout.VISIBLE);
-                fondoOpaco.setClickable(true);
-            }
-
-            @Override
-            public void onMenuCollapsed() {
-                fondoOpaco.setVisibility(View.GONE);
-            }
-        });
     }
 
     @Override
@@ -142,25 +112,20 @@ public class RutasListaActivity extends AppCompatActivity {
     public void initComponentes() {
 
         tvResponse = (TextView) findViewById(R.id.dia_textview);
-        rvRutas = (RecyclerView) findViewById(R.id.rutas_recyclerview);
         btnCerrarSesion = (com.getbase.floatingactionbutton.FloatingActionButton) findViewById(R.id.close_session_button);
         btnUpdate = (com.getbase.floatingactionbutton.FloatingActionButton) findViewById(R.id.update_button);
-        recyclerContainer = (LinearLayout) findViewById(R.id.recyclerview_container);
+        frameLayoutContainer = (LinearLayout) findViewById(R.id.framelayout_container);
         emptyStateContainer = (LinearLayout) findViewById(R.id.empty_state);
         loadingState = (LinearLayout) findViewById(R.id.loading_state);
 
+        setFloatingButtonControls();
+
         boolean yaDescargo = getIntent().getBooleanExtra("yaDescargo", false);
-
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
-        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-
-        rvRutas.setHasFixedSize(true);
-        rvRutas.setLayoutManager(linearLayoutManager);
 
         Route route = RealmProvider.getRoute(mRealm);
 
         if (yaDescargo || route != null) {
-            loadRecyclerView();
+            loadFragmentAndNavBar();
         } else {
             showEmptyState();
         }
@@ -201,7 +166,7 @@ public class RutasListaActivity extends AppCompatActivity {
                 if (!routes.isEmpty()) {
                     //Guarda los datos al Realm
                     RealmProvider.saveRouteListWTasksToRealm(mRealm, routes);
-                    loadRecyclerView();
+                    loadFragmentAndNavBar();
                 } else {
                     //No regreso nada y tampoco guardo a Realm, asi que se inicia
                     //la siguiente actividad con un empty state
@@ -217,21 +182,90 @@ public class RutasListaActivity extends AppCompatActivity {
         });
     }
 
-    public void loadRecyclerView() {
+    public void loadFragmentAndNavBar() {
 
-        showRecyclerView();
+        mBarraNav = (BottomBar) findViewById(R.id.barra_navegacion);
+        setUpBarraNavegacion();
+        mBarraNav.selectTabWithId(R.id.tab_todo_routes);
+
+        showFrameLayout();
+
+    }
+
+    private void setFloatingButtonControls() {
+        fondoOpaco = (RelativeLayout) findViewById(R.id.fondoOpaco);
+        floatingActionsMenu = (FloatingActionsMenu) findViewById(R.id.floatingActionsMenu);
+        floatingActionsMenu.setOnFloatingActionsMenuUpdateListener(new FloatingActionsMenu.OnFloatingActionsMenuUpdateListener() {
+            @Override
+            public void onMenuExpanded() {
+                fondoOpaco.setVisibility(RelativeLayout.VISIBLE);
+                fondoOpaco.setClickable(true);
+            }
+
+            @Override
+            public void onMenuCollapsed() {
+                fondoOpaco.setVisibility(View.GONE);
+            }
+        });
+    }
+
+    private void setUpBarraNavegacion() {
+        mBarraNav.setOnTabSelectListener(new OnTabSelectListener() {
+            @Override
+            public void onTabSelected(@IdRes int tabId) {
+                Fragment fragment = new Fragment();
+                if (tabId == R.id.tab_todo_routes) {
+                    fragment = new RutasARealizarFragment();
+                } else if (tabId == R.id.tab_done_routes) {
+                    fragment = new RutasTerminadasFragment();
+                }
+
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+            }
+        });
+    }
+
+    public void showEmptyState() {
+        emptyStateContainer.setVisibility(View.VISIBLE);
+        btnUpdate.setVisibility(View.VISIBLE);
+        frameLayoutContainer.setVisibility(View.GONE);
+        loadingState.setVisibility(View.GONE);
+    }
+
+    public void showFrameLayout() {
+        frameLayoutContainer.setVisibility(View.VISIBLE);
+        emptyStateContainer.setVisibility(View.GONE);
+        loadingState.setVisibility(View.GONE);
+        btnUpdate.setVisibility(View.GONE);
+    }
+
+    public void showLoadingState() {
+        loadingState.setVisibility(View.VISIBLE);
+        btnUpdate.setVisibility(View.GONE);
+        frameLayoutContainer.setVisibility(View.GONE);
+        emptyStateContainer.setVisibility(View.GONE);
+    }
+
+/*    public void loadFragmentAndNavBar() {
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+
+        rvRutas.setHasFixedSize(true);
+        rvRutas.setLayoutManager(linearLayoutManager);
 
 //        fixRoutesAndTasks();
 
         OrderedRealmCollection<Route> orderedRoutes = RealmProvider.getAllOrderedRoutes(mRealm);
 
+        //Muestra el dia que se descargaron las rutas.
         tvResponse.setText(orderedRoutes.get(0).getDay());
 
         rvRutasAdapter = new RutasRecyclerViewAdapter(mContext, orderedRoutes, new RecyclerViewItemClickListener() {
             @Override
             public void onItemClick(View v, int position) {
                 Route route = rvRutasAdapter.getItem(position);
-                saveRouteIdStartRecorrido(route);
+                startRecorridoActivity(route);
                 Log.d(TAG, route.toString());
             }
 
@@ -243,12 +277,15 @@ public class RutasListaActivity extends AppCompatActivity {
         });
 
         rvRutas.setAdapter(rvRutasAdapter);
+
+        showFrameLayout();
     }
 
-    public void saveRouteIdStartRecorrido(Route route) {
+    public void startRecorridoActivity(Route route) {
         Intent intent = new Intent(mContext, RecorridoMainActivity.class);
         String routeId = route.get_id();
 
+        //Guarda el ID de la ruta que se selecciona
         mSesionApp.crearSesionRutaSeleccionada(routeId);
         startActivity(intent);
 
@@ -310,7 +347,18 @@ public class RutasListaActivity extends AppCompatActivity {
             }
         });
 
+            public UploadCheckouts getCheckoutsFromRealm(Route route) {
+
+        UploadCheckouts uploadCheckouts;
+
+        List<Task> tasks = RealmProvider.getRouteCheckoutsFromRealm(mRealm, route);
+
+        uploadCheckouts = UploadCheckouts.create(route.get_id(), tasks);
+
+        return uploadCheckouts;
     }
+
+    }*/
 
     public void fixRoutesAndTasks() {
         mRealm.executeTransaction(new Realm.Transaction() {
@@ -347,36 +395,4 @@ public class RutasListaActivity extends AppCompatActivity {
         });
     }
 
-    public void showEmptyState() {
-        emptyStateContainer.setVisibility(View.VISIBLE);
-        btnUpdate.setVisibility(View.VISIBLE);
-        recyclerContainer.setVisibility(View.GONE);
-        loadingState.setVisibility(View.GONE);
-    }
-
-    public void showRecyclerView() {
-        recyclerContainer.setVisibility(View.VISIBLE);
-        emptyStateContainer.setVisibility(View.GONE);
-        loadingState.setVisibility(View.GONE);
-        btnUpdate.setVisibility(View.GONE);
-    }
-
-    public void showLoadingState() {
-        loadingState.setVisibility(View.VISIBLE);
-        btnUpdate.setVisibility(View.GONE);
-        recyclerContainer.setVisibility(View.GONE);
-        emptyStateContainer.setVisibility(View.GONE);
-    }
-
-
-    public UploadCheckouts getCheckoutsFromRealm(Route route) {
-
-        UploadCheckouts uploadCheckouts;
-
-        List<Task> tasks = RealmProvider.getRouteCheckoutsFromRealm(mRealm, route);
-
-        uploadCheckouts = UploadCheckouts.create(route.get_id(), tasks);
-
-        return uploadCheckouts;
-    }
 }

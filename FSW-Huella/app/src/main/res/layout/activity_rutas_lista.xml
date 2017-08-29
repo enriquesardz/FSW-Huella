@@ -21,27 +21,32 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
-            android:textColor="@color/colorIcons"
             android:text="LUNES"
+            android:textColor="@color/colorIcons"
             android:textSize="30sp"
             android:textStyle="bold" />
 
     </LinearLayout><!--Action Bar-->
 
     <LinearLayout
-        android:id="@+id/recyclerview_container"
+        android:id="@+id/framelayout_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="60dp">
+        android:layout_marginTop="60dp"
+        android:orientation="vertical">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rutas_recyclerview"
+        <FrameLayout
+            android:id="@id/fragment_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"/>
 
-        </android.support.v7.widget.RecyclerView>
+        <com.roughike.bottombar.BottomBar
+            android:id="@+id/barra_navegacion"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            app:bb_tabXmlResource="@xml/route_list_bottom_nav_tabs" />
 
-    </LinearLayout><!--Recycler View-->
+    </LinearLayout><!--Frame Layout and Nav Bar-->
 
     <LinearLayout
         android:id="@+id/empty_state"
@@ -78,23 +83,22 @@
         <ProgressBar
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
-    </LinearLayout>
+    </LinearLayout> <!-- Loading state -->
 
     <RelativeLayout
         android:id="@+id/fondoOpaco"
-        android:visibility="gone"
-        android:background="#B2000000"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/><!--Vista de fondo opaca-->
+        android:layout_height="match_parent"
+        android:background="#B2000000"
+        android:visibility="gone" /><!--Vista de fondo opaca-->
 
     <com.getbase.floatingactionbutton.FloatingActionsMenu
         android:id="@+id/floatingActionsMenu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_margin="16dp"
+        android:layout_marginTop="220dp"
         fab:fab_addButtonColorNormal="@color/colorAccent"
         fab:fab_addButtonSize="normal"
         fab:fab_labelStyle="@style/Etiquetas"
@@ -114,6 +118,7 @@
             android:layout_height="wrap_content"
             fab:fab_colorNormal="@color/colorSecondaryText"
             fab:fab_icon="@drawable/ic_exit_to_app"
-            fab:fab_title="Cerrar sesion"/>
+            fab:fab_title="Cerrar sesion" />
     </com.getbase.floatingactionbutton.FloatingActionsMenu>
+
 </RelativeLayout>

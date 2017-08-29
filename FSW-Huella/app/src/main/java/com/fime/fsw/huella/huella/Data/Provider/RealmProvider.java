@@ -117,6 +117,14 @@ public class RealmProvider{
         return mRealm.where(Route.class).findAllSorted(Route._ID_FIELD);
     }
 
+    public static OrderedRealmCollection<Route> getAllUnfinishedRoutes(Realm mRealm){
+        return mRealm.where(Route.class).equalTo(Route.IS_COMPLETED, false).findAllSorted(Route._ID_FIELD);
+    }
+
+    public static OrderedRealmCollection<Route> getAllFinishedRoutes(Realm mRealm){
+        return mRealm.where(Route.class).equalTo(Route.IS_COMPLETED, true).findAllSorted(Route._ID_FIELD);
+    }
+
     //Regresa un HashMap Key Value pair con la informacion que se muestra en la UI.
     public static HashMap<String, String> getAllDataAsStringByTask(Realm mRealm, Task task){
 
