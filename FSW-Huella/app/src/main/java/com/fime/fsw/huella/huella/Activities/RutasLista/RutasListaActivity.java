@@ -80,7 +80,7 @@ public class RutasListaActivity extends AppCompatActivity {
         setFloatingButtonControls();
     }
 
-    private void setFloatingButtonControls(){
+    private void setFloatingButtonControls() {
         fondoOpaco = (RelativeLayout) findViewById(R.id.fondoOpaco);
         floatingActionsMenu = (FloatingActionsMenu) findViewById(R.id.floatingActionsMenu);
         floatingActionsMenu.setOnFloatingActionsMenuUpdateListener(new FloatingActionsMenu.OnFloatingActionsMenuUpdateListener() {
@@ -171,6 +171,7 @@ public class RutasListaActivity extends AppCompatActivity {
                 mSesionApp.terminarSesionAplicacion();
                 //TODO: Quitar como comentario
                 //                RealmProvider.dropAllRealmTables(mRealm);
+                floatingActionsMenu.collapse();
                 startActivity(new Intent(mContext, PrefectoLoginActivity.class));
                 finish();
             }
@@ -179,6 +180,7 @@ public class RutasListaActivity extends AppCompatActivity {
         btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                floatingActionsMenu.collapse();
                 startRouteAndTasksDownload();
             }
         });
@@ -186,34 +188,34 @@ public class RutasListaActivity extends AppCompatActivity {
 
     }
 
-        public void startRouteAndTasksDownload() {
+    public void startRouteAndTasksDownload() {
 
-            showLoadingState();
+        showLoadingState();
 
-            HashMap<String, String> userData = mSesionApp.getDetalleUsuario();
-            String jwtToken = userData.get(SesionAplicacion.KEY_USER_TOKEN);
+        HashMap<String, String> userData = mSesionApp.getDetalleUsuario();
+        String jwtToken = userData.get(SesionAplicacion.KEY_USER_TOKEN);
 
-            APIManager.getInstance().startRouteAndTasksDownload(jwtToken, new APICallbackListener<List<Route>>() {
-                @Override
-                public void response(List<Route> routes) {
-                    if (!routes.isEmpty()) {
-                        //Guarda los datos al Realm
-                        RealmProvider.saveRouteListWTasksToRealm(mRealm, routes);
-                        loadRecyclerView();
-                    } else {
-                        //No regreso nada y tampoco guardo a Realm, asi que se inicia
-                        //la siguiente actividad con un empty state
-                        showEmptyState();
-                    }
-                }
-
-                @Override
-                public void failure() {
-                    Toast.makeText(mContext, "Fallo en la descarga", Toast.LENGTH_SHORT).show();
+        APIManager.getInstance().startRouteAndTasksDownload(jwtToken, new APICallbackListener<List<Route>>() {
+            @Override
+            public void response(List<Route> routes) {
+                if (!routes.isEmpty()) {
+                    //Guarda los datos al Realm
+                    RealmProvider.saveRouteListWTasksToRealm(mRealm, routes);
+                    loadRecyclerView();
+                } else {
+                    //No regreso nada y tampoco guardo a Realm, asi que se inicia
+                    //la siguiente actividad con un empty state
                     showEmptyState();
                 }
-            });
-        }
+            }
+
+            @Override
+            public void failure() {
+                Toast.makeText(mContext, "Fallo en la descarga", Toast.LENGTH_SHORT).show();
+                showEmptyState();
+            }
+        });
+    }
 
     public void loadRecyclerView() {
 
@@ -253,10 +255,10 @@ public class RutasListaActivity extends AppCompatActivity {
         finish();
     }
 
-    public void showUploadRouteMessage(final Route route){
+    public void showUploadRouteMessage(final Route route) {
         new AlertDialog.Builder(mContext)
                 .setMessage("¿Subir ruta?")
-                .setPositiveButton("Si" ,
+                .setPositiveButton("Si",
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
@@ -267,15 +269,15 @@ public class RutasListaActivity extends AppCompatActivity {
                 .show();
     }
 
-    public void tryToUploadRoute(final Route route){
+    public void tryToUploadRoute(final Route route) {
 
         HashMap<String, String> userData = mSesionApp.getDetalleUsuario();
         String jwtToken = userData.get(SesionAplicacion.KEY_USER_TOKEN);
 
-        if(!route.isCompleted()){
+        if (!route.isCompleted()) {
             Toast.makeText(mContext, "No ha terminado esta ruta.", Toast.LENGTH_SHORT).show();
             return;
-        } else if (route.isWasUploaded()){
+        } else if (route.isWasUploaded()) {
             Toast.makeText(mContext, "Esta ruta ya fue subida.", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -290,10 +292,9 @@ public class RutasListaActivity extends AppCompatActivity {
             public void onResponse(Call<UploadResponse> call, Response<UploadResponse> response) {
                 UploadResponse uploadResponse = response.body();
                 if (response.isSuccessful() && uploadResponse != null) {
-                    if(TextUtils.equals(uploadResponse.getStatus().toLowerCase().trim(),"success")){
-                        RealmProvider.setRouteWasUploaded(mRealm,route);
-                    }
-                    else{
+                    if (TextUtils.equals(uploadResponse.getStatus().toLowerCase().trim(), "success")) {
+                        RealmProvider.setRouteWasUploaded(mRealm, route);
+                    } else {
                         Toast.makeText(mContext, uploadResponse.getMessages(), Toast.LENGTH_SHORT).show();
                     }
                 } else {
@@ -311,7 +312,7 @@ public class RutasListaActivity extends AppCompatActivity {
 
     }
 
-    public void fixRoutesAndTasks(){
+    public void fixRoutesAndTasks() {
         mRealm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
@@ -320,7 +321,7 @@ public class RutasListaActivity extends AppCompatActivity {
 
                 mRealm.delete(Checkout.class);
 
-                for(Route route : routes){
+                for (Route route : routes) {
 
                     List<Task> tasks = route.getTasks();
                     route.setCompleted(false);
@@ -330,7 +331,7 @@ public class RutasListaActivity extends AppCompatActivity {
 
                     int i = 0;
 
-                    for (Task task : tasks){
+                    for (Task task : tasks) {
                         task.setSequence(i);
                         task.setCheckout(mRealm.copyToRealm(new Checkout()));
                         task.setTaskState(Task.STATE_NO_HA_PASADO);
@@ -339,28 +340,28 @@ public class RutasListaActivity extends AppCompatActivity {
 
                 }
 
-                for(Owner owner : owners){
+                for (Owner owner : owners) {
                     owner.setFingerPrint(HUELLA_ENRIQUE);
                 }
             }
         });
     }
 
-    public void showEmptyState(){
+    public void showEmptyState() {
         emptyStateContainer.setVisibility(View.VISIBLE);
         btnUpdate.setVisibility(View.VISIBLE);
         recyclerContainer.setVisibility(View.GONE);
         loadingState.setVisibility(View.GONE);
     }
 
-    public void showRecyclerView(){
+    public void showRecyclerView() {
         recyclerContainer.setVisibility(View.VISIBLE);
         emptyStateContainer.setVisibility(View.GONE);
         loadingState.setVisibility(View.GONE);
         btnUpdate.setVisibility(View.GONE);
     }
 
-    public void showLoadingState(){
+    public void showLoadingState() {
         loadingState.setVisibility(View.VISIBLE);
         btnUpdate.setVisibility(View.GONE);
         recyclerContainer.setVisibility(View.GONE);
@@ -372,7 +373,7 @@ public class RutasListaActivity extends AppCompatActivity {
 
         UploadCheckouts uploadCheckouts;
 
-        List<Task> tasks = RealmProvider.getRouteCheckoutsFromRealm(mRealm,route);
+        List<Task> tasks = RealmProvider.getRouteCheckoutsFromRealm(mRealm, route);
 
         uploadCheckouts = UploadCheckouts.create(route.get_id(), tasks);
 

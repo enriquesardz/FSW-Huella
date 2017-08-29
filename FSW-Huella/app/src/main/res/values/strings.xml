@@ -81,4 +81,7 @@
 
     <string name="auth_saludo">¡Buen día %1$s estamos descargando tus rutas del dia de hoy!</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>

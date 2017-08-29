@@ -46,6 +46,8 @@ dependencies {
     //Stetho
     //Stetho Realm
     //RabbitMQ
+
+
     compile 'com.jaredrummler:material-spinner:1.1.0'
     compile 'com.squareup.retrofit2:retrofit:2.3.0'
     compile 'com.squareup.retrofit2:converter-gson:2.3.0'
@@ -63,7 +65,6 @@ dependencies {
     compile 'com.android.support:support-vector-drawable:25.3.1'
     compile 'com.getbase:floatingactionbutton:1.10.1'
     compile 'com.android.support:recyclerview-v7:25.3.1'
-
     testCompile 'junit:junit:4.12'
 }
 
