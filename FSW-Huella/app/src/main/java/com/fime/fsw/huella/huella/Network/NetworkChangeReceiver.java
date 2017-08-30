@@ -6,7 +6,10 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.IBinder;
+import android.util.Log;
 import android.widget.Toast;
+
+import static com.fime.fsw.huella.huella.Activities.HuellaApplication.APP_TAG;
 
 /**
  * Created by ensardz on 28/08/2017.
@@ -14,16 +17,22 @@ import android.widget.Toast;
 
 public class NetworkChangeReceiver extends BroadcastReceiver {
 
-    public static int TYPE_WIFI = 1;
-    public static int TYPE_MOBILE = 2;
-    public static int TYPE_NOT_CONNECTED = 0;
+    private static final String TAG = APP_TAG + NetworkChangeReceiver.class.getSimpleName();
+
+    public static final int TYPE_WIFI = 1;
+    public static final int TYPE_MOBILE = 2;
+    public static final int TYPE_NOT_CONNECTED = 0;
 
     @Override
     public void onReceive(final Context context, final Intent intent) {
 
-        String status = getConnectivityStatusString(context);
+        int status = getConnectivityStatus(context);
 
-        Toast.makeText(context, status, Toast.LENGTH_LONG).show();
+        if(status == TYPE_WIFI || status == TYPE_MOBILE){
+            context.startService(new Intent(context, UpCheckoutsIntentService.class));
+            Toast.makeText(context, "Subiendo tareas...", Toast.LENGTH_SHORT).show();
+            Log.i(TAG, "Se inicio el UpCheckoutsIntentService");
+        }
     }
 
     public static String getConnectivityStatusString(Context context) {

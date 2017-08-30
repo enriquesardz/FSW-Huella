@@ -12,6 +12,7 @@ import com.google.gson.JsonParseException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import io.realm.RealmList;
 
@@ -28,12 +29,11 @@ public class RoutesWithTasksDeserializer implements JsonDeserializer<List<Route>
 
         List<Route> routes = new ArrayList<>();
 
-        int position = 0;
         for (JsonElement e : routeArray){
             JsonObject route = e.getAsJsonObject();
 //            String _id = route.get("_id").getAsString();
 
-            String _id = route.get("tasks").getAsJsonArray().get(0).getAsJsonObject().get("route").getAsString();
+            String _id = UUID.randomUUID().toString();//route.get("tasks").getAsJsonArray().get(0).getAsJsonObject().get("route").getAsString();
             String day = route.get("day").getAsString();
             String academyHour = route.get("academyHour").getAsString();
             //String area = route.get("area").getAsString();
@@ -43,6 +43,7 @@ public class RoutesWithTasksDeserializer implements JsonDeserializer<List<Route>
             JsonArray jsonTaskArray = route.get("tasks").getAsJsonArray();
             List<Task> tasks = new ArrayList<>();
 
+            int position = 0;
             //Utiliza el deserializador de Tasks para regresar una lista de Tasks
             if(jsonTaskArray != null){
                 for (JsonElement taskObject : jsonTaskArray){

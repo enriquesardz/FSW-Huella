@@ -46,7 +46,7 @@ public class RutasListaActivity extends AppCompatActivity {
     SesionAplicacion mSesionApp;
     Realm mRealm;
 
-    TextView tvResponse;
+    TextView tvResponse, tvDia;
     BottomBar mBarraNav;
     LinearLayout frameLayoutContainer, emptyStateContainer, loadingState;
     com.getbase.floatingactionbutton.FloatingActionButton btnCerrarSesion, btnUpdate;
@@ -112,6 +112,7 @@ public class RutasListaActivity extends AppCompatActivity {
     public void initComponentes() {
 
         tvResponse = (TextView) findViewById(R.id.dia_textview);
+        tvDia = (TextView) findViewById(R.id.dia_textview);
         btnCerrarSesion = (com.getbase.floatingactionbutton.FloatingActionButton) findViewById(R.id.close_session_button);
         btnUpdate = (com.getbase.floatingactionbutton.FloatingActionButton) findViewById(R.id.update_button);
         frameLayoutContainer = (LinearLayout) findViewById(R.id.framelayout_container);
@@ -126,6 +127,7 @@ public class RutasListaActivity extends AppCompatActivity {
 
         if (yaDescargo || route != null) {
             loadFragmentAndNavBar();
+            tvDia.setText(route.getDay());
         } else {
             showEmptyState();
         }

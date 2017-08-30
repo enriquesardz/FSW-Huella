@@ -48,6 +48,8 @@
             </intent-filter>
         </receiver>
 
+        <service android:name=".Network.UpCheckoutsIntentService" />
+
     </application>
 
 </manifest>

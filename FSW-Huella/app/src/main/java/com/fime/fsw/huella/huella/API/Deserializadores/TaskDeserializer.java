@@ -49,7 +49,7 @@ public class TaskDeserializer implements JsonDeserializer<Task> {
         Assignment assignment = new AssignmentDeserializer().deserialize(data.get("assigment").getAsJsonObject(), typeOfT, context);
         Owner owner = new OwnerDeserializer().deserialize(data.get("owner").getAsJsonObject(), typeOfT, context);
 
-        String modality = data.get("modality").getAsString();
+        String modality = "";//data.get("modality").getAsString();
 
 
         return Task.create(_id,sequence,period,language,group,room,assignment,owner,modality,checkout);
