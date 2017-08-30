@@ -18,10 +18,11 @@ public class RoomDeserializer implements JsonDeserializer<Room> {
     public Room deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         JsonObject roomObject = json.getAsJsonObject();
 
-        String building = roomObject.get("building").getAsString();
+
+        String area = roomObject.get("area").getAsJsonObject().get("area").getAsString();
+        String building = roomObject.get("building").getAsJsonObject().get("building").getAsString();
         String barcode = roomObject.get("barcode").getAsString();
         String roomNumber = roomObject.get("room").getAsString();
-        String area = roomObject.get("area").getAsString();
 
         return Room.create(building,barcode,roomNumber, area);
     }

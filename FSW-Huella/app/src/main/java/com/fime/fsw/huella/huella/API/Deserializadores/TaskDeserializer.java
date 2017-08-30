@@ -12,6 +12,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 
 import java.lang.reflect.Type;
+import java.util.UUID;
 
 /**
  * Created by Quique on 29/06/2017.
@@ -29,7 +30,7 @@ public class TaskDeserializer implements JsonDeserializer<Task> {
     public Task deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
 
         JsonObject taskObject = json.getAsJsonObject();
-        String _id = taskObject.get("_id").getAsString();
+        String _id = UUID.randomUUID().toString();
         // if API returns sequence
 //        int sequence = taskObject.get("sequence").getAsInt();
 
@@ -39,8 +40,9 @@ public class TaskDeserializer implements JsonDeserializer<Task> {
 
         //Stuff inside data object
         JsonObject data = taskObject.get("data").getAsJsonObject();
+
         String period = data.get("period").getAsString();
-        String language = data.get("language").getAsString();
+        String language = "";//data.get("language").getAsString();
         String group = data.get("group").getAsString();
 
         Room room = new RoomDeserializer().deserialize(data.get("room").getAsJsonObject(), typeOfT, context);

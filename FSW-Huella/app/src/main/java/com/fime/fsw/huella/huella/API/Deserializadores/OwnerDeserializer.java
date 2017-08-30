@@ -18,13 +18,14 @@ public class OwnerDeserializer implements JsonDeserializer<Owner> {
     public Owner deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         JsonObject ownerObject = json.getAsJsonObject();
 
-        String rawName = ownerObject.get("rawName").getAsString();
-        String userType = ownerObject.get("userType").getAsString();
-        String name = ownerObject.get("name").getAsString();
-        String title = ownerObject.get("title").getAsString();
-        String lastName = ownerObject.get("lastName").getAsString();
-        String fingerPrint = ownerObject.get("fingerPrint").getAsString();
         String employeeNumber = ownerObject.get("employeeNumber").getAsString();
+        String fingerPrint = ownerObject.get("fingerPrint").getAsString();
+        String rawName = ownerObject.get("name").getAsString();
+
+        String userType = "";//ownerObject.get("userType").getAsString();
+        String name = "";//ownerObject.get("name").getAsString();
+        String title = "";//ownerObject.get("title").getAsString();
+        String lastName = "";//ownerObject.get("lastName").getAsString();
 
         Owner owner = Owner.create(rawName,userType,name,title,lastName,fingerPrint,employeeNumber);
         return owner;

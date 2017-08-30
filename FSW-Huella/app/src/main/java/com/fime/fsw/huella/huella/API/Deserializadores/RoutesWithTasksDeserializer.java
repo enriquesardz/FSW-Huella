@@ -31,10 +31,13 @@ public class RoutesWithTasksDeserializer implements JsonDeserializer<List<Route>
         int position = 0;
         for (JsonElement e : routeArray){
             JsonObject route = e.getAsJsonObject();
-            String _id = route.get("_id").getAsString();
+//            String _id = route.get("_id").getAsString();
+
+            String _id = route.get("tasks").getAsJsonArray().get(0).getAsJsonObject().get("route").getAsString();
             String day = route.get("day").getAsString();
             String academyHour = route.get("academyHour").getAsString();
-            String assignedTo = route.get("assignedTo").getAsString();
+            //String area = route.get("area").getAsString();
+            String assignedTo = "";//route.get("assignedTo").getAsString();
             int tasksCount = route.get("tasksCounts").getAsInt();
 
             JsonArray jsonTaskArray = route.get("tasks").getAsJsonArray();
