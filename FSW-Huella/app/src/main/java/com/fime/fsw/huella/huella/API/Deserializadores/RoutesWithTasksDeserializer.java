@@ -43,7 +43,7 @@ public class RoutesWithTasksDeserializer implements JsonDeserializer<List<Route>
             JsonArray jsonTaskArray = route.get("tasks").getAsJsonArray();
             List<Task> tasks = new ArrayList<>();
 
-            int position = 0;
+            int position = 1;
             //Utiliza el deserializador de Tasks para regresar una lista de Tasks
             if(jsonTaskArray != null){
                 for (JsonElement taskObject : jsonTaskArray){

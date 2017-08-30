@@ -148,9 +148,9 @@ public class DatosVisitaFragment extends Fragment {
     public void cargarDatosTask(Task task) {
         HashMap<String, String> data = RealmProvider.getAllDataAsStringByTask(mRealm, task);
 
-        tvMaestro.setText(getResources().getString(R.string.cbarra_maestro, data.get(Owner.NAME_KEY), data.get(Owner.LAST_NAME_KEY)));
+        tvMaestro.setText(getResources().getString(R.string.cbarra_maestro, data.get(Owner.RAW_NAME_KEY)));
         tvSalonFime.setText(getResources().getString(R.string.cbarra_salon, data.get(Room.ROOM_NUMBER_KEY)));
-        tvMateria.setText(getResources().getString(R.string.cbarra_materia, data.get(Assignment.NAME_KEY)));
+        tvMateria.setText(getResources().getString(R.string.cbarra_materia, data.get(Assignment.RAW_NAME_KEY)));
         tvPlan.setText(getResources().getString(R.string.cbarra_plan, data.get(Assignment.PLAN_KEY)));
         tvCodigoBarra.setText(getResources().getString(R.string.cbarra_codigo_barra, data.get(Room.BARCODE_KEY)));
 

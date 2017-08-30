@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -129,6 +130,10 @@ public class IdentificarHuellaActivity extends AppCompatActivity {
         btnBuscarHuella.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (TextUtils.isEmpty(fingerPrintData)){
+                    Toast.makeText(mContext, "No hay huella asignada a este maestro.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 buscarHuella(fingerPrintData);
             }
         });
