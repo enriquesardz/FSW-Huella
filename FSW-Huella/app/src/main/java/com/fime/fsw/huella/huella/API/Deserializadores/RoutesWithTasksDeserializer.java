@@ -43,7 +43,7 @@ public class RoutesWithTasksDeserializer implements JsonDeserializer<List<Route>
             JsonArray jsonTaskArray = route.get("tasks").getAsJsonArray();
             List<Task> tasks = new ArrayList<>();
 
-            int position = 1;
+            int position = 0;
             //Utiliza el deserializador de Tasks para regresar una lista de Tasks
             if(jsonTaskArray != null){
                 for (JsonElement taskObject : jsonTaskArray){
@@ -59,7 +59,7 @@ public class RoutesWithTasksDeserializer implements JsonDeserializer<List<Route>
 
             //Sequence if API doesnt return sequence
             int currentTask = 0;
-            int lastTask = tasks.size();
+            int lastTask = tasks.size() - 1;
 
             RealmList<Task> rTasks = new RealmList<Task>(tasks.toArray(new Task[tasks.size()]));
 
