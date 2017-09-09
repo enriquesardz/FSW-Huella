@@ -8,6 +8,7 @@ import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,6 +31,10 @@ import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -118,7 +123,7 @@ public class RutasListaActivity extends AppCompatActivity {
         frameLayoutContainer = (LinearLayout) findViewById(R.id.framelayout_container);
         emptyStateContainer = (LinearLayout) findViewById(R.id.empty_state);
         loadingState = (LinearLayout) findViewById(R.id.loading_state);
-        
+
         setFloatingButtonControls();
 
         boolean yaDescargo = getIntent().getBooleanExtra("yaDescargo", false);
@@ -161,6 +166,12 @@ public class RutasListaActivity extends AppCompatActivity {
 
         HashMap<String, String> userData = mSesionApp.getDetalleUsuario();
         String jwtToken = userData.get(SesionAplicacion.KEY_USER_TOKEN);
+
+        Date today = Calendar.getInstance().getTime();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd");
+        String todayDate = format.format(today);
+
+        Log.i(TAG, todayDate);
 
         APIManager.getInstance().startRouteAndTasksDownload(jwtToken, new APICallbackListener<List<Route>>() {
             @Override
@@ -248,119 +259,6 @@ public class RutasListaActivity extends AppCompatActivity {
         emptyStateContainer.setVisibility(View.GONE);
     }
 
-/*    public void loadFragmentAndNavBar() {
-
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
-        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-
-        rvRutas.setHasFixedSize(true);
-        rvRutas.setLayoutManager(linearLayoutManager);
-
-//        fixRoutesAndTasks();
-
-        OrderedRealmCollection<Route> orderedRoutes = RealmProvider.getAllOrderedRoutes(mRealm);
-
-        //Muestra el dia que se descargaron las rutas.
-        tvResponse.setText(orderedRoutes.get(0).getDay());
-
-        rvRutasAdapter = new RutasRecyclerViewAdapter(mContext, orderedRoutes, new RecyclerViewItemClickListener() {
-            @Override
-            public void onItemClick(View v, int position) {
-                Route route = rvRutasAdapter.getItem(position);
-                startRecorridoActivity(route);
-                Log.d(TAG, route.toString());
-            }
-
-            @Override
-            public void onItemLongClick(View v, int position) {
-                Route route = rvRutasAdapter.getItem(position);
-                showUploadRouteMessage(route);
-            }
-        });
-
-        rvRutas.setAdapter(rvRutasAdapter);
-
-        showFrameLayout();
-    }
-
-    public void startRecorridoActivity(Route route) {
-        Intent intent = new Intent(mContext, RecorridoMainActivity.class);
-        String routeId = route.get_id();
-
-        //Guarda el ID de la ruta que se selecciona
-        mSesionApp.crearSesionRutaSeleccionada(routeId);
-        startActivity(intent);
-
-        finish();
-    }
-
-    public void showUploadRouteMessage(final Route route) {
-        new AlertDialog.Builder(mContext)
-                .setMessage("¿Subir ruta?")
-                .setPositiveButton("Si",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                tryToUploadRoute(route);
-                            }
-                        })
-                .setNegativeButton("No", null)
-                .show();
-    }
-
-    public void tryToUploadRoute(final Route route) {
-
-        HashMap<String, String> userData = mSesionApp.getDetalleUsuario();
-        String jwtToken = userData.get(SesionAplicacion.KEY_USER_TOKEN);
-
-        if (!route.isCompleted()) {
-            Toast.makeText(mContext, "No ha terminado esta ruta.", Toast.LENGTH_SHORT).show();
-            return;
-        } else if (route.isWasUploaded()) {
-            Toast.makeText(mContext, "Esta ruta ya fue subida.", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        UploadCheckouts uploadCheckouts = getCheckoutsFromRealm(route);
-
-        APIServices service = APICodo.uploadCheckouts().create(APIServices.class);
-        Call<UploadResponse> call = service.subirCheckoutsRuta(jwtToken, uploadCheckouts);
-
-        call.enqueue(new Callback<UploadResponse>() {
-            @Override
-            public void onResponse(Call<UploadResponse> call, Response<UploadResponse> response) {
-                UploadResponse uploadResponse = response.body();
-                if (response.isSuccessful() && uploadResponse != null) {
-                    if (TextUtils.equals(uploadResponse.getStatus().toLowerCase().trim(), "success")) {
-                        RealmProvider.setRouteWasUploaded(mRealm, route);
-                    } else {
-                        Toast.makeText(mContext, uploadResponse.getMessages(), Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    //No regreso nada y tampoco guardo a Realm, asi que se inicia
-                    //la siguiente actividad con un empty state
-                    Toast.makeText(mContext, "Error: " + response.message(), Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<UploadResponse> call, Throwable t) {
-                Toast.makeText(mContext, "Error: Error de red.", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-            public UploadCheckouts getCheckoutsFromRealm(Route route) {
-
-        UploadCheckouts uploadCheckouts;
-
-        List<Task> tasks = RealmProvider.getRouteCheckoutsFromRealm(mRealm, route);
-
-        uploadCheckouts = UploadCheckouts.create(route.get_id(), tasks);
-
-        return uploadCheckouts;
-    }
-
-    }*/
 
     public void fixRoutesAndTasks() {
         mRealm.executeTransaction(new Realm.Transaction() {

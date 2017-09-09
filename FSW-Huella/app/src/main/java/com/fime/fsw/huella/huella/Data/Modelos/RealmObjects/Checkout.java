@@ -19,6 +19,7 @@ public class Checkout extends RealmObject{
     private String signedAt;
     private String finishedAt;
 
+
     public Checkout (){}
 
     public String getStartedAt() {

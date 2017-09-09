@@ -78,10 +78,11 @@ public class AuthDownloadActivity extends AppCompatActivity {
 
                 txtSaludo.setText(getResources().getString(R.string.auth_saludo, user));
                 txtSaludo.setTypeface(null, Typeface.BOLD);
-                String jwtToken = saveUserToken(user, tokenResponse);
+                saveUserToken(user, tokenResponse);
 
                 Log.i(TAG, "Login successful: " + tokenResponse.toString());
-                startRouteAndTasksDownload(jwtToken);
+//                startRouteAndTasksDownload(jwtToken);
+                startRouteListActivity(false);
 
             }
 
@@ -95,29 +96,29 @@ public class AuthDownloadActivity extends AppCompatActivity {
 
     }
 
-    public void startRouteAndTasksDownload(final String jwtToken) {
-
-        APIManager.getInstance().startRouteAndTasksDownload(jwtToken, new APICallbackListener<List<Route>>() {
-            @Override
-            public void response(List<Route> routes) {
-                if (!routes.isEmpty()) {
-                    //Guarda los datos al Realm
-                    RealmProvider.saveRouteListWTasksToRealm(mRealm, routes);
-                    startRouteListActivity(true);
-                } else {
-                    //No regreso nada y tampoco guardo a Realm, asi que se inicia
-                    //la siguiente actividad con un empty state
-                    startRouteListActivity(false);
-                }
-            }
-
-            @Override
-            public void failure() {
-                //Toast.makeText(mContext, "Fallo en la descarga", Toast.LENGTH_SHORT).show();
-                startRouteListActivity(false);
-            }
-        });
-    }
+//    public void startRouteAndTasksDownload(final String jwtToken) {
+//
+//        APIManager.getInstance().startRouteAndTasksDownload(jwtToken, new APICallbackListener<List<Route>>() {
+//            @Override
+//            public void response(List<Route> routes) {
+//                if (!routes.isEmpty()) {
+//                    //Guarda los datos al Realm
+//                    RealmProvider.saveRouteListWTasksToRealm(mRealm, routes);
+//                    startRouteListActivity(true);
+//                } else {
+//                    //No regreso nada y tampoco guardo a Realm, asi que se inicia
+//                    //la siguiente actividad con un empty state
+//                    startRouteListActivity(false);
+//                }
+//            }
+//
+//            @Override
+//            public void failure() {
+//                //Toast.makeText(mContext, "Fallo en la descarga", Toast.LENGTH_SHORT).show();
+//                startRouteListActivity(false);
+//            }
+//        });
+//    }
 
     public String saveUserToken(String userName, TokenResponse tokenResponse) {
         //Guarda la sesion del usuario; el usuario ahora esta logeado.
