@@ -76,7 +76,7 @@ public class RutasRecyclerViewAdapter extends RealmRecyclerViewAdapter<Route, Ru
 
         String routeNum =  String.valueOf(position + 1);
         String taskCount = String.valueOf(route.getTasksCount());
-        String routeHora = String.valueOf(route.getAcademyHour());
+        String routeHora = String.valueOf(route.getHorarioId());
         holder.tvRutaNum.setText(routeNum);
         holder.tvTaskCount.setText(taskCount);
         holder.tvRutaHora.setText(routeHora);

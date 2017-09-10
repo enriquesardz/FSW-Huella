@@ -143,7 +143,7 @@ public class RutasListaActivity extends AppCompatActivity {
 
         if (yaDescargo || route != null) {
             loadFragmentAndNavBar();
-            tvDia.setText(route.getDay());
+            tvDia.setText(route.getDia());
         } else {
             showEmptyState();
         }
@@ -351,7 +351,8 @@ public class RutasListaActivity extends AppCompatActivity {
     }
 
     public void generateRoutesAndTasks() {
-        
+        //TODO:Mover a una clase aparte
+
     }
 
     public class SaveGroupAndPrefectoAsyncClass extends AsyncTask<String, Integer, String> {

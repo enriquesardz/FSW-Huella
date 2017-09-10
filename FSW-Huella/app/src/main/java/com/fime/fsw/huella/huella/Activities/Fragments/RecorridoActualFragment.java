@@ -135,7 +135,7 @@ public class RecorridoActualFragment extends Fragment {
         long currentTask = route.getCurrentTask();
 
         //Se obtiene la info de nuestro Realm
-        String routeHour = route.getAcademyHour();
+        String routeHour = route.getHorarioId();
 
         final OrderedRealmCollection<Task> recorridoData = route.getTasks().where().notEqualTo(Task.TASK_STATE_FIELD, Task.STATE_NO_HA_PASADO).findAll().sort(Task.SEQUENCE_FIELD);
 

@@ -4,9 +4,6 @@ package com.fime.fsw.huella.huella.API.Endpoints;
 import com.fime.fsw.huella.huella.Data.Modelos.LoginUser;
 import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Grupo;
 import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Prefecto;
-import com.fime.fsw.huella.huella.Data.Modelos.UploadRefreshToken;
-import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Route;
-import com.fime.fsw.huella.huella.Data.Modelos.RefreshTokenResponse;
 import com.fime.fsw.huella.huella.Data.Modelos.TokenResponse;
 import com.fime.fsw.huella.huella.Data.Modelos.UploadCheckouts;
 import com.fime.fsw.huella.huella.Data.Modelos.UploadResponse;
@@ -20,7 +17,6 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
-import retrofit2.http.Path;
 
 /**
  * Created by Quique on 28/06/2017.

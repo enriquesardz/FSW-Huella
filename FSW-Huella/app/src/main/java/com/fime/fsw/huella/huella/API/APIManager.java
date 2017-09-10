@@ -119,37 +119,4 @@ public class APIManager {
         });
     }
 
-//    public void refreshToken(final APICallbackListener<RefreshTokenResponse> listener){
-//
-//        String refreshToken = ""; //get refreshToken
-//
-//        APIServices service = APICodo.refreshToken().create(APIServices.class);
-//        Call<RefreshTokenResponse> call = service.authRefreshToken(new UploadRefreshToken(refreshToken));
-//
-//        call.enqueue(new Callback<RefreshTokenResponse>() {
-//            @Override
-//            public void onResponse(Call<RefreshTokenResponse> call, Response<RefreshTokenResponse> response) {
-//
-//                RefreshTokenResponse rtResponse = response.body();
-//
-//                if(response.isSuccessful() && response.body() != null){
-//                    if (TextUtils.equals(rtResponse.getStatus().toLowerCase(), STATUS_SUCESS)){
-//                        listener.response(rtResponse);
-//                    } else {
-//                        listener.failure();
-//                    }
-//                } else {
-//                    listener.failure();
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<RefreshTokenResponse> call, Throwable t) {
-//                listener.failure();
-//            }
-//        });
-//    }
-
-
-
 }

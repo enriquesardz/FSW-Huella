@@ -74,7 +74,7 @@ public class RecorridoAdapter extends RealmRecyclerViewAdapter<Task, RecorridoAd
         holder.task = task;
 
         int taskState = task.getTaskState();
-        String roomNumber = task.getRoom().getRoomNumber();
+        String roomNumber = task.getSalonId();
 
         holder.tvHoraFime.setText(routeAcademyHour);
         holder.tvSalonFime.setText(roomNumber);

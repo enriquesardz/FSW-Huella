@@ -133,33 +133,20 @@ public class RealmProvider {
         HashMap<String, String> data = new HashMap<>();
         String task_id = task.get_id();
         Route route = mRealm.where(Route.class).equalTo("tasks._id", task_id).findFirst();
-        Room room = task.getRoom();
-        Assignment assignment = task.getAssignment();
-        Owner owner = task.getOwner();
-        Checkout checkout = task.getCheckout();
 
-        data.put(Route.DAY_KEY, route.getDay());
-        data.put(Route.ACADEMY_HOUR_KEY, route.getAcademyHour());
-        data.put(Route.ASSIGNED_TO_KEY, route.getAssignedTo());
+        data.put(Route.HORARIO_ID_KEY, route.getHorarioId());
+        data.put(Route.DIA_KEY, route.getDia());
         data.put(Route.CURRENT_TASK_KEY, String.valueOf(route.getCurrentTask()));
         data.put(Route.LAST_TASK_KEY, String.valueOf(route.getLastTask()));
-        data.put(Task.PERIOD_KEY, task.getPeriod());
-        data.put(Task.LANGUAGE_KEY, task.getLanguage());
-        data.put(Task.GROUP_KEY, task.getGroup());
-        data.put(Task.MODALITY_KEY, task.getModality());
-        data.put(Room.BUILDING_KEY, room.getBuilding());
-        data.put(Room.BARCODE_KEY, room.getBarcode());
-        data.put(Room.ROOM_NUMBER_KEY, room.getRoomNumber());
-        data.put(Room.AREA_KEY, room.getArea());
-        data.put(Assignment.RAW_NAME_KEY, assignment.getRawName());
-        data.put(Assignment.CODE_KEY, assignment.getCode());
-        data.put(Assignment.NAME_KEY, assignment.getName());
-        data.put(Assignment.PLAN_KEY, assignment.getPlan());
-        data.put(Owner.RAW_NAME_KEY, owner.getRawName());
-        data.put(Owner.USER_TYPE_KEY, owner.getUserType());
-        data.put(Owner.NAME_KEY, owner.getName());
-        data.put(Owner.TITLE_KEY, owner.getTitle());
-        data.put(Owner.LAST_NAME_KEY, owner.getLastName());
+        data.put(Task.PLAN_ID_KEY, task.getPlanId());
+        data.put(Task.MATERIA_KEY, task.getMateria());
+        data.put(Task.SALON_ID_KEY, task.getSalonId());
+        data.put(Task.AREA_ID_KEY, task.getAreaId());
+        data.put(Task.EDIFICIO_ID_KEY, task.getEdificioId());
+        data.put(Task.NUMERO_EMPLEADO_KEY, task.getNumeroEmpleado());
+        data.put(Task.NOMBRE_EMPLEADO_KEY, task.getNombreEmpleado());
+        data.put(Task.HUELLA_EMPLEADO_KEY, task.getHuellaEmpleado());
+        data.put(Task.TIPO_KEY, task.getTipo());
 
         return data;
     }

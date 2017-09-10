@@ -129,7 +129,7 @@ public class BarcodeReaderActivity extends AppCompatActivity {
 
         mTask = RealmProvider.getTaskById(mRealm, taskId);
 
-        final String roomBarcode = mTask.getRoom().getBarcode();
+        final String roomBarcode = mTask.getSalonId();
 
         cargarInformacion(roomBarcode);
 

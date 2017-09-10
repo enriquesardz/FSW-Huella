@@ -170,7 +170,7 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
 
         HashMap<String, String> data = RealmProvider.getAllDataAsStringByTask(mRealm, mTask);
 
-        tvHoraFime.setText(getResources().getString(R.string.cbarra_hora, data.get(Route.ACADEMY_HOUR_KEY)));
+        tvHoraFime.setText(getResources().getString(R.string.cbarra_hora, data.get(Route.HORARIO_ID_KEY)));
 
         int currentTask = Integer.valueOf(data.get(Route.CURRENT_TASK_KEY));
         int lastTask = Integer.valueOf(data.get(Route.LAST_TASK_KEY));

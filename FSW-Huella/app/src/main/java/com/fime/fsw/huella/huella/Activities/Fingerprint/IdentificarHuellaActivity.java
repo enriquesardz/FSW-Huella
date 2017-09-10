@@ -125,7 +125,7 @@ public class IdentificarHuellaActivity extends AppCompatActivity {
 
         //Inicia el task para buscar la huella con el id que se le pasa,
         //ademas, toma la huella que se encuentre en el escanner para comparar.
-        final String fingerPrintData = mTask.getOwner().getFingerPrint();
+        final String fingerPrintData = mTask.getHuellaEmpleado();
 
         btnBuscarHuella.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -198,8 +198,8 @@ public class IdentificarHuellaActivity extends AppCompatActivity {
     }
 
     public void cargarDatosTask(Task task) {
-        tvNombre.setText(getResources().getString(R.string.ih_nombre, task.getOwner().getName()));
-        tvFullNombre.setText(getResources().getString(R.string.ih_apellido, task.getOwner().getLastName()));
+        tvNombre.setText(getResources().getString(R.string.ih_nombre, task.getNombreEmpleado()));
+        tvFullNombre.setText(getResources().getString(R.string.ih_apellido, task.getNombreEmpleado()));
     }
 
     public void debugHuellaEncontrada(final Task task) {
