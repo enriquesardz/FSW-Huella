@@ -53,7 +53,7 @@ public class Task extends RealmObject {
     public Task() {
     }
 
-    public static Task create(String _id, String routeId, String planId, String materia, String salonId, String areaId, String edificioId, String numeroEmpleado, String nombreEmpleado, String tipo, boolean isNexus, int sequence, int taskState, Checkout checkout) {
+    public static Task create(String _id, String routeId, String planId, String materia, String salonId, String areaId, String edificioId, String numeroEmpleado, String nombreEmpleado, String tipo, boolean isNexus, int sequence) {
         Task task = new Task();
         task._id = _id;
         task.routeId = routeId;
@@ -68,8 +68,8 @@ public class Task extends RealmObject {
         task.tipo = tipo;
         task.isNexus = isNexus;
         task.sequence = sequence;
-        task.taskState = taskState;
-        task.checkout = checkout;
+        task.taskState = STATE_NO_HA_PASADO;
+        task.checkout = new Checkout();
 
         return task;
     }

@@ -9,6 +9,9 @@ import io.realm.annotations.PrimaryKey;
 
 public class Grupo extends RealmObject {
 
+    public static final String AREA_ID_FIELD = "areaId";
+    public static final String HORARIO_ID_FIELD = "horarioId";
+
     @PrimaryKey
     private int id;
     private String planId;

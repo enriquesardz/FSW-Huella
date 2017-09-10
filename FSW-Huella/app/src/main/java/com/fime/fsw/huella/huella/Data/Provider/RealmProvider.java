@@ -2,10 +2,6 @@ package com.fime.fsw.huella.huella.Data.Provider;
 
 import android.util.Log;
 
-import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Assignment;
-import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Checkout;
-import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Owner;
-import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Room;
 import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Route;
 import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Task;
 
@@ -120,11 +116,11 @@ public class RealmProvider {
     }
 
     public static OrderedRealmCollection<Route> getAllUnfinishedRoutes(Realm mRealm) {
-        return mRealm.where(Route.class).equalTo(Route.IS_COMPLETED_FIELD, false).findAllSorted(Route.ACADEMY_HOUR_FIELD);
+        return mRealm.where(Route.class).equalTo(Route.IS_COMPLETED_FIELD, false).findAllSorted(Route.HORARIO_ID_FIELD);
     }
 
     public static OrderedRealmCollection<Route> getAllFinishedRoutes(Realm mRealm) {
-        return mRealm.where(Route.class).equalTo(Route.IS_COMPLETED_FIELD, true).findAllSorted(Route.ACADEMY_HOUR_FIELD);
+        return mRealm.where(Route.class).equalTo(Route.IS_COMPLETED_FIELD, true).findAllSorted(Route.HORARIO_ID_FIELD);
     }
 
     //Regresa un HashMap Key Value pair con la informacion que se muestra en la UI.
@@ -154,11 +150,7 @@ public class RealmProvider {
     public static void dataCount(Realm mRealm) {
         int tasknum = mRealm.where(Task.class).findAll().size();
         int routenum = mRealm.where(Route.class).findAll().size();
-        int roomnum = mRealm.where(Room.class).findAll().size();
-        int ownernum = mRealm.where(Owner.class).findAll().size();
-        int checkoutnum = mRealm.where(Checkout.class).findAll().size();
-        int assignmentnum = mRealm.where(Assignment.class).findAll().size();
-        Log.d(TAG, "Task: " + String.valueOf(tasknum) + " Route: " + String.valueOf(routenum) + " Room: " + String.valueOf(roomnum) + " Owner: " + String.valueOf(ownernum) + " Checkouts: " + String.valueOf(checkoutnum) + " Assignment: " + String.valueOf(assignmentnum));
+        Log.d(TAG, "Task: " + String.valueOf(tasknum) + " Route: " + String.valueOf(routenum));
     }
 
 

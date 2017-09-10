@@ -23,13 +23,13 @@ import com.fime.fsw.huella.huella.API.Deserializadores.PrefectosDeserializer;
 import com.fime.fsw.huella.huella.Activities.InicioSesion.PrefectoLoginActivity;
 import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Checkout;
 import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Grupo;
-import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Owner;
 import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Prefecto;
 import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Route;
 import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Task;
 import com.fime.fsw.huella.huella.Data.Provider.RealmProvider;
 import com.fime.fsw.huella.huella.R;
 import com.fime.fsw.huella.huella.Utilidad.AsyncTaskResponseListener;
+import com.fime.fsw.huella.huella.Utilidad.RouteAndTaskGenerator;
 import com.fime.fsw.huella.huella.Utilidad.SesionAplicacion;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.google.gson.GsonBuilder;
@@ -179,7 +179,6 @@ public class RutasListaActivity extends AppCompatActivity {
             @Override
             public void onSuccess() {
                 saveGroupsAndPrefectosToRealm();
-                showEmptyState();
             }
 
             @Override
@@ -288,41 +287,6 @@ public class RutasListaActivity extends AppCompatActivity {
     }
 
 
-    public void fixRoutesAndTasks() {
-        mRealm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                List<Route> routes = mRealm.where(Route.class).findAll();
-                List<Owner> owners = mRealm.where(Owner.class).findAll();
-
-                mRealm.delete(Checkout.class);
-
-                for (Route route : routes) {
-
-                    List<Task> tasks = route.getTasks();
-                    route.setCompleted(false);
-                    route.setCurrentTask(0);
-                    route.setLastTask(tasks.size() - 1);
-                    route.setWasUploaded(false);
-
-                    int i = 0;
-
-                    for (Task task : tasks) {
-                        task.setSequence(i);
-                        task.setCheckout(mRealm.copyToRealm(new Checkout()));
-                        task.setTaskState(Task.STATE_NO_HA_PASADO);
-                        i++;
-                    }
-
-                }
-
-                for (Owner owner : owners) {
-                    owner.setFingerPrint(HUELLA_ENRIQUE);
-                }
-            }
-        });
-    }
-
     public void saveGroupsAndPrefectosToRealm() {
         mRealm.executeTransactionAsync(new Realm.Transaction() {
             @Override
@@ -338,21 +302,15 @@ public class RutasListaActivity extends AppCompatActivity {
         }, new Realm.Transaction.OnSuccess() {
             @Override
             public void onSuccess() {
-
-                RealmResults<Grupo> grupoRealmResults = mRealm.where(Grupo.class).equalTo("areaId", "01").findAll();
-                Log.i(TAG, String.valueOf(grupoRealmResults.size()));
-
-                grupoRealmResults = grupoRealmResults.where().equalTo("horarioId", "M1").findAll();
-                Log.i(TAG, String.valueOf(grupoRealmResults.size()));
                 // Crear Rutas y Tasks
                 generateRoutesAndTasks();
             }
         });
     }
 
-    public void generateRoutesAndTasks() {
-        //TODO:Mover a una clase aparte
-
+    public void generateRoutesAndTasks(){
+        RouteAndTaskGenerator.getInstance(mRealm).createRoutesAndTasks();
+        showFrameLayout();
     }
 
     public class SaveGroupAndPrefectoAsyncClass extends AsyncTask<String, Integer, String> {

@@ -13,9 +13,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.fime.fsw.huella.huella.Activities.Barcode.BarcodeReaderActivity;
-import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Assignment;
-import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Owner;
-import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Room;
 import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Route;
 import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Task;
 import com.fime.fsw.huella.huella.Data.Provider.RealmProvider;
@@ -148,11 +145,11 @@ public class DatosVisitaFragment extends Fragment {
     public void cargarDatosTask(Task task) {
         HashMap<String, String> data = RealmProvider.getAllDataAsStringByTask(mRealm, task);
 
-        tvMaestro.setText(getResources().getString(R.string.cbarra_maestro, data.get(Owner.RAW_NAME_KEY)));
-        tvSalonFime.setText(getResources().getString(R.string.cbarra_salon, data.get(Room.ROOM_NUMBER_KEY)));
-        tvMateria.setText(getResources().getString(R.string.cbarra_materia, data.get(Assignment.RAW_NAME_KEY)));
-        tvPlan.setText(getResources().getString(R.string.cbarra_plan, data.get(Assignment.PLAN_KEY)));
-        tvCodigoBarra.setText(getResources().getString(R.string.cbarra_codigo_barra, data.get(Room.BARCODE_KEY)));
+        tvMaestro.setText(getResources().getString(R.string.cbarra_maestro, data.get(Task.NOMBRE_EMPLEADO_KEY)));
+        tvSalonFime.setText(getResources().getString(R.string.cbarra_salon, data.get(Task.SALON_ID_KEY)));
+        tvMateria.setText(getResources().getString(R.string.cbarra_materia, data.get(Task.MATERIA_KEY)));
+        tvPlan.setText(getResources().getString(R.string.cbarra_plan, data.get(Task.PLAN_ID_KEY)));
+        tvCodigoBarra.setText(getResources().getString(R.string.cbarra_codigo_barra, data.get(Task.SALON_ID_KEY)));
 
     }
 

@@ -14,7 +14,7 @@ import io.realm.annotations.PrimaryKey;
 public class Route extends RealmObject {
 
     public static final String _ID_FIELD = "_id";
-    public static final String ACADEMY_HOUR_FIELD = "academyHour";
+    public static final String HORARIO_ID_FIELD = "horarioId";
     public static final String WAS_UPLOADED_FIELD = "wasUploaded";
     public static final String IS_COMPLETED_FIELD = "isCompleted";
 
@@ -35,7 +35,7 @@ public class Route extends RealmObject {
     private boolean wasUploaded;
     private boolean isCompleted;
 
-    public static Route create(String _id, String horarioId, String dia, int tasksCount, RealmList<Task> tasks, int currentTask, int lastTask, boolean wasUploaded, boolean isCompleted) {
+    public static Route create(String _id, String horarioId, String dia, int tasksCount, RealmList<Task> tasks, int currentTask, int lastTask) {
         Route route = new Route();
         route._id = _id;
         route.horarioId = horarioId;
@@ -44,8 +44,8 @@ public class Route extends RealmObject {
         route.tasks = tasks;
         route.currentTask = currentTask;
         route.lastTask = lastTask;
-        route.wasUploaded = wasUploaded;
-        route.isCompleted = isCompleted;
+        route.wasUploaded = false;
+        route.isCompleted = false;
         return route;
     }
 
