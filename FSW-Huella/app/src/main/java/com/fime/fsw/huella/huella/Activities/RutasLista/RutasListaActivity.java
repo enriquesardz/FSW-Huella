@@ -46,6 +46,7 @@ import java.util.Date;
 import java.util.List;
 
 import io.realm.Realm;
+import io.realm.RealmResults;
 
 import static com.fime.fsw.huella.huella.Activities.HuellaApplication.APP_TAG;
 
@@ -177,8 +178,7 @@ public class RutasListaActivity extends AppCompatActivity {
         new SaveGroupAndPrefectoAsyncClass(new AsyncTaskResponseListener() {
             @Override
             public void onSuccess() {
-                savePrefectosToRealm();
-                saveGruposToRealm();
+                saveGroupsAndPrefectosToRealm();
                 showEmptyState();
             }
 
@@ -191,9 +191,9 @@ public class RutasListaActivity extends AppCompatActivity {
 
     }
 
-    public String getJsonFromGroupsFile(){
+    public String getJsonFromGroupsFile() {
         String json = null;
-        try{
+        try {
             InputStream is = getAssets().open("groups.json");
             int size = is.available();
             byte[] buffer = new byte[size];
@@ -201,15 +201,15 @@ public class RutasListaActivity extends AppCompatActivity {
             is.close();
             json = new String(buffer);
             return json;
-        } catch (IOException ex){
+        } catch (IOException ex) {
             ex.printStackTrace();
             return json;
         }
     }
 
-    public String getJsonFromPrefectosFile(){
+    public String getJsonFromPrefectosFile() {
         String json = null;
-        try{
+        try {
             InputStream is = getAssets().open("prefectos.json");
             int size = is.available();
             byte[] buffer = new byte[size];
@@ -217,7 +217,7 @@ public class RutasListaActivity extends AppCompatActivity {
             is.close();
             json = new String(buffer);
             return json;
-        } catch (IOException ex){
+        } catch (IOException ex) {
             ex.printStackTrace();
             return json;
         }
@@ -323,30 +323,38 @@ public class RutasListaActivity extends AppCompatActivity {
         });
     }
 
-    public void saveGruposToRealm(){
+    public void saveGroupsAndPrefectosToRealm() {
         mRealm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                for(Grupo grupo : listaGrupos){
+                for (Grupo grupo : listaGrupos) {
                     realm.copyToRealmOrUpdate(grupo);
                 }
-            }
-        });
-    }
 
-    public void savePrefectosToRealm(){
-        mRealm.executeTransactionAsync(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                for(Prefecto prefecto : listaPrefectos){
+                for (Prefecto prefecto : listaPrefectos) {
                     realm.copyToRealmOrUpdate(prefecto);
                 }
             }
+        }, new Realm.Transaction.OnSuccess() {
+            @Override
+            public void onSuccess() {
+
+                RealmResults<Grupo> grupoRealmResults = mRealm.where(Grupo.class).equalTo("areaId", "01").findAll();
+                Log.i(TAG, String.valueOf(grupoRealmResults.size()));
+
+                grupoRealmResults = grupoRealmResults.where().equalTo("horarioId", "M1").findAll();
+                Log.i(TAG, String.valueOf(grupoRealmResults.size()));
+                // Crear Rutas y Tasks
+                generateRoutesAndTasks();
+            }
         });
     }
 
+    public void generateRoutesAndTasks() {
+        
+    }
 
-    public class SaveGroupAndPrefectoAsyncClass extends AsyncTask<String,Integer,String>{
+    public class SaveGroupAndPrefectoAsyncClass extends AsyncTask<String, Integer, String> {
 
         AsyncTaskResponseListener listener;
 
@@ -367,8 +375,10 @@ public class RutasListaActivity extends AppCompatActivity {
             String jsonPrefectos = getJsonFromPrefectosFile();
 
 
-            Type listGrupos = new TypeToken<List<Grupo>>(){}.getType();
-            Type listPrefectos = new TypeToken<List<Prefecto>>(){}.getType();
+            Type listGrupos = new TypeToken<List<Grupo>>() {
+            }.getType();
+            Type listPrefectos = new TypeToken<List<Prefecto>>() {
+            }.getType();
 
             GsonBuilder groupGson = new GsonBuilder()
                     .serializeNulls()
@@ -381,7 +391,7 @@ public class RutasListaActivity extends AppCompatActivity {
             List<Grupo> grupos = groupGson.create().fromJson(jsonGroups, listGrupos);
             List<Prefecto> prefectos = prefectoGson.create().fromJson(jsonPrefectos, listPrefectos);
 
-            if(grupos != null && prefectos != null){
+            if (grupos != null && prefectos != null) {
 
                 Log.i(TAG, String.valueOf(grupos.size()));
                 Log.i(TAG, String.valueOf(prefectos.size()));
@@ -399,7 +409,7 @@ public class RutasListaActivity extends AppCompatActivity {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
 
-            if (!TextUtils.isEmpty(s)){
+            if (!TextUtils.isEmpty(s)) {
                 //Ok
                 listener.onSuccess();
             } else {
