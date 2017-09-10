@@ -3,11 +3,13 @@ package com.fime.fsw.huella.huella.Activities.RutasLista;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,27 +17,32 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.fime.fsw.huella.huella.API.APICallbackListener;
-import com.fime.fsw.huella.huella.API.APIManager;
+import com.fime.fsw.huella.huella.API.Deserializadores.GroupsDeserializer;
+import com.fime.fsw.huella.huella.API.Deserializadores.PrefectosDeserializer;
 import com.fime.fsw.huella.huella.Activities.InicioSesion.PrefectoLoginActivity;
 import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Checkout;
+import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Grupo;
 import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Owner;
+import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Prefecto;
 import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Route;
 import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Task;
 import com.fime.fsw.huella.huella.Data.Provider.RealmProvider;
 import com.fime.fsw.huella.huella.R;
+import com.fime.fsw.huella.huella.Utilidad.AsyncTaskResponseListener;
 import com.fime.fsw.huella.huella.Utilidad.SesionAplicacion;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
 
-import java.text.DateFormat;
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 import io.realm.Realm;
@@ -58,6 +65,9 @@ public class RutasListaActivity extends AppCompatActivity {
 
     private View fondoOpaco;
     private FloatingActionsMenu floatingActionsMenu;
+
+    private List<Grupo> listaGrupos;
+    private List<Prefecto> listaPrefectos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,46 +163,64 @@ public class RutasListaActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 floatingActionsMenu.collapse();
-                startRouteAndTasksDownload();
+                getGroups();
             }
         });
 
 
     }
 
-    public void startRouteAndTasksDownload() {
+    public void getGroups() {
 
         showLoadingState();
 
-        HashMap<String, String> userData = mSesionApp.getDetalleUsuario();
-        String jwtToken = userData.get(SesionAplicacion.KEY_USER_TOKEN);
-
-        Date today = Calendar.getInstance().getTime();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd");
-        String todayDate = format.format(today);
-
-        Log.i(TAG, todayDate);
-
-        APIManager.getInstance().startRouteAndTasksDownload(jwtToken, new APICallbackListener<List<Route>>() {
+        new SaveGroupAndPrefectoAsyncClass(new AsyncTaskResponseListener() {
             @Override
-            public void response(List<Route> routes) {
-                if (!routes.isEmpty()) {
-                    //Guarda los datos al Realm
-                    RealmProvider.saveRouteListWTasksToRealm(mRealm, routes);
-                    loadFragmentAndNavBar();
-                } else {
-                    //No regreso nada y tampoco guardo a Realm, asi que se inicia
-                    //la siguiente actividad con un empty state
-                    showEmptyState();
-                }
-            }
-
-            @Override
-            public void failure() {
-                Toast.makeText(mContext, "Fallo en la descarga", Toast.LENGTH_SHORT).show();
+            public void onSuccess() {
+                savePrefectosToRealm();
+                saveGruposToRealm();
                 showEmptyState();
             }
-        });
+
+            @Override
+            public void onFailure() {
+                showEmptyState();
+            }
+
+        }).execute();
+
+    }
+
+    public String getJsonFromGroupsFile(){
+        String json = null;
+        try{
+            InputStream is = getAssets().open("groups.json");
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer);
+            return json;
+        } catch (IOException ex){
+            ex.printStackTrace();
+            return json;
+        }
+    }
+
+    public String getJsonFromPrefectosFile(){
+        String json = null;
+        try{
+            InputStream is = getAssets().open("prefectos.json");
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer);
+            return json;
+        } catch (IOException ex){
+            ex.printStackTrace();
+            return json;
+        }
     }
 
     public void loadFragmentAndNavBar() {
@@ -293,6 +321,93 @@ public class RutasListaActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    public void saveGruposToRealm(){
+        mRealm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                for(Grupo grupo : listaGrupos){
+                    realm.copyToRealmOrUpdate(grupo);
+                }
+            }
+        });
+    }
+
+    public void savePrefectosToRealm(){
+        mRealm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                for(Prefecto prefecto : listaPrefectos){
+                    realm.copyToRealmOrUpdate(prefecto);
+                }
+            }
+        });
+    }
+
+
+    public class SaveGroupAndPrefectoAsyncClass extends AsyncTask<String,Integer,String>{
+
+        AsyncTaskResponseListener listener;
+
+        public SaveGroupAndPrefectoAsyncClass(AsyncTaskResponseListener asyncTaskResponseListener) {
+            super();
+            listener = asyncTaskResponseListener;
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            Date today = Calendar.getInstance().getTime();
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            String todayDate = format.format(today);
+            Log.i(TAG, todayDate);
+
+            String jsonGroups = getJsonFromGroupsFile();
+            String jsonPrefectos = getJsonFromPrefectosFile();
+
+
+            Type listGrupos = new TypeToken<List<Grupo>>(){}.getType();
+            Type listPrefectos = new TypeToken<List<Prefecto>>(){}.getType();
+
+            GsonBuilder groupGson = new GsonBuilder()
+                    .serializeNulls()
+                    .registerTypeAdapter(listGrupos, new GroupsDeserializer());
+
+            GsonBuilder prefectoGson = new GsonBuilder()
+                    .serializeNulls()
+                    .registerTypeAdapter(listPrefectos, new PrefectosDeserializer());
+
+            List<Grupo> grupos = groupGson.create().fromJson(jsonGroups, listGrupos);
+            List<Prefecto> prefectos = prefectoGson.create().fromJson(jsonPrefectos, listPrefectos);
+
+            if(grupos != null && prefectos != null){
+
+                Log.i(TAG, String.valueOf(grupos.size()));
+                Log.i(TAG, String.valueOf(prefectos.size()));
+
+                listaGrupos = grupos;
+                listaPrefectos = prefectos;
+
+                return "ok";
+            }
+
+            return "";
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            if (!TextUtils.isEmpty(s)){
+                //Ok
+                listener.onSuccess();
+            } else {
+                listener.onFailure();
+            }
+        }
+
+
     }
 
 }

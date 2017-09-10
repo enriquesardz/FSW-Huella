@@ -2,6 +2,8 @@ package com.fime.fsw.huella.huella.API.Endpoints;
 
 
 import com.fime.fsw.huella.huella.Data.Modelos.LoginUser;
+import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Grupo;
+import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Prefecto;
 import com.fime.fsw.huella.huella.Data.Modelos.UploadRefreshToken;
 import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Route;
 import com.fime.fsw.huella.huella.Data.Modelos.RefreshTokenResponse;
@@ -13,6 +15,8 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
@@ -28,19 +32,12 @@ public interface APIServices {
     @POST("auth/loginById")
     Call<TokenResponse> authGetToken(@Body LoginUser loginUser);
 
-    @POST("auth/renew")
-    Call<RefreshTokenResponse> authRefreshToken(@Body UploadRefreshToken refreshToken);
+    @FormUrlEncoded
+    @POST("routes/")
+    Call<List<Grupo>> downloadGroups(@Field("date")String date);
 
-    //Downloads Route list
-    @GET("routes/")
-    Call<List<Route>> descargaRutas(@Header("Authorization") String token);
-
-    //Gets single Route by ID
-    @GET("routes/{routeId}")
-    Call<Route> descargaRecorrido(@Path("routeId") String routeId, @Header("Authorization") String token);
-
-    @GET("routes/")
-    Call<List<Route>> descargaAllRoutesWTasks(@Header("Authorization") String token);
+    @GET("prefectos/")
+    Call<List<Prefecto>> downloadPrefectos();
 
     @POST("upload/checkouts")
     Call<UploadResponse> subirCheckoutsRuta(@Header("Authorization") String token, @Body UploadCheckouts uploadCheckouts);

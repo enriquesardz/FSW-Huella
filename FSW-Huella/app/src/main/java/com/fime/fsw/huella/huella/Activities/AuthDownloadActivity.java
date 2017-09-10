@@ -81,7 +81,6 @@ public class AuthDownloadActivity extends AppCompatActivity {
                 saveUserToken(user, tokenResponse);
 
                 Log.i(TAG, "Login successful: " + tokenResponse.toString());
-//                startRouteAndTasksDownload(jwtToken);
                 startRouteListActivity(false);
 
             }
@@ -96,9 +95,10 @@ public class AuthDownloadActivity extends AppCompatActivity {
 
     }
 
-//    public void startRouteAndTasksDownload(final String jwtToken) {
+
+//    public void downloadGrupos(final String jwtToken) {
 //
-//        APIManager.getInstance().startRouteAndTasksDownload(jwtToken, new APICallbackListener<List<Route>>() {
+//        APIManager.getInstance().downloadGrupos(jwtToken, new APICallbackListener<List<Route>>() {
 //            @Override
 //            public void response(List<Route> routes) {
 //                if (!routes.isEmpty()) {

@@ -4,12 +4,11 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.fime.fsw.huella.huella.API.Endpoints.APIServices;
-import com.fime.fsw.huella.huella.Data.Modelos.APICodoResponse;
 import com.fime.fsw.huella.huella.Data.Modelos.LoginUser;
+import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Grupo;
+import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Prefecto;
 import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Route;
-import com.fime.fsw.huella.huella.Data.Modelos.RefreshTokenResponse;
 import com.fime.fsw.huella.huella.Data.Modelos.TokenResponse;
-import com.fime.fsw.huella.huella.Data.Modelos.UploadRefreshToken;
 
 import java.util.List;
 
@@ -69,14 +68,15 @@ public class APIManager {
         });
     }
 
-    public void startRouteAndTasksDownload(final String jwtToken, final APICallbackListener<List<Route>> listener) {
+    //TODO: Usar
+    public void downloadGrupos(final String jwtToken, String date, final APICallbackListener<List<Grupo>> listener) {
 
-        APIServices service = APICodo.signedAllRoutesAndTasks().create(APIServices.class);
-        Call<List<Route>> call = service.descargaAllRoutesWTasks(jwtToken);
+        APIServices service = APICodo.getAllGroups().create(APIServices.class);
+        Call<List<Grupo>> call = service.downloadGroups(date);
 
-        call.enqueue(new Callback<List<Route>>() {
+        call.enqueue(new Callback<List<Grupo>>() {
             @Override
-            public void onResponse(Call<List<Route>> call, Response<List<Route>> response) {
+            public void onResponse(Call<List<Grupo>> call, Response<List<Grupo>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     listener.response(response.body());
                 } else {
@@ -92,7 +92,28 @@ public class APIManager {
             }
 
             @Override
-            public void onFailure(Call<List<Route>> call, Throwable t) {
+            public void onFailure(Call<List<Grupo>> call, Throwable t) {
+                listener.failure();
+            }
+        });
+    }
+
+    public void downloadPrefectos(final APICallbackListener<List<Prefecto>> listener){
+        APIServices service = APICodo.getPrefectos().create(APIServices.class);
+        Call<List<Prefecto>> call = service.downloadPrefectos();
+
+        call.enqueue(new Callback<List<Prefecto>>() {
+            @Override
+            public void onResponse(Call<List<Prefecto>> call, Response<List<Prefecto>> response) {
+                if (response.isSuccessful() && response.body() != null){
+                    listener.response(response.body());
+                } else{
+                    listener.failure();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Prefecto>> call, Throwable t) {
                 listener.failure();
             }
         });
