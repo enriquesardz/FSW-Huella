@@ -1,8 +1,5 @@
 package com.fime.fsw.huella.huella.Data.Modelos.RealmObjects;
 
-import com.fime.fsw.huella.huella.Data.Provider.RealmProvider;
-
-import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
@@ -17,35 +14,40 @@ public class Route extends RealmObject {
     public static final String HORARIO_ID_FIELD = "horarioId";
     public static final String WAS_UPLOADED_FIELD = "wasUploaded";
     public static final String IS_COMPLETED_FIELD = "isCompleted";
+    public static final String SEQUENCE_FIELD = "sequence";
 
     //Keys que identifican cada campo de Route
     public static final String HORARIO_ID_KEY = "routeHorarioId";
-    public static final String DIA_KEY = "routeDay";
+    public static final String DIA_NOMBRE_KEY = "routeDayName";
     public static final String CURRENT_TASK_KEY = "routeCurrentTask";
     public static final String LAST_TASK_KEY = "routeLastTask";
 
     @PrimaryKey
     private String _id;
     private String horarioId;
-    private String dia;
+    private String diaNum;
+    private String diaNombre;
     private int tasksCount;
     private RealmList<Task> tasks;
     private int currentTask;
     private int lastTask;
     private boolean wasUploaded;
     private boolean isCompleted;
+    private int sequence;
 
-    public static Route create(String _id, String horarioId, String dia, int tasksCount, RealmList<Task> tasks, int currentTask, int lastTask) {
+    public static Route create(String _id, String horarioId, String diaNum, String diaNombre,int tasksCount, RealmList<Task> tasks, int currentTask, int lastTask, int sequence) {
         Route route = new Route();
         route._id = _id;
         route.horarioId = horarioId;
-        route.dia = dia;
+        route.diaNum = diaNum;
+        route.diaNombre = diaNombre;
         route.tasksCount = tasksCount;
         route.tasks = tasks;
         route.currentTask = currentTask;
         route.lastTask = lastTask;
         route.wasUploaded = false;
         route.isCompleted = false;
+        route.sequence = sequence;
         return route;
     }
 
@@ -65,12 +67,12 @@ public class Route extends RealmObject {
         this.horarioId = horarioId;
     }
 
-    public String getDia() {
-        return dia;
+    public String getDiaNum() {
+        return diaNum;
     }
 
-    public void setDia(String dia) {
-        this.dia = dia;
+    public void setDiaNum(String diaNum) {
+        this.diaNum = diaNum;
     }
 
     public int getTasksCount() {
@@ -119,6 +121,22 @@ public class Route extends RealmObject {
 
     public void setCompleted(boolean completed) {
         isCompleted = completed;
+    }
+
+    public int getSequence() {
+        return sequence;
+    }
+
+    public void setSequence(int sequence) {
+        this.sequence = sequence;
+    }
+
+    public String getDiaNombre() {
+        return diaNombre;
+    }
+
+    public void setDiaNombre(String diaNombre) {
+        this.diaNombre = diaNombre;
     }
 
     public void moveToNextTask(){

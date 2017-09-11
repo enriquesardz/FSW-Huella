@@ -116,11 +116,11 @@ public class RealmProvider {
     }
 
     public static OrderedRealmCollection<Route> getAllUnfinishedRoutes(Realm mRealm) {
-        return mRealm.where(Route.class).equalTo(Route.IS_COMPLETED_FIELD, false).findAllSorted(Route.HORARIO_ID_FIELD);
+        return mRealm.where(Route.class).equalTo(Route.IS_COMPLETED_FIELD, false).findAllSorted(Route.SEQUENCE_FIELD);
     }
 
     public static OrderedRealmCollection<Route> getAllFinishedRoutes(Realm mRealm) {
-        return mRealm.where(Route.class).equalTo(Route.IS_COMPLETED_FIELD, true).findAllSorted(Route.HORARIO_ID_FIELD);
+        return mRealm.where(Route.class).equalTo(Route.IS_COMPLETED_FIELD, true).findAllSorted(Route.SEQUENCE_FIELD);
     }
 
     //Regresa un HashMap Key Value pair con la informacion que se muestra en la UI.
@@ -131,7 +131,7 @@ public class RealmProvider {
         Route route = mRealm.where(Route.class).equalTo("tasks._id", task_id).findFirst();
 
         data.put(Route.HORARIO_ID_KEY, route.getHorarioId());
-        data.put(Route.DIA_KEY, route.getDia());
+        data.put(Route.DIA_NOMBRE_KEY, route.getDiaNombre());
         data.put(Route.CURRENT_TASK_KEY, String.valueOf(route.getCurrentTask()));
         data.put(Route.LAST_TASK_KEY, String.valueOf(route.getLastTask()));
         data.put(Task.PLAN_ID_KEY, task.getPlanId());

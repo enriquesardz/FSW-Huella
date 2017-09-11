@@ -43,19 +43,23 @@ public class RouteAndTaskGenerator {
 
         //Primero se crean las rutas
         String[] horas = {"M", "V", "N"};
+
+        int rsecuencia = 0;
+
         for (String hora : horas) {
             for (int i = 1; i <= 6; i++) {
                 String _id = UUID.randomUUID().toString();
                 String horarioId = hora.concat(String.valueOf(i));
-                String dia = grupoRealmResults.first().getDia();
+                String diaNum = grupoRealmResults.first().getDia();
+                String diaNombre = getDayName(Integer.valueOf(diaNum));
 
                 int tasksCount = 0;
                 int currentTask = 0;
                 int lastTask = 0;
 
                 //Se pasa el RealmList como valor null
-                routes.add(Route.create(_id,horarioId,dia,tasksCount,null,currentTask,lastTask));
-
+                routes.add(Route.create(_id,horarioId,diaNum, diaNombre,tasksCount,null,currentTask,lastTask, rsecuencia));
+                rsecuencia++;
             }
         }
 
@@ -99,5 +103,35 @@ public class RouteAndTaskGenerator {
             }
         });
 
+    }
+
+    public String getDayName(int dayNum){
+        String dayName = null;
+
+        switch(dayNum){
+            case 0:
+                dayName = "Lunes";
+                break;
+            case 1:
+                dayName = "Martes";
+                break;
+            case 2:
+                dayName = "Miercoles";
+                break;
+            case 3:
+                dayName = "Jueves";
+                break;
+            case 4:
+                dayName = "Viernes";
+                break;
+            case 5:
+                dayName = "Sabado";
+                break;
+            case 6:
+                dayName = "Domingo";
+                break;
+        }
+
+        return dayName;
     }
 }

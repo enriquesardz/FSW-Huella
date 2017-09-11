@@ -21,11 +21,9 @@ import android.widget.TextView;
 import com.fime.fsw.huella.huella.API.Deserializadores.GroupsDeserializer;
 import com.fime.fsw.huella.huella.API.Deserializadores.PrefectosDeserializer;
 import com.fime.fsw.huella.huella.Activities.InicioSesion.PrefectoLoginActivity;
-import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Checkout;
 import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Grupo;
 import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Prefecto;
 import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Route;
-import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Task;
 import com.fime.fsw.huella.huella.Data.Provider.RealmProvider;
 import com.fime.fsw.huella.huella.R;
 import com.fime.fsw.huella.huella.Utilidad.AsyncTaskResponseListener;
@@ -46,7 +44,6 @@ import java.util.Date;
 import java.util.List;
 
 import io.realm.Realm;
-import io.realm.RealmResults;
 
 import static com.fime.fsw.huella.huella.Activities.HuellaApplication.APP_TAG;
 
@@ -69,6 +66,8 @@ public class RutasListaActivity extends AppCompatActivity {
 
     private List<Grupo> listaGrupos;
     private List<Prefecto> listaPrefectos;
+
+    private String diaRutas;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,8 +141,8 @@ public class RutasListaActivity extends AppCompatActivity {
         Route route = RealmProvider.getRoute(mRealm);
 
         if (yaDescargo || route != null) {
-            loadFragmentAndNavBar();
-            tvDia.setText(route.getDia());
+            diaRutas = route.getDiaNombre();
+            loadRouteFragments();
         } else {
             showEmptyState();
         }
@@ -169,6 +168,71 @@ public class RutasListaActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    public void loadRouteFragments() {
+        Route route = RealmProvider.getRoute(mRealm);
+        diaRutas = route.getDiaNombre();
+        
+        tvDia.setText(diaRutas);
+        setUpBarraNavegacion();
+        showFrameLayout();
+    }
+
+    private void setFloatingButtonControls() {
+        fondoOpaco = findViewById(R.id.fondoOpaco);
+        floatingActionsMenu = (FloatingActionsMenu) findViewById(R.id.floatingActionsMenu);
+        floatingActionsMenu.setOnFloatingActionsMenuUpdateListener(new FloatingActionsMenu.OnFloatingActionsMenuUpdateListener() {
+            @Override
+            public void onMenuExpanded() {
+                fondoOpaco.setVisibility(RelativeLayout.VISIBLE);
+                fondoOpaco.setClickable(true);
+            }
+
+            @Override
+            public void onMenuCollapsed() {
+                fondoOpaco.setVisibility(View.GONE);
+            }
+        });
+    }
+
+    private void setUpBarraNavegacion() {
+        mBarraNav = (BottomBar) findViewById(R.id.barra_navegacion);
+        mBarraNav.setOnTabSelectListener(new OnTabSelectListener() {
+            @Override
+            public void onTabSelected(@IdRes int tabId) {
+                Fragment fragment = new Fragment();
+                if (tabId == R.id.tab_todo_routes) {
+                    fragment = new RutasARealizarFragment();
+                } else if (tabId == R.id.tab_done_routes) {
+                    fragment = new RutasTerminadasFragment();
+                }
+
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+            }
+        });
+        mBarraNav.selectTabWithId(R.id.tab_todo_routes);
+    }
+
+    public void showEmptyState() {
+        emptyStateContainer.setVisibility(View.VISIBLE);
+        btnUpdate.setVisibility(View.VISIBLE);
+        frameLayoutContainer.setVisibility(View.GONE);
+        loadingState.setVisibility(View.GONE);
+    }
+
+    public void showFrameLayout() {
+        frameLayoutContainer.setVisibility(View.VISIBLE);
+        emptyStateContainer.setVisibility(View.GONE);
+        loadingState.setVisibility(View.GONE);
+        btnUpdate.setVisibility(View.GONE);
+    }
+
+    public void showLoadingState() {
+        loadingState.setVisibility(View.VISIBLE);
+        btnUpdate.setVisibility(View.GONE);
+        frameLayoutContainer.setVisibility(View.GONE);
+        emptyStateContainer.setVisibility(View.GONE);
     }
 
     public void getGroups() {
@@ -222,71 +286,6 @@ public class RutasListaActivity extends AppCompatActivity {
         }
     }
 
-    public void loadFragmentAndNavBar() {
-
-        mBarraNav = (BottomBar) findViewById(R.id.barra_navegacion);
-        setUpBarraNavegacion();
-        mBarraNav.selectTabWithId(R.id.tab_todo_routes);
-
-        showFrameLayout();
-
-    }
-
-    private void setFloatingButtonControls() {
-        fondoOpaco = findViewById(R.id.fondoOpaco);
-        floatingActionsMenu = (FloatingActionsMenu) findViewById(R.id.floatingActionsMenu);
-        floatingActionsMenu.setOnFloatingActionsMenuUpdateListener(new FloatingActionsMenu.OnFloatingActionsMenuUpdateListener() {
-            @Override
-            public void onMenuExpanded() {
-                fondoOpaco.setVisibility(RelativeLayout.VISIBLE);
-                fondoOpaco.setClickable(true);
-            }
-
-            @Override
-            public void onMenuCollapsed() {
-                fondoOpaco.setVisibility(View.GONE);
-            }
-        });
-    }
-
-    private void setUpBarraNavegacion() {
-        mBarraNav.setOnTabSelectListener(new OnTabSelectListener() {
-            @Override
-            public void onTabSelected(@IdRes int tabId) {
-                Fragment fragment = new Fragment();
-                if (tabId == R.id.tab_todo_routes) {
-                    fragment = new RutasARealizarFragment();
-                } else if (tabId == R.id.tab_done_routes) {
-                    fragment = new RutasTerminadasFragment();
-                }
-
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
-            }
-        });
-    }
-
-    public void showEmptyState() {
-        emptyStateContainer.setVisibility(View.VISIBLE);
-        btnUpdate.setVisibility(View.VISIBLE);
-        frameLayoutContainer.setVisibility(View.GONE);
-        loadingState.setVisibility(View.GONE);
-    }
-
-    public void showFrameLayout() {
-        frameLayoutContainer.setVisibility(View.VISIBLE);
-        emptyStateContainer.setVisibility(View.GONE);
-        loadingState.setVisibility(View.GONE);
-        btnUpdate.setVisibility(View.GONE);
-    }
-
-    public void showLoadingState() {
-        loadingState.setVisibility(View.VISIBLE);
-        btnUpdate.setVisibility(View.GONE);
-        frameLayoutContainer.setVisibility(View.GONE);
-        emptyStateContainer.setVisibility(View.GONE);
-    }
-
-
     public void saveGroupsAndPrefectosToRealm() {
         mRealm.executeTransactionAsync(new Realm.Transaction() {
             @Override
@@ -310,7 +309,7 @@ public class RutasListaActivity extends AppCompatActivity {
 
     public void generateRoutesAndTasks(){
         RouteAndTaskGenerator.getInstance(mRealm).createRoutesAndTasks();
-        showFrameLayout();
+        loadRouteFragments();
     }
 
     public class SaveGroupAndPrefectoAsyncClass extends AsyncTask<String, Integer, String> {

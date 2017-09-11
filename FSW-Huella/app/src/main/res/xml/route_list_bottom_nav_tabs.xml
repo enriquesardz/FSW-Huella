@@ -1,8 +1,8 @@
 <tabs>
     <tab
         id="@+id/tab_todo_routes"
-        title="TODO" />
+        title="Por hacer" />
     <tab
         id="@+id/tab_done_routes"
-        title="DONE" />
+        title="Terminadas" />
 </tabs>
