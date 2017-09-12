@@ -17,7 +17,10 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.fime.fsw.huella.huella.API.APICallbackListener;
+import com.fime.fsw.huella.huella.API.APIManager;
 import com.fime.fsw.huella.huella.API.Deserializadores.GroupsDeserializer;
 import com.fime.fsw.huella.huella.API.Deserializadores.PrefectosDeserializer;
 import com.fime.fsw.huella.huella.Activities.InicioSesion.PrefectoLoginActivity;
@@ -164,6 +167,7 @@ public class RutasListaActivity extends AppCompatActivity {
             public void onClick(View v) {
                 floatingActionsMenu.collapse();
                 getGroups();
+                //getGroupsOffline();
             }
         });
 
@@ -235,7 +239,52 @@ public class RutasListaActivity extends AppCompatActivity {
         emptyStateContainer.setVisibility(View.GONE);
     }
 
-    public void getGroups() {
+    public void getGroups(){
+        showLoadingState();
+
+        APIManager.getInstance().downloadPrefectos(new APICallbackListener<List<Prefecto>>() {
+            @Override
+            public void response(List<Prefecto> response) {
+
+                Date today = new Date();
+                Calendar c = Calendar.getInstance();
+                c.setTime(today);
+                c.add(Calendar.DATE, 1);
+                today = c.getTime();
+
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                String todayDate = format.format(today);
+                Log.i(TAG, todayDate);
+
+                listaPrefectos = response;
+
+                APIManager.getInstance().downloadGrupos("", todayDate, new APICallbackListener<List<Grupo>>() {
+                    @Override
+                    public void response(List<Grupo> response) {
+
+                        listaGrupos = response;
+                        saveGroupsAndPrefectosToRealm();
+
+                    }
+
+                    @Override
+                    public void failure() {
+                        Toast.makeText(mContext, "No descargo.", Toast.LENGTH_SHORT).show();
+                        showEmptyState();
+                    }
+                });
+            }
+
+            @Override
+            public void failure() {
+                Toast.makeText(mContext, "No descargo.", Toast.LENGTH_SHORT).show();
+                showEmptyState();
+            }
+        });
+
+
+    }
+    public void getGroupsOffline() {
 
         showLoadingState();
 

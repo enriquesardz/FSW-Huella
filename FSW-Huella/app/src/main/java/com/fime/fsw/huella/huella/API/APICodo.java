@@ -23,10 +23,14 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class APICodo {
 
     //Daniel
-    //https://young-escarpment-48238.herokuapp.com/routes
+    //https://young-escarpment-48238.herokuapp.com/
+    //148.234.130.156:8000
+
     //Abraham
     //https://api.myjson.com/bins/w20k7
-    public static final String BASE_URL = "https://nyx-codo.herokuapp.com/";
+
+    //public static final String BASE_URL = "https://nyx-codo.herokuapp.com/";
+    public static final String BASE_URL = "http://148.234.130.156:8000/";
     public static OkHttpClient client = new OkHttpClient();
 
     //Esta ruta esta firmada por la API entonces puede hacer requests.

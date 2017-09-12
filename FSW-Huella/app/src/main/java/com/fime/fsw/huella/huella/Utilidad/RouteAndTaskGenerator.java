@@ -69,15 +69,16 @@ public class RouteAndTaskGenerator {
             RealmResults<Grupo> gruposPorHora = grupoRealmResults.where().equalTo(Grupo.HORARIO_ID_FIELD, route.getHorarioId()).findAll();
 
             route.setTasksCount(gruposPorHora.size());
-            route.setCurrentTask(0);
-            route.setLastTask(gruposPorHora.size() - 1);
+            route.setCurrentTask(1);
+            route.setLastTask(gruposPorHora.size());
 
-            int i =0;
+            int i =1;
             for (Grupo grupo: gruposPorHora){
                 String _id = String.valueOf(grupo.getId());
                 String routeId = route.get_id();
                 String planId = grupo.getPlanId();
-                String materia = grupo.getMateriaId();
+                String materiaId = grupo.getMateriaId();
+                String materia = grupo.getMateria();
                 String salonId = grupo.getSalonId();
                 String areaId = grupo.getAreaId();
                 String edificioId = grupo.getEdificioId();
@@ -87,7 +88,7 @@ public class RouteAndTaskGenerator {
                 boolean isNexus = grupo.isNexus();
                 int sequence = i;
 
-                tasks.add(Task.create(_id,routeId,planId,materia,salonId,areaId,
+                tasks.add(Task.create(_id,routeId,planId,materiaId,materia,salonId,areaId,
                         edificioId,numeroEmpleado,nombreEmpleado,tipo,isNexus,sequence));
 
                 i++;
@@ -109,25 +110,28 @@ public class RouteAndTaskGenerator {
         String dayName = null;
 
         switch(dayNum){
-            case 0:
+            case 1:
                 dayName = "Lunes";
                 break;
-            case 1:
+            case 2:
                 dayName = "Martes";
                 break;
-            case 2:
+            case 3:
                 dayName = "Miercoles";
                 break;
-            case 3:
+            case 4:
                 dayName = "Jueves";
                 break;
-            case 4:
+            case 5:
                 dayName = "Viernes";
                 break;
-            case 5:
+            case 6:
                 dayName = "Sabado";
                 break;
-            case 6:
+            case 0:
+                dayName = "Domingo";
+                break;
+            default:
                 dayName = "Domingo";
                 break;
         }

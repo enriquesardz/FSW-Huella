@@ -36,6 +36,7 @@ public class Task extends RealmObject {
     @PrimaryKey
     private String _id;
     private String planId;
+    private String materiaId;
     private String materia;
     private String salonId;
     private String areaId;
@@ -53,11 +54,12 @@ public class Task extends RealmObject {
     public Task() {
     }
 
-    public static Task create(String _id, String routeId, String planId, String materia, String salonId, String areaId, String edificioId, String numeroEmpleado, String nombreEmpleado, String tipo, boolean isNexus, int sequence) {
+    public static Task create(String _id, String routeId, String planId, String materiaId, String materia, String salonId, String areaId, String edificioId, String numeroEmpleado, String nombreEmpleado, String tipo, boolean isNexus, int sequence) {
         Task task = new Task();
         task._id = _id;
         task.routeId = routeId;
         task.planId = planId;
+        task.materiaId = materiaId;
         task.materia = materia;
         task.salonId = salonId;
         task.areaId = areaId;
@@ -192,5 +194,13 @@ public class Task extends RealmObject {
 
     public void setHuellaEmpleado(String huellaEmpleado) {
         this.huellaEmpleado = huellaEmpleado;
+    }
+
+    public String getMateriaId() {
+        return materiaId;
+    }
+
+    public void setMateriaId(String materiaId) {
+        this.materiaId = materiaId;
     }
 }

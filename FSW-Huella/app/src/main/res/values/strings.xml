@@ -66,7 +66,7 @@
     <string name="cbarra_codigo_barra">%1$s</string>
     <string name="cbarra_escanear_salon">Escanear salón</string>
     <string name="cbarra_progreso_tasks">%1$d/%2$d</string>
-    <string name="cbarra_porcentaje_tasks">%1$.2f%%</string>
+    <string name="cbarra_porcentaje_tasks">%1$.0f%%</string>
 
     <!-- Identificar Huella Activity -->
     <string name="ih_nombre">Nombre: %1$s</string>
