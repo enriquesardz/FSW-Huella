@@ -68,7 +68,7 @@ public class PrefectoLoginActivity extends AppCompatActivity {
         String user = etUser.getText().toString().trim();
         String password = etPassword.getText().toString().trim();
 
-        if (TextUtils.isEmpty(user) && TextUtils.isEmpty(password)){
+        if (TextUtils.isEmpty(user) || TextUtils.isEmpty(password)){
             Toast.makeText(mContext, "Llenar ambos campos", Toast.LENGTH_SHORT).show();
             return;
         }

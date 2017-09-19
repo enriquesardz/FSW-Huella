@@ -9,6 +9,8 @@ import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Grupo;
 import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Prefecto;
 import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Route;
 import com.fime.fsw.huella.huella.Data.Modelos.TokenResponse;
+import com.fime.fsw.huella.huella.Data.Modelos.UploadCheckouts;
+import com.fime.fsw.huella.huella.Data.Modelos.UploadResponse;
 
 import java.util.List;
 
@@ -114,6 +116,29 @@ public class APIManager {
 
             @Override
             public void onFailure(Call<List<Prefecto>> call, Throwable t) {
+                listener.failure();
+            }
+        });
+    }
+
+    public void uploadCheckouts(UploadCheckouts uploadCheckouts, final APICallbackListener<UploadResponse> listener){
+        APIServices service = APICodo.uploadCheckouts().create(APIServices.class);
+        Call<UploadResponse> call = service.uploadCheckouts(uploadCheckouts);
+
+        call.enqueue(new Callback<UploadResponse>() {
+            @Override
+            public void onResponse(Call<UploadResponse> call, Response<UploadResponse> response) {
+                if(response.isSuccessful() && TextUtils.equals(response.body().getStatus(), STATUS_SUCESS)){
+                    //Si se subieron se supone
+                    listener.response(response.body());
+                } else {
+                    listener.failure();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UploadResponse> call, Throwable t) {
+                Log.e(TAG, t.getMessage());
                 listener.failure();
             }
         });

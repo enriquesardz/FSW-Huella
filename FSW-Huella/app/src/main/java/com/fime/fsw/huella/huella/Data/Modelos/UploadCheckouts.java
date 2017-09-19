@@ -3,7 +3,10 @@ package com.fime.fsw.huella.huella.Data.Modelos;
 import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Checkout;
 import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Task;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -18,37 +21,68 @@ public class UploadCheckouts {
         this.data = data;
     }
 
-    public static UploadCheckouts create(String routeId, List<Task> tasks){
+    public static UploadCheckouts create(List<Task> tasks){
         List<UpCheckout> upCheckouts = new ArrayList<UpCheckout>();
+
         for (Task task : tasks){
-            upCheckouts.add(new UpCheckout(task.get_id(),task.getCheckout()));
+            upCheckouts.add(new UpCheckout(
+                    "5434",
+                    task.getNumeroEmpleado(),
+                    task.getMateriaId(),
+                    "M1",
+                    task.getSalonId(),
+                    task.getCheckout()));
         }
-        Data data = new Data(routeId,upCheckouts);
+        Data data = new Data(upCheckouts);
         return new UploadCheckouts(data);
     }
 }
 
 
 class UpCheckout {
-    //Task id
-    private String _id;
     //Task checkout
-    private Checkout checkout;
+    private String statusCode;
+    private String prefectoId;
+    private String maestroId;
+    private String materiaId;
+    private String horaId;
+    private String salonId;
+    private String id;
+    private String date;
+    private String startedAt;
+    private String visitAt;
+    private String signedAt;
+    private String finishedAt;
 
-    public UpCheckout(String _id, Checkout checkout) {
-        this._id = _id;
-        this.checkout = checkout;
+    //TODO: Quitar los datos hardcodeados
+
+    public UpCheckout(String prefectoId, String maestroId, String materiaId, String horaId, String salonId, Checkout checkout) {
+
+        Date today = new Date();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        String todayDate = format.format(today);
+
+        this.statusCode = "32";
+        this.prefectoId = prefectoId;
+        this.maestroId = maestroId;
+        this.materiaId = materiaId;
+        this.horaId = horaId;
+        this.salonId = salonId;
+        this.id = prefectoId + maestroId + materiaId + horaId + salonId;
+        this.date = todayDate;
+        this.startedAt = checkout.getStartedAt();
+        this.visitAt = checkout.getVisitAt();
+        this.signedAt = checkout.getSignedAt();
+        this.finishedAt = checkout.getFinishedAt();
     }
 
 }
 
 class Data {
     //Route id
-    private String id;
     private List<UpCheckout> checkouts;
 
-    public Data(String id, List<UpCheckout> checkouts) {
-        this.id = id;
+    public Data(List<UpCheckout> checkouts) {
         this.checkouts = checkouts;
     }
 }

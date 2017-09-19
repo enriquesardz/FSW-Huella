@@ -20,7 +20,12 @@ public class Checkout extends RealmObject{
     private String finishedAt;
 
 
-    public Checkout (){}
+    public Checkout (){
+        this.startedAt = "";
+        this.visitAt = "";
+        this.signedAt = "";
+        this.finishedAt = "";
+    }
 
     public String getStartedAt() {
         return startedAt;

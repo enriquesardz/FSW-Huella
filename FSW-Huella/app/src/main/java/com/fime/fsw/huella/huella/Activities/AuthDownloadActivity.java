@@ -70,6 +70,8 @@ public class AuthDownloadActivity extends AppCompatActivity {
         loginRequest(user, password);
     }
 
+    //TODO: Que valide con la tabla de prefectos
+
     public void loginRequest(final String user, String password) {
 
         APIManager.getInstance().loginRequest(user, password, new APICallbackListener<TokenResponse>() {

@@ -131,6 +131,16 @@
                 fab:fab_colorNormal="@color/colorSecondaryText"
                 fab:fab_icon="@drawable/ic_exit_to_app"
                 fab:fab_title="Cerrar sesion" />
+
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/subir_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                fab:fab_colorNormal="@color/colorSecondaryText"
+                fab:fab_icon="@drawable/ic_exit_to_app_black_24dp"
+                fab:fab_title="Subir rutas"
+                />
+
         </com.getbase.floatingactionbutton.FloatingActionsMenu>
     </android.support.design.widget.CoordinatorLayout> <!-- Floating button -->
 

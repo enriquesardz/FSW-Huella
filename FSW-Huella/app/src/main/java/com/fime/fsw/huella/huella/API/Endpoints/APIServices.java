@@ -36,6 +36,6 @@ public interface APIServices {
     Call<List<Prefecto>> downloadPrefectos();
 
     @POST("upload/checkouts")
-    Call<UploadResponse> subirCheckoutsRuta(@Header("Authorization") String token, @Body UploadCheckouts uploadCheckouts);
+    Call<UploadResponse> uploadCheckouts(@Body UploadCheckouts uploadCheckouts);
 
 }
