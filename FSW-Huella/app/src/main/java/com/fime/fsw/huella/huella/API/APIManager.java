@@ -34,13 +34,17 @@ public class APIManager {
         return new APIManager();
     }
 
+    /**
+    * Tries to get a token that grants access to the rest of the API, it returns
+    * to the login Activity onFailure
+    * Proceeds to the download of Routes and Tasks onSuccess.
+     * @param user User's username
+     * @param password User's password
+     * @param listener Callback listener that returns the response to the requester
+    * */
     public void loginRequest(final String user, String password, final APICallbackListener<TokenResponse> listener) {
 
-        /*
-        * Tries to get a token that grants access to the rest of the API, it returns
-        * to the login Activity onFailure
-        * Proceeds to the download of Routes and Tasks onSuccess.
-        * */
+
 
         final LoginUser loginUser = new LoginUser(user, password);
 

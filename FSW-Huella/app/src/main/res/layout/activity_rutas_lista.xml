@@ -137,7 +137,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 fab:fab_colorNormal="@color/colorSecondaryText"
-                fab:fab_icon="@drawable/ic_exit_to_app_black_24dp"
                 fab:fab_title="Subir rutas"
                 />
 

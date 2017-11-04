@@ -17,7 +17,7 @@ import com.fime.fsw.huella.huella.Utilidad.SesionAplicacion;
 
 import static com.fime.fsw.huella.huella.Activities.HuellaApplication.APP_TAG;
 
-public class PrefectoLoginActivity extends AppCompatActivity {
+public class PrefectoLoginActivity extends AppCompatActivity implements LoginAuth.onLoginAuthResponse{
 
     private static final String TAG = APP_TAG + PrefectoLoginActivity.class.getSimpleName();
 

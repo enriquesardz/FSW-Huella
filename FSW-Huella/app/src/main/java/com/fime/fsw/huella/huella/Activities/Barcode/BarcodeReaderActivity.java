@@ -27,6 +27,10 @@ import io.realm.Realm;
 
 import static com.fime.fsw.huella.huella.Activities.HuellaApplication.APP_TAG;
 
+/**
+* Clase que se encarga de iniciar el leector de codigo de barras para se pueda
+* continuar el flujo de asistencia.
+* */
 public class BarcodeReaderActivity extends AppCompatActivity {
 
     private final static String TAG = APP_TAG + BarcodeReaderActivity.class.getSimpleName();
@@ -152,7 +156,11 @@ public class BarcodeReaderActivity extends AppCompatActivity {
         });
     }
 
-
+    /**
+    * Inicia una tarea asyncrona para leer el codigo de barras
+    * @param taskId Id el task que se esta recorriendo actualmente
+    * @param roomBarcode El valor del codigo de barras que se debe de validar, o sea del salon actual que se esta validando
+    * */
     public void escanearHuella(final String taskId, final String roomBarcode) {
         //Si el codigo de barras esta activo entonces puede escanear
         if (estaActivo) {

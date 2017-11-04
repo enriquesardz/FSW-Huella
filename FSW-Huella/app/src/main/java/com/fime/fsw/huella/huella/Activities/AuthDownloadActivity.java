@@ -14,6 +14,7 @@ import com.fime.fsw.huella.huella.API.APICallbackListener;
 import com.fime.fsw.huella.huella.API.APIManager;
 import com.fime.fsw.huella.huella.Activities.InicioSesion.PrefectoLoginActivity;
 import com.fime.fsw.huella.huella.Activities.RutasLista.RutasListaActivity;
+import com.fime.fsw.huella.huella.BuildConfig;
 import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Route;
 import com.fime.fsw.huella.huella.Data.Modelos.TokenResponse;
 import com.fime.fsw.huella.huella.Data.Provider.RealmProvider;
@@ -70,9 +71,24 @@ public class AuthDownloadActivity extends AppCompatActivity {
         loginRequest(user, password);
     }
 
-    //TODO: Que valide con la tabla de prefectos
-
     public void loginRequest(final String user, String password) {
+
+        if (BuildConfig.DEBUG) {
+            if (user.equals("Enrique") && password.equals("123")) {
+                txtSaludo.setText(getResources().getString(R.string.auth_saludo, user));
+                txtSaludo.setTypeface(null, Typeface.BOLD);
+                TokenResponse tokenResponse = new TokenResponse("debug", "debugtoken", "debuglol");
+                saveUserToken(user, tokenResponse);
+
+                Log.i(TAG, "Login successful: " + tokenResponse.toString());
+                startRouteListActivity(false);
+            } else {
+                Toast.makeText(mContext, "Usuario no autorizado", Toast.LENGTH_SHORT).show();
+                returnToLoginActivity(user);
+                Log.e(TAG, "Bad user");
+            }
+            return;
+        }
 
         APIManager.getInstance().loginRequest(user, password, new APICallbackListener<TokenResponse>() {
             @Override
@@ -94,6 +110,7 @@ public class AuthDownloadActivity extends AppCompatActivity {
                 Log.e(TAG, "Bad user");
             }
         });
+
 
     }
 
