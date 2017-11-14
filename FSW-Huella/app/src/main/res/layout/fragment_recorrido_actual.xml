@@ -12,7 +12,7 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context=".Activities.Fragments.RecorridoActualFragment">
+            tools:context=".Activities.screens.tasksmain.RecorridoActualFragment">
 
             <LinearLayout
                 android:id="@+id/recyclerview_container"

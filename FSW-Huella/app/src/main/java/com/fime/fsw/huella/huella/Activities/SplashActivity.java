@@ -4,9 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import com.fime.fsw.huella.huella.Activities.InicioSesion.PrefectoLoginActivity;
-import com.fime.fsw.huella.huella.Activities.RecorridoMain.RecorridoMainActivity;
-import com.fime.fsw.huella.huella.Activities.RutasLista.RutasListaActivity;
+import com.fime.fsw.huella.huella.Activities.screens.login.PrefectoLoginActivity;
+import com.fime.fsw.huella.huella.Activities.screens.tasksmain.RecorridoMainActivity;
+import com.fime.fsw.huella.huella.Activities.screens.rutasmain.RutasListaActivity;
 import com.fime.fsw.huella.huella.R;
 import com.fime.fsw.huella.huella.Utilidad.SesionAplicacion;
 

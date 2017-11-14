@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context="com.fime.fsw.huella.huella.Activities.InicioSesion.PrefectoLoginActivity">
+    tools:context="com.fime.fsw.huella.huella.Activities.screens.login.PrefectoLoginActivity">
 
     <LinearLayout
         android:orientation="vertical"
@@ -59,18 +59,30 @@
 
         </android.support.design.widget.TextInputLayout>
         <!--PRUEBAS MATERIAL DESIGN-->
-
+<LinearLayout
+    android:orientation="vertical"
+    android:layout_width="250dp"
+    android:layout_gravity="center"
+    android:layout_height="wrap_content">
         <Button
             android:id="@+id/iniciar_sesion_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="60dp"
-            android:layout_marginRight="60dp"
             android:layout_marginTop="40dp"
             android:background="@drawable/botonredondo"
             android:text="LOGIN"
             android:textColor="@color/blanco"/>
 
+        <Button
+            android:id="@+id/descargar_rutas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/botonredondo"
+            android:text="DESCARGAR RUTAS"
+            android:textColor="@color/blanco"
+            />
+</LinearLayout>
     </LinearLayout>
 
 </RelativeLayout>

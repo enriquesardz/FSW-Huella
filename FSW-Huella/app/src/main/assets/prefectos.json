@@ -2,6 +2,20 @@
     "status": "success",
     "data": [
         {
+            "PrefectoID": "FI0000",
+            "Nombre": "PREFECTO 0",
+            "Usuario": "Enrique",
+            "Password": "123",
+            "Huella": null,
+            "AreaID": "01",
+            "TipoPeriodoID": "01",
+            "PeriodoID": "320",
+            "Tipo": "C",
+            "NivelAcademicoID": "02",
+            "GradoAcademicoID": "03",
+            "InscripcionID": "01"
+        },
+        {
             "PrefectoID": "FI0001",
             "Nombre": "PREFECTO 1",
             "Usuario": "PREFECTO1",

@@ -1,5 +1,8 @@
 package com.fime.fsw.huella.huella.Data.Modelos.RealmObjects;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
@@ -7,7 +10,10 @@ import io.realm.annotations.PrimaryKey;
  * Created by ensardz on 08/09/2017.
  */
 
-public class Prefecto extends RealmObject {
+public class Prefecto extends RealmObject implements Parcelable {
+
+    public static final String USUARIO_FIELD = "usuario";
+    public static final String PASSWORD_FIELD = "password";
 
     @PrimaryKey
     private String prefectoId;
@@ -153,4 +159,56 @@ public class Prefecto extends RealmObject {
                 ", inscripcionId='" + inscripcionId + '\'' +
                 '}';
     }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.prefectoId);
+        dest.writeString(this.nombre);
+        dest.writeString(this.usuario);
+        dest.writeString(this.password);
+        dest.writeString(this.huella);
+        dest.writeString(this.areaId);
+        dest.writeString(this.tipoPeriodoId);
+        dest.writeString(this.periodoId);
+        dest.writeString(this.tipo);
+        dest.writeString(this.nivelAcademicoId);
+        dest.writeString(this.gradoAcademicoId);
+        dest.writeString(this.inscripcionId);
+    }
+
+    public Prefecto() {
+    }
+
+    protected Prefecto(Parcel in) {
+        this.prefectoId = in.readString();
+        this.nombre = in.readString();
+        this.usuario = in.readString();
+        this.password = in.readString();
+        this.huella = in.readString();
+        this.areaId = in.readString();
+        this.tipoPeriodoId = in.readString();
+        this.periodoId = in.readString();
+        this.tipo = in.readString();
+        this.nivelAcademicoId = in.readString();
+        this.gradoAcademicoId = in.readString();
+        this.inscripcionId = in.readString();
+    }
+
+    public static final Parcelable.Creator<Prefecto> CREATOR = new Parcelable.Creator<Prefecto>() {
+        @Override
+        public Prefecto createFromParcel(Parcel source) {
+            return new Prefecto(source);
+        }
+
+        @Override
+        public Prefecto[] newArray(int size) {
+            return new Prefecto[size];
+        }
+    };
 }

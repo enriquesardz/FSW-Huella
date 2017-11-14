@@ -29,17 +29,17 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".Activities.AuthDownloadActivity" />
+        <activity android:name=".Activities.screens.descarga.PrefectoDownloadActivity" />
 
-        <activity android:name=".Activities.InicioSesion.PrefectoLoginActivity" />
+        <activity android:name=".Activities.screens.login.PrefectoLoginActivity" />
 
-        <activity android:name=".Activities.RutasLista.RutasListaActivity" />
+        <activity android:name=".Activities.screens.rutasmain.RutasListaActivity" />
 
-        <activity android:name=".Activities.RecorridoMain.RecorridoMainActivity" />
+        <activity android:name=".Activities.screens.tasksmain.RecorridoMainActivity" />
 
-        <activity android:name=".Activities.Barcode.BarcodeReaderActivity" />
+        <activity android:name=".Activities.screens.codigoBarras.BarcodeReaderActivity" />
 
-        <activity android:name=".Activities.Fingerprint.IdentificarHuellaActivity" />
+        <activity android:name=".Activities.screens.huella.IdentificarHuellaActivity" />
 
         <receiver android:name=".Network.NetworkChangeReceiver">
             <intent-filter>

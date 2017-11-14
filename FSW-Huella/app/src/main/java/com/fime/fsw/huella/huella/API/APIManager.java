@@ -22,6 +22,8 @@ import static com.fime.fsw.huella.huella.Activities.HuellaApplication.APP_TAG;
 
 /**
  * Created by ensardz on 07/08/2017.
+ * Esta clase maneja las descargas de la aplicacion, dentro de esta clase se deben de colocar
+ * todo lo relacionado a llamadas al server o APIs.
  */
 
 public class APIManager {
@@ -29,6 +31,29 @@ public class APIManager {
     private static final String TAG = APP_TAG + APIManager.class.getSimpleName();
     private static final String STATUS_SUCESS = "success";
 
+    private List<Prefecto> PREFECTOS;
+    private List<Grupo> GRUPOS;
+
+
+    public interface onGruposDownload{
+        public void onGruposDownloadSuccess();
+        public void onGruposDownloadFailure();
+    }
+
+    public interface onPrefectosDownload{
+        public void onPrefectosDownloadSucess();
+        public void onPrefectosDownloadFailure();
+    }
+
+    public interface onCheckoutsUpload{
+        public void onCheckoutUploadSucess();
+        public void onCheckoutUploadFailure();
+    }
+
+    public interface onPrefectosGroupsDownload{
+        public void onPrefectosGroupsDownloadSuccess(List<Grupo> grupos, List<Prefecto> prefectos);
+        public void onPrefectosGroupsDownloadFailure();
+    }
 
     public static APIManager getInstance() {
         return new APIManager();
@@ -125,6 +150,129 @@ public class APIManager {
         });
     }
 
+    public void downloadPrefectos(final onPrefectosDownload callback){
+        APIServices service = APICodo.getPrefectos().create(APIServices.class);
+        Call<List<Prefecto>> call = service.downloadPrefectos();
+
+        call.enqueue(new Callback<List<Prefecto>>() {
+            @Override
+            public void onResponse(Call<List<Prefecto>> call, Response<List<Prefecto>> response) {
+                if (response.isSuccessful() && response.body() != null){
+//                    callback.response(response.body());
+                    callback.onPrefectosDownloadSucess();
+                } else{
+//                    callback.failure();
+                    callback.onPrefectosDownloadFailure();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Prefecto>> call, Throwable t) {
+                callback.onPrefectosDownloadFailure();
+            }
+        });
+    }
+
+    public void downloadGrupos(String date, final onGruposDownload callback) {
+
+        APIServices service = APICodo.getAllGroups().create(APIServices.class);
+        Call<List<Grupo>> call = service.downloadGroups(date);
+
+        call.enqueue(new Callback<List<Grupo>>() {
+            @Override
+            public void onResponse(Call<List<Grupo>> call, Response<List<Grupo>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    callback.onGruposDownloadSuccess();
+                } else {
+                    //TODO: Agregar excepcion
+                    callback.onGruposDownloadFailure();
+                }
+
+                if (TextUtils.equals(response.message().toLowerCase(), "unauthorized")){
+                    Log.d(TAG, response.message().toLowerCase());
+                    //TODO: Si expira el token.
+                    callback.onGruposDownloadFailure();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Grupo>> call, Throwable t) {
+                callback.onGruposDownloadFailure();
+            }
+        });
+    }
+
+    /**
+     * Esta funcion es una alternativa a hacer individualmente los dos requests, cuando el primero
+     * regrese algo, el segundo request inicia, si es exitoso, regresa los 2 arreglos al callback.
+     * @param date Fecha que se va a descargar
+     * @param callback Callback para regresar los dos arreglos
+     */
+    public void downloadPrefectosGroups(final String date, final onPrefectosGroupsDownload callback){
+
+        APIServices service = APICodo.getPrefectos().create(APIServices.class);
+        Call<List<Prefecto>> prefectosCall = service.downloadPrefectos();
+
+        prefectosCall.enqueue(new Callback<List<Prefecto>>() {
+            @Override
+            public void onResponse(Call<List<Prefecto>> prefectosCall, Response<List<Prefecto>> response) {
+                if (response.isSuccessful() && response.body() != null){
+
+                    PREFECTOS = response.body();
+
+                    if(PREFECTOS.isEmpty()){
+                        callback.onPrefectosGroupsDownloadFailure();
+                        return;
+                    }
+
+                    //Ya tenemos a los prefectos, ahora saquemos los grupos
+
+                    APIServices service = APICodo.getAllGroups().create(APIServices.class);
+                    Call<List<Grupo>> gruposCall = service.downloadGroups(date);
+
+                    gruposCall.enqueue(new Callback<List<Grupo>>() {
+                        @Override
+                        public void onResponse(Call<List<Grupo>> gruposCall, Response<List<Grupo>> response) {
+                            if (response.isSuccessful() && response.body() != null) {
+                                GRUPOS = response.body();
+
+                                if(GRUPOS.isEmpty()){
+                                    callback.onPrefectosGroupsDownloadFailure();
+                                    return;
+                                }
+
+                                //Si todo sale bien, se regresan los grupos y prefectos para que se procesen
+                                callback.onPrefectosGroupsDownloadSuccess(GRUPOS, PREFECTOS);
+
+                            } else {
+                                //TODO: Agregar excepcion
+                                callback.onPrefectosGroupsDownloadFailure();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<List<Grupo>> gruposCall, Throwable t) {
+                            callback.onPrefectosGroupsDownloadFailure();
+                        }
+                    });
+                } else{
+                    callback.onPrefectosGroupsDownloadFailure();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Prefecto>> prefectosCall, Throwable t) {
+                callback.onPrefectosGroupsDownloadFailure();
+            }
+        });
+    }
+
+
+    /**
+     * Esta funcion sube los checkouts a la API
+     * @param uploadCheckouts Los checkouts que se van a subir
+     * @param listener Callback para regresar la respuesta
+     */
     public void uploadCheckouts(UploadCheckouts uploadCheckouts, final APICallbackListener<UploadResponse> listener){
         APIServices service = APICodo.uploadCheckouts().create(APIServices.class);
         Call<UploadResponse> call = service.uploadCheckouts(uploadCheckouts);

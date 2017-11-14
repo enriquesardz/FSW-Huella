@@ -15,6 +15,7 @@ public class Route extends RealmObject {
     public static final String WAS_UPLOADED_FIELD = "wasUploaded";
     public static final String IS_COMPLETED_FIELD = "isCompleted";
     public static final String SEQUENCE_FIELD = "sequence";
+    public static final String PREFECTO_USUARIO = "prefectoUsuario";
 
     //Keys que identifican cada campo de Route
     public static final String HORARIO_ID_KEY = "routeHorarioId";
@@ -34,8 +35,12 @@ public class Route extends RealmObject {
     private boolean wasUploaded;
     private boolean isCompleted;
     private int sequence;
+    private String areaId;
+    private String prefectoUsuario;
 
-    public static Route create(String _id, String horarioId, String diaNum, String diaNombre,int tasksCount, RealmList<Task> tasks, int currentTask, int lastTask, int sequence) {
+    public static Route create(String _id, String horarioId, String diaNum, String diaNombre, int tasksCount,
+                               RealmList<Task> tasks, int currentTask, int lastTask, int sequence,
+                               String areaId, String prefectoUsuario) {
         Route route = new Route();
         route._id = _id;
         route.horarioId = horarioId;
@@ -48,6 +53,8 @@ public class Route extends RealmObject {
         route.wasUploaded = false;
         route.isCompleted = false;
         route.sequence = sequence;
+        route.areaId = areaId;
+        route.prefectoUsuario = prefectoUsuario;
         return route;
     }
 
@@ -139,8 +146,24 @@ public class Route extends RealmObject {
         this.diaNombre = diaNombre;
     }
 
-    public void moveToNextTask(){
-        if (getCurrentTask() <= getLastTask()){
+    public String getAreaId() {
+        return areaId;
+    }
+
+    public void setAreaId(String areaId) {
+        this.areaId = areaId;
+    }
+
+    public String getPrefectoUsuario() {
+        return prefectoUsuario;
+    }
+
+    public void setPrefectoUsuario(String prefectoUsuario) {
+        this.prefectoUsuario = prefectoUsuario;
+    }
+
+    public void moveToNextTask() {
+        if (getCurrentTask() <= getLastTask()) {
             setCurrentTask(getCurrentTask() + 1);
         }
     }

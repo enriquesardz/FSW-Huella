@@ -115,8 +115,10 @@ public class RealmProvider {
         return mRealm.where(Route.class).findAllSorted(Route._ID_FIELD);
     }
 
-    public static OrderedRealmCollection<Route> getAllUnfinishedRoutes(Realm mRealm) {
-        return mRealm.where(Route.class).equalTo(Route.IS_COMPLETED_FIELD, false).findAllSorted(Route.SEQUENCE_FIELD);
+    public static OrderedRealmCollection<Route> getAllUnfinishedRoutes(String user, Realm mRealm) {
+        return mRealm.where(Route.class).equalTo(Route.IS_COMPLETED_FIELD, false)
+                .equalTo(Route.PREFECTO_USUARIO, user)
+                .findAllSorted(Route.SEQUENCE_FIELD);
     }
 
     public static OrderedRealmCollection<Route> getAllFinishedRoutes(Realm mRealm) {
