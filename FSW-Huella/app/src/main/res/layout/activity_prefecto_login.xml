@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,80 +9,94 @@
     tools:context="com.fime.fsw.huella.huella.Activities.screens.login.PrefectoLoginActivity">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <ImageView
-            android:layout_width="130dp"
-            android:layout_height="140dp"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="130dp"
+                android:layout_height="140dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="40dp"
+                android:src="@drawable/fondo" />
+
+            <!--PRUEBAS MATERIAL DESIGN-->
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/layoutUsuario"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="60dp"
+                android:layout_marginRight="60dp">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/user_edittext"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/usuario"
+                    android:inputType="text"
+                    android:maxLines="1" />
+
+            </android.support.design.widget.TextInputLayout>
+            <!--PRUEBAS MATERIAL DESIGN-->
+
+            <!--PRUEBAS MATERIAL DESIGN-->
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/layoutContraseña"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="60dp"
+                android:layout_marginRight="60dp"
+                android:layout_marginTop="5dp">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/password_edittext"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/contrasena"
+                    android:inputType="textPassword"
+                    android:maxLines="1" />
+
+            </android.support.design.widget.TextInputLayout>
+        </LinearLayout>
+        <!--PRUEBAS MATERIAL DESIGN-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="40dp"
-            android:src="@drawable/fondo"/>
+            android:layout_weight="1"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_gravity="center"
+                android:layout_width="250dp"
+                android:orientation="vertical"
+                android:layout_height="wrap_content">
+                <Button
+                    android:id="@+id/iniciar_sesion_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/botonredondo"
+                    android:text="LOGIN"
+                    android:textColor="@color/blanco" />
 
-        <!--PRUEBAS MATERIAL DESIGN-->
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/layoutUsuario"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="60dp"
-            android:layout_marginRight="60dp"
-            android:layout_marginTop="100dp">
+                <Button
+                    android:id="@+id/descargar_rutas"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/botonredondo"
+                    android:text="DESCARGAR RUTAS"
+                    android:textColor="@color/blanco" />
+            </LinearLayout>
 
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/user_edittext"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/usuario"
-                android:inputType="text"
-                android:maxLines="1"/>
 
-        </android.support.design.widget.TextInputLayout>
-        <!--PRUEBAS MATERIAL DESIGN-->
+        </LinearLayout>
 
-        <!--PRUEBAS MATERIAL DESIGN-->
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/layoutContraseña"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="60dp"
-            android:layout_marginRight="60dp"
-            android:layout_marginTop="5dp">
-
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/password_edittext"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/contrasena"
-                android:inputType="textPassword"
-                android:maxLines="1"/>
-
-        </android.support.design.widget.TextInputLayout>
-        <!--PRUEBAS MATERIAL DESIGN-->
-<LinearLayout
-    android:orientation="vertical"
-    android:layout_width="250dp"
-    android:layout_gravity="center"
-    android:layout_height="wrap_content">
-        <Button
-            android:id="@+id/iniciar_sesion_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
-            android:background="@drawable/botonredondo"
-            android:text="LOGIN"
-            android:textColor="@color/blanco"/>
-
-        <Button
-            android:id="@+id/descargar_rutas"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/botonredondo"
-            android:text="DESCARGAR RUTAS"
-            android:textColor="@color/blanco"
-            />
-</LinearLayout>
     </LinearLayout>
 
-</RelativeLayout>
+</LinearLayout>
