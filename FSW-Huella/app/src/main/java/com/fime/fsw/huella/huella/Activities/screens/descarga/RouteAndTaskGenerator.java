@@ -153,9 +153,11 @@ public class RouteAndTaskGenerator {
                                 String tipo = grupo.getTipo();
                                 boolean isNexus = grupo.isNexus();
                                 int sequence = taskSecuencia;
+                                String prefectoId = prefecto.getPrefectoId();
+                                String horaId = grupo.getHorarioId();
 
                                 tasks.add(Task.create(_id, routeId, planId, materiaId, materia, salonId, areaId,
-                                        edificioId, numeroEmpleado, nombreEmpleado, tipo, isNexus, sequence));
+                                        edificioId, numeroEmpleado, nombreEmpleado, tipo, isNexus, sequence,  prefectoId,horaId));
 
                                 taskSecuencia++;
                             }

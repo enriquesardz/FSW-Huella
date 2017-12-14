@@ -53,11 +53,16 @@ public class Task extends RealmObject {
     private Checkout checkout;
     private String routeId;
     private boolean isUploaded;
+    private String prefectoId;
+    private String horaId;
 
     public Task() { //TODO: Agregar los campos horaId
     }
 
-    public static Task create(String _id, String routeId, String planId, String materiaId, String materia, String salonId, String areaId, String edificioId, String numeroEmpleado, String nombreEmpleado, String tipo, boolean isNexus, int sequence) {
+    public static Task create(String _id, String routeId, String planId, String materiaId,
+                              String materia, String salonId, String areaId, String edificioId,
+                              String numeroEmpleado, String nombreEmpleado, String tipo,
+                              boolean isNexus, int sequence, String prefectoId, String horaId) {
         Task task = new Task();
         task._id = _id;
         task.routeId = routeId;
@@ -76,6 +81,8 @@ public class Task extends RealmObject {
         task.taskState = STATE_NO_HA_PASADO;
         task.checkout = new Checkout();
         task.isUploaded = false;
+        task.prefectoId = prefectoId;
+        task.horaId = horaId;
 
         return task;
     }
@@ -214,5 +221,21 @@ public class Task extends RealmObject {
 
     public void setUploaded(boolean uploaded) {
         isUploaded = uploaded;
+    }
+
+    public String getPrefectoId() {
+        return prefectoId;
+    }
+
+    public void setPrefectoId(String prefectoId) {
+        this.prefectoId = prefectoId;
+    }
+
+    public String getHoraId() {
+        return horaId;
+    }
+
+    public void setHoraId(String horaId) {
+        this.horaId = horaId;
     }
 }

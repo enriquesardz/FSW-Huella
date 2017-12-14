@@ -26,10 +26,10 @@ public class UploadCheckouts {
 
         for (Task task : tasks){
             upCheckouts.add(new UpCheckout(
-                    "5434",
+                    task.getPrefectoId(),
                     task.getNumeroEmpleado(),
                     task.getMateriaId(),
-                    "M1",
+                    task.getHoraId(),
                     task.getSalonId(),
                     task.getCheckout()));
         }
