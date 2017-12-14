@@ -14,6 +14,7 @@ import com.fime.fsw.huella.huella.Activities.screens.descarga.PrefectoDownloadAc
 import com.fime.fsw.huella.huella.Activities.screens.rutasmain.RutasListaActivity;
 import com.fime.fsw.huella.huella.R;
 import com.fime.fsw.huella.huella.Utilidad.SesionAplicacion;
+import com.fime.fsw.huella.huella.tests.KotlinTest;
 
 import io.realm.Realm;
 
@@ -94,12 +95,10 @@ public class PrefectoLoginActivity extends AppCompatActivity implements LoginAut
         LoginAuth.getInstance(mContext, mRealm)
                 .loginAttempt(user, password, this);
 
-
     }
 
     @Override
     public void onLoginSuccess(String user, String password) {
-        //TODO: Remove PrefectoDownloadActivity.class, ya no se valida de lado servidor
         Intent intent = new Intent(mContext, RutasListaActivity.class);
         intent.putExtra("user", user);
         intent.putExtra("password", password);

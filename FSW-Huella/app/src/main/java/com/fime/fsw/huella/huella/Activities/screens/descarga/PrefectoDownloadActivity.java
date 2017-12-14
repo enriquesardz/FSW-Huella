@@ -95,24 +95,30 @@ public class PrefectoDownloadActivity extends AppCompatActivity implements APIMa
              */
             loadingState.setVisibility(View.VISIBLE);
             RouteAndTaskGenerator.getInstance().offlineGroupsPrefectos(mContext, PrefectoDownloadActivity.this);
-
-        } else {
-
-            loadingState.setVisibility(View.VISIBLE);
-
-            int HOY = 0;
-            String date;
-            //Obtiene la fecha dependiendo de la fecha que eligio
-            int option = rdioGroup.getCheckedRadioButtonId();
-            RadioButton optionBtn = (RadioButton) findViewById(option);
-            if (option == HOY || TextUtils.equals(optionBtn.getText(), "hoy")) {
-                date = getDate(0);
-            } else {
-                date = getDate(1);
-            }
-
-            APIManager.getInstance().downloadPrefectosGroups(date, PrefectoDownloadActivity.this);
+            return;
         }
+
+        loadingState.setVisibility(View.VISIBLE);
+
+        int HOY = 0;
+        String date;
+        //Obtiene la fecha dependiendo de la fecha que eligio
+
+        int option = rdioGroup.getCheckedRadioButtonId();
+        if (option < 0) {
+            Toast.makeText(mContext, "No ha seleccionado una fecha.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        RadioButton optionBtn = (RadioButton) findViewById(option);
+        if (option == HOY || TextUtils.equals(optionBtn.getText().toString().toLowerCase(), "hoy")) {
+            date = getDate(0);
+        } else {
+            date = getDate(1);
+        }
+
+        APIManager.getInstance().downloadPrefectosGroups(date, PrefectoDownloadActivity.this);
+
     }
 
     /**
