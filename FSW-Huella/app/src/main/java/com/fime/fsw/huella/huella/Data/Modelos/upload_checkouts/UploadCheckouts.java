@@ -1,16 +1,17 @@
-package com.fime.fsw.huella.huella.Data.Modelos;
+package com.fime.fsw.huella.huella.Data.Modelos.upload_checkouts;
 
 import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Checkout;
 import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Task;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 /**
  * Created by ensardz on 01/08/2017.
+ * Esta clase se usa para darle formato a las Tasks que se suben, no esta bien hecho y es poco legible, se debe
+ * de cambiar.
  */
 
 public class UploadCheckouts {
@@ -56,13 +57,14 @@ class UpCheckout {
 
     //TODO: Quitar los datos hardcodeados
 
-    public UpCheckout(String prefectoId, String maestroId, String materiaId, String horaId, String salonId, Checkout checkout) {
+    public UpCheckout(String prefectoId, String maestroId, String materiaId, String horaId,
+                      String salonId, Checkout checkout) {
 
         Date today = new Date();
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         String todayDate = format.format(today);
 
-        this.statusCode = "32";
+        this.statusCode = "32"; //TODO: No idea, hardcoded
         this.prefectoId = prefectoId;
         this.maestroId = maestroId;
         this.materiaId = materiaId;

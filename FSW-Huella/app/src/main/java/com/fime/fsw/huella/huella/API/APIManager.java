@@ -7,9 +7,8 @@ import com.fime.fsw.huella.huella.API.Endpoints.APIServices;
 import com.fime.fsw.huella.huella.Data.Modelos.LoginUser;
 import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Grupo;
 import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Prefecto;
-import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Route;
 import com.fime.fsw.huella.huella.Data.Modelos.TokenResponse;
-import com.fime.fsw.huella.huella.Data.Modelos.UploadCheckouts;
+import com.fime.fsw.huella.huella.Data.Modelos.upload_checkouts.UploadCheckouts;
 import com.fime.fsw.huella.huella.Data.Modelos.UploadResponse;
 
 import java.util.List;

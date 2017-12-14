@@ -2,17 +2,14 @@ package com.fime.fsw.huella.huella.Network;
 
 import android.app.IntentService;
 import android.content.Intent;
-import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.fime.fsw.huella.huella.API.APICallbackListener;
 import com.fime.fsw.huella.huella.API.APIManager;
 import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Task;
-import com.fime.fsw.huella.huella.Data.Modelos.UploadCheckouts;
+import com.fime.fsw.huella.huella.Data.Modelos.upload_checkouts.UploadCheckouts;
 import com.fime.fsw.huella.huella.Data.Modelos.UploadResponse;
-import com.fime.fsw.huella.huella.Data.Provider.RealmProvider;
 
 import java.util.List;
 
@@ -43,8 +40,14 @@ public class UpCheckoutsIntentService extends IntentService implements APICallba
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
-        Log.i(TAG, "UpCHeckouts service running...");
+        Log.i(TAG, "UpCeckouts service running...");
         upload();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mRealm.close();
     }
 
     /**

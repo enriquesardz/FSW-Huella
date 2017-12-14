@@ -9,7 +9,6 @@
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
-
     <application
         android:name=".Activities.HuellaApplication"
         android:allowBackup="true"
@@ -18,7 +17,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/FimeTheme">
-
         <activity
             android:name=".Activities.SplashActivity"
             android:theme="@style/SplashTheme">
@@ -28,17 +26,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity android:name=".Activities.screens.descarga.PrefectoDownloadActivity" />
-
         <activity android:name=".Activities.screens.login.PrefectoLoginActivity" />
-
         <activity android:name=".Activities.screens.rutasmain.RutasListaActivity" />
-
         <activity android:name=".Activities.screens.tasksmain.RecorridoMainActivity" />
-
         <activity android:name=".Activities.screens.codigoBarras.BarcodeReaderActivity" />
-
         <activity android:name=".Activities.screens.huella.IdentificarHuellaActivity" />
 
         <receiver android:name=".Network.NetworkChangeReceiver">
@@ -48,8 +40,9 @@
             </intent-filter>
         </receiver>
 
-        <service android:name=".Network.UpCheckoutsIntentService"
-            android:exported="false"/>
+        <service
+            android:name=".Network.UpCheckoutsIntentService"
+            android:exported="false" />
 
     </application>
 
