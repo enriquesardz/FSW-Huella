@@ -18,6 +18,7 @@ import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Grupo;
 import com.fime.fsw.huella.huella.Data.Modelos.RealmObjects.Prefecto;
 import com.fime.fsw.huella.huella.R;
 import com.fime.fsw.huella.huella.Utilidad.SesionAplicacion;
+import com.fime.fsw.huella.huella.Utilidad.Utils;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -117,7 +118,8 @@ public class PrefectoDownloadActivity extends AppCompatActivity implements APIMa
             date = getDate(1);
         }
 
-        APIManager.getInstance().downloadPrefectosGroups(date, PrefectoDownloadActivity.this);
+        APIManager.getInstance().downloadPrefectosGroups(date, Utils.getMacAddress(mContext),
+                PrefectoDownloadActivity.this);
 
     }
 

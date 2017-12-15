@@ -33,6 +33,7 @@ public class UpCheckoutsIntentService extends IntentService implements APICallba
     private static final String SERVICE_NAME = "UpCheckoutsIntentService";
 
     private Realm mRealm = Realm.getDefaultInstance();
+    private RealmResults<Task> doneTasks;
 
     public UpCheckoutsIntentService() {
         super(SERVICE_NAME);
@@ -56,7 +57,7 @@ public class UpCheckoutsIntentService extends IntentService implements APICallba
      * terminadas.
      */
     public void upload(){
-        RealmResults<Task> doneTasks = mRealm.where(Task.class)
+        doneTasks = mRealm.where(Task.class)
                 .notEqualTo(Task.TASK_STATE_FIELD, Task.STATE_NO_HA_PASADO)
                 .equalTo(Task.IS_UPLOADED_FIELD, false)
                 .findAllSorted(Task.ROUTE_ID_FIELD);
@@ -86,7 +87,28 @@ public class UpCheckoutsIntentService extends IntentService implements APICallba
      */
     @Override
     public void response(UploadResponse response) {
-        Log.d(TAG, "Success! Se han subido las Tasks");
+        //Si se llega a este punto, entonces seteamos el campo "isUploaded" a true, para que
+        //esas Tasks ya no se vuelvan a subir.
+        try {
+            mRealm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    //En teoria, nunca deberia de ser null aqui.
+                    if (doneTasks == null) {
+                        throw new NullPointerException(TAG + " doneTasks null?!");
+                    }
+
+                    for (Task task : doneTasks) {
+                        task.setUploaded(true);
+                    }
+                }
+            });
+            int taskCount = doneTasks.size();
+            Log.d(TAG, "Success! Se han subido " + String.valueOf(taskCount) + " Tasks");
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     /**

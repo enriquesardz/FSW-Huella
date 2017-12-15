@@ -59,13 +59,14 @@ public class APIManager {
     }
 
     /**
-    * Tries to get a token that grants access to the rest of the API, it returns
+    * Attempts to get a token that grants access to the rest of the API endpoints, it returns
     * to the login Activity onFailure
     * Proceeds to the download of Routes and Tasks onSuccess.
      * @param user User's username
      * @param password User's password
      * @param listener Callback listener that returns the response to the requester
     * */
+    @Deprecated
     public void loginRequest(final String user, String password, final APICallbackListener<TokenResponse> listener) {
 
 
@@ -98,7 +99,13 @@ public class APIManager {
         });
     }
 
-    //TODO: Usar
+    /**
+     * Metodo que descarga grupos con un token.
+     * @param jwtToken Token exlusivo a prefecto, ya no se utiliza.
+     * @param date Fecha que determina los grupos que se van a descargar.
+     * @param listener Callback que regresa la respuesta.
+     */
+    @Deprecated
     public void downloadGrupos(final String jwtToken, String date, final APICallbackListener<List<Grupo>> listener) {
 
         APIServices service = APICodo.getAllGroups().create(APIServices.class);
@@ -128,6 +135,11 @@ public class APIManager {
         });
     }
 
+    /**
+     * Metodo que descarga los prefectos, con otro tipo de callback diferente.
+     * @param listener Callback que regresa el resultado.
+     */
+    @Deprecated
     public void downloadPrefectos(final APICallbackListener<List<Prefecto>> listener){
         APIServices service = APICodo.getPrefectos().create(APIServices.class);
         Call<List<Prefecto>> call = service.downloadPrefectos();
@@ -149,6 +161,11 @@ public class APIManager {
         });
     }
 
+    /**
+     * Metodo que se usa para descargar exlusivamente los prefectos.
+     * @param callback Callback que regresa el resultado.
+     */
+    @Deprecated
     public void downloadPrefectos(final onPrefectosDownload callback){
         APIServices service = APICodo.getPrefectos().create(APIServices.class);
         Call<List<Prefecto>> call = service.downloadPrefectos();
@@ -172,6 +189,12 @@ public class APIManager {
         });
     }
 
+    /**
+     * Metodo que se usa para descargar exlusivamente los grupos.
+     * @param date Fecha que indica los grupos que se van a descargar.
+     * @param callback Callback que regresa el resultado.
+     */
+    @Deprecated
     public void downloadGrupos(String date, final onGruposDownload callback) {
 
         APIServices service = APICodo.getAllGroups().create(APIServices.class);
@@ -204,10 +227,11 @@ public class APIManager {
     /**
      * Esta funcion es una alternativa a hacer individualmente los dos requests, cuando el primero
      * regrese algo, el segundo request inicia, si es exitoso, regresa los 2 arreglos al callback.
-     * @param date Fecha que se va a descargar
-     * @param callback Callback para regresar los dos arreglos
+     * @param date Fecha que determina cuales son los grupos que se van a descargar.
+     * @param macAddress Mac address del dispositivo que esta haciendo el request.
+     * @param callback Callback para regresar los dos arreglos.
      */
-    public void downloadPrefectosGroups(final String date, final onPrefectosGroupsDownload callback){
+    public void downloadPrefectosGroups(final String date, final String macAddress, final onPrefectosGroupsDownload callback){
 
         APIServices service = APICodo.getPrefectos().create(APIServices.class);
         Call<List<Prefecto>> prefectosCall = service.downloadPrefectos();
@@ -268,9 +292,9 @@ public class APIManager {
 
 
     /**
-     * Esta funcion sube los checkouts a la API
-     * @param uploadCheckouts Los checkouts que se van a subir
-     * @param listener Callback para regresar la respuesta
+     * Esta funcion sube los checkouts a la API.
+     * @param uploadCheckouts Los checkouts o tasks que se van a subir.
+     * @param listener Callback para regresar la respuesta.
      */
     public void uploadCheckouts(UploadCheckouts uploadCheckouts, final APICallbackListener<UploadResponse> listener){
         APIServices service = APICodo.uploadCheckouts().create(APIServices.class);

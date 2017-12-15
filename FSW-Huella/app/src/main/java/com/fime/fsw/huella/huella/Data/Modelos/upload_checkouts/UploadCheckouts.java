@@ -39,7 +39,6 @@ public class UploadCheckouts {
     }
 }
 
-
 class UpCheckout {
     //Task checkout
     private String statusCode;
