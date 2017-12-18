@@ -45,6 +45,7 @@
             android:name=".Network.UpCheckoutsIntentService"
             android:exported="false" />
 
+        <activity android:name=".Activities.screens.recorridoMain.RecorridoActivity"></activity>
     </application>
 
 </manifest>

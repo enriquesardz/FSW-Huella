@@ -11,10 +11,10 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.fime.fsw.huella.huella.Activities.screens.descarga.PrefectoDownloadActivity;
+import com.fime.fsw.huella.huella.Activities.screens.recorridoMain.RecorridoActivity;
 import com.fime.fsw.huella.huella.Activities.screens.rutasmain.RutasListaActivity;
 import com.fime.fsw.huella.huella.R;
 import com.fime.fsw.huella.huella.Utilidad.SesionAplicacion;
-import com.fime.fsw.huella.huella.tests.KotlinTest;
 
 import io.realm.Realm;
 
@@ -99,7 +99,7 @@ public class PrefectoLoginActivity extends AppCompatActivity implements LoginAut
 
     @Override
     public void onLoginSuccess(String user, String password) {
-        Intent intent = new Intent(mContext, RutasListaActivity.class);
+        Intent intent = new Intent(mContext, RecorridoActivity.class);
         intent.putExtra("user", user);
         intent.putExtra("password", password);
         startActivity(intent);
