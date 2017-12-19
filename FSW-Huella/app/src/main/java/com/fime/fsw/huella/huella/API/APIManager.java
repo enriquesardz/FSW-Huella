@@ -11,6 +11,7 @@ import com.fime.fsw.huella.huella.Data.Modelos.TokenResponse;
 import com.fime.fsw.huella.huella.Data.Modelos.upload_checkouts.UploadCheckouts;
 import com.fime.fsw.huella.huella.Data.Modelos.UploadResponse;
 
+import java.io.IOException;
 import java.util.List;
 
 import retrofit2.Call;
@@ -34,23 +35,27 @@ public class APIManager {
     private List<Grupo> GRUPOS;
 
 
-    public interface onGruposDownload{
+    public interface onGruposDownload {
         public void onGruposDownloadSuccess();
+
         public void onGruposDownloadFailure();
     }
 
-    public interface onPrefectosDownload{
+    public interface onPrefectosDownload {
         public void onPrefectosDownloadSucess();
+
         public void onPrefectosDownloadFailure();
     }
 
-    public interface onCheckoutsUpload{
+    public interface onCheckoutsUpload {
         public void onCheckoutUploadSucess();
+
         public void onCheckoutUploadFailure();
     }
 
-    public interface onPrefectosGroupsDownload{
+    public interface onPrefectosGroupsDownload {
         public void onPrefectosGroupsDownloadSuccess(List<Grupo> grupos, List<Prefecto> prefectos);
+
         public void onPrefectosGroupsDownloadFailure();
     }
 
@@ -59,16 +64,16 @@ public class APIManager {
     }
 
     /**
-    * Attempts to get a token that grants access to the rest of the API endpoints, it returns
-    * to the login Activity onFailure
-    * Proceeds to the download of Routes and Tasks onSuccess.
-     * @param user User's username
+     * Attempts to get a token that grants access to the rest of the API endpoints, it returns
+     * to the login Activity onFailure
+     * Proceeds to the download of Routes and Tasks onSuccess.
+     *
+     * @param user     User's username
      * @param password User's password
      * @param listener Callback listener that returns the response to the requester
-    * */
+     */
     @Deprecated
     public void loginRequest(final String user, String password, final APICallbackListener<TokenResponse> listener) {
-
 
 
         final LoginUser loginUser = new LoginUser(user, password);
@@ -101,8 +106,9 @@ public class APIManager {
 
     /**
      * Metodo que descarga grupos con un token.
+     *
      * @param jwtToken Token exlusivo a prefecto, ya no se utiliza.
-     * @param date Fecha que determina los grupos que se van a descargar.
+     * @param date     Fecha que determina los grupos que se van a descargar.
      * @param listener Callback que regresa la respuesta.
      */
     @Deprecated
@@ -121,7 +127,7 @@ public class APIManager {
                     listener.failure();
                 }
 
-                if (TextUtils.equals(response.message().toLowerCase(), "unauthorized")){
+                if (TextUtils.equals(response.message().toLowerCase(), "unauthorized")) {
                     Log.d(TAG, response.message().toLowerCase());
                     //TODO: Si expira el token.
                     listener.failure();
@@ -137,19 +143,20 @@ public class APIManager {
 
     /**
      * Metodo que descarga los prefectos, con otro tipo de callback diferente.
+     *
      * @param listener Callback que regresa el resultado.
      */
     @Deprecated
-    public void downloadPrefectos(final APICallbackListener<List<Prefecto>> listener){
+    public void downloadPrefectos(final APICallbackListener<List<Prefecto>> listener) {
         APIServices service = APICodo.getPrefectos().create(APIServices.class);
         Call<List<Prefecto>> call = service.downloadPrefectos();
 
         call.enqueue(new Callback<List<Prefecto>>() {
             @Override
             public void onResponse(Call<List<Prefecto>> call, Response<List<Prefecto>> response) {
-                if (response.isSuccessful() && response.body() != null){
+                if (response.isSuccessful() && response.body() != null) {
                     listener.response(response.body());
-                } else{
+                } else {
                     listener.failure();
                 }
             }
@@ -163,20 +170,21 @@ public class APIManager {
 
     /**
      * Metodo que se usa para descargar exlusivamente los prefectos.
+     *
      * @param callback Callback que regresa el resultado.
      */
     @Deprecated
-    public void downloadPrefectos(final onPrefectosDownload callback){
+    public void downloadPrefectos(final onPrefectosDownload callback) {
         APIServices service = APICodo.getPrefectos().create(APIServices.class);
         Call<List<Prefecto>> call = service.downloadPrefectos();
 
         call.enqueue(new Callback<List<Prefecto>>() {
             @Override
             public void onResponse(Call<List<Prefecto>> call, Response<List<Prefecto>> response) {
-                if (response.isSuccessful() && response.body() != null){
+                if (response.isSuccessful() && response.body() != null) {
 //                    callback.response(response.body());
                     callback.onPrefectosDownloadSucess();
-                } else{
+                } else {
 //                    callback.failure();
                     callback.onPrefectosDownloadFailure();
                 }
@@ -191,7 +199,8 @@ public class APIManager {
 
     /**
      * Metodo que se usa para descargar exlusivamente los grupos.
-     * @param date Fecha que indica los grupos que se van a descargar.
+     *
+     * @param date     Fecha que indica los grupos que se van a descargar.
      * @param callback Callback que regresa el resultado.
      */
     @Deprecated
@@ -210,7 +219,7 @@ public class APIManager {
                     callback.onGruposDownloadFailure();
                 }
 
-                if (TextUtils.equals(response.message().toLowerCase(), "unauthorized")){
+                if (TextUtils.equals(response.message().toLowerCase(), "unauthorized")) {
                     Log.d(TAG, response.message().toLowerCase());
                     //TODO: Si expira el token.
                     callback.onGruposDownloadFailure();
@@ -227,11 +236,12 @@ public class APIManager {
     /**
      * Esta funcion es una alternativa a hacer individualmente los dos requests, cuando el primero
      * regrese algo, el segundo request inicia, si es exitoso, regresa los 2 arreglos al callback.
-     * @param date Fecha que determina cuales son los grupos que se van a descargar.
+     *
+     * @param date       Fecha que determina cuales son los grupos que se van a descargar.
      * @param macAddress Mac address del dispositivo que esta haciendo el request.
-     * @param callback Callback para regresar los dos arreglos.
+     * @param callback   Callback para regresar los dos arreglos.
      */
-    public void downloadPrefectosGroups(final String date, final String macAddress, final onPrefectosGroupsDownload callback){
+    public void downloadPrefectosGroups(final String date, final String macAddress, final onPrefectosGroupsDownload callback) {
 
         APIServices service = APICodo.getPrefectos().create(APIServices.class);
         Call<List<Prefecto>> prefectosCall = service.downloadPrefectos();
@@ -239,11 +249,11 @@ public class APIManager {
         prefectosCall.enqueue(new Callback<List<Prefecto>>() {
             @Override
             public void onResponse(Call<List<Prefecto>> prefectosCall, Response<List<Prefecto>> response) {
-                if (response.isSuccessful() && response.body() != null){
+                if (response.isSuccessful() && response.body() != null) {
 
                     PREFECTOS = response.body();
 
-                    if(PREFECTOS.isEmpty()){
+                    if (PREFECTOS.isEmpty()) {
                         callback.onPrefectosGroupsDownloadFailure();
                         return;
                     }
@@ -259,7 +269,7 @@ public class APIManager {
                             if (response.isSuccessful() && response.body() != null) {
                                 GRUPOS = response.body();
 
-                                if(GRUPOS.isEmpty()){
+                                if (GRUPOS.isEmpty()) {
                                     callback.onPrefectosGroupsDownloadFailure();
                                     return;
                                 }
@@ -278,7 +288,7 @@ public class APIManager {
                             callback.onPrefectosGroupsDownloadFailure();
                         }
                     });
-                } else{
+                } else {
                     callback.onPrefectosGroupsDownloadFailure();
                 }
             }
@@ -293,17 +303,18 @@ public class APIManager {
 
     /**
      * Esta funcion sube los checkouts a la API.
+     *
      * @param uploadCheckouts Los checkouts o tasks que se van a subir.
-     * @param listener Callback para regresar la respuesta.
+     * @param listener        Callback para regresar la respuesta.
      */
-    public void uploadCheckouts(UploadCheckouts uploadCheckouts, final APICallbackListener<UploadResponse> listener){
+    public void uploadCheckouts(UploadCheckouts uploadCheckouts, final APICallbackListener<UploadResponse> listener) {
         APIServices service = APICodo.uploadCheckouts().create(APIServices.class);
         Call<UploadResponse> call = service.uploadCheckouts(uploadCheckouts);
 
         call.enqueue(new Callback<UploadResponse>() {
             @Override
             public void onResponse(Call<UploadResponse> call, Response<UploadResponse> response) {
-                if(response.isSuccessful() && TextUtils.equals(response.body().getStatus(), STATUS_SUCESS)){
+                if (response.isSuccessful() && TextUtils.equals(response.body().getStatus(), STATUS_SUCESS)) {
                     //Si se subieron se supone
                     listener.response(response.body());
                 } else {
@@ -319,4 +330,25 @@ public class APIManager {
         });
     }
 
+    /**
+     * Esta funcion sube los checkouts a la API de forma syncrona, en caso de que ya se encuentre en otro thread.
+     *
+     * @param uploadCheckouts Los checkouts o tasks que se van a subir.
+     * @param listener        Callback para regresar la respuesta.
+     */
+    public void uploadCheckoutsSync(UploadCheckouts uploadCheckouts, final APICallbackListener<UploadResponse> listener) {
+        APIServices service = APICodo.uploadCheckouts().create(APIServices.class);
+        Call<UploadResponse> call = service.uploadCheckouts(uploadCheckouts);
+        try {
+            Response<UploadResponse> response = call.execute();
+            if (response.isSuccessful() && TextUtils.equals(response.body().getStatus(), STATUS_SUCESS)) {
+                listener.response(response.body());
+            } else {
+                listener.failure();
+            }
+        } catch (IOException e) {
+            Log.e(TAG, e.getLocalizedMessage());
+            listener.failure();
+        }
+    }
 }

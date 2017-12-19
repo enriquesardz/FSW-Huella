@@ -32,7 +32,7 @@ public class UpCheckoutsIntentService extends IntentService implements APICallba
 
     private static final String SERVICE_NAME = "UpCheckoutsIntentService";
 
-    private Realm mRealm = Realm.getDefaultInstance();
+    private Realm mRealm;
     private RealmResults<Task> doneTasks;
 
     public UpCheckoutsIntentService() {
@@ -57,6 +57,7 @@ public class UpCheckoutsIntentService extends IntentService implements APICallba
      * terminadas.
      */
     public void upload(){
+        mRealm = Realm.getDefaultInstance();
         doneTasks = mRealm.where(Task.class)
                 .notEqualTo(Task.TASK_STATE_FIELD, Task.STATE_NO_HA_PASADO)
                 .equalTo(Task.IS_UPLOADED_FIELD, false)
@@ -78,7 +79,7 @@ public class UpCheckoutsIntentService extends IntentService implements APICallba
         UploadCheckouts upCheckouts = UploadCheckouts.create(upDoneTasks);
 
         //Ya que hicimos todo lo anterior ahora si, podemos subir.
-        APIManager.getInstance().uploadCheckouts(upCheckouts, this);
+        APIManager.getInstance().uploadCheckoutsSync(upCheckouts, this);
     }
 
     /**
