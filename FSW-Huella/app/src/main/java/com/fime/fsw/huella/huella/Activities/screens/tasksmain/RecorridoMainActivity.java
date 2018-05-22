@@ -159,6 +159,9 @@ public class RecorridoMainActivity extends AppCompatActivity implements Recorrid
     public void checkAndSetRouteCompleted() {
         if (mRoute.getCurrentTask() == mRoute.getLastTask()) {
             RealmProvider.setRouteIsCompletedByRoute(mRealm, mRoute);
+            startActivity(new Intent(this, RutasListaActivity.class));
+            Log.d(TAG, "RECORRIDO TERMINADO");
+            finish();
         }
     }
 

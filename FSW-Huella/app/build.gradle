@@ -22,7 +22,6 @@ repositories {
 
 android {
     compileSdkVersion 25
-    buildToolsVersion '26.0.2'
     defaultConfig {
         applicationId "com.fime.fsw.huella.huella"
         minSdkVersion 14
@@ -30,6 +29,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
@@ -52,11 +52,12 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile files('libs/DeviceAPIver20141109.jar')
+    implementation 'com.android.support:multidex:1.0.1'
+    implementation files('libs/DeviceAPIver20141109.jar')
     //Spinner material design
     //Retrofit
     //GSON
@@ -68,30 +69,30 @@ dependencies {
     //RabbitMQ
 
 
-    compile 'com.jaredrummler:material-spinner:1.1.0'
-    compile 'com.squareup.retrofit2:retrofit:2.3.0'
-    compile 'com.squareup.retrofit2:converter-gson:2.3.0'
-    compile 'com.google.code.gson:gson:2.8.0'
-    compile 'com.android.support:cardview-v7:25.3.1'
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile 'com.android.support:design:25.3.1'
-    compile 'com.roughike:bottom-bar:2.3.1'
-    compile 'io.realm:android-adapters:2.0.0'
-    compile 'com.facebook.stetho:stetho:1.5.0'
-    compile 'com.uphyca:stetho_realm:2.1.0'
-    compile 'com.rabbitmq:amqp-client:4.1.1'
-    compile 'com.android.support:support-v4:25.3.1'
-    compile 'com.android.support:support-vector-drawable:25.3.1'
-    compile 'com.getbase:floatingactionbutton:1.10.1'
-    compile 'com.android.support:recyclerview-v7:25.3.1'
-    testCompile 'junit:junit:4.12'
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
-    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
+    implementation 'com.google.code.gson:gson:2.8.0'
+    implementation 'com.jaredrummler:material-spinner:1.1.0'
+    implementation 'com.android.support:cardview-v7:25.3.1'
+    implementation 'com.android.support:appcompat-v7:25.3.1'
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    implementation 'com.android.support:design:25.3.1'
+    implementation 'com.roughike:bottom-bar:2.3.1'
+    implementation 'io.realm:android-adapters:2.0.0'
+    implementation 'com.facebook.stetho:stetho:1.5.0'
+    implementation 'com.uphyca:stetho_realm:2.1.0'
+    implementation 'com.rabbitmq:amqp-client:4.1.1'
+    implementation 'com.android.support:support-v4:25.3.1'
+    implementation 'com.android.support:support-vector-drawable:25.3.1'
+    implementation 'com.getbase:floatingactionbutton:1.10.1'
+    implementation 'com.android.support:recyclerview-v7:25.3.1'
+    testImplementation 'junit:junit:4.12'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
 // Because RxAndroid releases are few and far between, it is recommended you also
 // explicitly depend on RxJava's latest version for bug fixes and new features.
-    compile 'io.reactivex.rxjava2:rxjava:2.1.7'
-    compile('com.crashlytics.sdk.android:crashlytics:2.8.0@aar') {
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.7'
+    implementation('com.crashlytics.sdk.android:crashlytics:2.8.0@aar') {
         transitive = true;
     }
 }

@@ -16,13 +16,16 @@
         style="@style/TextSubTitulo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Nombre" />
+        android:padding="16dp"
+        android:textSize="24sp" />
 
     <TextView
         android:id="@+id/full_nombre_textview"
         style="@style/TextSubTitulo"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:textSize="24sp" />
 
     <View
         android:layout_width="match_parent"

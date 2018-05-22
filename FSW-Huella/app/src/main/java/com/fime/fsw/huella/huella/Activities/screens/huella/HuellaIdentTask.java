@@ -57,6 +57,7 @@ public class HuellaIdentTask extends AsyncTask<Integer, Integer, String> {
         }
         //Se pasa a una funcion el valor hexadecimal que se saca de la base de datos utilizando el ID proporcionado
         //para que este lo cargue al Buffer 2
+        Log.e(TAG, usuarioHexData);
         if (mFingerprint.downChar(Fingerprint.BufferEnum.B2, usuarioHexData)) {
             exeSucc = true;
         }
@@ -84,6 +85,7 @@ public class HuellaIdentTask extends AsyncTask<Integer, Integer, String> {
                 Log.i(TAG, data);
                 return "ok";
             } else {
+//                Log.e(TAG, "HUELLA LMAO: " + mFingerprint.upChar(Fingerprint.BufferEnum.B1));
                 Log.e(TAG, "No hubo match");
             }
 
@@ -100,6 +102,7 @@ public class HuellaIdentTask extends AsyncTask<Integer, Integer, String> {
         super.onPostExecute(result);
 
         progressDialog.cancel();
+        progressDialog.dismiss();
 
         if (TextUtils.isEmpty(result)) {
             //Fallo la identificacion

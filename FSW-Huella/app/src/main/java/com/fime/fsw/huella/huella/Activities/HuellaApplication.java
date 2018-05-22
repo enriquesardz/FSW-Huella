@@ -2,6 +2,7 @@ package com.fime.fsw.huella.huella.Activities;
 
 import android.app.Application;
 import android.content.Context;
+import android.support.multidex.MultiDexApplication;
 
 import com.facebook.stetho.Stetho;
 import com.uphyca.stetho_realm.RealmInspectorModulesProvider;
@@ -13,7 +14,7 @@ import io.realm.Realm;
 import io.realm.RealmConfiguration;
 
 
-public class HuellaApplication extends Application {
+public class HuellaApplication extends MultiDexApplication {
 
     public static final String REALM_NAME = "Huella.realm";
     public static final String APP_TAG = "CODO: ";

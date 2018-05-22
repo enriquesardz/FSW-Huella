@@ -99,7 +99,7 @@ public class PrefectoLoginActivity extends AppCompatActivity implements LoginAut
 
     @Override
     public void onLoginSuccess(String user, String password) {
-        Intent intent = new Intent(mContext, RecorridoActivity.class);
+        Intent intent = new Intent(mContext, RutasListaActivity.class); // new Intent(mContext, RecorridoActivity.class);
         intent.putExtra("user", user);
         intent.putExtra("password", password);
         startActivity(intent);

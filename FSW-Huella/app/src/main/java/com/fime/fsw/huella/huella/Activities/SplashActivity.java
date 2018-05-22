@@ -23,7 +23,7 @@ public class SplashActivity extends AppCompatActivity {
         Intent intent;
 
         Fabric.with(this, new Crashlytics());
-              Fabric.with(this, new Crashlytics());
+
         if(!sesionAplicacion.usuarioLogeado()){
             //El usuario no esta logeado
             intent = new Intent(this, PrefectoLoginActivity.class);
