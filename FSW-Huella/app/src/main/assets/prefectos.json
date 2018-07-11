@@ -126,6 +126,20 @@
             "NivelAcademicoID": "02",
             "GradoAcademicoID": "03",
             "InscripcionID": "01"
+        },
+        {
+            "PrefectoID": "FI0009",
+            "Nombre": "PREFECTO 9",
+            "Usuario": "Leo",
+            "Password": "123",
+            "Huella": null,
+            "AreaID": "01",
+            "TipoPeriodoID": "01",
+            "PeriodoID": "320",
+            "Tipo": "C",
+            "NivelAcademicoID": "02",
+            "GradoAcademicoID": "03",
+            "InscripcionID": "01"
         }
     ]
 }
